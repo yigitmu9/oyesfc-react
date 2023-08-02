@@ -1,25 +1,26 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Navbar from "./components/navbar/navbar";
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import MainPage from './pages/main-page';
+import Matches from "./pages/matches";
+import IndividualStats from "./pages/individual-stats";
+import TeamStats from "./pages/team-stats";
+import AddMatch from "./pages/add-match";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <Navbar/>
+            <Routes>
+                <Route path='/' element={<MainPage/>}/>
+                <Route path='/matches' element={<Matches/>}/>
+                <Route path='/individual-stats' element={<IndividualStats/>}/>
+                <Route path='/team-stats' element={<TeamStats/>}/>
+                <Route path='/add-match' element={<AddMatch/>}/>
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
