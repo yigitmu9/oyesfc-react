@@ -1,17 +1,12 @@
 import React from 'react';
+import AddMatchComponent from "../components/AddMatch";
 
 const AddMatch = () => {
     return (
-        <div
-            style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '90vh',
-                color: 'lightgray'
-            }}
-        >
-            <h1>Add Match</h1>
+        <div>
+            <main>
+                <AddMatchComponent/>
+            </main>
         </div>
     );
 };

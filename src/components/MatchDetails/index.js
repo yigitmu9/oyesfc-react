@@ -1,78 +1,129 @@
-import React, { useRef, useEffect, useCallback } from 'react';
-import { useSpring, animated } from 'react-spring';
-import styled from 'styled-components';
-import { MdClose } from 'react-icons/md';
+import React, {useEffect, useRef} from 'react';
 import classes from "./match-details.module.css"
+import TeamView from "../TeamView";
+import Result from "../Result";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import GroupsIcon from '@mui/icons-material/Groups';
 
-const Background = styled.div`
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+export const MatchDetails = ({onClose, matchDetailsData}) => {
 
-const ModalWrapper = styled.div`
-  width: 800px;
-  height: 500px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  background: #fff;
-  color: #000;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  position: relative;
-  z-index: 10;
-  border-radius: 10px;
-`;
+    const buttonBgColor = '#323232'
+    const matchDetails = Object.entries(matchDetailsData.oyesfc.squad).filter(x => x[1].goal > 0)
+    const popupRef = useRef(null);
 
-const ModalImg = styled.img`
-  width: 100%;
-  height: 100%;
-  border-radius: 10px 0 0 10px;
-  background: #000;
-`;
+    const handleOutsideClick = (event) => {
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+            onClose();
+        }
+    };
 
-const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  line-height: 1.8;
-  color: #141414;
-
-  p {
-    margin-bottom: 1rem;
-  }
-
-  button {
-    padding: 10px 24px;
-    background: #141414;
-    color: #fff;
-    border: none;
-  }
-`;
-
-const CloseModalButton = styled(MdClose)`
-  cursor: pointer;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  z-index: 10;
-`;
-
-export const MatchDetails = ({ onClose }) => {
-
+    useEffect(() => {
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [popupRef, onClose]);
 
     return (
-        <div className={classes.popupContainer}>
-            <button className={classes.popupCloseButton} onClick={onClose}>
-                X
-            </button>
+        <div className={classes.popupContainer} ref={popupRef}>
+            <section className={classes.scoreboard} style={{background: buttonBgColor}}>
+                <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
+                          bgColor={buttonBgColor} isDetails={true}/>
+                <main className={classes.score} style={{background: buttonBgColor}}>
+                    <Result homeTeamScore={matchDetailsData?.oyesfc?.goal} awayTeamScore={matchDetailsData?.rival?.goal}
+                            bgColor={buttonBgColor}
+                            fontSize={'3rem'}/>
+                </main>
+                <TeamView teamData={matchDetailsData?.rival} rakipbul={matchDetailsData?.rakipbul}
+                          bgColor={buttonBgColor} isDetails={true}/>
+            </section>
+            {matchDetailsData.oyesfc.goal !== 0 ?
+                <section className={classes.goalNames} style={{background: buttonBgColor}}>
+                    {matchDetails.map((item, index) => (
+                        <div key={index} style={{
+                            background: buttonBgColor,
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginBottom: '5px',
+                            marginTop: '5px'
+                        }}>
+                            <span style={{
+                                background: buttonBgColor,
+                                color: "lightgray",
+                                marginRight: '10px'
+                            }}>{item[0].replace(/[0-9]/g, '')}</span>
+                            {Array.from({length: item[1].goal}).map((_, imgIndex) => (
+                                <img
+                                    key={imgIndex}
+                                    style={{width: 20, height: 20, background: buttonBgColor, marginLeft: '5px',}}
+                                    src={require('../../images/football.png')}
+                                    alt={`Goal ${imgIndex + 1}`}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </section>
+                : null
+            }
+            <div style={{display: "flex", background: "#404040"}}>
+                <div style={{display: "block", background: "#404040", width: "30%"}}>
+                    <section className={classes.location} style={{background: buttonBgColor}}>
+                        <LocationOnIcon
+                            style={{background: buttonBgColor, color: "white", fontSize: 43}}></LocationOnIcon>
+                        <span style={{
+                            background: buttonBgColor,
+                            color: "lightgray",
+                            fontSize: 20,
+                            display: "block",
+                            marginTop: "10px"}}>
+                            {matchDetailsData.place}
+                        </span>
+                    </section>
+                    <section className={classes.location} style={{background: buttonBgColor}}>
+                        <CalendarMonthIcon
+                            style={{background: buttonBgColor, color: "white", fontSize: 43}}></CalendarMonthIcon>
+                        <span style={{
+                            background: buttonBgColor,
+                            color: "lightgray",
+                            fontSize: 20,
+                            display: "block",
+                            marginTop: "10px"}}>
+                            {matchDetailsData.day.replace(/-/g, '/')}
+                        </span>
+                    </section>
+                    <section className={classes.location} style={{background: buttonBgColor}}>
+                        <AccessTimeIcon
+                            style={{background: buttonBgColor, color: "white", fontSize: 43}}></AccessTimeIcon>
+                        <span style={{
+                            background: buttonBgColor,
+                            color: "lightgray",
+                            fontSize: 20,
+                            display: "block",
+                            marginTop: "10px"}}>
+                            {matchDetailsData.time}
+                        </span>
+                    </section>
+                </div>
+                <div style={{display: "block", background: "#404040", width: "70%"}}>
+
+                    <section className={classes.squadMembers} style={{background: buttonBgColor}}>
+                        <GroupsIcon
+                            style={{background: buttonBgColor, color: "white", fontSize: 43, marginLeft: "10px"}}></GroupsIcon>
+                        {Object.entries(matchDetailsData.oyesfc.squad).map((x, y) => (
+                            <span style={{
+                                background: buttonBgColor,
+                                color: "lightgray",
+                                fontSize: 20,
+                                display: "block",
+                                marginTop: "10px", marginLeft: "10px"}}>
+                                {x[0].replace(/[0-9]/g, '')}
+                            </span>
+                        ))}
+                    </section>
+                </div>
+            </div>
         </div>
     );
 };

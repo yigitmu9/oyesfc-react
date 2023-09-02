@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Nav,
     NavLink,
@@ -7,8 +7,24 @@ import {
     NavBtn,
     NavBtnLink
 } from './navbarElements';
+import AddMatchComponent from "../AddMatch";
+import Message from "../Message";
 
 const Navbar = () => {
+
+    const [isPopupOpen, setPopupOpen] = useState(false);
+
+    const openPopup = () => {
+        setPopupOpen(true);
+    };
+
+    const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
+    const [messageData, setmessageData] = useState(null);
+
+    const handleXClick = (messageData) => {
+        setmessageData(messageData);
+    };
+
     return (
         <>
             <Nav>
@@ -28,7 +44,11 @@ const Navbar = () => {
                     </NavLink>
                 </NavMenu>
                 <NavBtn style={{background:"darkred"}}>
-                    <NavBtnLink to='/add-match'>Add Match</NavBtnLink>
+                    <NavBtnLink onClick={openPopup}>Add Match</NavBtnLink>
+                    {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
+                                                       onClose={() => setPopupOpen(false)}
+                                                       messageData={(messageData) => handleXClick(messageData)}/>}
+                    {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} />}
                 </NavBtn>
             </Nav>
         </>

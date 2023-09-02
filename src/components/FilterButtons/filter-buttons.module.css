@@ -1,0 +1,7 @@
+.activeButton {
+    background-color: darkred;
+}
+
+.disabledButton {
+    background-color: #242424;
+}

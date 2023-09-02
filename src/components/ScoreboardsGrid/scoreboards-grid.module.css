@@ -1,8 +1,13 @@
 .grid {
   list-style-type: none;
-  margin: 3rem;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  margin: 1% 3rem 3rem;
+}
+
+.filterButtons {
+  margin: 5% 15% 1%
 }

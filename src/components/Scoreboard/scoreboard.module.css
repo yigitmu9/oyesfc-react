@@ -5,10 +5,15 @@
   padding: 1rem;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   border-radius: 25px;
-
+  max-width: 500px;
   min-width: 572px;
-  margin: 1rem;
   cursor: pointer;
+  width: calc(33.33% - 20px); /* Her bir kartın yüzde 33.33 genişliği (kenar boşluğu çıkarılarak) */
+  margin: 10px;
+}
+
+.scoreboard:nth-child(3n + 1):last-child {
+  margin-right: auto; /* Sadece bir kart varsa sağ tarafa boşluk eklemek için */
 }
 
 .score {

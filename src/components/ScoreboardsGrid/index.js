@@ -3,10 +3,24 @@ import Scoreboard from "../Scoreboard";
 import {databaseData} from "../../firebase";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails";
+import FilterButtons from "../FilterButtons";
 
 const ScoreboardsGrid = () => {
+    const buttons = ['All', 'Rakipbul', 'Normal'];
+    const [matchDetailsfilteredData, setMatchDetailsfilteredData] = useState(Object.values(databaseData));
+
+    const applyFilter = (selectedButton) => {
+        if (selectedButton === 'All') {
+            setMatchDetailsfilteredData(Object.values(databaseData))
+        } else if (selectedButton === 'Rakipbul') {
+            setMatchDetailsfilteredData(Object.values(databaseData).filter(x => x.rakipbul === true))
+        } else if (selectedButton === 'Normal') {
+            setMatchDetailsfilteredData(Object.values(databaseData).filter(x => x.rakipbul === false))
+        }
+    };
+
     let dataFound = databaseData && Object.values(databaseData || {})?.some(x => x.oyesfc && x.rival)
-    const sortedData = Object.values(databaseData || {})?.slice().sort((a, b) => {
+    const sortedData = matchDetailsfilteredData?.slice().sort((a, b) => {
         if (a.day && b.day) {
             const [dayA, monthA, yearA] = a.day.split('-').map(Number);
             const [dayB, monthB, yearB] = b.day.split('-').map(Number);
@@ -22,13 +36,22 @@ const ScoreboardsGrid = () => {
         }
     });
     const [isPopupOpen, setPopupOpen] = useState(false);
+    const [matchDetailsData, setMatchDetailsData] = useState(null);
 
-    const openPopup = () => {
+    const openPopup = ({x}) => {
         setPopupOpen(true);
+        setMatchDetailsData(x);
+    };
+
+    const handleXClick = (matchDetailsData) => {
+        setMatchDetailsData(matchDetailsData);
     };
 
     return (
         <>
+            <div className={classes.filterButtons}>
+                <FilterButtons data={buttons} applyFilter={applyFilter} />
+            </div>
             <>
                 {dataFound ?
                     <div className={classes.grid}>
@@ -36,8 +59,9 @@ const ScoreboardsGrid = () => {
                             <Scoreboard
                                 key={y}
                                 value={x}
-                                openPopup={openPopup} />))}
-                        {isPopupOpen && <MatchDetails onClose={() => setPopupOpen(false)} />}
+                                openPopup={() => openPopup(x)}
+                                matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}/>))}
+                        {isPopupOpen && <MatchDetails matchDetailsData={matchDetailsData} onClose={() => setPopupOpen(false)} />}
                     </div>
                     :
                     <div

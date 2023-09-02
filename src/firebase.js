@@ -27,3 +27,5 @@ onValue(distanceRef, (snapshot) => {
     data = snapshot.val();
 })
 export const databaseData = data
+
+export const dataBase = db
