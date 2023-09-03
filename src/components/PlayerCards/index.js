@@ -14,7 +14,6 @@ const PlayerCards = ({playerName, data}) => {
     Object.values(data).forEach(item => {
         if (item?.oyesfc?.squad[playerName] && playerName !== TeamMembers.can.name) {
             playerTotalGoal += item.oyesfc.squad[playerName].goal;
-            console.log(playerName, playerTotalGoal)
         }
     });
 
@@ -26,7 +25,7 @@ const PlayerCards = ({playerName, data}) => {
     const imageUrl = Object.entries(TeamMembers).find(x => x[1].name === playerName)[0];
 
     return (
-        <Card sx={{ maxWidth: 1345, borderRadius: "25px", width: "265px" }}>
+        <Card sx={{ maxWidth: 1345, borderRadius: "25px", width: "265px" }} style={{backgroundColor: "#242424"}}>
             <CardMedia
                 component="img"
                 sx={{ height: 140 }}
@@ -54,7 +53,7 @@ const PlayerCards = ({playerName, data}) => {
                     </ListItem>
                     <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                     <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                        <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 14}}>Goals per Game</p>
+                        <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 14}}>Goal per Game</p>
                         <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 14}}>{(playerTotalGoal / playerTotalMatch).toFixed(2)}</p>
                     </ListItem>
                 </List>

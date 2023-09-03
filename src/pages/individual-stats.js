@@ -4,10 +4,10 @@ import {TeamMembers} from "../constants/constants";
 import classes from "../components/ScoreboardsGrid/scoreboards-grid.module.css";
 import FilterButtons from "../components/FilterButtons";
 import {databaseData} from "../firebase";
+import {Bar} from "react-chartjs-2";
+import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 
 const IndividualStats = () => {
-
-    console.log(Object.values(TeamMembers).map(x => x.name))
 
     const buttons = ['All', 'Rakipbul', 'Normal'];
     const [matchDetailsfilteredData, setMatchDetailsfilteredData] = useState(Object.values(databaseData));
@@ -21,6 +21,39 @@ const IndividualStats = () => {
             setMatchDetailsfilteredData(Object.values(databaseData).filter(x => x.rakipbul === false))
         }
     };
+
+    let test = 0;
+    let test2 = []
+    let test3 = 0;
+
+    Object.values(TeamMembers)?.map(x => x.name).map((z, y) => {
+        test = 0;
+        test3 = Object.values(matchDetailsfilteredData).filter(item =>
+            Object.keys(item.oyesfc.squad).includes(z)).length;
+        Object.values(matchDetailsfilteredData).forEach(item => {
+            if (item?.oyesfc?.squad[z] && z !== TeamMembers.can.name) {
+                test += item.oyesfc.squad[z].goal;
+            }
+        });
+        const test4 = (test / test3).toFixed(2)
+        test2.push(test4)
+    })
+
+    const state = {
+        labels: Object.values(TeamMembers)?.map(x => x.name),
+        datasets: [
+            {
+                label: 'Goal per Game',
+                backgroundColor: 'darkred',
+                borderColor: 'darkred',
+                borderWidth: 2,
+                data: test2,
+                textColor: 'lightgray'
+            }
+        ]
+    }
+    Chart.register(CategoryScale);
+    linear.register(CategoryScale)
 
     return (
         <div
@@ -47,6 +80,25 @@ const IndividualStats = () => {
                     playerName={x.name}
                     data={matchDetailsfilteredData}/>))}
             </div>
+            <div style={{ height: "70%", width: "70%" }}>
+                <Bar
+                    data={state}
+                    width={"100%"}
+                    options={{
+                        maintainAspectRatio: false,
+                        title:{
+                            display:true,
+                            text:'Goal per Game',
+                            fontSize:20
+                        },
+                        legend:{
+                            display:true,
+                            position:'right',
+                        }
+                    }}
+                />
+            </div>
+
         </div>
     );
 };
