@@ -10,7 +10,7 @@ function FilterButtons({ data, applyFilter }) {
     };
 
     return (
-        <div >
+        <div className={classes.grid}>
             {data.map((item, index) => (
                 <button
                     style={{marginRight: "12px"}}

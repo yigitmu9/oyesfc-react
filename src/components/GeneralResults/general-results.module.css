@@ -1,0 +1,11 @@
+.chart {
+    background-color: rgb(36, 36, 36);
+}
+
+.grid {
+    justify-content: center;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 50px;
+}

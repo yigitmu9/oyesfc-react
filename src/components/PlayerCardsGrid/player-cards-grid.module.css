@@ -1,0 +1,11 @@
+.grid {
+    list-style-type: none;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 6rem;
+    margin-top: 2rem;
+    width: 60%;
+}

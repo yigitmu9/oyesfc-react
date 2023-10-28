@@ -1,0 +1,167 @@
+import React from 'react';
+import classes from "./facilities-stats.module.css";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import {Bar} from "react-chartjs-2";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {StadiumNames} from "../../constants/constants";
+import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
+
+const FacilitiesStats = ({data}) => {
+
+    const rows = Object.values(StadiumNames);
+    let win = 0;
+    let draw = 0;
+    let loss = 0;
+    let game = 0;
+    let winData = [];
+    let drawData = [];
+    let lossData = [];
+    let gameData = [];
+    let winPercentData = [];
+    let goals = 0;
+    let rivalGoals = 0;
+    let rivalGoalsData = [];
+    let goalsData = [];
+    let rivalGoalsPerGameData = [];
+    let goalsPerGameData = [];
+
+    Object.values(StadiumNames)?.map((z, y) => {
+        win = 0;
+        draw = 0;
+        loss = 0;
+        game = 0;
+        goals = 0;
+        rivalGoals = 0;
+        game = Object.values(data)?.filter(item => item.place === z)?.length;
+        win = Object.values(data)?.filter(item => item.place === z && item.oyesfc.goal > item.rival.goal)?.length;
+        draw = Object.values(data)?.filter(item => item.place === z && item.oyesfc.goal === item.rival.goal)?.length;
+        loss = Object.values(data)?.filter(item => item.place === z && item.oyesfc.goal < item.rival.goal)?.length;
+        Object.values(data)?.filter(item => item.place === z)?.forEach(item => {
+            goals += item?.oyesfc?.goal;
+        });
+        Object.values(data)?.filter(item => item.place === z)?.forEach(item => {
+            rivalGoals += item?.rival?.goal;
+        });
+        const winPercent = ((win / game) * 100)?.toFixed(0);
+        const goalsPerGame = (goals / game)?.toFixed(2)
+        const rivalGoalsPerGame = (rivalGoals / game)?.toFixed(2)
+        goalsData.push(goals)
+        rivalGoalsData.push(rivalGoals)
+        rivalGoalsPerGameData.push(rivalGoalsPerGame)
+        goalsPerGameData.push(goalsPerGame)
+        winData.push(win)
+        drawData.push(draw)
+        lossData.push(loss)
+        gameData.push(game)
+        winPercentData.push(winPercent)
+    })
+
+    const chartDatasets = {
+        labels: Object.values(StadiumNames),
+        datasets: [
+            {
+                label: 'Win Rate on Facilities (%)',
+                backgroundColor: 'darkred',
+                borderColor: 'darkred',
+                borderWidth: 2,
+                data: winPercentData,
+            }
+        ]
+    }
+
+    const options = {
+        indexAxis: 'y',
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: 'lightgray',
+                    fontSize: 10,
+                },
+            },
+        },
+        scales: {
+            x: {
+                beginAtZero: true,
+                suggestedMin: 0,
+                suggestedMax: 100,
+                ticks: {
+                    color: 'lightgray',
+                    fontSize: 10
+                },
+            },
+            y: {
+                ticks: {
+                    color: 'lightgray',
+                    fontSize: 10
+                },
+            },
+        },
+    };
+
+    Chart.register(CategoryScale);
+    linear.register(CategoryScale);
+
+    return (
+        <div className={classes.grid}>
+            <Card sx={{ borderRadius: "25px", width: "100%", height: "470px" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Statistics on Facilities</h1>
+                <CardContent style={{backgroundColor: "#242424"}}>
+                    <div style={{display: "flex", backgroundColor: "#242424"}}>
+                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424"}}>
+                            <Bar
+                                data={chartDatasets}
+                                width={"100%"}
+                                className={classes.chart}
+                                options={options}
+                            />
+                        </div>
+                        <div style={{display: "flex", width: "60%", height: "350px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
+                            <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                    <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                        <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Facilities</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Wins</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Draws</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Losses</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Scored</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Per Game</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Conceded</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Per Game</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {rows.map((row, number) => (
+                                            <TableRow
+                                                key={row}
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
+                                            >
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
+                                                    {row}
+                                                </TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{gameData[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{winData[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{drawData[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{lossData[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{goalsData[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{goalsPerGameData[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{rivalGoalsData[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{rivalGoalsPerGameData[number]}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    );
+};
+
+export default FacilitiesStats;

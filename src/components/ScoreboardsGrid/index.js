@@ -49,9 +49,7 @@ const ScoreboardsGrid = () => {
 
     return (
         <>
-            <div className={classes.filterButtons}>
-                <FilterButtons data={buttons} applyFilter={applyFilter} />
-            </div>
+            <FilterButtons data={buttons} applyFilter={applyFilter} />
             <>
                 {dataFound ?
                     <div className={classes.grid}>
