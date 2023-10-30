@@ -28,7 +28,7 @@ const GeneralResults = ({data}) => {
         labels: ['Win', 'Draw', 'Lose'],
         datasets: [
             {
-                label: 'Win Rate (%)',
+                label: 'Rate (%)',
                 backgroundColor: ['green', 'yellow', 'red'],
                 borderColor: 'black',
                 borderWidth: 1,

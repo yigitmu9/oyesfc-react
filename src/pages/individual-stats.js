@@ -3,9 +3,8 @@ import FilterButtons from "../components/FilterButtons";
 import {databaseData} from "../firebase";
 import PlayerCardsGrid from "../components/PlayerCardsGrid";
 import ChartsGrid from "../components/ChartsGrid";
-import TeamStatsGrid from "../components/TeamStatsGrid";
-import FacilitiesStats from "../components/FacilitiesStats";
 import FacilitiesIndividualStats from "../components/FacilitiesIndividualStats";
+import WeatherIndividualStats from "../components/WeatherIndividualStats";
 
 const IndividualStats = () => {
 
@@ -24,14 +23,17 @@ const IndividualStats = () => {
 
     return (
         <div style={{display: "flex", justifyContent: "center"}}>
-            <div style={{height: '90vh', color: 'lightgray'}}>
+            <div style={{height: '90vh', color: 'lightgray', maxWidth: "100%"}}>
                 <FilterButtons data={buttons} applyFilter={applyFilter}/>
-                <div style={{display: "flex"}}>
+                <div style={{display: "flex", width: "95%"}}>
                     <PlayerCardsGrid matchData={matchDetailsfilteredData}/>
                     <ChartsGrid matchData={matchDetailsfilteredData}/>
                 </div>
-                <div>
+                <div style={{display: "flex", width: "100%"}}>
                     <FacilitiesIndividualStats data={matchDetailsfilteredData}/>
+                </div>
+                <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
+                    <WeatherIndividualStats data={matchDetailsfilteredData}/>
                 </div>
             </div>
         </div>

@@ -4,10 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Bar} from "react-chartjs-2";
 import {
-    Box,
     FormControl,
-    InputLabel, MenuItem,
-    Select,
     Table,
     TableBody,
     TableCell,
@@ -20,7 +17,7 @@ import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 
 const FacilitiesIndividualStats = ({data}) => {
 
-    const [facility, setFacility] = React.useState('');
+    const [facility, setFacility] = React.useState('Vitamin');
 
     const handleChange = (event) => {
         setFacility(event.target.value);
@@ -103,33 +100,23 @@ const FacilitiesIndividualStats = ({data}) => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "100%", height: "570px" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+            <Card sx={{ borderRadius: "25px", width: "100%", height: "570px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
                 <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Individual Statistics on Facilities</h1>
                 <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>
-                    <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", width: "300px", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center"}}>
+                    <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", width: "500px", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center"}}>
                         <FormControl style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} fullWidth>
-                            <InputLabel style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} id="demo-simple-select-label">Facility</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={facility}
-                                label="Facility"
-                                onChange={handleChange}
-                                classes={classes.select}
-                                className={classes.select}
-                                style={{backgroundColor: "rgb(36, 36, 36)"}}
-                            >
-                                {Object.values(StadiumNames).map(x => (
-                                    <MenuItem style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} value={x}>{x}</MenuItem>
-                                ))}
+                            <label style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                Select a Facility:
+                                <select className={classes.select} onChange={handleChange}>
+                                    {Object.values(StadiumNames).map(x => (
+                                        <option value={x}>{x}</option>
+                                    ))}
+                                </select>
+                            </label>
 
-                            </Select>
                         </FormControl>
                     </div>
                 </div>
-
-
-
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div style={{display: "flex", backgroundColor: "#242424"}}>
                         <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424"}}>
@@ -140,7 +127,7 @@ const FacilitiesIndividualStats = ({data}) => {
                                 options={options}
                             />
                         </div>
-                        <div style={{display: "flex", width: "60%", height: "350px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
+                        <div style={{display: "flex", width: "60%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
