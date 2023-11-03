@@ -109,12 +109,12 @@ const GeneralResults = ({data}) => {
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Scored / Match</p>
+                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Scored per Match</p>
                                     <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{scoredGoalsPerGame}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Conceded / Match</p>
+                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Conceded per Match</p>
                                     <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{concededGoalsPerGame}</p>
                                 </ListItem>
                             </List>

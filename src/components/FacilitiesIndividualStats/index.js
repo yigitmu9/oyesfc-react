@@ -17,7 +17,7 @@ import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 
 const FacilitiesIndividualStats = ({data}) => {
 
-    const [facility, setFacility] = React.useState('Vitamin');
+    const [facility, setFacility] = React.useState(StadiumNames.vitamin);
 
     const handleChange = (event) => {
         setFacility(event.target.value);

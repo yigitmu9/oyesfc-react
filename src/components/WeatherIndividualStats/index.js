@@ -1,19 +1,16 @@
-import React, {useState} from 'react';
+import React from 'react';
 import classes from "./weather-individual-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {Bar} from "react-chartjs-2";
 import {
-    FormControl, FormGroup, Stack,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow, Typography
+    TableRow
 } from "@mui/material";
-import {StadiumNames, TeamMembers} from "../../constants/constants";
-import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
+import {TeamMembers} from "../../constants/constants";
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 
@@ -33,7 +30,7 @@ const WeatherIndividualStats = ({data}) => {
     const rows = Object.values(TeamMembers).map(x => x.name);
     let playerTotalGoal = 0;
     let playerGoalData = [];
-    let playerAttendenceData = [];
+    let playerAttendanceData = [];
     let playerGoalPerGameData = [];
     let playerMatchData = [];
 
@@ -54,14 +51,14 @@ const WeatherIndividualStats = ({data}) => {
         const goalsPerGame = (playerTotalGoal / playerTotalMatch)?.toFixed(2)
 
         playerGoalData.push(playerTotalGoal)
-        playerAttendenceData.push(attendenceRate)
+        playerAttendanceData.push(attendenceRate)
         playerMatchData.push(playerTotalMatch)
         playerGoalPerGameData.push(goalsPerGame)
     });
 
     let playerTotalGoalCold = 0;
     let playerGoalDataCold = [];
-    let playerAttendenceDataCold = [];
+    let playerAttendanceDataCold = [];
     let playerGoalPerGameDataCold = [];
     let playerMatchDataCold = [];
 
@@ -82,7 +79,7 @@ const WeatherIndividualStats = ({data}) => {
         const goalsPerGameCold = (playerTotalGoalCold / playerTotalMatchCold)?.toFixed(2)
 
         playerGoalDataCold.push(playerTotalGoalCold)
-        playerAttendenceDataCold.push(attendenceRateCold)
+        playerAttendanceDataCold.push(attendenceRateCold)
         playerMatchDataCold.push(playerTotalMatchCold)
         playerGoalPerGameDataCold.push(goalsPerGameCold)
     });
@@ -121,7 +118,7 @@ const WeatherIndividualStats = ({data}) => {
                                                 </TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchDataCold[number]}</TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalDataCold[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendenceDataCold[number]}%</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceDataCold[number]}%</TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameDataCold[number]}</TableCell>
                                             </TableRow>
                                         ))}
@@ -164,7 +161,7 @@ const WeatherIndividualStats = ({data}) => {
                                                 </TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchData[number]}</TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendenceData[number]}%</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceData[number]}%</TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameData[number]}</TableCell>
                                             </TableRow>
                                         ))}

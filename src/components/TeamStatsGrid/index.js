@@ -2,6 +2,7 @@ import React from 'react';
 import classes from "./team-stats-grid.module.css";
 import GeneralResults from "../GeneralResults";
 import FacilitiesStats from "../FacilitiesStats";
+import WeatherTeamStats from "../WeatherTeamStats";
 
 const TeamStatsGrid = ({matchData}) => {
 
@@ -9,6 +10,7 @@ const TeamStatsGrid = ({matchData}) => {
         <div className={classes.grid}>
             <GeneralResults data={matchData}/>
             <FacilitiesStats data={matchData}/>
+            <WeatherTeamStats data={matchData}/>
         </div>
     );
 };
