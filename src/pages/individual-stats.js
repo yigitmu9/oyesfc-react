@@ -5,6 +5,7 @@ import PlayerCardsGrid from "../components/PlayerCardsGrid";
 import ChartsGrid from "../components/ChartsGrid";
 import FacilitiesIndividualStats from "../components/FacilitiesIndividualStats";
 import WeatherIndividualStats from "../components/WeatherIndividualStats";
+import RakipbulIndividualStats from "../components/RakipbulIndividualStats";
 
 const IndividualStats = () => {
 
@@ -34,6 +35,9 @@ const IndividualStats = () => {
                 </div>
                 <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
                     <WeatherIndividualStats data={matchDetailsfilteredData}/>
+                </div>
+                <div style={{display: "flex", width: "100%"}}>
+                    <RakipbulIndividualStats/>
                 </div>
             </div>
         </div>

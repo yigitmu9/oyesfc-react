@@ -31,7 +31,7 @@ const GeneralResults = ({data}) => {
                 label: 'Rate (%)',
                 backgroundColor: ['green', 'yellow', 'red'],
                 borderColor: 'black',
-                borderWidth: 1,
+                borderWidth: 0,
                 data: [
                     ((wonMatches / numberOfMatches) * 100)?.toFixed(0),
                     ((drawMatches / numberOfMatches) * 100)?.toFixed(0),
@@ -61,8 +61,8 @@ const GeneralResults = ({data}) => {
             <Card sx={{ borderRadius: "25px", width: "100%", height: "470px" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
                 <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>O Yes FC General Statistics</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex"}}>
-                        <div style={{display: "block", width: "50%", height: "330px"}}>
+                    <div style={{display: "flex", backgroundColor: "#242424"}}>
+                        <div style={{display: "block", width: "50%", height: "330px", backgroundColor: "#242424"}}>
                             <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 17}}>Win Rate</p>
                             <Doughnut
                                 data={chartDatasets}
@@ -70,6 +70,7 @@ const GeneralResults = ({data}) => {
                                 className={classes.chart}
                                 options={options}
                             />
+                            <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "-180px", fontSize: "50px"}}>{((wonMatches / numberOfMatches) * 100)?.toFixed(0)}%</h1>
                         </div>
                         <div style={{display: "flex", width: "50%", height: "350px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center"}}>
                             <List  component="nav" aria-label="mailbox folders" style={{backgroundColor: "#242424", width: "80%"}}>

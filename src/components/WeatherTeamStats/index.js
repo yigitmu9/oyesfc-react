@@ -103,10 +103,10 @@ const WeatherIndividualStats = ({data}) => {
                             <AcUnitIcon
                                 style={{background: "#242424", color: "white", fontSize: 350}}></AcUnitIcon>
                         </div>
-                        <div style={{display: "block", width: "50%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "20px", marginLeft: "15px"}}>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", textAlign: "center", marginTop: "20px", fontSize: "70px"}}>{((wonColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", textAlign: "center", marginTop: "20px", fontSize: "70px"}}>{((drawColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", textAlign: "center", marginTop: "20px", fontSize: "70px"}}>{((lostColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                        <div style={{display: "block", width: "50%", height: "330px", backgroundColor: "#242424", justifyContent: "center", marginRight: "20px", marginLeft: "55px"}}>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", marginTop: "20px", fontSize: "70px"}}>W: {((wonColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", marginTop: "20px", fontSize: "70px"}}>D: {((drawColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", marginTop: "20px", fontSize: "70px"}}>L: {((lostColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
                         </div>
                     </div>
                 </CardContent>
@@ -119,10 +119,10 @@ const WeatherIndividualStats = ({data}) => {
                             <LocalFireDepartmentIcon
                                 style={{background: "#242424", color: "white", fontSize: 350}}></LocalFireDepartmentIcon>
                         </div>
-                        <div style={{display: "block", width: "50%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "20px", marginLeft: "15px"}}>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", textAlign: "center", marginTop: "20px", fontSize: "70px"}}>{((wonHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", textAlign: "center", marginTop: "20px", fontSize: "70px"}}>{((drawHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", textAlign: "center", marginTop: "20px", fontSize: "70px"}}>{((lostHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                        <div style={{display: "block", width: "50%", height: "330px", backgroundColor: "#242424", justifyContent: "center", marginRight: "20px", marginLeft: "55px"}}>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", marginTop: "20px", fontSize: "70px"}}>W: {((wonHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", marginTop: "20px", fontSize: "70px"}}>D: {((drawHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", marginTop: "20px", fontSize: "70px"}}>L: {((lostHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
                         </div>
                     </div>
                 </CardContent>

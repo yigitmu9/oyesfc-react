@@ -1,0 +1,24 @@
+.grid {
+    margin-top: 50px;
+    margin-left: 12%;
+    margin-right: 12%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.chart {
+    background-color: rgb(36, 36, 36);
+}
+
+.select {
+    background-color: #404040;
+    color: lightgray;
+    margin-left: 30px;
+    border-color: #404040;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    font-size: 16px;
+}
