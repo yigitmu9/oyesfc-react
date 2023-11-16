@@ -86,20 +86,20 @@ const WeatherIndividualStats = ({data}) => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "48%", height: "470px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Individual Statistics in Cold Weather</h1>
+            <Card sx={{ borderRadius: "25px", width: "48%", height: "390px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Cold Weather Statistics</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424", textAlign: "center"}}>
+                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "300px", backgroundColor: "#242424", textAlign: "center"}}>
                             <AcUnitIcon
-                                style={{background: "#242424", color: "white", fontSize: 350}}></AcUnitIcon>
+                                style={{background: "#242424", color: "white", fontSize: 270, marginTop: "17px"}}></AcUnitIcon>
                         </div>
-                        <div style={{display: "flex", width: "50%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "20px", marginLeft: "15px"}}>
+                        <div style={{display: "flex", width: "50%", height: "270px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "20px", marginLeft: "15px"}}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                         <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0", zIndex:"999"}}>Players</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0", zIndex:"9"}}>Players</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>
@@ -129,20 +129,20 @@ const WeatherIndividualStats = ({data}) => {
                     </div>
                 </CardContent>
             </Card>
-            <Card sx={{ borderRadius: "25px", width: "48%", height: "470px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Individual Statistics in Hot Weather</h1>
+            <Card sx={{ borderRadius: "25px", width: "48%", height: "390px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Hot Weather Statistics</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div style={{display: "flex", backgroundColor: "#242424"}}>
                         <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424", textAlign: "center"}}>
                             <LocalFireDepartmentIcon
-                                style={{background: "#242424", color: "white", fontSize: 350}}></LocalFireDepartmentIcon>
+                                style={{background: "#242424", color: "white", fontSize: 270, marginTop: "17px"}}></LocalFireDepartmentIcon>
                         </div>
-                        <div style={{display: "flex", width: "50%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px", marginLeft: "15px"}}>
+                        <div style={{display: "flex", width: "50%", height: "270px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px", marginLeft: "15px"}}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                         <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0", zIndex:"999"}}>Players</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0", zIndex:"9"}}>Players</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>

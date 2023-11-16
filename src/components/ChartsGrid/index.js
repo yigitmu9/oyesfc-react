@@ -3,10 +3,9 @@ import {TeamMembers} from "../../constants/constants";
 import classes from "./charts-grid.module.css";
 import {Bar, Line, Pie, Radar} from "react-chartjs-2";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
-import {databaseData} from "../../firebase";
 
 
-const ChartsGrid = ({matchData}) => {
+const ChartsGrid = ({matchData, databaseData}) => {
 
     let goals = 0;
     let goalsPerGameData = []
@@ -210,42 +209,48 @@ const ChartsGrid = ({matchData}) => {
 
     return (
         <div className={classes.grid}>
-            <div className={classes.goalsPerGameDiv}>
-                <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Goals per Game</h3>
-                <Bar
-                    data={goalsPerGameDatasets}
-                    width={"100%"}
-                    className={classes.goalsPerGameChart}
-                    options={options}
-                />
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+                <div className={classes.goalsPerGameDiv}>
+                    <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Goals per Game</h3>
+                    <Bar
+                        data={goalsPerGameDatasets}
+                        width={"100%"}
+                        className={classes.goalsPerGameChart}
+                        options={options}
+                    />
+                </div>
+                <div className={classes.goalsPerGameDiv}>
+                    <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Rate of Attendance</h3>
+                    <Line
+                        data={attendanceRateDatasets}
+                        width={"100%"}
+                        className={classes.goalsPerGameChart}
+                        options={options}
+                    />
+                </div>
             </div>
-            <div className={classes.goalsPerGameDiv}>
-                <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Rate of Attendance</h3>
-                <Line
-                    data={attendanceRateDatasets}
-                    width={"100%"}
-                    className={classes.goalsPerGameChart}
-                    options={options}
-                />
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+                <div className={classes.goalsPerGameDiv}>
+                    <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Goal Percentage Compared to Total O Yes FC Goal</h3>
+                    <Pie
+                        data={goalPercentDatasets}
+                        width={"100%"}
+                        className={classes.goalsPerGameChart}
+                        options={pieOptions}
+                    />
+                </div>
+                <div className={classes.goalsPerGameDiv}>
+                    <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Regular Matches Compared to the Rakipbul</h3>
+                    <Radar
+                        data={performanceRateDatasets}
+                        width={"100%"}
+                        className={classes.goalsPerGameChart}
+                        options={radarOptions}
+                    />
+                </div>
             </div>
-            <div className={classes.goalsPerGameDiv}>
-                <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Goal Percentage Compared to Total O Yes FC Goal</h3>
-                <Pie
-                    data={goalPercentDatasets}
-                    width={"100%"}
-                    className={classes.goalsPerGameChart}
-                    options={pieOptions}
-                />
-            </div>
-            <div className={classes.goalsPerGameDiv}>
-                <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Regular Matches Compared to the Rakipbul</h3>
-                <Radar
-                    data={performanceRateDatasets}
-                    width={"100%"}
-                    className={classes.goalsPerGameChart}
-                    options={radarOptions}
-                />
-            </div>
+
+
         </div>
     );
 };

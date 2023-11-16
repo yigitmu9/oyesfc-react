@@ -117,12 +117,12 @@ const FacilitiesStats = ({data}) => {
                                 options={options}
                             />
                         </div>
-                        <div style={{display: "flex", width: "60%", height: "350px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
+                        <div style={{display: "flex", width: "56%", height: "350px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                         <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Facilities</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0", zIndex: 9}}>Facilities</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Wins</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Draws</TableCell>
@@ -140,7 +140,7 @@ const FacilitiesStats = ({data}) => {
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
                                             >
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0"}} component="th" scope="row">
                                                     {row}
                                                 </TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{gameData[number]}</TableCell>

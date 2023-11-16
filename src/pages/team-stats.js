@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {databaseData} from "../firebase";
 import FilterButtons from "../components/FilterButtons";
 import TeamStatsGrid from "../components/TeamStatsGrid";
 
-const TeamStats = () => {
+const TeamStats = ({databaseData}) => {
 
     const buttons = ['All', 'Rakipbul', 'Normal'];
     const [matchDetailsfilteredData, setMatchDetailsfilteredData] = useState(Object.values(databaseData));
@@ -23,6 +22,9 @@ const TeamStats = () => {
             <div style={{height: '90vh', color: 'lightgray'}}>
                 <FilterButtons data={buttons} applyFilter={applyFilter}/>
                 <TeamStatsGrid matchData={matchDetailsfilteredData}/>
+                <div style={{marginTop: "50px", textAlign: "center"}}>
+                    <span style={{color: "gray", textAlign: "center"}}>O Yes FC</span>
+                </div>
             </div>
         </div>
     );

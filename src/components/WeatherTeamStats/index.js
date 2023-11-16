@@ -95,34 +95,34 @@ const WeatherIndividualStats = ({data}) => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "48%", height: "470px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+            <Card sx={{ borderRadius: "25px", width: "48%", height: "360px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
                 <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Win Rate in Cold Weather</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424", textAlign: "center"}}>
+                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "300px", backgroundColor: "#242424", textAlign: "center", marginLeft: "50px"}}>
                             <AcUnitIcon
-                                style={{background: "#242424", color: "white", fontSize: 350}}></AcUnitIcon>
+                                style={{background: "#242424", color: "white", fontSize: 270}}></AcUnitIcon>
                         </div>
-                        <div style={{display: "block", width: "50%", height: "330px", backgroundColor: "#242424", justifyContent: "center", marginRight: "20px", marginLeft: "55px"}}>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", marginTop: "20px", fontSize: "70px"}}>W: {((wonColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", marginTop: "20px", fontSize: "70px"}}>D: {((drawColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", marginTop: "20px", fontSize: "70px"}}>L: {((lostColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                        <div style={{display: "block", width: "50%", height: "300px", backgroundColor: "#242424", justifyContent: "center", marginRight: "20px", marginLeft: "25px"}}>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", marginTop: "20px", fontSize: "50px"}}>W: {((wonColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", marginTop: "20px", fontSize: "50px"}}>D: {((drawColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", marginTop: "20px", fontSize: "47px"}}>L: {((lostColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
                         </div>
                     </div>
                 </CardContent>
             </Card>
-            <Card sx={{ borderRadius: "25px", width: "48%", height: "470px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+            <Card sx={{ borderRadius: "25px", width: "48%", height: "360px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
                 <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Win Rate in Hot Weather</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424", textAlign: "center"}}>
+                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "300px", backgroundColor: "#242424", textAlign: "center", marginLeft: "50px"}}>
                             <LocalFireDepartmentIcon
-                                style={{background: "#242424", color: "white", fontSize: 350}}></LocalFireDepartmentIcon>
+                                style={{background: "#242424", color: "white", fontSize: 270}}></LocalFireDepartmentIcon>
                         </div>
-                        <div style={{display: "block", width: "50%", height: "330px", backgroundColor: "#242424", justifyContent: "center", marginRight: "20px", marginLeft: "55px"}}>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", marginTop: "20px", fontSize: "70px"}}>W: {((wonHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", marginTop: "20px", fontSize: "70px"}}>D: {((drawHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", marginTop: "20px", fontSize: "70px"}}>L: {((lostHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                        <div style={{display: "block", width: "50%", height: "300px", backgroundColor: "#242424", justifyContent: "center", marginRight: "20px", marginLeft: "25px"}}>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", marginTop: "20px", fontSize: "50px"}}>W: {((wonHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", marginTop: "20px", fontSize: "50px"}}>D: {((drawHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", marginTop: "20px", fontSize: "50px"}}>L: {((lostHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
                         </div>
                     </div>
                 </CardContent>

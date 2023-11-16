@@ -1,11 +1,10 @@
 import classes from "./scoreboards-grid.module.css";
 import Scoreboard from "../Scoreboard";
-import {databaseData} from "../../firebase";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails";
 import FilterButtons from "../FilterButtons";
 
-const ScoreboardsGrid = () => {
+const ScoreboardsGrid = ({databaseData}) => {
     const buttons = ['All', 'Rakipbul', 'Normal'];
     const [matchDetailsfilteredData, setMatchDetailsfilteredData] = useState(Object.values(databaseData));
 
@@ -39,6 +38,7 @@ const ScoreboardsGrid = () => {
     const [matchDetailsData, setMatchDetailsData] = useState(null);
 
     const openPopup = ({x}) => {
+        document.body.style.overflow = 'hidden';
         setPopupOpen(true);
         setMatchDetailsData(x);
     };

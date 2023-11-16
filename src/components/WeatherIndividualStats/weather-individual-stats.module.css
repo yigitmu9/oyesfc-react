@@ -1,12 +1,10 @@
 .grid {
     margin-top: 50px;
-
+    margin-left: 14%;
+    margin-right: 14%;
     display: flex;
     justify-content: space-between;
-    margin-left: 12%;
-    margin-right: 12%;
     overflow-x: hidden;
-    max-width: 100%;
 }
 
 .chart {

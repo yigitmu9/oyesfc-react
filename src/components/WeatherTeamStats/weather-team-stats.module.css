@@ -1,10 +1,9 @@
 .grid {
     margin-top: 50px;
-
     display: flex;
     justify-content: space-between;
-    margin-left: 12%;
-    margin-right: 12%;
+    margin-left: 14%;
+    margin-right: 14%;
     overflow-x: hidden;
     max-width: 100%;
 }

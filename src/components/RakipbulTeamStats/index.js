@@ -92,12 +92,12 @@ const RakipbulIndividualStats = () => {
 
     return (
     <div className={classes.grid}>
-        <Card sx={{ borderRadius: "25px", width: "100%", height: "550px" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+        <Card sx={{ borderRadius: "25px", width: "100%", height: "auto" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
             <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Statistics of 10 Specific Rakipbul Matches</h1>
             <CardContent style={{backgroundColor: "#242424", marginBottom: "50px"}}>
                 <div style={{display: "flex", backgroundColor: "#242424"}}>
                     <div style={{display: "block", width: "40%", height: "330px", backgroundColor: "#242424"}}>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 17}}>Rate of Converting Our Positions Into Goals</p>
+                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 17}}>Rate of Converting O Yes FC Positions Into Goals</p>
                         <Doughnut
                             data={chartDatasets}
                             width={"100%"}
@@ -117,7 +117,7 @@ const RakipbulIndividualStats = () => {
                         <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 29}}>{goalsConceded}</p>
                     </div>
                     <div style={{display: "block", width: "40%", height: "330px", backgroundColor: "#242424"}}>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 17}}>Rate of Converting Their Positions Into Goals</p>
+                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 17}}>Rate of Converting Rival Positions Into Goals</p>
                         <Doughnut
                             data={rivalChartDatasets}
                             width={"100%"}
@@ -128,10 +128,12 @@ const RakipbulIndividualStats = () => {
                     </div>
                 </div>
             </CardContent>
-            <span style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", textAlign: "center", marginTop: "30px", marginLeft: "20px", fontSize: "15px"}}>
+            <div style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", marginTop: "30px", marginLeft: "20px", fontSize: "15px", marginBottom: "20px"}}>
+                <span style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", textAlign: "center"}}>
                     *Note: These statistic tables are only valid for 10 specific Rakipbul matches for which position data is available.
                     The data is static and cannot work with filters.
-                </span>
+            </span>
+            </div>
         </Card>
     </div>
     );

@@ -25,7 +25,7 @@ const PlayerCards = ({playerName, data}) => {
     const imageUrl = Object.entries(TeamMembers).find(x => x[1].name === playerName)[0];
 
     return (
-        <Card sx={{ maxHeight: "389px", borderRadius: "25px", width: "265px" }} style={{backgroundColor: "#242424"}}>
+        <Card sx={{ maxHeight: "389px", borderRadius: "25px", width: "265px", marginBottom: "50px" }} style={{backgroundColor: "#242424"}}>
             <CardMedia
                 component="img"
                 sx={{ height: 140 }}

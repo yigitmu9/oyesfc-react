@@ -15,6 +15,7 @@ const Navbar = () => {
     const [isPopupOpen, setPopupOpen] = useState(false);
 
     const openPopup = () => {
+        document.body.style.overflow = 'hidden';
         setPopupOpen(true);
     };
 

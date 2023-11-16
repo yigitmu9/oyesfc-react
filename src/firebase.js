@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import {initializeApp} from "firebase/app";
+import {getAnalytics} from "firebase/analytics";
 import {getDatabase, onValue, ref} from "firebase/database"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,10 +22,23 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const distanceRef = ref(db)
-let data
-onValue(distanceRef, (snapshot) => {
-    data = snapshot.val();
-})
-export const databaseData = data
+let data;
+
+const getDataFromFirebase = () => {
+    return new Promise((resolve) => {
+        onValue(distanceRef, (snapshot) => {
+            data = snapshot.val();
+            resolve(data);
+        });
+    });
+};
 
 export const dataBase = db
+
+export async function loadWebsite() {
+    try {
+        return await getDataFromFirebase();
+    } catch (error) {
+        console.error("Failed to get the Firebase data.", error);
+    }
+}

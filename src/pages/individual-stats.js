@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import FilterButtons from "../components/FilterButtons";
-import {databaseData} from "../firebase";
 import PlayerCardsGrid from "../components/PlayerCardsGrid";
 import ChartsGrid from "../components/ChartsGrid";
 import FacilitiesIndividualStats from "../components/FacilitiesIndividualStats";
 import WeatherIndividualStats from "../components/WeatherIndividualStats";
-import RakipbulIndividualStats from "../components/RakipbulIndividualStats";
+import RakipbulPlayerStats from "../components/RakipbulPlayerStats";
 
-const IndividualStats = () => {
+const IndividualStats = ({databaseData}) => {
 
     const buttons = ['All', 'Rakipbul', 'Normal'];
     const [matchDetailsfilteredData, setMatchDetailsfilteredData] = useState(Object.values(databaseData));
@@ -24,20 +23,25 @@ const IndividualStats = () => {
 
     return (
         <div style={{display: "flex", justifyContent: "center"}}>
-            <div style={{height: '90vh', color: 'lightgray', maxWidth: "100%"}}>
+            <div style={{color: 'lightgray', maxWidth: "100%"}}>
                 <FilterButtons data={buttons} applyFilter={applyFilter}/>
-                <div style={{display: "flex", width: "95%"}}>
+                <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
                     <PlayerCardsGrid matchData={matchDetailsfilteredData}/>
-                    <ChartsGrid matchData={matchDetailsfilteredData}/>
                 </div>
-                <div style={{display: "flex", width: "100%"}}>
+                <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
+                    <ChartsGrid matchData={matchDetailsfilteredData} databaseData={databaseData}/>
+                </div>
+                <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
                     <FacilitiesIndividualStats data={matchDetailsfilteredData}/>
                 </div>
                 <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
                     <WeatherIndividualStats data={matchDetailsfilteredData}/>
                 </div>
-                <div style={{display: "flex", width: "100%"}}>
-                    <RakipbulIndividualStats/>
+                <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
+                    <RakipbulPlayerStats/>
+                </div>
+                <div style={{marginTop: "50px", textAlign: "center"}}>
+                    <span style={{color: "gray", textAlign: "center"}}>O Yes FC</span>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from "./rakipbul-individual-stats.module.css";
+import classes from "./rakipbul-player-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Bar} from "react-chartjs-2";
@@ -15,7 +15,7 @@ import {
 import {DetailedRakipbulMatches, StadiumNames, TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 
-const RakipbulIndividualStats = () => {
+const RakipbulPlayerStats = () => {
 
     const [match, setMatch] = React.useState('Total of All Matches');
 
@@ -101,7 +101,7 @@ const RakipbulIndividualStats = () => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "100%", height: "600px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+            <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
                 <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Statistics of 10 Specific Rakipbul Matches</h1>
                 <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>
                     <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", width: "500px", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center"}}>
@@ -120,7 +120,7 @@ const RakipbulIndividualStats = () => {
                 </div>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "60%", marginRight:"30px", height: "350px", backgroundColor: "#242424"}}>
+                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424"}}>
                             <Bar
                                 data={chartDatasets}
                                 width={"100%"}
@@ -128,7 +128,7 @@ const RakipbulIndividualStats = () => {
                                 options={options}
                             />
                         </div>
-                        <div style={{display: "flex", width: "40%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
+                        <div style={{display: "flex", width: "60%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
@@ -158,13 +158,15 @@ const RakipbulIndividualStats = () => {
                         </div>
                     </div>
                 </CardContent>
-                <span style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", textAlign: "center", marginTop: "20px", marginLeft: "20px", fontSize: "15px"}}>
-                    *Note: These statistic tables are only valid for 10 specific Rakipbul matches for which position data is available.
-                    The data is static and cannot work with filters.
-                </span>
+                <div style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", margin: "10px",  fontSize: "15px"}}>
+                        <span style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", marginTop: "20px",  fontSize: "15px"}}>
+                            *Note: These statistic tables are only valid for 10 specific Rakipbul matches for which position data is available.
+                            The data is static and cannot work with filters.
+                        </span>
+                </div>
             </Card>
         </div>
     );
 };
 
-export default RakipbulIndividualStats;
+export default RakipbulPlayerStats;

@@ -101,7 +101,7 @@ const FacilitiesIndividualStats = ({data}) => {
     return (
         <div className={classes.grid}>
             <Card sx={{ borderRadius: "25px", width: "100%", height: "570px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Individual Statistics on Facilities</h1>
+                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Facilities Statistics</h1>
                 <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>
                     <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", width: "500px", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center"}}>
                         <FormControl style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} fullWidth>
