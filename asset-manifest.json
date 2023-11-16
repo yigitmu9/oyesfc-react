@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/oyesfc-react/static/css/main.323c1426.css",
+    "main.js": "/oyesfc-react/static/js/main.33cddb0b.js",
+    "static/js/787.9398f104.chunk.js": "/oyesfc-react/static/js/787.9398f104.chunk.js",
+    "static/media/ghost.png": "/oyesfc-react/static/media/ghost.be13388caa96804fa3ce.png",
+    "static/media/mert.jpeg": "/oyesfc-react/static/media/mert.da0a37140cc1e08c4e13.jpeg",
+    "static/media/gokhan.jpeg": "/oyesfc-react/static/media/gokhan.a53ebefa64a46611da61.jpeg",
+    "static/media/firstLogo.png": "/oyesfc-react/static/media/firstLogo.3711abd90f028c308299.png",
+    "static/media/mehmet.jpeg": "/oyesfc-react/static/media/mehmet.161b2fea565731d8f4c6.jpeg",
+    "static/media/oyesfc.PNG": "/oyesfc-react/static/media/oyesfc.01842b69ce4c2478495e.PNG",
+    "static/media/phoenix.png": "/oyesfc-react/static/media/phoenix.d977231dc2dd70d835ae.png",
+    "static/media/berent.jpeg": "/oyesfc-react/static/media/berent.f53e85a76289f6feafec.jpeg",
+    "static/media/yigit.jpeg": "/oyesfc-react/static/media/yigit.75b8c25b069bc41c4270.jpeg",
+    "static/media/oguzhan.jpeg": "/oyesfc-react/static/media/oguzhan.b1922e2aed9c97d1f77b.jpeg",
+    "static/media/berk.jpeg": "/oyesfc-react/static/media/berk.3327b60992bfb60fd55e.jpeg",
+    "static/media/atakan.jpeg": "/oyesfc-react/static/media/atakan.82a0584e3ebff8b2e902.jpeg",
+    "static/media/ogulcan.jpeg": "/oyesfc-react/static/media/ogulcan.3eda737f7dcfbcb6efac.jpeg",
+    "static/media/can.jpeg": "/oyesfc-react/static/media/can.ccd16ee457623db749f3.jpeg",
+    "static/media/utku.jpeg": "/oyesfc-react/static/media/utku.8e20a6bb9839c39e0c30.jpeg",
+    "static/media/rakipbul.png": "/oyesfc-react/static/media/rakipbul.0d3349e9505024fc8ef0.png",
+    "static/media/football.png": "/oyesfc-react/static/media/football.cb2c116cabd7616ef325.png",
+    "index.html": "/oyesfc-react/index.html",
+    "main.323c1426.css.map": "/oyesfc-react/static/css/main.323c1426.css.map",
+    "main.33cddb0b.js.map": "/oyesfc-react/static/js/main.33cddb0b.js.map",
+    "787.9398f104.chunk.js.map": "/oyesfc-react/static/js/787.9398f104.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.323c1426.css",
+    "static/js/main.33cddb0b.js"
+  ]
+}
