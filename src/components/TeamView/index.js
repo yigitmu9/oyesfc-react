@@ -3,29 +3,20 @@ import {TeamNames} from "../../constants/constants";
 
 const TeamView = ({teamData, rakipbul, bgColor, isDetails}) => {
 
-    let imageSize;
-    let fontSize;
-
-    if (isDetails) {
-        imageSize = 100
-        fontSize = 20
-    } else {
-        imageSize = 75
-        fontSize = 16
-    }
     return (
         <div>
             <div className={classes.team} style={{background: bgColor}}>
                 {(teamData?.name && rakipbul)
                     ?
-                    <img style={{ width: imageSize, height: imageSize, background: bgColor }} src={require('../../images/rakipbul.png')}/>
+                    <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle} style={{background: bgColor }}
+                         src={require(`../../images/${teamData.name}.png`)}/>
                     :
                     (teamData?.name && !rakipbul)
                         ?
-                        <img style={{ width: imageSize, height: imageSize, background: bgColor }} src={require('../../images/unknown.png')}/>
+                        <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle} style={{ background: bgColor }} src={require('../../images/unknown.png')}/>
                         :
-                        <img style={{ width: imageSize, height: imageSize, background: bgColor}} src={require('../../images/oyesfc.PNG')}/>}
-                <span style={{ background: bgColor, color: "lightgray", textAlign: "center" , fontSize: fontSize}}>
+                        <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle} style={{background: bgColor}} src={require('../../images/oyesfc.PNG')}/>}
+                <span className={isDetails ? classes.titleDetailStyle : classes.titleStyle} style={{ background: bgColor }}>
                     {teamData?.name ? teamData?.name : TeamNames.oYesFc}
                 </span>
             </div>

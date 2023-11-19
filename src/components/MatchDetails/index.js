@@ -9,6 +9,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 
 export const MatchDetails = ({onClose, matchDetailsData}) => {
 
+    const isMobile = window.innerWidth <= 600;
     const buttonBgColor = '#323232'
     const matchDetails = Object.entries(matchDetailsData.oyesfc.squad).filter(x => x[1].goal > 0)
     const popupRef = useRef(null);
@@ -18,6 +19,11 @@ export const MatchDetails = ({onClose, matchDetailsData}) => {
             document.body.style.overflow = 'visible';
             onClose();
         }
+    };
+
+    const handleClose = () => {
+        document.body.style.overflow = 'visible';
+        onClose();
     };
 
     useEffect(() => {
@@ -36,7 +42,7 @@ export const MatchDetails = ({onClose, matchDetailsData}) => {
                     <main className={classes.score} style={{background: buttonBgColor}}>
                         <Result homeTeamScore={matchDetailsData?.oyesfc?.goal} awayTeamScore={matchDetailsData?.rival?.goal}
                                 bgColor={buttonBgColor}
-                                fontSize={'3rem'}/>
+                                isDetails={true}/>
                     </main>
                     <TeamView teamData={matchDetailsData?.rival} rakipbul={matchDetailsData?.rakipbul}
                               bgColor={buttonBgColor} isDetails={true}/>
@@ -46,20 +52,17 @@ export const MatchDetails = ({onClose, matchDetailsData}) => {
                         {matchDetails.map((item, index) => (
                             <div key={index} style={{
                                 background: buttonBgColor,
-                                display: 'flex',
-                                alignItems: 'center',
-                                marginBottom: '5px',
-                                marginTop: '5px'
-                            }}>
+                            }}
+                                 className={classes.goalScorerGrid}>
                             <span style={{
                                 background: buttonBgColor,
-                                color: "lightgray",
-                                marginRight: '10px'
-                            }}>{item[0].replace(/[0-9]/g, '')}</span>
+                            }}
+                            className={classes.goalScorerName}>{item[0].replace(/[0-9]/g, '')}</span>
                                 {Array.from({length: item[1].goal}).map((_, imgIndex) => (
                                     <img
                                         key={imgIndex}
-                                        style={{width: 20, height: 20, background: buttonBgColor, marginLeft: '5px',}}
+                                        className={classes.goalImage}
+                                        style={{background: buttonBgColor}}
                                         src={require('../../images/football.png')}
                                         alt={`Goal ${imgIndex + 1}`}
                                     />
@@ -70,62 +73,57 @@ export const MatchDetails = ({onClose, matchDetailsData}) => {
                     : null
                 }
                 <div style={{display: "flex", background: "#404040"}}>
-                    <div style={{display: "block", background: "#404040", width: "30%"}}>
+                    <div className={classes.timeSectionStyle}>
                         <section className={classes.location} style={{background: buttonBgColor}}>
                             <LocationOnIcon
-                                style={{background: buttonBgColor, color: "white", fontSize: 43}}></LocationOnIcon>
-                            <span style={{
-                                background: buttonBgColor,
-                                color: "lightgray",
-                                fontSize: 20,
-                                display: "block",
-                                marginTop: "10px"}}>
+                                className={classes.iconStyle}
+                                style={{background: buttonBgColor}}></LocationOnIcon>
+                            <span className={classes.dataStyle}
+                                style={{
+                                background: buttonBgColor}}>
                             {matchDetailsData.place}
                         </span>
                         </section>
                         <section className={classes.location} style={{background: buttonBgColor}}>
                             <CalendarMonthIcon
-                                style={{background: buttonBgColor, color: "white", fontSize: 43}}></CalendarMonthIcon>
-                            <span style={{
-                                background: buttonBgColor,
-                                color: "lightgray",
-                                fontSize: 20,
-                                display: "block",
-                                marginTop: "10px"}}>
+                                className={classes.iconStyle}
+                                style={{background: buttonBgColor}}></CalendarMonthIcon>
+                            <span className={classes.dataStyle}
+                                style={{
+                                background: buttonBgColor}}>
                             {matchDetailsData.day.replace(/-/g, '/')}
                         </span>
                         </section>
                         <section className={classes.location} style={{background: buttonBgColor}}>
                             <AccessTimeIcon
-                                style={{background: buttonBgColor, color: "white", fontSize: 43}}></AccessTimeIcon>
-                            <span style={{
-                                background: buttonBgColor,
-                                color: "lightgray",
-                                fontSize: 20,
-                                display: "block",
-                                marginTop: "10px"}}>
+                                className={classes.iconStyle}
+                                style={{background: buttonBgColor}}></AccessTimeIcon>
+                            <span className={classes.dataStyle}
+                                  style={{
+                                background: buttonBgColor}}>
                             {matchDetailsData.time}
                         </span>
                         </section>
                     </div>
-                    <div style={{display: "block", background: "#404040", width: "70%"}}>
-
+                    <div className={classes.squadSectionStyle}>
                         <section className={classes.squadMembers} style={{background: buttonBgColor}}>
                             <GroupsIcon
-                                style={{background: buttonBgColor, color: "white", fontSize: 43, marginLeft: "10px"}}></GroupsIcon>
+                                className={classes.iconStyle}
+                                style={{background: buttonBgColor, marginLeft: "10px"}}></GroupsIcon>
                             {Object.entries(matchDetailsData.oyesfc.squad).map((x, y) => (
-                                <span style={{
+                                <span className={classes.dataStyle}
+                                    style={{
                                     background: buttonBgColor,
-                                    color: "lightgray",
-                                    fontSize: 20,
-                                    display: "block",
-                                    marginTop: "10px", marginLeft: "10px"}}>
+                                        marginLeft: "10px"}}>
                                 {x[0].replace(/[0-9]/g, '')}
                             </span>
                             ))}
                         </section>
                     </div>
                 </div>
+                {isMobile && <div className={classes.buttonBorderStyle}>
+                    <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
+                </div>}
             </div>
         </div>
     );

@@ -6,3 +6,38 @@
   text-align: center;
 }
 
+.imageStyle {
+  width: 75px;
+  height: 75px;
+  @media (max-width: 600px) {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.imageDetailStyle {
+  width: 100px;
+  height: 100px;
+  @media (max-width: 600px) {
+    width: 65px;
+    height: 65px;
+  }
+}
+
+.titleStyle {
+  font-size: 16px;
+  color: lightgray;
+  text-align: center;
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
+}
+
+.titleDetailStyle {
+  font-size: 20px;
+  color: lightgray;
+  text-align: center;
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
+}

@@ -13,7 +13,6 @@ function FilterButtons({ data, applyFilter }) {
         <div className={classes.grid}>
             {data.map((item, index) => (
                 <button
-                    style={{marginRight: "12px", fontSize: "14px"}}
                     key={index}
                     onClick={() => handleButtonClick(index)}
                     className={index === activeButton ? classes.activeButton : classes.disabledButton}

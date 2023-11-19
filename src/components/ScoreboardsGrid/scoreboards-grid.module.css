@@ -5,7 +5,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 1%;
+  margin-top: 20px;
   margin-left: 14%;
   margin-right: 14%;
+  @media (max-width: 600px) {
+    margin-left: 3%;
+    margin-right: 3%;
+  }
 }

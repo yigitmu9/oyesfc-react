@@ -50,32 +50,15 @@ const ScoreboardsGrid = ({databaseData}) => {
     return (
         <>
             <FilterButtons data={buttons} applyFilter={applyFilter} />
-            <>
-                {dataFound ?
-                    <div className={classes.grid}>
-                        {sortedData?.map((x, y) => (
-                            <Scoreboard
-                                key={y}
-                                value={x}
-                                openPopup={() => openPopup(x)}
-                                matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}/>))}
-                        {isPopupOpen && <MatchDetails matchDetailsData={matchDetailsData} onClose={() => setPopupOpen(false)} />}
-                    </div>
-                    :
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: '90vh',
-                            color: 'lightgray'
-                        }}
-                    >
-                        <h1>No match found</h1>
-                    </div>
-                }
-
-            </>
+            <div className={classes.grid}>
+                {sortedData?.map((x, y) => (
+                    <Scoreboard
+                        key={y}
+                        value={x}
+                        openPopup={() => openPopup(x)}
+                        matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}/>))}
+                {isPopupOpen && <MatchDetails matchDetailsData={matchDetailsData} onClose={() => setPopupOpen(false)} />}
+            </div>
         </>
     );
 

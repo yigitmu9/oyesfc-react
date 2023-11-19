@@ -14,6 +14,11 @@
     max-height: 99%;
     overflow: auto;
     z-index: 12;
+    @media (max-width: 600px) {
+        width: 97%;
+        max-width: 97%;
+        padding: 2px;
+    }
 }
 
 .popupCloseButton {
@@ -44,6 +49,9 @@
     border-radius: 25px;
     min-width: 572px;
     margin: 10px;
+    @media (max-width: 600px) {
+        min-width: 0;
+    }
 }
 
 .score {
@@ -58,6 +66,9 @@
     border-radius: 25px;
     min-width: 572px;
     margin: 10px;
+    @media (max-width: 600px) {
+        min-width: 0;
+    }
 }
 
 .location {
@@ -68,6 +79,9 @@
     width: auto;
     height: auto;
     margin: 10px;
+    @media (max-width: 600px) {
+        margin: 5px 5px 10px 10px;
+    }
 }
 
 .squadMembers {
@@ -77,6 +91,9 @@
     width: auto;
     height: 95%;
     margin: 10px;
+    @media (max-width: 600px) {
+        margin: 5px 10px 10px 5px;
+    }
 }
 
 .overlay {
@@ -90,4 +107,77 @@
     justify-content: center;
     align-items: center;
     z-index: 11;
+}
+
+.goalScorerName {
+    color: lightgray;
+    margin-right: 10px;
+    @media (max-width: 600px) {
+        font-size: 14px;
+    }
+}
+
+.goalScorerGrid {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.goalImage {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    @media (max-width: 600px) {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.iconStyle {
+    color: white;
+    font-size: 43px;
+    @media (max-width: 600px) {
+        font-size: 30px;
+    }
+}
+
+.dataStyle {
+    color: lightgray;
+    font-size: 20px;
+    display: block;
+    margin-top: 10px;
+    @media (max-width: 600px) {
+        font-size: 14px;
+    }
+}
+
+.timeSectionStyle {
+    display: block;
+    background: #404040;
+    width: 30%;
+    @media (max-width: 600px) {
+        width: 40%;
+    }
+}
+
+.squadSectionStyle {
+    display: block;
+    background: #404040;
+    width: 70%;
+    @media (max-width: 600px) {
+        width: 60%;
+    }
+}
+
+.buttonStyle {
+    background: darkred;
+    font-size: 14px;
+    border-radius: 25px;
+}
+
+.buttonBorderStyle {
+    background: #404040;
+    font-size: 14px;
+    margin: 10px;
 }

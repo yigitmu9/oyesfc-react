@@ -1,9 +1,9 @@
 import React from 'react';
 import classes from "./result.module.css";
 
-const Result = ({ homeTeamScore, awayTeamScore, bgColor, fontSize }) => {
+const Result = ({ homeTeamScore, awayTeamScore, bgColor, isDetails }) => {
     return (
-        <span className={classes.result} style={{background: bgColor, fontSize: fontSize}}>{homeTeamScore} - {awayTeamScore}</span>
+        <span className={isDetails ? classes.resultDetails: classes.result} style={{background: bgColor}}>{homeTeamScore} - {awayTeamScore}</span>
     );
 };
 

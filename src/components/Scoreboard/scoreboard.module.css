@@ -8,12 +8,18 @@
   max-width: 500px;
   min-width: 572px;
   cursor: pointer;
-  width: calc(33.33% - 20px); /* Her bir kartın yüzde 33.33 genişliği (kenar boşluğu çıkarılarak) */
+  width: calc(33.33% - 20px);
   margin: 10px;
+  @media (max-width: 600px) {
+    max-width: 100%;
+    min-width: 100px;
+    width: 100%;
+    margin-bottom: -5px;
+  }
 }
 
 .scoreboard:nth-child(3n + 1):last-child {
-  margin-right: auto; /* Sadece bir kart varsa sağ tarafa boşluk eklemek için */
+  margin-right: auto;
 }
 
 .score {
@@ -21,6 +27,5 @@
 }
 
 .scoreboard:hover {
-
-  transform: scale(1.05); /* Slightly larger size on hover */
+  transform: scale(1.05);
 }

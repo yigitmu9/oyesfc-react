@@ -26,8 +26,7 @@ const Scoreboard = ({value, openPopup, matchDetailsData}) => {
                  onMouseLeave={handleButtonLeave} style={{background: buttonBgColor}}>
             <TeamView teamData={value?.oyesfc} rakipbul={value?.rakipbul} bgColor={buttonBgColor}/>
             <main className={classes.score} style={{background: buttonBgColor}}>
-                <Result homeTeamScore={value?.oyesfc?.goal} awayTeamScore={value?.rival?.goal} bgColor={buttonBgColor}
-                fontSize={'1.4rem'}/>
+                <Result homeTeamScore={value?.oyesfc?.goal} awayTeamScore={value?.rival?.goal} bgColor={buttonBgColor}/>
                 <GameStatus status={value?.day?.replace(/-/g, '/')} bgColor={buttonBgColor}/>
             </main>
             <TeamView teamData={value?.rival} rakipbul={value?.rakipbul} bgColor={buttonBgColor}/>

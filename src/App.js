@@ -26,11 +26,11 @@ function App() {
                 <Router>
                     <Navbar/>
                     <Routes>
-                        <Route path='/' element={<MainPage/>}/>
-                        <Route path='/matches' element={<Matches databaseData={data}/>}/>
-                        <Route path='/individual-stats' element={<IndividualStats databaseData={data}/>}/>
-                        <Route path='/team-stats' element={<TeamStats databaseData={data}/>}/>
-                        <Route path='/add-match' element={<AddMatch/>}/>
+                        <Route path='oyesfc-react/' element={<MainPage/>}/>
+                        <Route path='oyesfc-react/matches' element={<Matches databaseData={data}/>}/>
+                        <Route path='oyesfc-react/individual-stats' element={<IndividualStats databaseData={data}/>}/>
+                        <Route path='oyesfc-react/team-stats' element={<TeamStats databaseData={data}/>}/>
+                        <Route path='oyesfc-react/add-match' element={<AddMatch/>}/>
                     </Routes>
                 </Router>
                 :

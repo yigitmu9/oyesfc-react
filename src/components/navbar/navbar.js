@@ -29,18 +29,18 @@ const Navbar = () => {
     return (
         <>
             <Nav>
-                <NavLink to='/' style={{background:"darkred"}}>
+                <NavLink to='oyesfc-react/' style={{background:"darkred"}}>
                     <img style={{ width: 60, height: 60, background:"darkred" }} src={require('../../images/oyesfc.PNG')}/>
                 </NavLink>
                 <Bars />
                 <NavMenu>
-                    <NavLink to='/matches' activestyle="true" style={{background:"darkred"}}>
+                    <NavLink to='oyesfc-react/matches' activestyle="true" style={{background:"darkred"}}>
                         Matches
                     </NavLink>
-                    <NavLink to='/individual-stats' activestyle="true" style={{background:"darkred"}}>
+                    <NavLink to='oyesfc-react/individual-stats' activestyle="true" style={{background:"darkred"}}>
                         Individual Stats
                     </NavLink>
-                    <NavLink to='/team-stats' activestyle="true" style={{background:"darkred"}}>
+                    <NavLink to='oyesfc-react/team-stats' activestyle="true" style={{background:"darkred"}}>
                         Team Stats
                     </NavLink>
                 </NavMenu>

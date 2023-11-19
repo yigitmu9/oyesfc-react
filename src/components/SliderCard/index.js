@@ -53,14 +53,14 @@ const SliderCard = () => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <CardContent style={{backgroundColor: "#242424", width: "100%", height: "100%"}}>
+            <Card className={classes.cardStyle}>
+                <CardContent className={classes.cardContentStyle}>
                     <div className={classes.slider}>
                         <button className={classes.buttonAlign} onClick={prevCard}>&lt;</button>
                         <StyledCardDesign>
-                            <img style={{ width: "400px", height: "400px", background: "#242424", transition: 'opacity 1.3s ease-in-out'}} src={require(`../../images/${selectedCard[0].logo}`)}/>
-                            <h1 style={{ background: "#242424", marginTop: "50px", transition: 'opacity 1.3s ease-in-out'}}>{selectedCard[0].title}</h1>
-                            <h3 style={{ background: "#242424", marginTop: "50px", transition: 'opacity 1.3s ease-in-out'}}>{selectedCard[0].content}</h3>
+                            <img className={classes.image} src={require(`../../images/${selectedCard[0].logo}`)}/>
+                            <h1 className={classes.title}>{selectedCard[0].title}</h1>
+                            <h3 className={classes.content}>{selectedCard[0].content}</h3>
                         </StyledCardDesign>
                         <button onClick={nextCard}>&gt;</button>
                     </div>
