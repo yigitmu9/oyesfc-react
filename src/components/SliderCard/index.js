@@ -53,7 +53,7 @@ const SliderCard = () => {
 
     return (
         <div className={classes.grid}>
-            <Card className={classes.cardStyle}>
+            <Card sx={{backgroundColor: "#242424", borderRadius: "25px"}} className={classes.cardStyle}>
                 <CardContent className={classes.cardContentStyle}>
                     <div className={classes.slider}>
                         <button className={classes.buttonAlign} onClick={prevCard}>&lt;</button>
