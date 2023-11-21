@@ -7,9 +7,7 @@
 }
 
 .navbarOpen {
-    display: flex;
-    align-items: center;
-    margin-right: -24px;
+    display: none;
 
     @media (max-width: 768px) {
         display: block;

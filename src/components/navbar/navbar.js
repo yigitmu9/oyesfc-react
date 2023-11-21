@@ -51,7 +51,7 @@ const Navbar = () => {
                     <img style={{ width: 60, height: 60, background:"darkred" }} src={require('../../images/oyesfc.PNG')}/>
                 </NavLink>
                 <Bars onClick={changeMobileNavbar}/>
-                <NavMenu className={isNavOpen ? classes.navbarOpen : classes.navCloseMenuStyle}>
+                <NavMenu className={ classes.navCloseMenuStyle}>
                     <NavLink onClick={changeMobileNavbar} to='oyesfc-react/matches' activestyle="true" style={{background:"darkred"}}>
                         Matches
                     </NavLink>
@@ -62,6 +62,20 @@ const Navbar = () => {
                         Team Stats
                     </NavLink>
                 </NavMenu>
+                {isNavOpen ?
+                    <NavMenu className={classes.navbarOpen}>
+                        <NavLink onClick={changeMobileNavbar} to='oyesfc-react/matches' activestyle="true" style={{background:"darkred"}}>
+                            Matches
+                        </NavLink>
+                        <NavLink onClick={changeMobileNavbar} to='oyesfc-react/individual-stats' activestyle="true" style={{background:"darkred"}}>
+                            Individual Stats
+                        </NavLink>
+                        <NavLink onClick={changeMobileNavbar} to='oyesfc-react/team-stats' activestyle="true" style={{background:"darkred"}}>
+                            Team Stats
+                        </NavLink>
+                    </NavMenu>
+                    : null
+                }
                 <NavBtn className={isNavOpen ? classes.navOpenButtonStyle : classes.navCloseButtonStyle} style={{background:"darkred"}}>
                     <NavBtnLink className={isNavOpen ? classes.navOpenButtonLinkStyle : classes.navCloseButtonLinkStyle} onClick={openPopup}>Add Match</NavBtnLink>
                     {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
