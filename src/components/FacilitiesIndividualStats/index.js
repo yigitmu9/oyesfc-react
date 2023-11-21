@@ -101,11 +101,11 @@ const FacilitiesIndividualStats = ({data}) => {
     return (
         <div className={classes.grid}>
             <Card sx={{ borderRadius: "25px", width: "100%", height: "570px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Facilities Statistics</h1>
-                <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>
-                    <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", width: "500px", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center"}}>
-                        <FormControl style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} fullWidth>
-                            <label style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                <h1 className={classes.titleStyle}>Facilities Statistics</h1>
+                <div className={classes.selectionGrid}>
+                    <div className={classes.selectionInsideGrid}>
+                        <FormControl className={classes.colorStyle} fullWidth>
+                            <label className={classes.colorStyle}>
                                 Select a Facility:
                                 <select className={classes.select} onChange={handleChange}>
                                     {Object.values(StadiumNames).map(x => (

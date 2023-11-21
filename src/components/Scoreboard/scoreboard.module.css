@@ -10,7 +10,7 @@
   cursor: pointer;
   width: calc(33.33% - 20px);
   margin: 10px;
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     max-width: 100%;
     min-width: 100px;
     width: 100%;

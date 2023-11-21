@@ -6,7 +6,10 @@
     width: 100%;
     margin-left: 14%;
     margin-right: 14%;
-
+    @media (max-width: 768px) {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
 }
 
 .goalsPerGameDiv {
@@ -16,9 +19,39 @@
     background-color: rgb(36, 36, 36);
     padding: 30px;
     border-radius: 25px;
+    @media (max-width: 768px) {
+        width: 100%;
+        height: 450px;
+    }
 }
 
 .goalsPerGameChart {
     background-color: rgb(36, 36, 36);
     height: auto;
+    @media (max-width: 768px) {
+        height: 100%;
+    }
+}
+
+.insideGrid {
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 768px) {
+        display: block;
+        justify-content: center;
+    }
+}
+
+.titleStyle {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    text-align: center;
+    @media (max-width: 768px) {
+
+    }
+}
+
+.chartStyle {
+    height: 85%;
+    background-color: rgb(36, 36, 36);
 }

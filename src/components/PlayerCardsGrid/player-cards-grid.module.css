@@ -6,10 +6,11 @@
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 2rem;
-
     margin-left: 14%;
     margin-right: 14%;
-
     align-items: center;
     align-content: center;
+    @media (max-width: 768px) {
+        justify-content: center;
+    }
 }

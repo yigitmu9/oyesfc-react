@@ -5,6 +5,10 @@
     justify-content: center;
     align-items: center;
     align-content: center;
+    @media screen and (max-width: 600px) {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
 }
 
 .chart {
@@ -20,4 +24,39 @@
     width: 200px;
     height: 50px;
     font-size: 16px;
+}
+
+.titleStyle {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    text-align: center;
+    margin-top: 20px
+}
+
+.selectionGrid {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.selectionInsideGrid {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+}
+
+.colorStyle {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
 }

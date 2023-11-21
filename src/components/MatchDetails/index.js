@@ -9,7 +9,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 
 export const MatchDetails = ({onClose, matchDetailsData}) => {
 
-    const isMobile = window.innerWidth <= 600;
+    const isMobile = window.innerWidth <= 768;
     const buttonBgColor = '#323232'
     const matchDetails = Object.entries(matchDetailsData.oyesfc.squad).filter(x => x[1].goal > 0)
     const popupRef = useRef(null);

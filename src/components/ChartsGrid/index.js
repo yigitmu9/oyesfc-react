@@ -209,9 +209,9 @@ const ChartsGrid = ({matchData, databaseData}) => {
 
     return (
         <div className={classes.grid}>
-            <div style={{display: "flex", justifyContent: "space-between"}}>
+            <div className={classes.insideGrid}>
                 <div className={classes.goalsPerGameDiv}>
-                    <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Goals per Game</h3>
+                    <h3 className={classes.titleStyle}>Goals per Game</h3>
                     <Bar
                         data={goalsPerGameDatasets}
                         width={"100%"}
@@ -220,7 +220,7 @@ const ChartsGrid = ({matchData, databaseData}) => {
                     />
                 </div>
                 <div className={classes.goalsPerGameDiv}>
-                    <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Rate of Attendance</h3>
+                    <h3 className={classes.titleStyle}>Rate of Attendance</h3>
                     <Line
                         data={attendanceRateDatasets}
                         width={"100%"}
@@ -229,24 +229,29 @@ const ChartsGrid = ({matchData, databaseData}) => {
                     />
                 </div>
             </div>
-            <div style={{display: "flex", justifyContent: "space-between"}}>
+            <div className={classes.insideGrid}>
                 <div className={classes.goalsPerGameDiv}>
-                    <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Goal Percentage Compared to Total O Yes FC Goal</h3>
-                    <Pie
-                        data={goalPercentDatasets}
-                        width={"100%"}
-                        className={classes.goalsPerGameChart}
-                        options={pieOptions}
-                    />
+                    <h3 className={classes.titleStyle}>Goal Percentage Compared to Total O Yes FC Goal</h3>
+                    <div className={classes.chartStyle}>
+                        <Pie
+                            data={goalPercentDatasets}
+                            width={"100%"}
+                            className={classes.goalsPerGameChart}
+                            options={pieOptions}
+                        />
+                    </div>
+
                 </div>
                 <div className={classes.goalsPerGameDiv}>
-                    <h3 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center"}}>Regular Matches Compared to the Rakipbul</h3>
-                    <Radar
-                        data={performanceRateDatasets}
-                        width={"100%"}
-                        className={classes.goalsPerGameChart}
-                        options={radarOptions}
-                    />
+                    <h3 className={classes.titleStyle}>Regular Matches Compared to the Rakipbul</h3>
+                    <div className={classes.chartStyle}>
+                        <Radar
+                            data={performanceRateDatasets}
+                            width={"100%"}
+                            className={classes.goalsPerGameChart}
+                            options={radarOptions}
+                        />
+                    </div>
                 </div>
             </div>
 

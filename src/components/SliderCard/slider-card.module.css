@@ -44,6 +44,10 @@ button {
     border: none;
     font-size: 24px;
     cursor: pointer;
+    @media (max-width: 768px) {
+        padding: 10px;
+    }
+
 }
 
 .dot {
@@ -60,7 +64,7 @@ button {
 }
 
 .grid {
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
         margin-left: 5%;
         margin-right: 5%;
         width: 100%;
@@ -89,10 +93,12 @@ button {
 }
 
 .image {
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
         width: 90%;
         height: 90%;
         background: #242424;
+        min-width: 100px;
+        min-height: 100px;
     }
     width: 40%;
     height: 40%;
@@ -107,7 +113,7 @@ button {
 .content {
     background: #242424;
     margin-top: 50px;
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
         font-size: 0.9rem;
     }
 }
