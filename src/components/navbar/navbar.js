@@ -13,14 +13,17 @@ import classes from "../navbar/navbar.module.css"
 
 const Navbar = () => {
 
+    const innerWidth = () => {
+        return window.innerWidth;
+    }
+
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [isNavOpen, setNavOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [messageData, setmessageData] = useState(null);
-    const isMobile = window.innerWidth <= 768;
 
     const openPopup = () => {
-        if (isMobile) changeMobileNavbar()
+        if (innerWidth() <= 768) changeMobileNavbar()
         document.body.style.overflow = 'hidden';
         setPopupOpen(true);
     };
@@ -30,14 +33,13 @@ const Navbar = () => {
     };
 
     const changeMobileNavbar = () => {
-        if (isMobile) {
-            console.log('yes')
+        if (innerWidth() <= 768) {
             isNavOpen ? setNavOpen(false) : setNavOpen(true);
         }
     };
 
     const closeMobileNavbar = () => {
-        if (isMobile && isNavOpen) {
+        if (isNavOpen) {
             setNavOpen(false);
         }
     };
