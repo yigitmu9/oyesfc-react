@@ -51,7 +51,7 @@ const Navbar = () => {
                     <img style={{ width: 60, height: 60, background:"darkred" }} src={require('../../images/oyesfc.PNG')}/>
                 </NavLink>
                 <Bars onClick={changeMobileNavbar}/>
-                <NavMenu className={isNavOpen ? classes.navOpenMenuStyle : classes.navCloseMenuStyle}>
+                <NavMenu className={isNavOpen ? classes.navbarOpen : classes.navCloseMenuStyle}>
                     <NavLink onClick={changeMobileNavbar} to='oyesfc-react/matches' activestyle="true" style={{background:"darkred"}}>
                         Matches
                     </NavLink>

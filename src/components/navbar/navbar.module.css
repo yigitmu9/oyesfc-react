@@ -6,12 +6,12 @@
     background-color: #242424;
 }
 
-.navOpenMenuStyle {
+.navbarOpen {
     display: flex;
     align-items: center;
     margin-right: -24px;
 
-    @media screen and (max-width: 768px) {
+    @media (max-width: 768px) {
         display: block;
         align-items: center;
         position: absolute;
