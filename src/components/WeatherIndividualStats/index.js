@@ -86,92 +86,96 @@ const WeatherIndividualStats = ({data}) => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "48%", height: "390px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Cold Weather Statistics</h1>
-                <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "300px", backgroundColor: "#242424", textAlign: "center"}}>
-                            <AcUnitIcon
-                                style={{background: "#242424", color: "white", fontSize: 270, marginTop: "17px"}}></AcUnitIcon>
-                        </div>
-                        <div style={{display: "flex", width: "50%", height: "270px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "20px", marginLeft: "15px"}}>
-                            <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                    <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                        <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0", zIndex:"9"}}>Players</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals per Game</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rows.map((row, number) => (
-                                            <TableRow
-                                                key={row}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
-                                            >
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0"}} component="th" scope="row">
-                                                    {row}
-                                                </TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchDataCold[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalDataCold[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceDataCold[number]}%</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameDataCold[number]}</TableCell>
+            <div className={classes.cardGrid}>
+                <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                    <h1 className={classes.titleStyle}>Cold Weather Statistics</h1>
+                    <CardContent style={{backgroundColor: "#242424"}}>
+                        <div className={classes.cardAlign}>
+                            <div className={classes.iconDivStyle}>
+                                <AcUnitIcon sx={{width: "200px", height: "200px"}}
+                                            className={classes.iconStyle}></AcUnitIcon>
+                            </div>
+                            <div className={classes.tableStyle}>
+                                <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                    <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                        <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                            <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Players</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals per Game</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows.map((row, number) => (
+                                                <TableRow
+                                                    key={row}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                    style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
+                                                >
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
+                                                        {row}
+                                                    </TableCell>
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchDataCold[number]}</TableCell>
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalDataCold[number]}</TableCell>
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceDataCold[number]}%</TableCell>
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameDataCold[number]}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </div>
                         </div>
-                    </div>
-                </CardContent>
-            </Card>
-            <Card sx={{ borderRadius: "25px", width: "48%", height: "390px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Hot Weather Statistics</h1>
-                <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424", textAlign: "center"}}>
-                            <LocalFireDepartmentIcon
-                                style={{background: "#242424", color: "white", fontSize: 270, marginTop: "17px"}}></LocalFireDepartmentIcon>
-                        </div>
-                        <div style={{display: "flex", width: "50%", height: "270px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px", marginLeft: "15px"}}>
-                            <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                    <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                        <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0", zIndex:"9"}}>Players</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals per Game</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rows.map((row, number) => (
-                                            <TableRow
-                                                key={row}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
-                                            >
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0"}} component="th" scope="row">
-                                                    {row}
-                                                </TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceData[number]}%</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameData[number]}</TableCell>
+                    </CardContent>
+                </Card>
+            </div>
+            <div className={classes.cardGrid}>
+                <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                    <h1 className={classes.titleStyle}>Hot Weather Statistics</h1>
+                    <CardContent style={{backgroundColor: "#242424"}}>
+                        <div className={classes.cardAlign}>
+                            <div className={classes.iconDivStyle}>
+                                <LocalFireDepartmentIcon sx={{width: "200px", height: "200px"}}
+                                    className={classes.iconStyle}></LocalFireDepartmentIcon>
+                            </div>
+                            <div className={classes.tableStyle}>
+                                <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                    <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                        <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                            <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Players</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals per Game</TableCell>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows.map((row, number) => (
+                                                <TableRow
+                                                    key={row}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                    style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
+                                                >
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
+                                                        {row}
+                                                    </TableCell>
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchData[number]}</TableCell>
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalData[number]}</TableCell>
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceData[number]}%</TableCell>
+                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameData[number]}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </div>
                         </div>
-                    </div>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 };

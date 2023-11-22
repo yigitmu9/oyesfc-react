@@ -5,9 +5,15 @@
     justify-content: center;
     align-items: center;
     align-content: center;
-    @media screen and (max-width: 600px) {
-        margin-left: 3%;
-        margin-right: 3%;
+    @media screen and (max-width: 768px) {
+        margin-left: 13%;
+        margin-right: 13%;
+        width: 95%;
+    }
+    @media screen and (min-width: 769px) and (max-width: 1700px) {
+        margin-left: 13%;
+        margin-right: 13%;
+        width: 72%;
     }
 }
 
@@ -24,13 +30,21 @@
     width: 200px;
     height: 50px;
     font-size: 16px;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+        width: 170px;
+        height: 40px;
+    }
 }
 
 .titleStyle {
     background-color: rgb(36, 36, 36);
     color: lightgray;
     text-align: center;
-    margin-top: 20px
+    margin-top: 20px;
+    @media screen and (max-width: 768px) {
+        font-size: 25px;
+    }
 }
 
 .selectionGrid {
@@ -56,7 +70,62 @@
     text-align: center;
 }
 
+.chartStyle {
+    display: block;
+    background-color: #242424;
+    width: 40%;
+    margin-right: 30px;
+    height: 350px;
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    @media screen and (min-width: 769px) and (max-width: 1700px) {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+}
+
 .colorStyle {
     background-color: rgb(36, 36, 36);
     color: lightgray;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+
+.cardContentInsideStyle {
+    display: flex;
+    background-color: #242424;
+
+    @media screen and (max-width: 768px) {
+        display: block;
+    }
+    @media screen and (min-width: 769px) and (max-width: 1700px) {
+        display: block;
+    }
+}
+
+.tableStyle {
+    display: block;
+    background-color: #242424;
+    width: 60%;
+    margin-right: 30px;
+    height: 330px;
+    text-align: center;
+    justify-content: center;
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+        overflow: auto;
+    }
+    @media screen and (min-width: 769px) and (max-width: 1700px) {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+        overflow: auto;
+    }
 }

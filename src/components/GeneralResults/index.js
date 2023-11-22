@@ -121,7 +121,6 @@ const GeneralResults = ({data}) => {
                             </List>
                         </div>
                     </div>
-
                 </CardContent>
             </Card>
         </div>

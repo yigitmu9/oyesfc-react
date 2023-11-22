@@ -100,7 +100,7 @@ const FacilitiesIndividualStats = ({data}) => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "100%", height: "570px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+            <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center" }}>
                 <h1 className={classes.titleStyle}>Facilities Statistics</h1>
                 <div className={classes.selectionGrid}>
                     <div className={classes.selectionInsideGrid}>
@@ -118,8 +118,8 @@ const FacilitiesIndividualStats = ({data}) => {
                     </div>
                 </div>
                 <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424"}}>
+                    <div className={classes.cardContentInsideStyle}>
+                        <div className={classes.chartStyle}>
                             <Bar
                                 data={chartDatasets}
                                 width={"100%"}
@@ -127,7 +127,7 @@ const FacilitiesIndividualStats = ({data}) => {
                                 options={options}
                             />
                         </div>
-                        <div style={{display: "flex", width: "60%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
+                        <div className={classes.tableStyle}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>

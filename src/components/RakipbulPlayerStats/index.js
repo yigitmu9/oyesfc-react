@@ -102,11 +102,11 @@ const RakipbulPlayerStats = () => {
     return (
         <div className={classes.grid}>
             <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Statistics of 10 Specific Rakipbul Matches</h1>
-                <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>
-                    <div style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", width: "500px", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", textAlign: "center"}}>
-                        <FormControl style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} fullWidth>
-                            <label style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
+                <h1 className={classes.titleStyle}>Statistics of 10 Specific Rakipbul Matches</h1>
+                <div className={classes.selectionGrid}>
+                    <div className={classes.selectionInsideGrid}>
+                        <FormControl className={classes.colorStyle} fullWidth>
+                            <label className={classes.colorStyle}>
                                 Select a Match:
                                 <select className={classes.select} onChange={handleChange}>
                                     <option value='Total of All Matches'>Total of All Matches</option>
@@ -119,8 +119,8 @@ const RakipbulPlayerStats = () => {
                     </div>
                 </div>
                 <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424"}}>
+                    <div className={classes.cardContentInsideStyle}>
+                        <div className={classes.chartStyle}>
                             <Bar
                                 data={chartDatasets}
                                 width={"100%"}
@@ -128,7 +128,7 @@ const RakipbulPlayerStats = () => {
                                 options={options}
                             />
                         </div>
-                        <div style={{display: "flex", width: "60%", height: "330px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
+                        <div className={classes.tableStyle}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
@@ -158,8 +158,8 @@ const RakipbulPlayerStats = () => {
                         </div>
                     </div>
                 </CardContent>
-                <div style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", margin: "10px",  fontSize: "15px"}}>
-                        <span style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", marginTop: "20px",  fontSize: "15px"}}>
+                <div className={classes.noteStyle}>
+                        <span className={classes.noteInsideStyle}>
                             *Note: These statistic tables are only valid for 10 specific Rakipbul matches for which position data is available.
                             The data is static and cannot work with filters.
                         </span>
