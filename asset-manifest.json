@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/oyesfc-react/static/css/main.176e8bed.css",
-    "main.js": "/oyesfc-react/static/js/main.04122383.js",
+    "main.css": "/oyesfc-react/static/css/main.931407f8.css",
+    "main.js": "/oyesfc-react/static/js/main.34c503f4.js",
     "static/js/787.9398f104.chunk.js": "/oyesfc-react/static/js/787.9398f104.chunk.js",
     "static/media/ghost.png": "/oyesfc-react/static/media/ghost.be13388caa96804fa3ce.png",
     "static/media/mert.jpeg": "/oyesfc-react/static/media/mert.da0a37140cc1e08c4e13.jpeg",
@@ -35,12 +35,12 @@
     "static/media/football.png": "/oyesfc-react/static/media/football.cb2c116cabd7616ef325.png",
     "static/media/Olympos.png": "/oyesfc-react/static/media/Olympos.561cd7e7555c194cb599.png",
     "index.html": "/oyesfc-react/index.html",
-    "main.176e8bed.css.map": "/oyesfc-react/static/css/main.176e8bed.css.map",
-    "main.04122383.js.map": "/oyesfc-react/static/js/main.04122383.js.map",
+    "main.931407f8.css.map": "/oyesfc-react/static/css/main.931407f8.css.map",
+    "main.34c503f4.js.map": "/oyesfc-react/static/js/main.34c503f4.js.map",
     "787.9398f104.chunk.js.map": "/oyesfc-react/static/js/787.9398f104.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.176e8bed.css",
-    "static/js/main.04122383.js"
+    "static/css/main.931407f8.css",
+    "static/js/main.34c503f4.js"
   ]
 }
