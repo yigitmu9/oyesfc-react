@@ -21,7 +21,7 @@ const Message = ({onClose, messageData}) => {
                         <ReportProblemIcon style={{marginBottom: "10px", width: "5rem", height: "5rem",  background: "#404040", color: "lightgray"}}></ReportProblemIcon>
                     }
                     <h4 style={{marginBottom: "10px",  background: "#404040", color: "lightgray"}}>{messageData.message}</h4>
-                    <button onClick={handleClose}>Ok</button>
+                    <button className={classes.buttonStyle} onClick={handleClose}>Ok</button>
                 </div>
             </div>
         </div>

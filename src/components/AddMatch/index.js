@@ -271,7 +271,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
                         </div>
                     </div>
                     <div className={classes.buttonDivStyle}>
-                        <button className={classes.buttonSubmitStyle} type="submit">Submit</button>
+                        <button className={classes.buttonStyle} style={{ marginRight: "1rem"}} type="submit">Submit</button>
                         <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
                     </div>
                 </form>
