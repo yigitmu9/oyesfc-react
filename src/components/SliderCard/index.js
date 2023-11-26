@@ -56,13 +56,13 @@ const SliderCard = () => {
             <Card sx={{backgroundColor: "#242424", borderRadius: "25px"}} className={classes.cardStyle}>
                 <CardContent className={classes.cardContentStyle}>
                     <div className={classes.slider}>
-                        <button className={classes.buttonAlign} onClick={prevCard}>&lt;</button>
+                        <button className={classes.buttonStyle} onClick={prevCard}>&lt;</button>
                         <StyledCardDesign>
                             <img className={classes.image} src={require(`../../images/${selectedCard[0].logo}`)}/>
                             <h1 className={classes.title}>{selectedCard[0].title}</h1>
                             <h3 className={classes.content}>{selectedCard[0].content}</h3>
                         </StyledCardDesign>
-                        <button onClick={nextCard}>&gt;</button>
+                        <button className={classes.buttonStyle} onClick={nextCard}>&gt;</button>
                     </div>
                 </CardContent>
             </Card>
