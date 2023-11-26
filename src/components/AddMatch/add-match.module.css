@@ -163,7 +163,7 @@ input {
 
 .buttonSubmitStyle {
     background-color: darkred;
-    color: #ffffff;
+    color: lightgray;
     padding: 10px 20px;
     border: none;
     border-radius: 25px;
@@ -178,7 +178,7 @@ input {
 
 .buttonStyle {
     background-color: darkred;
-    color: #ffffff;
+    color: lightgray;
     padding: 10px 20px;
     border: none;
     border-radius: 25px;
