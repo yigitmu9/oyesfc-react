@@ -60,7 +60,7 @@ const SliderCard = () => {
                         <StyledCardDesign>
                             <img className={classes.image} src={require(`../../images/${selectedCard[0].logo}`)}/>
                             <h1 className={classes.title}>{selectedCard[0].title}</h1>
-                            <h3 className={classes.content}>{selectedCard[0].content}</h3>
+                            <span className={classes.content}>{selectedCard[0].content}</span>
                         </StyledCardDesign>
                         <button className={classes.buttonStyle} onClick={nextCard}>&gt;</button>
                     </div>

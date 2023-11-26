@@ -4,23 +4,27 @@
     font-size: 14px;
     color: lightgray;
     border-radius: 25px;
+    border: none;
     padding: 10px 20px;
+    cursor: pointer;
     @media (max-width: 768px) {
         font-size: 12px;
-        padding: 7px 14px;
+        padding: 10px;
     }
 }
 
 .disabledButton {
     background-color: #242424;
+    border: none;
     margin-right: 12px;
     font-size: 14px;
     color: lightgray;
     border-radius: 25px;
     padding: 10px 20px;
+    cursor: pointer;
     @media (max-width: 768px) {
         font-size: 12px;
-        padding: 7px 14px;
+        padding: 10px;
     }
 }
 

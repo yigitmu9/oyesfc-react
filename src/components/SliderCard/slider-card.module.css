@@ -90,13 +90,14 @@
 .title {
     background: #242424;
     margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .content {
     background: #242424;
-    margin-top: 50px;
+    font-size: 18px;
     @media (max-width: 768px) {
-        font-size: 0.9rem;
+        font-size: 14px;
     }
 }
 

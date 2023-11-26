@@ -175,6 +175,8 @@
     font-size: 14px;
     border-radius: 25px;
     color: lightgray;
+    border: none;
+    padding: 10px;
 }
 
 .buttonBorderStyle {

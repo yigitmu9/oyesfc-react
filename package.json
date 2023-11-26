@@ -1,7 +1,7 @@
 {
   "homepage": "https://yigitmu9.github.io/oyesfc-react",
   "name": "oyesfc-react",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
