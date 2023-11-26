@@ -2,21 +2,10 @@ import React from 'react';
 import classes from "./rakipbul-team-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {Bar, Doughnut} from "react-chartjs-2";
-import {
-    Divider,
-    FormControl, List, ListItem,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material";
-import {DetailedRakipbulMatches, StadiumNames, TeamMembers} from "../../constants/constants";
+import {Doughnut} from "react-chartjs-2";
+import {DetailedRakipbulMatches} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import {Divider, List, ListItem} from "@mui/material";
 
 const RakipbulIndividualStats = () => {
 
@@ -93,43 +82,72 @@ const RakipbulIndividualStats = () => {
     return (
     <div className={classes.grid}>
         <Card sx={{ borderRadius: "25px", width: "100%", height: "auto" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-            <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Statistics of 10 Specific Rakipbul Matches</h1>
+            <h1 className={classes.titleStyle}>Statistics of 10 Specific Rakipbul Matches</h1>
             <CardContent style={{backgroundColor: "#242424", marginBottom: "50px"}}>
-                <div style={{display: "flex", backgroundColor: "#242424"}}>
-                    <div style={{display: "block", width: "40%", height: "330px", backgroundColor: "#242424"}}>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 17}}>Rate of Converting O Yes FC Positions Into Goals</p>
+                <div className={classes.cardContentInsideStyle}>
+                    <div className={classes.chartStyle}>
+                        <p className={classes.chartTitle}>Rate of Converting O Yes FC Positions Into Goals</p>
                         <Doughnut
                             data={chartDatasets}
                             width={"100%"}
                             className={classes.chart}
                             options={options}
                         />
-                        <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "-180px", fontSize: "50px"}}>{((goalsScored / ourPositions) * 100)?.toFixed(0)}%</h1>
                     </div>
-                    <div style={{display: "block", width: "20%", height: "330px", backgroundColor: "#242424", marginTop: "30px"}}>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 18, marginBottom: "10px"}}>Number of Positions of O Yes FC</p>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 29, marginBottom: "10px"}}>{ourPositions}</p>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 18, marginBottom: "10px"}}>O Yes FC's Goal Count</p>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 29, marginBottom: "10px"}}>{goalsScored}</p>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 18, marginBottom: "10px"}}>Number of Positions of Rivals</p>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 29, marginBottom: "10px"}}>{theirPositions}</p>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 18, marginBottom: "10px"}}>Rivals' Goal Count</p>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 29}}>{goalsConceded}</p>
+                    <div className={classes.tableDiv}>
+                        <List  component="nav" aria-label="mailbox folders" style={{backgroundColor: "#242424"}} className={classes.widthStyle}>
+                            <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
+                                <p className={classes.listItemSpanStyle}>O Yes FC</p>
+                                <p className={classes.listItemSpanStyle}></p>
+                            </ListItem>
+                            <div className={classes.spaceStyle}></div>
+                            <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
+                            <div className={classes.spaceStyle}></div>
+                            <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
+                                <p className={classes.listItemSpanStyle}>Number of Positions</p>
+                                <p className={classes.listItemSpanStyle}>{ourPositions}</p>
+                            </ListItem>
+                            <div className={classes.spaceStyle}></div>
+                            <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
+                            <div className={classes.spaceStyle}></div>
+                            <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
+                                <p className={classes.listItemSpanStyle}>Goal Count</p>
+                                <p className={classes.listItemSpanStyle}>{goalsScored}</p>
+                            </ListItem>
+                            <div className={classes.bigSpaceStyle}></div>
+                            <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
+                                <p className={classes.listItemSpanStyle}>Rival</p>
+                                <p className={classes.listItemSpanStyle}></p>
+                            </ListItem>
+                            <div className={classes.spaceStyle}></div>
+                            <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
+                            <div className={classes.spaceStyle}></div>
+                            <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
+                                <p className={classes.listItemSpanStyle}>Number of Positions</p>
+                                <p className={classes.listItemSpanStyle}>{theirPositions}</p>
+                            </ListItem>
+                            <div className={classes.spaceStyle}></div>
+                            <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
+                            <div className={classes.spaceStyle}></div>
+                            <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
+                                <p className={classes.listItemSpanStyle}>Goal Count</p>
+                                <p className={classes.listItemSpanStyle}>{goalsConceded}</p>
+                            </ListItem>
+                        </List>
                     </div>
-                    <div style={{display: "block", width: "40%", height: "330px", backgroundColor: "#242424"}}>
-                        <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 17}}>Rate of Converting Rival Positions Into Goals</p>
+                    <div className={classes.chartStyle}>
+                        <p className={classes.chartTitle}>Rate of Converting Rival Positions Into Goals</p>
                         <Doughnut
                             data={rivalChartDatasets}
                             width={"100%"}
                             className={classes.chart}
                             options={rivalChartOptions}
                         />
-                        <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "-180px", fontSize: "50px"}}>{((goalsConceded / theirPositions) * 100)?.toFixed(0)}%</h1>
                     </div>
                 </div>
             </CardContent>
-            <div style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", marginTop: "30px", marginLeft: "20px", fontSize: "15px", marginBottom: "20px"}}>
-                <span style={{backgroundColor: "rgb(36, 36, 36)", color: "gray", textAlign: "center"}}>
+            <div className={classes.noteStyle}>
+                <span className={classes.noteInsideStyle}>
                     *Note: These statistic tables are only valid for 10 specific Rakipbul matches for which position data is available.
                     The data is static and cannot work with filters.
             </span>

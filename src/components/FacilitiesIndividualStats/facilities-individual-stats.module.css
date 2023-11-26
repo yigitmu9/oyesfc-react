@@ -116,6 +116,7 @@
     height: 330px;
     text-align: center;
     justify-content: center;
+    overflow: auto;
     @media screen and (max-width: 768px) {
         width: 100%;
         margin-right: 0;

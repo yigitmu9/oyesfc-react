@@ -105,11 +105,11 @@ const FacilitiesStats = ({data}) => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "100%", height: "470px" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Statistics on Facilities</h1>
+            <Card sx={{ borderRadius: "25px", width: "100%", height: "auto" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                <h1 className={classes.titleStyle}>Statistics on Facilities</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "350px", backgroundColor: "#242424"}}>
+                    <div className={classes.cardContentInsideStyle}>
+                        <div className={classes.chartStyle}>
                             <Bar
                                 data={chartDatasets}
                                 width={"100%"}
@@ -117,12 +117,12 @@ const FacilitiesStats = ({data}) => {
                                 options={options}
                             />
                         </div>
-                        <div style={{display: "flex", width: "56%", height: "350px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center", marginRight: "30px"}}>
+                        <div className={classes.tableStyle}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                         <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0", zIndex: 9}}>Facilities</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Facilities</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Wins</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Draws</TableCell>
@@ -140,7 +140,7 @@ const FacilitiesStats = ({data}) => {
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
                                             >
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", position: "sticky", left: "0"}} component="th" scope="row">
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
                                                     {row}
                                                 </TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{gameData[number]}</TableCell>

@@ -153,8 +153,8 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
         <div className={classes.overlay}>
             <div className={classes.generalStyle} ref={popupRef}>
                 <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
-                    <div style={{display: "flex", background: "#1f1f1f"}}>
-                        <div style={{display: "block", background: "#1f1f1f", width: "50%"}}>
+                    <div className={classes.formAlign}>
+                        <div className={classes.infoAlign}>
                             <label style={{background: "#1f1f1f"}}>
                                 Rival Name:
                                 <input
@@ -239,7 +239,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
                             </label>
                             <br/>
                         </div>
-                        <div style={{display: "block", background: "#1f1f1f", marginLeft: "5rem", width: "50%"}}>
+                        <div className={classes.playersAlign}>
                             {Object.keys(formData.oyesfc.squad).map((member) => (
                                 <div key={member} style={{background: "#1f1f1f"}}>
                                     <label style={{background: "#1f1f1f"}}>

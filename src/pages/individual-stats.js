@@ -5,6 +5,7 @@ import ChartsGrid from "../components/ChartsGrid";
 import FacilitiesIndividualStats from "../components/FacilitiesIndividualStats";
 import WeatherIndividualStats from "../components/WeatherIndividualStats";
 import RakipbulPlayerStats from "../components/RakipbulPlayerStats";
+import {Divider} from "@mui/material";
 
 const IndividualStats = ({databaseData}) => {
 
@@ -41,7 +42,7 @@ const IndividualStats = ({databaseData}) => {
                     <RakipbulPlayerStats/>
                 </div>
                 <div style={{marginTop: "50px", textAlign: "center"}}>
-                    <span style={{color: "gray", textAlign: "center"}}>O Yes FC</span>
+                    <span style={{color: "gray", textAlign: "center"}}>© 2023, O Yes FC</span>
                 </div>
             </div>
         </div>

@@ -1,24 +1,125 @@
 .grid {
     margin-top: 50px;
-    display: flex;
-    justify-content: space-between;
     margin-left: 14%;
     margin-right: 14%;
+    display: flex;
+    justify-content: space-between;
     overflow-x: hidden;
-    max-width: 100%;
+    @media screen and (max-width: 768px) {
+        margin-left: 3%;
+        margin-right: 3%;
+        display: block;
+        justify-content: center;
+    }
 }
 
-.chart {
+.titleStyle {
     background-color: rgb(36, 36, 36);
+    color: lightgray;
+    text-align: center;
+    margin-top: 20px;
+    @media screen and (max-width: 768px) {
+        font-size: 25px;
+    }
+    @media screen and (max-width: 1200px) {
+        margin: 20px;
+    }
 }
 
-.select {
-    background-color: #404040;
-    color: lightgray;
-    margin-left: 30px;
-    border-color: #404040;
-    border-radius: 10px;
-    width: 200px;
-    height: 50px;
-    font-size: 16px;
+.cardAlign {
+    display: flex;
+    background-color: #242424;
+    @media screen and (max-width: 1500px) {
+        display: block;
+        justify-content: center;
+    }
+}
+
+.iconDivStyle {
+    display: block;
+    width: 40%;
+    margin-right: 30px;
+    height: 300px;
+    background-color: #242424;
+    text-align: center;
+    @media screen and (max-width: 1500px) {
+        width: 100%;
+        margin-right: 0;
+        height: auto;
+    }
+}
+
+.iconStyle {
+    background: #242424;
+    color: white;
+    font-size: 270px;
+    width: 270px;
+    height: 270px;
+    margin-top: 17px;
+    @media screen and (max-width: 1500px) {
+        font-size: 200px;
+        width: 200px;
+        height: 200px;
+        margin-top: 0;
+    }
+}
+
+.cardGrid {
+    border-radius: 25px;
+    width: 48%;
+    height: 340px;
+    background-color: #242424;
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        height: auto;
+        margin-bottom: 50px;
+    }
+    @media screen and (max-width: 1500px) {
+        height: auto;
+    }
+}
+
+.percentageDiv {
+    display: block;
+    width: 50%;
+    height: 300px;
+    background-color: #242424;
+    justify-content: center;
+    margin-right: 20px;
+    margin-left: 25px;
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        margin-right: 0;
+        margin-left: 0;
+    }
+    @media screen and (max-width: 1500px) {
+        width: 100%;
+        height: auto;
+        margin-right: 0;
+        margin-left: 0;
+        text-align: center;
+    }
+}
+
+.percentageGreen {
+    background-color: rgb(36, 36, 36);
+    color: green;
+    margin-top: 20px;
+    font-size: 40px;
+}
+
+.percentageYellow {
+    background-color: rgb(36, 36, 36);
+    color: yellow;
+    margin-top: 20px;
+    font-size: 40px;
+}
+
+.percentageRed {
+    background-color: rgb(36, 36, 36);
+    color: red;
+    margin-top: 20px;
+    font-size: 40px;
 }

@@ -58,65 +58,64 @@ const GeneralResults = ({data}) => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "100%", height: "470px" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>O Yes FC General Statistics</h1>
+            <Card sx={{ borderRadius: "25px", width: "100%", height: "auto" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                <h1 className={classes.titleStyle}>O Yes FC General Statistics</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "50%", height: "330px", backgroundColor: "#242424"}}>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", fontSize: 17}}>Win Rate</p>
+                    <div className={classes.cardInsideDiv}>
+                        <div className={classes.chartDiv}>
+                            <p className={classes.chartTitleStyle}>Win Rate</p>
                             <Doughnut
                                 data={chartDatasets}
                                 width={"100%"}
                                 className={classes.chart}
                                 options={options}
                             />
-                            <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "-180px", fontSize: "50px"}}>{((wonMatches / numberOfMatches) * 100)?.toFixed(0)}%</h1>
                         </div>
-                        <div style={{display: "flex", width: "50%", height: "350px", backgroundColor: "#242424", textAlign: "center", justifyContent: "center"}}>
+                        <div className={classes.tableDiv}>
                             <List  component="nav" aria-label="mailbox folders" style={{backgroundColor: "#242424", width: "80%"}}>
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Matches</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{numberOfMatches}</p>
+                                    <p className={classes.listItemSpanStyle}>Matches</p>
+                                    <p className={classes.listItemSpanStyle}>{numberOfMatches}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" color="red"/>
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Wins</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{wonMatches}</p>
+                                    <p className={classes.listItemSpanStyle}>Wins</p>
+                                    <p className={classes.listItemSpanStyle}>{wonMatches}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Draws</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{drawMatches}</p>
+                                    <p className={classes.listItemSpanStyle}>Draws</p>
+                                    <p className={classes.listItemSpanStyle}>{drawMatches}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Losses</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{lostMatches}</p>
+                                    <p className={classes.listItemSpanStyle}>Losses</p>
+                                    <p className={classes.listItemSpanStyle}>{lostMatches}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Goals Scored</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{goalsScored}</p>
+                                    <p className={classes.listItemSpanStyle}>Goals Scored</p>
+                                    <p className={classes.listItemSpanStyle}>{goalsScored}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" color="red"/>
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Goals Conceded</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{goalsConceded}</p>
+                                    <p className={classes.listItemSpanStyle}>Goals Conceded</p>
+                                    <p className={classes.listItemSpanStyle}>{goalsConceded}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Goal Difference</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{goalDifference}</p>
+                                    <p className={classes.listItemSpanStyle}>Goal Difference</p>
+                                    <p className={classes.listItemSpanStyle}>{goalDifference}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Scored per Match</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{scoredGoalsPerGame}</p>
+                                    <p className={classes.listItemSpanStyle}>Scored per Match</p>
+                                    <p className={classes.listItemSpanStyle}>{scoredGoalsPerGame}</p>
                                 </ListItem>
                                 <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>Conceded per Match</p>
-                                    <p style={{backgroundColor: "#242424", color: "lightgray", fontSize: 17}}>{concededGoalsPerGame}</p>
+                                    <p className={classes.listItemSpanStyle}>Conceded per Match</p>
+                                    <p className={classes.listItemSpanStyle}>{concededGoalsPerGame}</p>
                                 </ListItem>
                             </List>
                         </div>

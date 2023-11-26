@@ -78,11 +78,11 @@ const Navbar = () => {
                 }
                 <NavBtn className={isNavOpen ? classes.navOpenButtonStyle : classes.navCloseButtonStyle} style={{background:"darkred"}}>
                     <NavBtnLink className={isNavOpen ? classes.navOpenButtonLinkStyle : classes.navCloseButtonLinkStyle} onClick={openPopup}>Add Match</NavBtnLink>
-                    {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
-                                                       onClose={() => setPopupOpen(false)}
-                                                       messageData={(messageData) => handleXClick(messageData)}/>}
-                    {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} />}
                 </NavBtn>
+                {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
+                                                   onClose={() => setPopupOpen(false)}
+                                                   messageData={(messageData) => handleXClick(messageData)}/>}
+                {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} />}
             </Nav>
         </>
     );

@@ -95,38 +95,42 @@ const WeatherIndividualStats = ({data}) => {
 
     return (
         <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "48%", height: "360px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Win Rate in Cold Weather</h1>
-                <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "300px", backgroundColor: "#242424", textAlign: "center", marginLeft: "50px"}}>
-                            <AcUnitIcon
-                                style={{background: "#242424", color: "white", fontSize: 270}}></AcUnitIcon>
+            <div className={classes.cardGrid}>
+                <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                    <h1 className={classes.titleStyle}>Win Rate in Cold Weather</h1>
+                    <CardContent style={{backgroundColor: "#242424"}}>
+                        <div className={classes.cardAlign}>
+                            <div className={classes.iconDivStyle}>
+                                <AcUnitIcon sx={{width: "200px", height: "200px"}}
+                                              className={classes.iconStyle}></AcUnitIcon>
+                            </div>
+                            <div className={classes.percentageDiv}>
+                                <p className={classes.percentageGreen}>W: {((wonColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                                <p className={classes.percentageYellow}>D: {((drawColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                                <p className={classes.percentageRed}>L: {((lostColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                            </div>
                         </div>
-                        <div style={{display: "block", width: "50%", height: "300px", backgroundColor: "#242424", justifyContent: "center", marginRight: "20px", marginLeft: "25px"}}>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", marginTop: "20px", fontSize: "50px"}}>W: {((wonColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", marginTop: "20px", fontSize: "50px"}}>D: {((drawColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", marginTop: "20px", fontSize: "47px"}}>L: {((lostColdMatches / numberOfColdMatches) * 100)?.toFixed(0)}%</p>
+                    </CardContent>
+                </Card>
+            </div>
+            <div className={classes.cardGrid}>
+                <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                    <h1 className={classes.titleStyle}>Win Rate in Hot Weather</h1>
+                    <CardContent style={{backgroundColor: "#242424"}}>
+                        <div className={classes.cardAlign}>
+                            <div className={classes.iconDivStyle}>
+                                <LocalFireDepartmentIcon sx={{width: "200px", height: "200px"}}
+                                                           className={classes.iconStyle}></LocalFireDepartmentIcon>
+                            </div>
+                            <div className={classes.percentageDiv}>
+                                <p className={classes.percentageGreen}>W: {((wonHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                                <p className={classes.percentageYellow}>D: {((drawHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                                <p className={classes.percentageRed}>L: {((lostHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
+                            </div>
                         </div>
-                    </div>
-                </CardContent>
-            </Card>
-            <Card sx={{ borderRadius: "25px", width: "48%", height: "360px", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray", textAlign: "center", marginTop: "20px"}}>Win Rate in Hot Weather</h1>
-                <CardContent style={{backgroundColor: "#242424"}}>
-                    <div style={{display: "flex", backgroundColor: "#242424"}}>
-                        <div style={{display: "block", width: "40%", marginRight:"30px", height: "300px", backgroundColor: "#242424", textAlign: "center", marginLeft: "50px"}}>
-                            <LocalFireDepartmentIcon
-                                style={{background: "#242424", color: "white", fontSize: 270}}></LocalFireDepartmentIcon>
-                        </div>
-                        <div style={{display: "block", width: "50%", height: "300px", backgroundColor: "#242424", justifyContent: "center", marginRight: "20px", marginLeft: "25px"}}>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "green", marginTop: "20px", fontSize: "50px"}}>W: {((wonHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "yellow", marginTop: "20px", fontSize: "50px"}}>D: {((drawHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
-                            <p style={{backgroundColor: "rgb(36, 36, 36)", color: "red", marginTop: "20px", fontSize: "50px"}}>L: {((lostHotMatches / numberOfHotMatches) * 100)?.toFixed(0)}%</p>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 };
