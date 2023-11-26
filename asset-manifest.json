@@ -1,13 +1,12 @@
 {
   "files": {
-    "main.css": "/oyesfc-react/static/css/main.931407f8.css",
-    "main.js": "/oyesfc-react/static/js/main.34c503f4.js",
+    "main.css": "/oyesfc-react/static/css/main.b1f0289e.css",
+    "main.js": "/oyesfc-react/static/js/main.ed0e22b2.js",
     "static/js/787.9398f104.chunk.js": "/oyesfc-react/static/js/787.9398f104.chunk.js",
     "static/media/ghost.png": "/oyesfc-react/static/media/ghost.be13388caa96804fa3ce.png",
-    "static/media/mert.jpeg": "/oyesfc-react/static/media/mert.da0a37140cc1e08c4e13.jpeg",
-    "static/media/gokhan.jpeg": "/oyesfc-react/static/media/gokhan.a53ebefa64a46611da61.jpeg",
     "static/media/firstLogo.png": "/oyesfc-react/static/media/firstLogo.3711abd90f028c308299.png",
     "static/media/Toki.png": "/oyesfc-react/static/media/Toki.d2065f3c6b7c95ecc2d7.png",
+    "static/media/gokhan.jpeg": "/oyesfc-react/static/media/gokhan.5559f13b7a510a600022.jpeg",
     "static/media/mehmet.jpeg": "/oyesfc-react/static/media/mehmet.161b2fea565731d8f4c6.jpeg",
     "static/media/oyesfc.PNG": "/oyesfc-react/static/media/oyesfc.01842b69ce4c2478495e.PNG",
     "static/media/phoenix.png": "/oyesfc-react/static/media/phoenix.d977231dc2dd70d835ae.png",
@@ -29,18 +28,19 @@
     "static/media/Elfi.png": "/oyesfc-react/static/media/Elfi.398280192682b8ff786e.png",
     "static/media/rakipbul.png": "/oyesfc-react/static/media/rakipbul.0d3349e9505024fc8ef0.png",
     "static/media/Keyifçiler.png": "/oyesfc-react/static/media/Keyifçiler.b845d3bbecb343844e1d.png",
+    "static/media/mert.jpeg": "/oyesfc-react/static/media/mert.36d67eb2a190b5449d2a.jpeg",
     "static/media/4evler.png": "/oyesfc-react/static/media/4evler.6cd0088a848a76031581.png",
     "static/media/Vikings.png": "/oyesfc-react/static/media/Vikings.94a37ee4c4ab8bfd35bf.png",
     "static/media/Kurtsan.png": "/oyesfc-react/static/media/Kurtsan.e84e55b826a089074b04.png",
     "static/media/football.png": "/oyesfc-react/static/media/football.cb2c116cabd7616ef325.png",
     "static/media/Olympos.png": "/oyesfc-react/static/media/Olympos.561cd7e7555c194cb599.png",
     "index.html": "/oyesfc-react/index.html",
-    "main.931407f8.css.map": "/oyesfc-react/static/css/main.931407f8.css.map",
-    "main.34c503f4.js.map": "/oyesfc-react/static/js/main.34c503f4.js.map",
+    "main.b1f0289e.css.map": "/oyesfc-react/static/css/main.b1f0289e.css.map",
+    "main.ed0e22b2.js.map": "/oyesfc-react/static/js/main.ed0e22b2.js.map",
     "787.9398f104.chunk.js.map": "/oyesfc-react/static/js/787.9398f104.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.931407f8.css",
-    "static/js/main.34c503f4.js"
+    "static/css/main.b1f0289e.css",
+    "static/js/main.ed0e22b2.js"
   ]
 }
