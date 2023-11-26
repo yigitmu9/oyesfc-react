@@ -263,16 +263,16 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
                                     value={newSquadMember}
                                     onChange={(e) => setNewSquadMember(e.target.value)}
                                 />
-                                <button type="button" onClick={handleAddSquadMember}>
+                                <button className={classes.buttonStyle} type="button" onClick={handleAddSquadMember}>
                                     Add
                                 </button>
                             </label>
                             <br/>
                         </div>
                     </div>
-                    <div style={{background: "#1f1f1f"}}>
-                        <button style={{ marginRight: "1rem"}} type="submit">Submit</button>
-                        <button onClick={handleClose}>Close</button>
+                    <div className={classes.buttonDivStyle}>
+                        <button className={classes.buttonSubmitStyle} style={{ marginRight: "1rem"}} type="submit">Submit</button>
+                        <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
                     </div>
                 </form>
             </div>

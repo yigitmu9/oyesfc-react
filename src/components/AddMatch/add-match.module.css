@@ -58,23 +58,6 @@ input {
     color: #ffffff;
 }
 
-button {
-    background-color: darkred;
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    @media (max-width: 768px) {
-        font-size: 14px;
-    }
-}
-
-button:hover {
-    background-color: darkred;
-}
-
 #oyesfc {
     background-color: #292929;
 }
@@ -171,5 +154,38 @@ button:hover {
     @media (max-width: 768px) {
         width: 100%;
         margin-left: 0;
+    }
+}
+
+.buttonDivStyle {
+    background: #1f1f1f;
+}
+
+.buttonSubmitStyle {
+    background-color: darkred;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+    margin-right: 1rem;
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+
+.buttonStyle {
+    background-color: darkred;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+    @media (max-width: 768px) {
+        font-size: 14px;
     }
 }
