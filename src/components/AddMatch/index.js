@@ -108,17 +108,6 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        document.body.style.overflow = 'visible';
-        onClose()
-        const messageResponse = {
-            isValid: false,
-            message: 'Add new match is not available!'
-        }
-        messageData(messageResponse)
-        openMessage(true)
-
-        /*
         try {
             await set(ref(dataBase, formData.day), formData);
             setFormData(initialFormData);
@@ -141,7 +130,6 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
             messageData(messageResponse)
             openMessage(true)
         }
-         */
     };
 
     const handleClose = () => {

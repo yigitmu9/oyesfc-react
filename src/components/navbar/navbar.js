@@ -10,6 +10,8 @@ import {
 import AddMatchComponent from "../AddMatch";
 import Message from "../Message";
 import classes from "../navbar/navbar.module.css"
+import SignInComponent from "../SignIn";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = () => {
 
@@ -18,9 +20,11 @@ const Navbar = () => {
     }
 
     const [isPopupOpen, setPopupOpen] = useState(false);
+    const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
     const [isNavOpen, setNavOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [messageData, setmessageData] = useState(null);
+    const [widht2, setwidht] = useState(window.innerWidth);
 
     const openPopup = () => {
         if (innerWidth() <= 768) changeMobileNavbar()
@@ -42,6 +46,12 @@ const Navbar = () => {
         if (isNavOpen) {
             setNavOpen(false);
         }
+    };
+
+    const openSignInPopup = () => {
+        if (innerWidth() <= 768) changeMobileNavbar()
+        document.body.style.overflow = 'hidden';
+        setSignInPopupOpen(true);
     };
 
     return (
@@ -77,12 +87,14 @@ const Navbar = () => {
                     : null
                 }
                 <NavBtn className={isNavOpen ? classes.navOpenButtonStyle : classes.navCloseButtonStyle} style={{background:"darkred"}}>
-                    <NavBtnLink className={isNavOpen ? classes.navOpenButtonLinkStyle : classes.navCloseButtonLinkStyle} onClick={openPopup}>Add Match</NavBtnLink>
+                    <NavBtnLink className={isNavOpen ? classes.navOpenButtonLinkStyle : classes.navCloseButtonLinkStyle} onClick={openSignInPopup}>
+                        <AccountCircleIcon sx={{width: "65px", height: "65px", background: "darkred", color: "black"}}
+                                           className={classes.userButtonLinkStyle}></AccountCircleIcon>
+                    </NavBtnLink>
                 </NavBtn>
-                {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
-                                                   onClose={() => setPopupOpen(false)}
-                                                   messageData={(messageData) => handleXClick(messageData)}/>}
-                {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} />}
+                {isSignInPopupOpen && <SignInComponent openMessage={() => setMessagePopupOpen(true)}
+                                                       onClose={() => setSignInPopupOpen(false)}
+                                                       messageData={(messageData) => handleXClick(messageData)}/>}
             </Nav>
         </>
     );

@@ -1,0 +1,263 @@
+.generalStyle {
+    color: lightgray;
+    font-family: Arial, sans-serif;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    max-width: 70%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: auto;
+    max-height: 95%;
+    background-color: #404040;
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 500px;
+    height: auto;
+    z-index: 11;
+    @media (max-width: 768px) {
+        width: 97%;
+        max-width: 97%;
+        padding: 2px;
+        max-height: 97%;
+    }
+    @media (min-width: 769px) and (max-width: 1100px) {
+        width: 80%;
+        max-width: 80%;
+        padding: 8px;
+    }
+    @media (min-width: 1101px) and (max-width: 1700px) {
+        width: 500px;
+        max-width: 600px;
+        padding: 14px;
+    }
+}
+
+form {
+    background-color: rgb(50, 50, 50);
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #292929;
+    color: #ffffff;
+}
+
+#oyesfc {
+    background-color: #292929;
+}
+
+.customCheckbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+    margin-bottom: 40px;
+}
+
+.customCheckbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: lightgray;
+    border-radius: 4px;
+}
+
+.customCheckbox input:checked ~ .checkmark {
+    background-color: darkred;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.customCheckbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.customCheckbox .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+.inputDesign {
+    border-radius: 25px;
+    margin-top: 5px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formAlign {
+    display: flex;
+    background: #1f1f1f;
+    @media (max-width: 768px) {
+        display: block;
+    }
+}
+
+.infoAlign {
+    display: block;
+    background: #1f1f1f;
+    width: 100%;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+}
+
+.playersAlign {
+    display: block;
+    background: #1f1f1f;
+    margin-left: 5rem;
+    width: 50%;
+    @media (max-width: 768px) {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+.buttonDivStyle {
+    background: #1f1f1f;
+    text-align: center;
+    margin: 20px;
+}
+
+.buttonSubmitStyle {
+    background-color: darkred;
+    color: lightgray;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+.buttonStyle {
+    background-color: darkred;
+    color: lightgray;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+.image {
+    @media (max-width: 768px) {
+        width: 90%;
+        height: 90%;
+        background: #242424;
+        min-width: 100px;
+        min-height: 100px;
+    }
+    width: 40%;
+    height: 40%;
+    background: #242424;
+}
+
+.iconDivStyle {
+    display: block;
+    background-color: #1f1f1f;
+    text-align: center;
+    @media screen and (max-width: 1500px) {
+        width: 100%;
+        margin-right: 0;
+        height: auto;
+    }
+}
+
+.iconStyle {
+    background-color: #1f1f1f;
+    color: lightgray;
+    font-size: 200px;
+    width: 200px;
+    height: 200px;
+    margin-top: 17px;
+    text-align: center;
+    @media screen and (max-width: 768px) {
+        font-size: 150px;
+        width: 150px;
+        height: 150px;
+        margin-top: 0;
+    }
+}
+
+.titleStyle {
+    background-color: #1f1f1f;
+    color: lightgray;
+    text-align: center;
+    margin: 20px;
+    font-size: 50px;
+    @media screen and (max-width: 768px) {
+        font-size: 40px;
+    }
+}
+
+.signedInStyle {
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.usernameStyle {
+    background-color: #1f1f1f;
+    color: lightgray;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 20px;
+    @media screen and (max-width: 768px) {
+        font-size: 16px;
+    }
+}

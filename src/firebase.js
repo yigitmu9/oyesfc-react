@@ -2,6 +2,7 @@
 import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
 import {getDatabase, onValue, ref} from "firebase/database"
+import {getAuth} from "firebase/auth"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,6 +23,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
 const distanceRef = ref(db)
+export const auth = getAuth(app)
 let data;
 
 const getDataFromFirebase = () => {

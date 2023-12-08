@@ -57,9 +57,7 @@
 }
 
 .navOpenButtonLinkStyle {
-    border-radius: 4px;
-    background: #121212;
-    padding: 10px 22px;
+    background: darkred;
     color: #fff;
     outline: none;
     border: none;
@@ -70,8 +68,7 @@
 
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
+        color: lightgray;
     }
 
     @media screen and (max-width: 768px) {
@@ -87,10 +84,19 @@
     }
 }
 
+.userButtonLinkStyle {
+    &:hover {
+        transition: all 0.2s ease-in-out;
+        color: lightgray;
+    }
+
+    @media screen and (max-width: 768px) {
+        display: none;
+    }
+}
+
 .navCloseButtonLinkStyle {
-    border-radius: 4px;
-    background: #121212;
-    padding: 10px 22px;
+    background: darkred;
     color: #fff;
     outline: none;
     border: none;
@@ -101,7 +107,16 @@
 
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
+        color: lightgray;
+    }
+}
+
+.userButtonStyle {
+    &:hover {
+        transition: all 0.2s ease-in-out;
+        color: lightgray;
+    }
+    @media screen and (max-width: 768px) {
+        margin-right: 50px;
     }
 }
