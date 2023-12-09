@@ -58,11 +58,11 @@ const SignInComponent = ({onClose, openMessage, messageData}) => {
     };
 
     const checkAuthState = async () => {
-        onAuthStateChanged(auth, user => {
-            if (user) {
+        await onAuthStateChanged(auth, user => {
+            if (user && !signedIn) {
                 setSignedIn(true)
                 setCredentials(user)
-            } else {
+            } else if (!user && signedIn) {
                 setSignedIn(false)
             }
         })
@@ -71,8 +71,10 @@ const SignInComponent = ({onClose, openMessage, messageData}) => {
     const logOut = async () => {
         await signOut(auth)
             .then((x) => {
-                setSignedIn(false)
-                setCredentials(null)
+                if (signedIn) {
+                    setSignedIn(false)
+                    setCredentials(null)
+                }
                 handleClose()
             })
             .catch((error) => {
@@ -85,7 +87,6 @@ const SignInComponent = ({onClose, openMessage, messageData}) => {
                 messageData(messageResponse)
                 openMessage(true)
             })
-
     }
 
     return (
