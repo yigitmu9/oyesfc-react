@@ -6,17 +6,17 @@ import Message from "../Message";
 import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/auth"
 import {auth} from "../../firebase"
 
-const SignInComponent = ({onClose, openMessage, messageData2}) => {
+const SignInComponent = ({onClose, openMessage, messageData}) => {
 
     const popupRef = useRef(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
-    const [messageData, setmessageData] = useState(null);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [credentials, setCredentials] = useState(null)
     const [signedIn, setSignedIn] = useState(false)
-    let yes;
+    const [errorMessage, setErrorMessage] = useState(false)
+    const [messageData2, setMessageData] = useState(null);
 
     const handleOutsideClick = (event) => {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -26,7 +26,7 @@ const SignInComponent = ({onClose, openMessage, messageData2}) => {
     };
 
     const handleXClick = (messageData) => {
-        setmessageData(messageData);
+        setMessageData(messageData);
     };
 
     useEffect(() => {
@@ -44,13 +44,7 @@ const SignInComponent = ({onClose, openMessage, messageData2}) => {
             })
             .catch((error) => {
                 console.log(error)
-                onClose()
-                const messageResponse = {
-                    isValid: false,
-                    message: 'An error occurred!'
-                }
-                messageData(messageResponse)
-                openMessage(true)
+                setErrorMessage(true)
             })
     };
 
@@ -68,7 +62,6 @@ const SignInComponent = ({onClose, openMessage, messageData2}) => {
             if (user) {
                 setSignedIn(true)
                 setCredentials(user)
-                console.log(credentials)
             } else {
                 setSignedIn(false)
             }
@@ -99,38 +92,39 @@ const SignInComponent = ({onClose, openMessage, messageData2}) => {
         <div className={classes.overlay}>
             { !isPopupOpen && !isMessagePopupOpen && <div className={classes.generalStyle} ref={popupRef}>
                 { checkAuthState() && !signedIn ? <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
-                    <div className={classes.infoAlign}>
-                        <div className={classes.iconDivStyle}>
-                            <AccountCircleIcon sx={{width: "200px", height: "200px"}}
-                                               className={classes.iconStyle}></AccountCircleIcon>
+                        <div className={classes.infoAlign}>
+                            <div className={classes.iconDivStyle}>
+                                <AccountCircleIcon sx={{width: "200px", height: "200px"}}
+                                                   className={classes.iconStyle}></AccountCircleIcon>
+                            </div>
+                            <h1 className={classes.titleStyle}>Log In</h1>
+                            <label style={{background: "#1f1f1f"}}>
+                                Email:
+                                <input
+                                    className={classes.inputDesign}
+                                    required={true}
+                                    type="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                />
+                            </label>
+                            <br/>
+                            <label style={{background: "#1f1f1f"}}>
+                                Password:
+                                <input
+                                    className={classes.inputDesign}
+                                    required={true}
+                                    type="password"
+                                    name="password"
+                                    value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
+                                />
+                            </label>
+                            { errorMessage && <span className={classes.errorMessage}>Invalid email or password!</span> }
                         </div>
-                        <h1 className={classes.titleStyle}>Sign In</h1>
-                        <label style={{background: "#1f1f1f"}}>
-                            Email:
-                            <input
-                                className={classes.inputDesign}
-                                required={true}
-                                type="email"
-                                name="email"
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                            />
-                        </label>
-                        <br/>
-                        <label style={{background: "#1f1f1f"}}>
-                            Password:
-                            <input
-                                className={classes.inputDesign}
-                                required={true}
-                                type="password"
-                                name="password"
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                            />
-                        </label>
-                    </div>
-                    <div className={classes.buttonDivStyle}>
-                        <button className={classes.buttonStyle} style={{marginRight: "1rem"}} type="submit">Sign In
+                        <div className={classes.buttonDivStyle}>
+                        <button className={classes.buttonStyle} style={{marginRight: "1rem"}} type="submit">Log In
                         </button>
                         <button className={classes.buttonStyle} onClick={handleClose}>Cancel</button>
                     </div>
@@ -156,7 +150,7 @@ const SignInComponent = ({onClose, openMessage, messageData2}) => {
             {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
                                                onClose={() => setPopupOpen(false)}
                                                messageData={(messageData) => handleXClick(messageData)}/>}
-            {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} />}
+            {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)} />}
         </div>
     );
 };

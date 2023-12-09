@@ -261,3 +261,8 @@ input {
         font-size: 16px;
     }
 }
+
+.errorMessage {
+    background-color: #1f1f1f;
+    color: red;
+}

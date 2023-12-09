@@ -24,7 +24,6 @@ const Navbar = () => {
     const [isNavOpen, setNavOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [messageData, setmessageData] = useState(null);
-    const [widht2, setwidht] = useState(window.innerWidth);
 
     const openPopup = () => {
         if (innerWidth() <= 768) changeMobileNavbar()
@@ -95,6 +94,7 @@ const Navbar = () => {
                 {isSignInPopupOpen && <SignInComponent openMessage={() => setMessagePopupOpen(true)}
                                                        onClose={() => setSignInPopupOpen(false)}
                                                        messageData={(messageData) => handleXClick(messageData)}/>}
+                {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} />}
             </Nav>
         </>
     );
