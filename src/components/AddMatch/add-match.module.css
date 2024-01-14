@@ -115,6 +115,15 @@ input {
 .inputDesign {
     border-radius: 25px;
     margin-top: 5px;
+    @media (max-width: 768px) {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 16px;
+        border: none;
+        border-radius: 25px;
+        background-color: #292929;
+        color: #ffffff;
+    }
 }
 
 .overlay {
@@ -211,7 +220,5 @@ input {
     background-color: #292929;
     @media screen and (max-width: 768px) {
         font-size: 14px;
-        width: 170px;
-        height: 40px;
     }
 }
