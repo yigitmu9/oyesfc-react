@@ -191,3 +191,27 @@ input {
         padding: 10px;
     }
 }
+
+.colorStyle {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+
+.select {
+    color: #ffffff;
+    margin-top: 5px;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 25px;
+    background-color: #292929;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+        width: 170px;
+        height: 40px;
+    }
+}

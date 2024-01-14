@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import classes from "./add-match.module.css";
 import {dataBase} from "../../firebase";
 import {ref, set} from "firebase/database";
+import {StadiumNames, TeamMembers} from "../../constants/constants";
 
 const AddMatchComponent = ({onClose, openMessage, messageData}) => {
 
@@ -108,6 +109,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setDayTime();
         try {
             await set(ref(dataBase, formData.day), formData);
             setFormData(initialFormData);
@@ -130,6 +132,24 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
             messageData(messageResponse)
             openMessage(true)
         }
+    };
+
+    const setDayTime = () => {
+        const [datePart, timePart] = formData.day.split('T');
+
+        const [year, month, day] = datePart.split('-');
+        const dateFormat = `${day}-${month}-${year}`;
+
+        const [hour, minute] = timePart.split(':');
+        const timeFormat = `${hour}:${minute}`;
+
+        const nextHour = new Date(`${year}-${month}-${day}T${hour}:${minute}`);
+        nextHour.setHours(nextHour.getHours() + 1);
+        const [nextHourStr, nextMinuteStr] = [nextHour.getHours(), nextHour.getMinutes()].map(num => num.toString().padStart(2, '0'));
+        const nextTimeFormat = `${nextHourStr}:${nextMinuteStr}`;
+
+        formData.day = dateFormat;
+        formData.time = `${timeFormat}-${nextTimeFormat}`;
     };
 
     const handleClose = () => {
@@ -167,11 +187,11 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
-                                Day:
+                                Day & Time:
                                 <input
                                     className={classes.inputDesign}
                                     required={true}
-                                    type="text"
+                                    type="datetime-local"
                                     name="day"
                                     value={formData.day}
                                     onChange={handleInputChange}
@@ -179,27 +199,17 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
-                                Time:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="text"
-                                    name="time"
-                                    value={formData.time}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <br/>
-                            <label style={{background: "#1f1f1f"}}>
                                 Place:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="text"
-                                    name="place"
-                                    value={formData.place}
-                                    onChange={handleInputChange}
-                                />
+                                <select className={classes.select}
+                                        onChange={handleInputChange}
+                                        required={true}
+                                        name="place"
+                                        value={formData.place}>
+                                    <option></option>
+                                    {Object.values(StadiumNames).map(x => (
+                                        <option value={x}>{x}</option>
+                                    ))}
+                                </select>
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
@@ -243,6 +253,19 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
                                     <br/>
                                 </div>
                             ))}
+                            <label style={{background: "#1f1f1f"}}>
+                                Select O Yes FC Member:
+                                <select className={classes.select}
+                                        onChange={(e) =>
+                                            setNewSquadMember(e.target.value !== 'None' ? e.target.value : '')}
+                                        value={newSquadMember}>
+                                    <option></option>
+                                    {Object.values(TeamMembers).map(x => (
+                                        <option placeholder='yes' value={x.name}>{x.name}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <br/>
                             <label style={{background: "#1f1f1f"}}>
                                 Add Squad Member:
                                 <input

@@ -9,6 +9,9 @@ const Message = ({onClose, messageData}) => {
     const handleClose = () => {
         document.body.style.overflow = 'visible';
         onClose();
+        if (messageData.isValid && messageData.message === 'Match successfully added.') {
+            window.location.reload(false);
+        }
     }
 
     return (
