@@ -186,10 +186,10 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
                                 <span className={classes.checkmark}></span>
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f", width: "100%"}}>
+                            <label style={{background: "#1f1f1f", width: "100%", minWidth: "100%"}}>
                                 Day & Time:
                                 <input
-                                    style={{width: "100%"}}
+                                    style={{width: "100%", minWidth: "100%"}}
                                     className={classes.dayTimeDesign}
                                     required={true}
                                     type="datetime-local"
