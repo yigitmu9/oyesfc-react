@@ -234,6 +234,8 @@ label {
     background-color: #292929;
     color: #ffffff;
     height: 33px;
+    min-width: 100%;
+    text-align: start;
     @media (max-width: 768px) {
         min-width: 100%;
         border-radius: 25px;
