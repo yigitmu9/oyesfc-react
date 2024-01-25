@@ -26,7 +26,8 @@ export const StadiumNames = {
     ozluceTimsaha: 'Özlüce Timsaha',
     galatasaray: 'Galatasaray',
     dikkaldirim: 'Dikkaldırım',
-    sadik: 'Hüdavendigar Sadık'
+    sadik: 'Hüdavendigar Sadık',
+    karafatma: 'Karafatma'
 }
 
 export const DetailedRakipbulMatches = {
