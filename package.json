@@ -1,7 +1,7 @@
 {
   "homepage": "https://yigitmu9.github.io/oyesfc-react",
   "name": "oyesfc-react",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -21,6 +21,7 @@
     "react-icons": "^4.10.1",
     "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.8",
     "react-spring": "^9.7.2",
     "react-switch": "^7.0.0",
     "styled-components": "^6.0.5",

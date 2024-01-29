@@ -1,4 +1,5 @@
 import React from 'react';
+import {ScaleLoader} from "react-spinners";
 
 const Loading = () => {
     return (
@@ -13,7 +14,7 @@ const Loading = () => {
             }}
         >
             <img style={{ width: "200px", height: "200px", background: "#121212", marginBottom: "20px"}} src={require('../images/oyesfc.PNG')}/>
-            <h1>Loading...</h1>
+            <ScaleLoader color="red" speedMultiplier={0.7} />
         </div>
     );
 };
