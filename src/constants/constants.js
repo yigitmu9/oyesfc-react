@@ -16,20 +16,6 @@ export const TeamMembers = {
     yigit: {name: 'Yiğit Mutlu', number: 7}
 }
 
-export const StadiumNames = {
-    vitamin: 'Vitamin',
-    jimer: 'Jimer',
-    fener: 'Fenerbahçe',
-    asya: 'Asya',
-    sandalci: 'Sandalcı',
-    sukru: 'Şükrü Şankaya',
-    ozluceTimsaha: 'Özlüce Timsaha',
-    galatasaray: 'Galatasaray',
-    dikkaldirim: 'Dikkaldırım',
-    sadik: 'Hüdavendigar Sadık',
-    karafatma: 'Karafatma'
-}
-
 export const DetailedRakipbulMatches = {
     guadalajara1: {
         rival: {

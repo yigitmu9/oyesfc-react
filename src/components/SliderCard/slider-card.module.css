@@ -54,8 +54,8 @@
 
 .grid {
     @media (max-width: 768px) {
-        margin-left: 5%;
-        margin-right: 5%;
+        margin-left: 3%;
+        margin-right: 3%;
         width: 100%;
         margin-top: 100px;
     }
@@ -65,7 +65,7 @@
     justify-content: center;
     align-items: center;
     align-content: center;
-    margin-top: 150px;
+    margin-top: 120px;
 }
 
 .cardDesign {
@@ -88,14 +88,16 @@
 }
 
 .title {
-    background: #242424;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    background: rgba(0, 0, 0, 0.0);
+    margin-top: 20px;
+    margin-bottom: 40px;
+    color: lightgray;
 }
 
 .content {
-    background: #242424;
+    background: rgba(0, 0, 0, 0.0);
     font-size: 18px;
+    color: lightgray;
     @media (max-width: 768px) {
         font-size: 14px;
     }
@@ -131,7 +133,29 @@
     }
 }
 
-.buttonStyle:hover {
-    background-color: darkred;
+
+.smallCardStyle {
     border-radius: 25px;
+    width: 21%;
+    height: 130px;
+    background-color: #242424;
+    text-align: center;
+    @media (max-width: 768px) {
+        height: 90px;
+    }
+
+}
+
+.smallCardTitle {
+    background: rgba(0, 0, 0, 0.0);
+    margin: 10px;
+    text-align: center;
+    @media (max-width: 768px) {
+        font-size: 17px;
+    }
+}
+
+.smallCardFoto {
+    background: #242424;
+    text-align: center;
 }

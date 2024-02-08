@@ -13,7 +13,7 @@ import classes from "../navbar/navbar.module.css"
 import SignInComponent from "../SignIn";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-const Navbar = () => {
+const Navbar = ({databaseData}) => {
 
     const innerWidth = () => {
         return window.innerWidth;
@@ -93,7 +93,8 @@ const Navbar = () => {
                 </NavBtn>
                 {isSignInPopupOpen && <SignInComponent openMessage={() => setMessagePopupOpen(true)}
                                                        onClose={() => setSignInPopupOpen(false)}
-                                                       messageData={(messageData) => handleXClick(messageData)}/>}
+                                                       messageData={(messageData) => handleXClick(messageData)}
+                                                       databaseData={databaseData}/>}
                 {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} />}
             </Nav>
         </>

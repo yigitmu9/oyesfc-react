@@ -3,69 +3,135 @@ import classes from "./slider-card.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { keyframes, styled } from '@mui/system';
+import CardMedia from "@mui/material/CardMedia";
+import {TeamMembers} from "../../constants/constants";
+import {Divider, List, ListItem, Typography} from "@mui/material";
 
 const SliderCard = () => {
     const cards = [
         { number: 0, title: 'Red & Black', content: 'The colors of O Yes FC are red and black. The red represents enthusiasm and ' +
                 'fieriness, and the black represents the fear of opponents to face O Yes FC. The logo and colors took their ' +
-                'final form in April 29, 2019 and were used on the jersey produced in the same year. Red jersey, designed on May 13.', logo: 'oyesfc.PNG'},
+                'final form in April 29, 2019 and were used on the jersey produced in the same year. Red jersey, designed on May 13.', logo: 'red3.jpeg'},
         { number: 1, title: 'Golden Age', content: 'A special logo for the 10th anniversary of the establishment of O Yes FC. ' +
                 'It took its color from gold, which symbolizes special, and its symbol from the phoenix, the official ' +
-                'animal of the team. The gold color and logo were used on the jersey produced in July 14, 2023.', logo: 'phoenix.png' },
+                'animal of the team. The gold color and logo were used on the jersey produced in July 14, 2023.', logo: 'gold2.jpeg' },
         { number: 2, title: 'Rising', content: 'The first O Yes FC logo appeared on May 13, 2014, as a result of gradual' +
                 ' growth and branding. As in the first 2 jerseys, a blue tone is used in this logo and represents self-confidence.' +
                 ' It was used in the Chelsea jersey released on August 28, 2014 and the Wavy' +
-                ' jersey released on August 22, 2015.', logo: 'firstLogo.png' },
+                ' jersey released on August 22, 2015.', logo: 'blue2.jpeg' },
         { number: 3, title: 'Origin', content: 'O Yes FC was founded on November 17, 2013 and its first jersey was introduced ' +
                 '5 days later, on November 22. The ghost logo used on the first jersey is symbol of  opponents fear, the harbinger of victory. ' +
                 'The white next to blue on the jersey represents stability, ' +
-                'while the orange used on the collar represents enthusiasm and energy.', logo: 'ghost.png' },
+                'while the orange used on the collar represents enthusiasm and energy.', logo: 'ghost1.jpeg' },
     ];
 
     const [currentCard, setCurrentCard] = useState(0);
 
-    const nextCard = () => {
-        setCurrentCard((prev) => (prev + 1) % cards.length);
+    const styles = {
+        card: {
+            position: 'relative',
+            backgroundColor: 'transparent',
+            borderRadius: '25px',
+        },
+        media: {
+            height: 0,
+            paddingTop: '56.25%',
+        },
+        content: {
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            color: 'white',
+            padding: '10px',
+        },
     };
 
-    const prevCard = () => {
-        setCurrentCard((prev) => (prev - 1 + cards.length) % cards.length);
+    const smallStyles = {
+        card: {
+            position: 'relative',
+            backgroundColor: 'transparent',
+            cursor: 'pointer',
+            '&:hover': {
+                transform: 'scale(1.05)',
+            },
+        },
+        media: {
+            height: 0,
+            paddingTop: '56.25%',
+        },
+        content: {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            textAlign: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.0)',
+            color: 'lightgray',
+            padding: '10px',
+            transition: 'opacity 0.3s ease',
+            opacity: 0,
+            pointerEvents: 'none',
+        },
+        smallMedia: {
+            transition: 'filter 0.3s ease',
+            '&:hover': {
+                filter: 'blur(10px)',
+                transform: 'scale(1.05)',
+            },
+            height: '100%',
+            width: '100%'
+        }
     };
 
-    const selectedCard = cards.filter(x => x.number === currentCard)
+    const clickCard = (index) => {
+        setCurrentCard(index);
+    }
 
-    const fadeIn = keyframes` 
-      from {
-        opacity: 0;
-      } 
-      to {
-        opacity: 1;
-      }`;
+    const [hovered, setHovered] = useState(false);
+    const [hoveredCard, setHoveredCard] = useState(null);
 
-    const StyledCardDesign = styled('div')(({ theme }) => ({
-        textAlign: 'center',
-        animation: `${fadeIn} 0.9s ease-in-out`,
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#242424',
-        color: 'lightgray'
-    }));
+    const hoverGeldi = (index) => {
+        setHoveredCard(index)
+        setHovered(true)
+    }
+
+    const hoverGitti = () => {
+        setHovered(false)
+    }
 
     return (
         <div className={classes.grid}>
-            <Card sx={{backgroundColor: "#242424", borderRadius: "25px"}} className={classes.cardStyle}>
-                <CardContent className={classes.cardContentStyle}>
-                    <div className={classes.slider}>
-                        <button className={classes.buttonStyle} onClick={prevCard}>&lt;</button>
-                        <StyledCardDesign>
-                            <img className={classes.image} src={require(`../../images/${selectedCard[0].logo}`)}/>
-                            <h1 className={classes.title}>{selectedCard[0].title}</h1>
-                            <span className={classes.content}>{selectedCard[0].content}</span>
-                        </StyledCardDesign>
-                        <button className={classes.buttonStyle} onClick={nextCard}>&gt;</button>
-                    </div>
+            <Card sx={styles.card} className={classes.cardStyle}>
+                <CardMedia
+                    component="img"
+                    sx={{height: 700, width: '100%'}}
+                    image={require(`../../images/${cards[currentCard].logo}`)}
+                />
+                <CardContent sx={styles.content}>
+                    <h1 className={classes.title}>{cards[currentCard].title}</h1>
+                    <span className={classes.content}>{cards[currentCard].content}</span>
                 </CardContent>
             </Card>
+            <div style={{display: "flex", justifyContent: "space-between", marginTop: "20px"}}>
+                {cards.map((x, index) =>
+                    <Card key={index} sx={smallStyles.card} className={classes.smallCardStyle} onClick={() => clickCard(index)}>
+                        <CardMedia
+                            onMouseEnter={() => hoverGeldi(index)}
+                            onMouseLeave={() => hoverGitti()}
+                            component="img"
+                            sx={smallStyles.smallMedia}
+                            image={require(`../../images/${x.logo}`)}
+                            className={classes.smallCardFoto}
+                        />
+                        <CardContent sx={{ ...smallStyles.content, opacity: hovered && hoveredCard === index ? 1 : 0 }}>
+                            <h1 className={classes.smallCardTitle}>{x.title}</h1>
+                        </CardContent>
+                    </Card>
+                )}
+            </div>
+
         </div>
     );
 };

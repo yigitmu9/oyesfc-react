@@ -12,12 +12,18 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
-import {StadiumNames, TeamMembers} from "../../constants/constants";
+import {TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 
 const FacilitiesIndividualStats = ({data}) => {
 
-    const [facility, setFacility] = React.useState(StadiumNames.vitamin);
+    let facilities = [];
+    Object.values(data)?.forEach((x) => {
+        if (!facilities.includes(x.place)) {
+            facilities.push(x.place)
+        }
+    } )
+    const [facility, setFacility] = React.useState(facilities[0]);
 
     const handleChange = (event) => {
         setFacility(event.target.value);
@@ -108,7 +114,7 @@ const FacilitiesIndividualStats = ({data}) => {
                             <label className={classes.colorStyle}>
                                 Select a Facility:
                                 <select className={classes.select} onChange={handleChange}>
-                                    {Object.values(StadiumNames).map(x => (
+                                    {facilities.map(x => (
                                         <option value={x}>{x}</option>
                                     ))}
                                 </select>

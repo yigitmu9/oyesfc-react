@@ -12,7 +12,7 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
-import {DetailedRakipbulMatches, StadiumNames, TeamMembers} from "../../constants/constants";
+import {DetailedRakipbulMatches, TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 
 const RakipbulPlayerStats = () => {

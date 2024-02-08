@@ -2,10 +2,16 @@ import React, {useEffect, useRef, useState} from 'react';
 import classes from "./add-match.module.css";
 import {dataBase} from "../../firebase";
 import {ref, set} from "firebase/database";
-import {StadiumNames, TeamMembers} from "../../constants/constants";
+import {TeamMembers} from "../../constants/constants";
 
-const AddMatchComponent = ({onClose, openMessage, messageData}) => {
+const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) => {
 
+    let facilities = [];
+    Object.values(databaseData)?.forEach((x) => {
+        if (!facilities.includes(x.place)) {
+            facilities.push(x.place)
+        }
+    } )
     const popupRef = useRef(null);
 
     const handleOutsideClick = (event) => {
@@ -206,11 +212,23 @@ const AddMatchComponent = ({onClose, openMessage, messageData}) => {
                                         required={true}
                                         name="place"
                                         value={formData.place}>
-                                    <option></option>
-                                    {Object.values(StadiumNames).map(x => (
+                                    <option value={'New Place'}>New Place</option>
+                                    {facilities.map(x => (
                                         <option value={x}>{x}</option>
                                     ))}
                                 </select>
+                            </label>
+                            <br/>
+                            <label style={{background: "#1f1f1f"}}>
+                                New Place:
+                                <input
+                                    className={classes.inputDesign}
+                                    required={true}
+                                    type="text"
+                                    name="place"
+                                    value={formData.place}
+                                    onChange={handleInputChange}
+                                />
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>

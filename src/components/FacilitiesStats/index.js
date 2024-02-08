@@ -4,12 +4,17 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Bar} from "react-chartjs-2";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import {StadiumNames} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 
 const FacilitiesStats = ({data}) => {
 
-    const rows = Object.values(StadiumNames);
+    let facilities = [];
+    Object.values(data)?.forEach((x) => {
+        if (!facilities.includes(x.place)) {
+            facilities.push(x.place)
+        }
+    } )
+    const rows = facilities;
     let win = 0;
     let draw = 0;
     let loss = 0;
@@ -26,7 +31,7 @@ const FacilitiesStats = ({data}) => {
     let rivalGoalsPerGameData = [];
     let goalsPerGameData = [];
 
-    Object.values(StadiumNames)?.map((z, y) => {
+    facilities?.map((z, y) => {
         win = 0;
         draw = 0;
         loss = 0;
@@ -58,7 +63,7 @@ const FacilitiesStats = ({data}) => {
     })
 
     const chartDatasets = {
-        labels: Object.values(StadiumNames),
+        labels: facilities,
         datasets: [
             {
                 label: 'Win Rate on Facilities (%)',

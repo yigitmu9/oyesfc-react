@@ -24,7 +24,7 @@ function App() {
         (
             data ?
                 <Router>
-                    <Navbar/>
+                    <Navbar databaseData={data}/>
                     <Routes>
                         <Route path='oyesfc-react/' element={<MainPage/>}/>
                         <Route path='oyesfc-react/matches' element={<Matches databaseData={data}/>}/>

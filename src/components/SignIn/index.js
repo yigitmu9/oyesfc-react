@@ -6,7 +6,7 @@ import Message from "../Message";
 import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/auth"
 import {auth} from "../../firebase"
 
-const SignInComponent = ({onClose, openMessage, messageData}) => {
+const SignInComponent = ({onClose, openMessage, messageData, databaseData}) => {
 
     const popupRef = useRef(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
@@ -150,7 +150,8 @@ const SignInComponent = ({onClose, openMessage, messageData}) => {
             </div>}
             {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
                                                onClose={() => setPopupOpen(false)}
-                                               messageData={(messageData) => handleXClick(messageData)}/>}
+                                               messageData={(messageData) => handleXClick(messageData)}
+                                               databaseData={databaseData}/>}
             {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)} />}
         </div>
     );
