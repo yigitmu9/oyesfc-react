@@ -56,6 +56,7 @@ const SliderCard = () => {
             '&:hover': {
                 transform: 'scale(1.05)',
             },
+            borderRadius: '25px',
         },
         media: {
             height: 0,
@@ -92,12 +93,12 @@ const SliderCard = () => {
     const [hovered, setHovered] = useState(false);
     const [hoveredCard, setHoveredCard] = useState(null);
 
-    const hoverGeldi = (index) => {
+    const hoverTrue = (index) => {
         setHoveredCard(index)
         setHovered(true)
     }
 
-    const hoverGitti = () => {
+    const hoverFalse = () => {
         setHovered(false)
     }
 
@@ -116,22 +117,22 @@ const SliderCard = () => {
             </Card>
             <div style={{display: "flex", justifyContent: "space-between", marginTop: "20px"}}>
                 {cards.map((x, index) =>
-                    <Card key={index} sx={smallStyles.card} className={classes.smallCardStyle} onClick={() => clickCard(index)}>
+                    <Card key={index} sx={smallStyles.card} className={classes.smallCardStyle}
+                          onClick={() => clickCard(index)}>
                         <CardMedia
-                            onMouseEnter={() => hoverGeldi(index)}
-                            onMouseLeave={() => hoverGitti()}
+                            onMouseEnter={() => hoverTrue(index)}
+                            onMouseLeave={() => hoverFalse()}
                             component="img"
                             sx={smallStyles.smallMedia}
                             image={require(`../../images/${x.logo}`)}
                             className={classes.smallCardFoto}
                         />
-                        <CardContent sx={{ ...smallStyles.content, opacity: hovered && hoveredCard === index ? 1 : 0 }}>
+                        <CardContent sx={{...smallStyles.content, opacity: hovered && hoveredCard === index ? 1 : 0}}>
                             <h1 className={classes.smallCardTitle}>{x.title}</h1>
                         </CardContent>
                     </Card>
                 )}
             </div>
-
         </div>
     );
 };
