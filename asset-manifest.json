@@ -1,12 +1,16 @@
 {
   "files": {
-    "main.css": "/oyesfc-react/static/css/main.c69ff949.css",
-    "main.js": "/oyesfc-react/static/js/main.26041eba.js",
+    "main.css": "/oyesfc-react/static/css/main.5e28d8b3.css",
+    "main.js": "/oyesfc-react/static/js/main.115ca749.js",
     "static/js/787.9398f104.chunk.js": "/oyesfc-react/static/js/787.9398f104.chunk.js",
     "static/media/ghost.png": "/oyesfc-react/static/media/ghost.be13388caa96804fa3ce.png",
     "static/media/firstLogo.png": "/oyesfc-react/static/media/firstLogo.3711abd90f028c308299.png",
     "static/media/Toki.png": "/oyesfc-react/static/media/Toki.d2065f3c6b7c95ecc2d7.png",
+    "static/media/gold2.jpeg": "/oyesfc-react/static/media/gold2.e771b6dd3e8ac34c13a9.jpeg",
+    "static/media/blue2.jpeg": "/oyesfc-react/static/media/blue2.7a2e8bb20db1f3987e7c.jpeg",
+    "static/media/red3.jpeg": "/oyesfc-react/static/media/red3.2da08bef64728bbdea4b.jpeg",
     "static/media/gokhan.jpeg": "/oyesfc-react/static/media/gokhan.5559f13b7a510a600022.jpeg",
+    "static/media/ghost1.jpeg": "/oyesfc-react/static/media/ghost1.a08f9010f426903cdbe6.jpeg",
     "static/media/mehmet.jpeg": "/oyesfc-react/static/media/mehmet.161b2fea565731d8f4c6.jpeg",
     "static/media/oyesfc.PNG": "/oyesfc-react/static/media/oyesfc.01842b69ce4c2478495e.PNG",
     "static/media/phoenix.png": "/oyesfc-react/static/media/phoenix.d977231dc2dd70d835ae.png",
@@ -35,12 +39,12 @@
     "static/media/football.png": "/oyesfc-react/static/media/football.cb2c116cabd7616ef325.png",
     "static/media/Olympos.png": "/oyesfc-react/static/media/Olympos.561cd7e7555c194cb599.png",
     "index.html": "/oyesfc-react/index.html",
-    "main.c69ff949.css.map": "/oyesfc-react/static/css/main.c69ff949.css.map",
-    "main.26041eba.js.map": "/oyesfc-react/static/js/main.26041eba.js.map",
+    "main.5e28d8b3.css.map": "/oyesfc-react/static/css/main.5e28d8b3.css.map",
+    "main.115ca749.js.map": "/oyesfc-react/static/js/main.115ca749.js.map",
     "787.9398f104.chunk.js.map": "/oyesfc-react/static/js/787.9398f104.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c69ff949.css",
-    "static/js/main.26041eba.js"
+    "static/css/main.5e28d8b3.css",
+    "static/js/main.115ca749.js"
   ]
 }
