@@ -206,13 +206,13 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
-                                Place:
+                                Select a Facility:
                                 <select className={classes.select}
                                         onChange={handleInputChange}
                                         required={true}
                                         name="place"
                                         value={formData.place}>
-                                    <option value={'New Place'}>New Place</option>
+                                    <option value={'New Facility'}>New Facility</option>
                                     {facilities.map(x => (
                                         <option value={x}>{x}</option>
                                     ))}
@@ -220,7 +220,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
-                                New Place:
+                                Place:
                                 <input
                                     className={classes.inputDesign}
                                     required={true}
