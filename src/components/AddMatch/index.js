@@ -12,6 +12,15 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
             facilities.push(x.place)
         }
     } )
+
+    const [isRakipbul, setIsRakipbul] = useState(false);
+    let rivalNames = [];
+    Object.values(databaseData)?.forEach((x) => {
+        if (!rivalNames.includes(x.rival.name) && x.rakipbul === isRakipbul) {
+            rivalNames.push(x.rival.name)
+        }
+    } )
+
     const popupRef = useRef(null);
 
     const handleOutsideClick = (event) => {
@@ -49,6 +58,9 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
     const handleInputChange = (event) => {
         const {name, value, type, checked} = event.target;
         const inputValue = type === "checkbox" ? checked : value;
+        if (type === "checkbox" && isRakipbul !== checked) {
+            setIsRakipbul(checked);
+        }
         setFormData((prevData) => ({
             ...prevData,
             [name]: inputValue,
@@ -169,6 +181,31 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                 <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
                     <div className={classes.formAlign}>
                         <div className={classes.infoAlign}>
+                            <label style={{background: "#1f1f1f"}} className={classes.customCheckbox}>
+                                Rakipbul
+                                <input
+                                    type="checkbox"
+                                    name="rakipbul"
+                                    checked={formData.rakipbul}
+                                    onChange={handleInputChange}
+                                />
+                                <span className={classes.checkmark}></span>
+                            </label>
+                            <br/>
+                            <label style={{background: "#1f1f1f"}}>
+                                Select a Rival:
+                                <select className={classes.select}
+                                        onChange={handleRivalInputChange}
+                                        required={true}
+                                        name="name"
+                                        value={formData.rival.name}>
+                                    <option value={'New Rival'}>New Rival</option>
+                                    {rivalNames.map(x => (
+                                        <option value={x}>{x}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <br/>
                             <label style={{background: "#1f1f1f"}}>
                                 Rival Name:
                                 <input
@@ -179,17 +216,6 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                     value={formData.rival.name}
                                     onChange={handleRivalInputChange}
                                 />
-                            </label>
-                            <br/>
-                            <label style={{background: "#1f1f1f"}} className={classes.customCheckbox}>
-                                Rakipbul
-                                <input
-                                    type="checkbox"
-                                    name="rakipbul"
-                                    checked={formData.rakipbul}
-                                    onChange={handleInputChange}
-                                />
-                                <span className={classes.checkmark}></span>
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f", width: "100%", minWidth: "100%"}}>

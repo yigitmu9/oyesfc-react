@@ -14,10 +14,13 @@
     max-height: 99%;
     overflow: auto;
     z-index: 12;
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         width: 97%;
         max-width: 97%;
         padding: 2px;
+    }
+    @media (min-width: 768px) {
+        min-width: 600px;
     }
 }
 

@@ -25,6 +25,15 @@ const PlayerCards = ({playerName, data}) => {
 
     const imageUrl = Object.entries(TeamMembers).find(x => x[1].name === playerName)[0];
 
+    const getPlayerName = () => {
+        if (playerName === TeamMembers.yigit.name) {
+            return playerName + ' (C) ';
+        } else if (playerName === TeamMembers.can.name) {
+            return playerName + ' (GK) ';
+        }
+        return playerName
+    };
+
     return (
         <Card sx={{ maxHeight: "389px", borderRadius: "25px", width: "278px", marginBottom: "50px" }} style={{backgroundColor: "#242424"}}>
             <CardMedia
@@ -34,7 +43,7 @@ const PlayerCards = ({playerName, data}) => {
             />
             <CardContent style={{backgroundColor: "#242424"}}>
                 <div style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end", width: "94%", margin: "8px"}}>
-                    <h3 className={classes.titleStyle}>{playerName === TeamMembers.yigit.name ? playerName + ' (C) ' : playerName}</h3>
+                    <h3 className={classes.titleStyle}>{getPlayerName()}</h3>
                     <h3 className={classes.titleStyle}>{playerNumber}</h3>
                 </div>
                 <List  component="nav" aria-label="mailbox folders" style={{backgroundColor: "#242424"}}>
