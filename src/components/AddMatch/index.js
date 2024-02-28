@@ -299,12 +299,12 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                 </div>
                             ))}
                             <label style={{background: "#1f1f1f"}}>
-                                Select O Yes FC Member:
+                                Select Player:
                                 <select className={classes.select}
                                         onChange={(e) =>
                                             setNewSquadMember(e.target.value !== 'None' ? e.target.value : '')}
                                         value={newSquadMember}>
-                                    <option></option>
+                                    <option>New Player</option>
                                     {Object.values(TeamMembers).map(x => (
                                         <option placeholder='yes' value={x.name}>{x.name}</option>
                                     ))}

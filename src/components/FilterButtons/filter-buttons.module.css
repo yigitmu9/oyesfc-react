@@ -29,6 +29,7 @@
 }
 
 .grid {
+    display: flex;
     margin-top: 100px;
     margin-left: 18%;
     @media (max-width: 768px) {
