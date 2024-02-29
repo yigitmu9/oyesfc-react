@@ -5,6 +5,7 @@ import AddMatchComponent from "../AddMatch";
 import Message from "../Message";
 import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/auth"
 import {auth} from "../../firebase"
+import AddIcon from "@mui/icons-material/Add";
 
 const SignInComponent = ({onClose, openMessage, messageData, databaseData}) => {
 
@@ -137,8 +138,11 @@ const SignInComponent = ({onClose, openMessage, messageData, databaseData}) => {
                         </div>
                         <h1 className={classes.titleStyle}>Welcome</h1>
                         <h1 className={classes.usernameStyle}>{credentials?.email}</h1>
-                        <div className={classes.buttonDivStyle}>
-                            <button className={classes.buttonStyle} onClick={openAddMatchPopup}>Add Match</button>
+                        <div className={classes.addMatchButtonDiv}>
+                            <div className={classes.addMatchDiv} onClick={openAddMatchPopup}>
+                                <AddIcon className={classes.addIconStyle}></AddIcon>
+                                <span className={classes.addMatchSpan}>Add Match</span>
+                            </div>
                         </div>
                         <div className={classes.buttonDivStyle}>
                             <button className={classes.buttonStyle} style={{marginRight: "1rem"}} onClick={logOut}>Log

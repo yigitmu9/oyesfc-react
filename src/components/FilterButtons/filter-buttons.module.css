@@ -1,40 +1,43 @@
-.activeButton {
-    background-color: darkred;
-    margin-right: 12px;
-    font-size: 14px;
-    color: lightgray;
-    border-radius: 25px;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    @media (max-width: 768px) {
-        font-size: 12px;
-        padding: 10px;
-    }
-}
-
-.disabledButton {
-    background-color: #242424;
-    border: none;
-    margin-right: 12px;
-    font-size: 14px;
-    color: lightgray;
-    border-radius: 25px;
-    padding: 10px 20px;
-    cursor: pointer;
-    @media (max-width: 768px) {
-        font-size: 12px;
-        padding: 10px;
-    }
-}
-
-.grid {
+.buttonDivStyle {
     display: flex;
     margin-top: 100px;
-    margin-left: 18%;
-    @media (max-width: 768px) {
-        margin-top: 100px;
-        margin-left: 7%;
-        margin-bottom: 20px;
-    }
+    width: 100%;
+    justify-content: center;
+}
+
+.iconStyle {
+    background-color: #242424;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+    color: lightgray;
+    cursor: pointer;
+}
+
+.iconStyle:hover {
+    background-color: rgb(50, 50, 50);
+    transform: scale(1.15);
+}
+
+.disabledButtonStyle:hover {
+    transform: scale(1.15);
+    background-color: rgb(50, 50, 50);
+}
+
+.filteredIconStyle {
+    background-color: darkred;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+    color: lightgray;
+    cursor: pointer;
+}
+
+.filteredIconStyle:hover {
+    background-color: red;
+    transform: scale(1.15);
 }

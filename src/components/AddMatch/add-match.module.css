@@ -4,34 +4,35 @@
     position: fixed;
     justify-content: center;
     align-items: center;
-    max-width: 70%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     overflow: auto;
     max-height: 95%;
-    background-color: #404040;
-    padding: 20px;
+    background-color: #1f1f1f;
+    padding: 0;
     border-radius: 25px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    width: 40%;
+    width: 30%;
+    min-width: 550px;
+    max-width: 50%;
     height: auto;
     z-index: 11;
     @media (max-width: 767px) {
         width: 97%;
         max-width: 97%;
-        padding: 2px;
         max-height: 97%;
+        min-width: 100px;
     }
     @media (min-width: 768px) and (max-width: 1100px) {
-        width: 80%;
-        max-width: 80%;
-        padding: 8px;
+        width: 30%;
+        max-width: 50%;
+        min-width: 550px;
     }
     @media (min-width: 1101px) and (max-width: 1700px) {
-        width: 60%;
-        max-width: 60%;
-        padding: 14px;
+        width: 30%;
+        max-width: 50%;
+        min-width: 550px;
     }
 }
 
@@ -113,15 +114,6 @@ label {
     color: #ffffff;
     height: 33px;
     @media (max-width: 768px) {
-        border-radius: 25px;
-        margin-top: 5px;
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 16px;
-        border: none;
-        background-color: #292929;
-        color: #ffffff;
-        height: 33px;
         font-size: 14px;
     }
 }
@@ -139,31 +131,21 @@ label {
 }
 
 .formAlign {
-    display: flex;
+    display: block;
     background: #1f1f1f;
-    @media (max-width: 768px) {
-        display: block;
-    }
 }
 
 .infoAlign {
     display: block;
     background: #1f1f1f;
-    width: 50%;
-    @media (max-width: 768px) {
-        width: 100%;
-    }
+    width: 100%;
 }
 
 .playersAlign {
     display: block;
     background: #1f1f1f;
-    margin-left: 5rem;
-    width: 50%;
-    @media (max-width: 768px) {
-        width: 100%;
-        margin-left: 0;
-    }
+    width: 100%;
+    margin-left: 0;
 }
 
 .buttonDivStyle {
@@ -249,4 +231,42 @@ label {
         height: 33px;
         font-size: 14px;
     }
+}
+
+.matchTypeTitle {
+    background-color: #1f1f1f;
+    margin-bottom: 10px;
+}
+
+.generalTitle {
+    background-color: #1f1f1f;
+    font-size: 50px;
+    margin-bottom: 40px;
+    @media (max-width: 768px) {
+        font-size: 40px;
+    }
+}
+
+.addPlayerDiv {
+    background: #1f1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 5px;
+    height: 20px;
+    width: 30px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.iconStyle {
+    background: #1f1f1f;
+    font-size: 30px;
+    color: darkred;
+}
+
+.addPlayerSpan {
+    background: #1f1f1f;
+    font-size: 20px;
+    color: darkred;
 }

@@ -23,7 +23,7 @@ const FacilitiesIndividualStats = ({data}) => {
             facilities.push(x.place)
         }
     } )
-    const [facility, setFacility] = React.useState(facilities[0]);
+    const [facility, setFacility] = React.useState(null);
 
     const handleChange = (event) => {
         setFacility(event.target.value);
@@ -112,8 +112,8 @@ const FacilitiesIndividualStats = ({data}) => {
                     <div className={classes.selectionInsideGrid}>
                         <FormControl className={classes.colorStyle} fullWidth>
                             <label className={classes.colorStyle}>
-                                Select a Facility:
                                 <select className={classes.select} onChange={handleChange}>
+                                    <option>Select Facility</option>
                                     {facilities.map(x => (
                                         <option value={x}>{x}</option>
                                     ))}

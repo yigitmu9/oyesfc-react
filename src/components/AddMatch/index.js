@@ -3,6 +3,7 @@ import classes from "./add-match.module.css";
 import {dataBase} from "../../firebase";
 import {ref, set} from "firebase/database";
 import {TeamMembers} from "../../constants/constants";
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) => {
 
@@ -181,6 +182,10 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                 <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
                     <div className={classes.formAlign}>
                         <div className={classes.infoAlign}>
+                            <h1 className={classes.generalTitle}>Add Match</h1>
+                            <label className={classes.matchTypeTitle}>
+                                Select Match Type:
+                            </label>
                             <label style={{background: "#1f1f1f"}} className={classes.customCheckbox}>
                                 Rakipbul
                                 <input
@@ -319,15 +324,17 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                     value={newSquadMember}
                                     onChange={(e) => setNewSquadMember(e.target.value)}
                                 />
-                                <button className={classes.buttonStyle} type="button" onClick={handleAddSquadMember}>
-                                    Add
-                                </button>
+                                <div className={classes.addPlayerDiv} onClick={handleAddSquadMember}>
+                                    <PersonAddAlt1Icon className={classes.iconStyle}></PersonAddAlt1Icon>
+                                    <span className={classes.addPlayerSpan}>Add</span>
+                                </div>
                             </label>
                             <br/>
                         </div>
                     </div>
                     <div className={classes.buttonDivStyle}>
-                        <button className={classes.buttonStyle} style={{ marginRight: "1rem"}} type="submit">Submit</button>
+                        <button className={classes.buttonStyle} style={{marginRight: "1rem"}} type="submit">Submit
+                        </button>
                         <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
                     </div>
                 </form>

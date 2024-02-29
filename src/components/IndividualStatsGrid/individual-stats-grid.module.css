@@ -1,0 +1,15 @@
+.grid {
+    display: flex;
+    justify-content: center;
+}
+
+.generalStyle {
+    color: lightgray;
+    max-width: 100%;
+}
+
+.divStyle {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
