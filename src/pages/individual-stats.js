@@ -1,5 +1,6 @@
 import React from 'react';
 import IndividualStatsGrid from "../components/IndividualStatsGrid";
+import Footer from "../components/Footer";
 
 const IndividualStats = ({databaseData}) => {
 
@@ -7,9 +8,7 @@ const IndividualStats = ({databaseData}) => {
         <div>
             <main>
                 <IndividualStatsGrid databaseData={databaseData}/>
-                <div style={{marginTop: "50px", textAlign: "center"}}>
-                    <span style={{color: "gray", textAlign: "center"}}>© 2023, O Yes FC</span>
-                </div>
+                <Footer></Footer>
             </main>
         </div>
     );

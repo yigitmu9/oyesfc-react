@@ -102,7 +102,7 @@ const RakipbulPlayerStats = () => {
     return (
         <div className={classes.grid}>
             <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 className={classes.titleStyle}>Statistics of 10 Specific Rakipbul Matches</h1>
+                <h1 className={classes.titleStyle}>Statistics of 10 Specific Rakipbul Matches**</h1>
                 <div className={classes.selectionGrid}>
                     <div className={classes.selectionInsideGrid}>
                         <FormControl className={classes.colorStyle} fullWidth>
@@ -158,12 +158,6 @@ const RakipbulPlayerStats = () => {
                         </div>
                     </div>
                 </CardContent>
-                <div className={classes.noteStyle}>
-                        <span className={classes.noteInsideStyle}>
-                            *Note: These statistic tables are only valid for 10 specific Rakipbul matches for which position data is available.
-                            The data is static and cannot work with filters.
-                        </span>
-                </div>
             </Card>
         </div>
     );

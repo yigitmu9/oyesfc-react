@@ -1,3 +1,23 @@
+.grid {
+    list-style-type: none;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 100px;
+    margin-left: 14%;
+    margin-right: 14%;
+    @media (max-width: 767px) {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+}
+
+.insideGrid {
+    width: 100%;
+}
+
 .slider {
     position: relative;
     width: 100%;
@@ -50,22 +70,6 @@
 
 .dot.active {
     background-color: #333;
-}
-
-.grid {
-    @media (max-width: 768px) {
-        margin-left: 3%;
-        margin-right: 3%;
-        width: 100%;
-        margin-top: 100px;
-    }
-    margin-left: 14%;
-    margin-right: 14%;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    margin-top: 120px;
 }
 
 .cardDesign {

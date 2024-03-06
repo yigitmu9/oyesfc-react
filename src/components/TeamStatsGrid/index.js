@@ -21,6 +21,13 @@ const TeamStatsGrid = ({databaseData}) => {
             <FacilitiesStats data={matchDetailsFilteredData}/>
             <WeatherTeamStats data={matchDetailsFilteredData}/>
             <RakipbulTeamStats/>
+            <div className={classes.divStyle}>
+                <div className={classes.spanDivStyle}>
+                    <span className={classes.spanStyle}>*These statistics are only valid for 10 specific
+                            Rakipbul matches for which position data is available.
+                            Does not work with filters.</span>
+                </div>
+            </div>
         </div>
     );
 };

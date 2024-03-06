@@ -1,0 +1,59 @@
+.grid {
+    list-style-type: none;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 30px;
+    bottom: 0;
+    width: 100%;
+}
+
+.content {
+    align-content: center;
+    justify-content: space-between;
+    text-align: center;
+    display: flex;
+    padding: 30px 14% 30px;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    background-color: #1a1a1a;
+    @media screen and (max-width: 768px) {
+        padding: 30px 3% 30px;
+        justify-content: center;
+        flex-direction: column-reverse;
+    }
+}
+
+.iconsGrid {
+    display: flex;
+    justify-content: center;
+    background-color: #1a1a1a;
+}
+
+.infoGrid {
+    color: gray;
+    text-align: center;
+    background-color: #1a1a1a;
+    @media screen and (max-width: 768px) {
+        margin-top: 20px;
+    }
+}
+
+.iconStyle {
+    color: gray;
+    background-color: #1a1a1a;
+    padding: 0 10px 0;
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.spanStyle {
+    color: gray;
+    text-align: center;
+    background-color: #1a1a1a;
+}

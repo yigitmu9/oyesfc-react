@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from "./slider-card.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { keyframes, styled } from '@mui/system';
 import CardMedia from "@mui/material/CardMedia";
-import {TeamMembers} from "../../constants/constants";
-import {Divider, List, ListItem, Typography} from "@mui/material";
+import Footer from "../Footer";
 
 const SliderCard = () => {
     const cards = [
@@ -26,6 +24,23 @@ const SliderCard = () => {
     ];
 
     const [currentCard, setCurrentCard] = useState(0);
+    const [isScrollbarVisible, setIsScrollbarVisible] = useState(false);
+
+    useEffect(() => {
+        const checkScrollbar = () => {
+            const bodyHeight = document.body.scrollHeight;
+            const windowHeight = window.innerHeight;
+            setIsScrollbarVisible(bodyHeight > windowHeight);
+        };
+
+        checkScrollbar();
+
+        window.addEventListener('resize', checkScrollbar);
+
+        return () => {
+            window.removeEventListener('resize', checkScrollbar);
+        };
+    }, []);
 
     const styles = {
         card: {
@@ -103,37 +118,43 @@ const SliderCard = () => {
     }
 
     return (
-        <div className={classes.grid}>
-            <Card sx={styles.card} className={classes.cardStyle}>
-                <CardMedia
-                    component="img"
-                    sx={{height: 700, width: '100%'}}
-                    image={require(`../../images/${cards[currentCard].logo}`)}
-                />
-                <CardContent sx={styles.content}>
-                    <h1 className={classes.title}>{cards[currentCard].title}</h1>
-                    <span className={classes.content}>{cards[currentCard].content}</span>
-                </CardContent>
-            </Card>
-            <div style={{display: "flex", justifyContent: "space-between", marginTop: "20px"}}>
-                {cards.map((x, index) =>
-                    <Card key={index} sx={smallStyles.card} className={classes.smallCardStyle}
-                          onClick={() => clickCard(index)}>
+        <>
+            <div className={classes.grid}>
+                <div className={classes.insideGrid}>
+                    <Card sx={styles.card} className={classes.cardStyle}>
                         <CardMedia
-                            onMouseEnter={() => hoverTrue(index)}
-                            onMouseLeave={() => hoverFalse()}
                             component="img"
-                            sx={smallStyles.smallMedia}
-                            image={require(`../../images/${x.logo}`)}
-                            className={classes.smallCardFoto}
+                            sx={{height: 700, width: '100%'}}
+                            image={require(`../../images/${cards[currentCard].logo}`)}
                         />
-                        <CardContent sx={{...smallStyles.content, opacity: hovered && hoveredCard === index ? 1 : 0}}>
-                            <h1 className={classes.smallCardTitle}>{x.title}</h1>
+                        <CardContent sx={styles.content}>
+                            <h1 className={classes.title}>{cards[currentCard].title}</h1>
+                            <span className={classes.content}>{cards[currentCard].content}</span>
                         </CardContent>
                     </Card>
-                )}
+                    <div style={{display: "flex", justifyContent: "space-between", marginTop: "20px"}}>
+                        {cards.map((x, index) =>
+                            <Card key={index} sx={smallStyles.card} className={classes.smallCardStyle}
+                                  onClick={() => clickCard(index)}>
+                                <CardMedia
+                                    onMouseEnter={() => hoverTrue(index)}
+                                    onMouseLeave={() => hoverFalse()}
+                                    component="img"
+                                    sx={smallStyles.smallMedia}
+                                    image={require(`../../images/${x.logo}`)}
+                                    className={classes.smallCardFoto}
+                                />
+                                <CardContent
+                                    sx={{...smallStyles.content, opacity: hovered && hoveredCard === index ? 1 : 0}}>
+                                    <h1 className={classes.smallCardTitle}>{x.title}</h1>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </div>
+                </div>
             </div>
-        </div>
+            <Footer isShortPage={!isScrollbarVisible}></Footer>
+        </>
     );
 };
 

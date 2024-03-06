@@ -3,6 +3,7 @@ import Scoreboard from "../Scoreboard";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails";
 import FilterButtons from "../FilterButtons";
+import Footer from "../Footer";
 
 const ScoreboardsGrid = ({databaseData}) => {
 
@@ -24,6 +25,13 @@ const ScoreboardsGrid = ({databaseData}) => {
     });
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [matchDetailsData, setMatchDetailsData] = useState(null);
+    const [isShortPage, setIsShortPage] = useState(false);
+
+    const checkScrollbar = () => {
+        const bodyHeight = document.body.scrollHeight;
+        const windowHeight = window.innerHeight;
+        setIsShortPage(bodyHeight > windowHeight);
+    };
 
     const openPopup = ({x}) => {
         document.body.style.overflow = 'hidden';
@@ -36,6 +44,7 @@ const ScoreboardsGrid = ({databaseData}) => {
     };
 
     const setAdvancedFilters = (filteredData) => {
+        checkScrollbar();
         setMatchDetailsFilteredData(filteredData);
     };
 
@@ -54,6 +63,8 @@ const ScoreboardsGrid = ({databaseData}) => {
                 <h1 className={classes.title}>No Match found</h1>}
                 {isPopupOpen && <MatchDetails matchDetailsData={matchDetailsData} onClose={() => setPopupOpen(false)} />}
             </div>
+            <Footer isShortPage={isShortPage}></Footer>
+
         </>
     );
 

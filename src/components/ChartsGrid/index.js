@@ -105,10 +105,6 @@ const ChartsGrid = ({matchData, databaseData}) => {
         ]
     }
 
-    let yes = [];
-    yes.push(Object.values(TeamMembers)?.map(x => x.name))
-    yes.push('Other')
-
     const goalPercentDatasets = {
         labels: Object.values(TeamMembers)?.map(x => x.name),
         datasets: [
@@ -243,7 +239,7 @@ const ChartsGrid = ({matchData, databaseData}) => {
 
                 </div>
                 <div className={classes.goalsPerGameDiv}>
-                    <h3 className={classes.titleStyle}>Regular Matches Compared to the Rakipbul</h3>
+                    <h3 className={classes.titleStyle}>Regular Matches Compared to the Rakipbul*</h3>
                     <div className={classes.chartStyle}>
                         <Radar
                             data={performanceRateDatasets}
