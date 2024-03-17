@@ -144,6 +144,10 @@
     height: 130px;
     background-color: #242424;
     text-align: center;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    justify-content: center;
     @media (max-width: 768px) {
         height: 90px;
     }
@@ -154,8 +158,13 @@
     background: rgba(0, 0, 0, 0.0);
     margin: 10px;
     text-align: center;
+    font-size: 25px;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    justify-content: center;
     @media (max-width: 768px) {
-        font-size: 17px;
+        font-size: 12px;
     }
 }
 

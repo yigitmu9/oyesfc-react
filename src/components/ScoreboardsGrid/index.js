@@ -25,13 +25,7 @@ const ScoreboardsGrid = ({databaseData}) => {
     });
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [matchDetailsData, setMatchDetailsData] = useState(null);
-    const [isShortPage, setIsShortPage] = useState(false);
-
-    const checkScrollbar = () => {
-        const bodyHeight = document.body.scrollHeight;
-        const windowHeight = window.innerHeight;
-        setIsShortPage(bodyHeight > windowHeight);
-    };
+    const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 330) + 'px' : (window.innerHeight - 370) + 'px';
 
     const openPopup = ({x}) => {
         document.body.style.overflow = 'hidden';
@@ -44,14 +38,13 @@ const ScoreboardsGrid = ({databaseData}) => {
     };
 
     const setAdvancedFilters = (filteredData) => {
-        checkScrollbar();
         setMatchDetailsFilteredData(filteredData);
     };
 
     return (
         <>
             <FilterButtons databaseData={databaseData} setAdvancedFilters={setAdvancedFilters}></FilterButtons>
-            <div className={classes.grid}>
+            <div className={classes.grid} style={{minHeight: windowHeight}}>
                 {matchDetailsFilteredData.length > 0 ?
                     sortedData?.map((x, y) => (
                         <Scoreboard
@@ -63,8 +56,6 @@ const ScoreboardsGrid = ({databaseData}) => {
                 <h1 className={classes.title}>No Match found</h1>}
                 {isPopupOpen && <MatchDetails matchDetailsData={matchDetailsData} onClose={() => setPopupOpen(false)} />}
             </div>
-            <Footer isShortPage={isShortPage}></Footer>
-
         </>
     );
 

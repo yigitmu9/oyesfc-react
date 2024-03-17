@@ -10,16 +10,21 @@
   cursor: pointer;
   width: calc(33.33% - 20px);
   margin: 10px;
+  max-height: 128px;
   @media (max-width: 768px) {
     max-width: 100%;
     min-width: 100px;
     width: 100%;
     margin-bottom: -5px;
+    max-height: 97px;
   }
 }
 
 .scoreboard:nth-child(3n + 1):last-child {
-  margin-right: auto;
+  @media (min-width: 769px) {
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
 
 .score {

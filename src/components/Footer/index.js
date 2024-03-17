@@ -22,7 +22,7 @@ const Footer = ({isShortPage}) => {
     const packageJson = require('./../../../package.json');
 
     return (
-        <footer className={classes.grid} style={{ position: isShortPage ? 'fixed' : 'relative' }}>
+        <footer className={classes.grid}>
             <div className={classes.content}>
                 <div className={classes.infoGrid}>
                     <span className={classes.spanStyle}>{'© 2023 O Yes FC™ | v' + packageJson.version}</span>

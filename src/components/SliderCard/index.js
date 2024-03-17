@@ -24,23 +24,7 @@ const SliderCard = () => {
     ];
 
     const [currentCard, setCurrentCard] = useState(0);
-    const [isScrollbarVisible, setIsScrollbarVisible] = useState(false);
-
-    useEffect(() => {
-        const checkScrollbar = () => {
-            const bodyHeight = document.body.scrollHeight;
-            const windowHeight = window.innerHeight;
-            setIsScrollbarVisible(bodyHeight > windowHeight);
-        };
-
-        checkScrollbar();
-
-        window.addEventListener('resize', checkScrollbar);
-
-        return () => {
-            window.removeEventListener('resize', checkScrollbar);
-        };
-    }, []);
+    const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 240) + 'px' : (window.innerHeight - 370) + 'px';
 
     const styles = {
         card: {
@@ -89,6 +73,7 @@ const SliderCard = () => {
             transition: 'opacity 0.3s ease',
             opacity: 0,
             pointerEvents: 'none',
+            width: '200%',
         },
         smallMedia: {
             transition: 'filter 0.3s ease',
@@ -119,7 +104,7 @@ const SliderCard = () => {
 
     return (
         <>
-            <div className={classes.grid}>
+            <div className={classes.grid} style={{minHeight: windowHeight}}>
                 <div className={classes.insideGrid}>
                     <Card sx={styles.card} className={classes.cardStyle}>
                         <CardMedia
@@ -145,6 +130,7 @@ const SliderCard = () => {
                                     className={classes.smallCardFoto}
                                 />
                                 <CardContent
+                                    style={{paddingBottom: '10px'}}
                                     sx={{...smallStyles.content, opacity: hovered && hoveredCard === index ? 1 : 0}}>
                                     <h1 className={classes.smallCardTitle}>{x.title}</h1>
                                 </CardContent>
@@ -153,7 +139,6 @@ const SliderCard = () => {
                     </div>
                 </div>
             </div>
-            <Footer isShortPage={!isScrollbarVisible}></Footer>
         </>
     );
 };

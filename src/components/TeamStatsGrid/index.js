@@ -5,6 +5,7 @@ import FacilitiesStats from "../FacilitiesStats";
 import WeatherTeamStats from "../WeatherTeamStats";
 import RakipbulTeamStats from "../RakipbulTeamStats";
 import FilterButtons from "../FilterButtons";
+import MainSquadStats from "../MainSquadStats";
 
 const TeamStatsGrid = ({databaseData}) => {
 
@@ -20,6 +21,7 @@ const TeamStatsGrid = ({databaseData}) => {
             <GeneralResults data={matchDetailsFilteredData}/>
             <FacilitiesStats data={matchDetailsFilteredData}/>
             <WeatherTeamStats data={matchDetailsFilteredData}/>
+            <MainSquadStats data={matchDetailsFilteredData}/>
             <RakipbulTeamStats/>
             <div className={classes.divStyle}>
                 <div className={classes.spanDivStyle}>
