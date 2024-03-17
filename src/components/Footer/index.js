@@ -4,7 +4,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import EmailIcon from '@mui/icons-material/Email';
 import XIcon from '@mui/icons-material/X';
 
-const Footer = ({isShortPage}) => {
+const Footer = () => {
 
     const redirectToEmail = () => {
         window.location.href = "mailto:oyesfc@gmail.com";

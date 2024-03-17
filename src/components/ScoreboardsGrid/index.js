@@ -3,7 +3,6 @@ import Scoreboard from "../Scoreboard";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails";
 import FilterButtons from "../FilterButtons";
-import Footer from "../Footer";
 
 const ScoreboardsGrid = ({databaseData}) => {
 
