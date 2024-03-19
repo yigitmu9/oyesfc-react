@@ -6,6 +6,7 @@ import Filter3Icon from "@mui/icons-material/Filter3";
 import Filter4Icon from "@mui/icons-material/Filter4";
 import Filter5Icon from "@mui/icons-material/Filter5";
 import Filter6Icon from "@mui/icons-material/Filter6";
+import Filter7Icon from '@mui/icons-material/Filter7';
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AdvancedFilters from "../AdvancedFilters";
 
@@ -31,6 +32,7 @@ function FilterButtons({ databaseData, setAdvancedFilters }) {
         if (appliedFilters?.appliedRivals?.length > 0) count = count + 1
         if (appliedFilters?.appliedYears?.length > 0) count = count + 1
         if (appliedFilters?.appliedType === 'rakipbul' || appliedFilters?.appliedType === 'normal') count = count + 1
+        if (appliedFilters?.appliedSquad === 'Main Squad' || appliedFilters?.appliedSquad === 'Squad Including Foreigners') count = count + 1
         setCountFilter(count)
         setApplyFilters(appliedFilters)
     };
@@ -56,7 +58,10 @@ function FilterButtons({ databaseData, setAdvancedFilters }) {
                                     : countFilter === 6 ? <Filter6Icon className={classes.filteredIconStyle}
                                                                        style={{height: "70px", width: "70px"}}
                                                                        onClick={openFiltersModal}></Filter6Icon>
-                                        : <FilterListIcon className={classes.iconStyle}
+                                        : countFilter === 7 ? <Filter7Icon className={classes.filteredIconStyle}
+                                                                          style={{height: "70px", width: "70px"}}
+                                                                          onClick={openFiltersModal}></Filter7Icon>
+                                            : <FilterListIcon className={classes.iconStyle}
                                                           style={{height: "70px", width: "70px"}}
                                                           onClick={openFiltersModal}></FilterListIcon>
             }

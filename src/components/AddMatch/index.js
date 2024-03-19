@@ -205,7 +205,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                         name="name"
                                         value={formData.rival.name}>
                                     <option value={'New Rival'}>New Rival</option>
-                                    {rivalNames.map(x => (
+                                    {rivalNames.sort().map(x => (
                                         <option value={x}>{x}</option>
                                     ))}
                                 </select>

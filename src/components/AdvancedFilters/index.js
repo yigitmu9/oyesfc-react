@@ -11,7 +11,9 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
             applyFilters?.appliedFacilities?.length > 0 ||
             applyFilters?.appliedYears?.length > 0 ||
             applyFilters?.appliedMonths?.length > 0 ||
-            applyFilters?.appliedRivals?.length > 0;
+            applyFilters?.appliedRivals?.length > 0 ||
+            applyFilters?.appliedSquad === 'Main Squad' ||
+            applyFilters?.appliedSquad === 'Squad Including Foreigners';
     };
 
     document.body.style.overflow = 'hidden';
@@ -23,6 +25,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
     const [filteredYears, setFilteredYears] = useState(applyFilters?.appliedYears  === undefined ? [] : applyFilters?.appliedYears);
     const [filteredMonths, setFilteredMonths] = useState(applyFilters?.appliedMonths  === undefined ? [] : applyFilters?.appliedMonths);
     const [filteredRivals, setFilteredRivals] = useState(applyFilters?.appliedRivals  === undefined ? [] : applyFilters?.appliedRivals);
+    const [filteredSquad, setFilteredSquad] = useState(applyFilters?.appliedSquad ? applyFilters?.appliedSquad : 'All');
     let facilities = [];
     let years = [];
     let months = [];
@@ -34,6 +37,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
     const matchCategories = ['All', 'Rakipbul', 'Normal']
+    const squadTypes = ['All', 'Main Squad', 'Squad Including Foreigners']
+    const players = Object.values(TeamMembers).map(x => x.name)
 
     Object.values(databaseData)?.forEach((x) => {
         if (!facilities.includes(x.place) && (matchType === 'all' || x.rakipbul === (matchType === 'rakipbul'))) {
@@ -91,6 +96,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
         setFilteredYears([])
         setFilteredMonths([])
         setFilteredRivals([])
+        setFilteredSquad('All')
     }
 
     const handleMatchTypeChange = (event) => {
@@ -152,6 +158,14 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
         }
     };
 
+    const handleSquadTypeChange = (event) => {
+        const {name} = event.target;
+        const checked = event.target.checked;
+        if (name !== filteredSquad && checked) {
+            setFilteredSquad(name)
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -183,19 +197,39 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
             filteredData = filteredData?.filter(x => filteredRivals?.includes(x?.rival.name))
         }
 
+        if (filteredData?.length > 0 && filteredSquad !== 'All') {
+            let foreignDataIndex = [];
+            Object.values(filteredData).forEach((item, index) => {
+                for (let i = 0; i < Object.keys(item.oyesfc.squad).length; i++) {
+                    if (!players.includes(Object.keys(item.oyesfc.squad)[i])) {
+                        if (!foreignDataIndex.includes(index)) {
+                            foreignDataIndex.push(index)
+                        }
+                    }
+                }
+            });
+            if (filteredSquad === 'Main Squad') {
+                filteredData = Object.values(filteredData).filter((x, y) => !foreignDataIndex.includes(y))
+            } else if (filteredSquad === 'Squad Including Foreigners') {
+                filteredData = Object.values(filteredData).filter((x, y) => foreignDataIndex.includes(y))
+            }
+        }
+
         if (matchType !== 'all' ||
             filteredPlayers?.length > 0 ||
             filteredFacilities?.length > 0 ||
             filteredYears?.length > 0 ||
             filteredMonths?.length > 0 ||
-            filteredRivals?.length > 0) {
+            filteredRivals?.length > 0 ||
+            filteredSquad !== 'All') {
             appliedFilters = {
                 appliedType: matchType,
                 appliedPlayers: filteredPlayers,
                 appliedFacilities: filteredFacilities,
                 appliedYears: filteredYears,
                 appliedMonths: filteredMonths,
-                appliedRivals: filteredRivals
+                appliedRivals: filteredRivals,
+                appliedSquad: filteredSquad
             }
         }
         sendAppliedFilters(appliedFilters)
@@ -334,13 +368,33 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
 
                                         ))}
                                     </div>
+                                    <div className={classes.filterPartStyle}>
+                                        <h2 className={classes.title}>Match Squad</h2>
+                                        {squadTypes.map(x => (
+                                            <div style={{background: "#1f1f1f"}}>
+                                                <label style={{background: "#1f1f1f"}}
+                                                       className={classes.customCheckbox}>
+                                                    {x}
+                                                    <input
+                                                        type="checkbox"
+                                                        name={x}
+                                                        onChange={handleSquadTypeChange}
+                                                        checked={filteredSquad === x}
+                                                    />
+                                                    <span className={classes.checkmark}></span>
+                                                </label>
+                                                <br/>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                                 : null
                             }
                         </div>
                         {!moreFilters ?
                             <div className={classes.buttonDivStyle}>
-                                <ExpandMoreIcon className={classes.expandIconStyle} style={{height: "60px", width: "80px"}}
+                                <ExpandMoreIcon className={classes.expandIconStyle}
+                                                style={{height: "60px", width: "80px"}}
                                                 onClick={showMoreFilters}>
                                 </ExpandMoreIcon>
                             </div>
@@ -349,7 +403,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                         <div className={classes.buttonDivStyle}>
                             <button className={classes.buttonStyle} style={{marginRight: "1rem"}} type="submit">Apply
                             </button>
-                            <FilterListOffIcon className={classes.iconStyle} style={{height: "40px", width: "40px", marginRight: "1rem"}}
+                            <FilterListOffIcon className={classes.iconStyle}
+                                               style={{height: "40px", width: "40px", marginRight: "1rem"}}
                                                onClick={resetFilters}>
                             </FilterListOffIcon>
                             <button className={classes.buttonStyle} onClick={handleClose}>Cancel</button>

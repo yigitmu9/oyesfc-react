@@ -23,6 +23,7 @@ const GeneralResults = ({data}) => {
     const goalDifference = goalsScored - goalsConceded;
     const scoredGoalsPerGame = (goalsScored / numberOfMatches)?.toFixed(2);
     const concededGoalsPerGame = (goalsConceded / numberOfMatches)?.toFixed(2);
+    const goalDifferencePerGame = (goalDifference / numberOfMatches)?.toFixed(2);
 
     const chartDatasets = {
         labels: ['Win', 'Draw', 'Lose'],
@@ -116,6 +117,11 @@ const GeneralResults = ({data}) => {
                                 <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
                                     <p className={classes.listItemSpanStyle}>Conceded per Match</p>
                                     <p className={classes.listItemSpanStyle}>{concededGoalsPerGame}</p>
+                                </ListItem>
+                                <Divider sx={{ bgcolor: "#646464" }} variant="middle" />
+                                <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
+                                    <p className={classes.listItemSpanStyle}>Goal Difference per Match</p>
+                                    <p className={classes.listItemSpanStyle}>{goalDifferencePerGame}</p>
                                 </ListItem>
                             </List>
                         </div>

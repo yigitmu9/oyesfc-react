@@ -6,6 +6,7 @@ import WeatherTeamStats from "../WeatherTeamStats";
 import RakipbulTeamStats from "../RakipbulTeamStats";
 import FilterButtons from "../FilterButtons";
 import MainSquadStats from "../MainSquadStats";
+import RivalComparison from "../RivalComparison";
 
 const TeamStatsGrid = ({databaseData}) => {
 
@@ -20,6 +21,7 @@ const TeamStatsGrid = ({databaseData}) => {
             <FilterButtons databaseData={databaseData} setAdvancedFilters={setAdvancedFilters}></FilterButtons>
             <GeneralResults data={matchDetailsFilteredData}/>
             <FacilitiesStats data={matchDetailsFilteredData}/>
+            <RivalComparison data={matchDetailsFilteredData}/>
             <WeatherTeamStats data={matchDetailsFilteredData}/>
             <MainSquadStats data={matchDetailsFilteredData}/>
             <RakipbulTeamStats/>
@@ -27,7 +29,8 @@ const TeamStatsGrid = ({databaseData}) => {
                 <div className={classes.spanDivStyle}>
                     <span className={classes.spanStyle}>*These statistics are only valid for 10 specific
                             Rakipbul matches for which position data is available.
-                            Does not work with filters.</span>
+                            Does not work with filters.
+                    </span>
                 </div>
             </div>
         </div>
