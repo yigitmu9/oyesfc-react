@@ -3,12 +3,13 @@ import {TeamMembers} from "../../constants/constants";
 import classes from "./charts-grid.module.css";
 import {Bar, Line, Pie, Radar} from "react-chartjs-2";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
+import PropTypes from "prop-types";
 
 
 const ChartsGrid = ({matchData, databaseData}) => {
 
     let goals = 0;
-    let goalsPerGameData = []
+    let goalsPerGameData = [];
     let game = 0;
     let attendedMatches = 0;
     let rateOfAttendanceData = [];
@@ -26,18 +27,22 @@ const ChartsGrid = ({matchData, databaseData}) => {
         oyesfcTotalGoal += item?.oyesfc?.goal;
     });
 
-    Object.values(TeamMembers)?.map(x => x.name)?.map((z, y) => {
+    Object.values(TeamMembers)?.map(x => x.name)?.map(z => {
         rakipbulGoals = 0;
         normalGoals = 0;
         rakipbulGame = Object.values(databaseData)?.filter(x => x.rakipbul === true)?.filter(item =>
-            Object.keys(item.oyesfc.squad)?.includes(z))?.length;
+            typeof z === 'string' &&
+            Object.keys(item.oyesfc.squad || {}).includes(z)
+        )?.length;
         Object.values(databaseData)?.filter(x => x.rakipbul === true)?.forEach(item => {
             if (item?.oyesfc?.squad[z]) {
                 rakipbulGoals += item?.oyesfc?.squad[z]?.goal;
             }
         });
         normalGame = Object.values(databaseData)?.filter(x => x.rakipbul === false)?.filter(item =>
-            Object.keys(item.oyesfc.squad)?.includes(z))?.length;
+            typeof z === 'string' &&
+            Object.keys(item.oyesfc.squad || {}).includes(z)
+        )?.length;
         Object.values(databaseData)?.filter(x => x.rakipbul === false)?.forEach(item => {
             if (item?.oyesfc?.squad[z]) {
                 normalGoals += item?.oyesfc?.squad[z]?.goal;
@@ -51,13 +56,15 @@ const ChartsGrid = ({matchData, databaseData}) => {
         } else {
             performanceRateData.push(0)
         }
-
+        return null
     })
 
-    Object.values(TeamMembers)?.map(x => x.name)?.map((z, y) => {
+    Object.values(TeamMembers)?.map(x => x.name)?.map(z => {
         goals = 0;
         game = Object.values(matchData)?.filter(item =>
-            Object.keys(item.oyesfc.squad)?.includes(z))?.length;
+            typeof z === 'string' &&
+            Object.keys(item.oyesfc.squad || {}).includes(z)
+        )?.length;
         Object.values(matchData)?.forEach(item => {
             if (item?.oyesfc?.squad[z] && z !== TeamMembers.can.name) {
                 goals += item?.oyesfc?.squad[z]?.goal;
@@ -67,19 +74,22 @@ const ChartsGrid = ({matchData, databaseData}) => {
         const goalPercent = ((goals / oyesfcTotalGoal) * 100)?.toFixed(0)
         goalsPerGameData.push(goalsPerGame)
         goalPercentData.push(goalPercent)
+        return null
     })
 
-    Object.values(TeamMembers)?.map(x => x.name)?.map((z, y) => {
+    Object.values(TeamMembers)?.map(x => x.name)?.map(z => {
         attendedMatches = 0;
         attendedMatches = Object.values(matchData)?.filter(item =>
-            Object.keys(item.oyesfc.squad)?.includes(z))?.length;
+            typeof z === 'string' &&
+            Object.keys(item.oyesfc.squad || {}).includes(z)
+        )?.length;
         const rateOfAttendance = ((attendedMatches / numberOfMatches) * 100)?.toFixed(0)
         rateOfAttendanceData.push(rateOfAttendance)
+        return null
     });
 
     const goalsPerGameDatasets = {
         labels: Object.values(TeamMembers)?.map(x => x.name),
-        classes: classes.yes,
         labelColor: 'red',
         datasets: [
             {
@@ -97,10 +107,10 @@ const ChartsGrid = ({matchData, databaseData}) => {
         datasets: [
             {
                 label: 'Rate of Attendance (%)',
+                data: rateOfAttendanceData,
                 backgroundColor: 'darkred',
                 borderColor: 'darkred',
-                borderWidth: 4,
-                data: rateOfAttendanceData,
+                borderWidth: 2,
             }
         ]
     }
@@ -148,7 +158,6 @@ const ChartsGrid = ({matchData, databaseData}) => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         },
@@ -156,13 +165,11 @@ const ChartsGrid = ({matchData, databaseData}) => {
             x: {
                 ticks: {
                     color: 'lightgray',
-                    fontSize: 10
                 },
             },
             y: {
                 ticks: {
                     color: 'lightgray',
-                    fontSize: 10
                 },
             },
         },
@@ -174,7 +181,6 @@ const ChartsGrid = ({matchData, databaseData}) => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         }
@@ -186,7 +192,6 @@ const ChartsGrid = ({matchData, databaseData}) => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         },
@@ -202,6 +207,15 @@ const ChartsGrid = ({matchData, databaseData}) => {
     Chart.register(CategoryScale);
     linear.register(CategoryScale)
 
+    const CustomLine = (props) => {
+        return <Line {...props} />;
+    };
+
+    CustomLine.propTypes = {
+        backgroundColor: PropTypes.string,
+        borderColor: PropTypes.string,
+        borderWidth: PropTypes.number,
+    };
 
     return (
         <div className={classes.grid}>
@@ -217,11 +231,14 @@ const ChartsGrid = ({matchData, databaseData}) => {
                 </div>
                 <div className={classes.goalsPerGameDiv}>
                     <h3 className={classes.titleStyle}>Rate of Attendance</h3>
-                    <Line
+                    <CustomLine
                         data={attendanceRateDatasets}
                         width={"100%"}
                         className={classes.goalsPerGameChart}
                         options={options}
+                        backgroundColor="darkred"
+                        borderColor="darkred"
+                        borderWidth={2}
                     />
                 </div>
             </div>
@@ -236,7 +253,6 @@ const ChartsGrid = ({matchData, databaseData}) => {
                             options={pieOptions}
                         />
                     </div>
-
                 </div>
                 <div className={classes.goalsPerGameDiv}>
                     <h3 className={classes.titleStyle}>Regular Matches Compared to the Rakipbul*</h3>
@@ -250,8 +266,6 @@ const ChartsGrid = ({matchData, databaseData}) => {
                     </div>
                 </div>
             </div>
-
-
         </div>
     );
 };

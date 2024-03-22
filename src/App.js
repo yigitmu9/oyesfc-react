@@ -6,9 +6,9 @@ import MainPage from './pages/main-page';
 import Matches from "./pages/matches";
 import IndividualStats from "./pages/individual-stats";
 import TeamStats from "./pages/team-stats";
-import AddMatch from "./pages/add-match";
 import {loadWebsite} from "./firebase";
 import Loading from "./pages/loading";
+import SignIn from "./components/SignIn";
 
 function App() {
 
@@ -30,7 +30,7 @@ function App() {
                         <Route path='oyesfc-react/matches' element={<Matches databaseData={data}/>}/>
                         <Route path='oyesfc-react/individual-stats' element={<IndividualStats databaseData={data}/>}/>
                         <Route path='oyesfc-react/team-stats' element={<TeamStats databaseData={data}/>}/>
-                        <Route path='oyesfc-react/add-match' element={<AddMatch/>}/>
+                        <Route path='oyesfc-react/sign-in' element={<SignIn/>}/>
                     </Routes>
                 </Router>
                 :

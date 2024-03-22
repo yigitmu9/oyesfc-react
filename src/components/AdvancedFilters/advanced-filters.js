@@ -80,7 +80,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
-    }, [popupRef, onClose]);
+    });
 
     const handleOutsideClick = (event) => {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -178,7 +178,12 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
         }
 
         if (filteredData?.length > 0 && filteredPlayers?.length > 0) {
-            filteredData = filteredData?.filter(x => filteredPlayers?.every(v => Object.keys(x?.oyesfc?.squad)?.includes(v)))
+            filteredData = filteredData?.filter(x =>
+                filteredPlayers?.every(v =>
+                    typeof v === 'string' &&
+                    Object.keys(x?.oyesfc?.squad || {}).includes(v)
+                )
+            );
         }
 
         if (filteredData?.length > 0 && filteredFacilities?.length > 0) {
@@ -245,8 +250,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                         <div className={classes.formAlign}>
                             <div className={classes.filterPartStyle}>
                                 <h2 className={classes.title}>Match Type</h2>
-                                {matchCategories.map(x => (
-                                    <div style={{background: "#1f1f1f"}}>
+                                {matchCategories.map((x, y) => (
+                                    <div key={y} style={{background: "#1f1f1f"}}>
                                         <label style={{background: "#1f1f1f"}}
                                                className={classes.customCheckbox}>
                                             {x}
@@ -266,8 +271,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                                 <div style={{background: "#1f1f1f"}}>
                                     <div className={classes.filterPartStyle}>
                                         <h2 className={classes.title}>Players</h2>
-                                        {Object.values(TeamMembers).map(x => (
-                                            <div style={{background: "#1f1f1f"}}>
+                                        {Object.values(TeamMembers).map((x, y) => (
+                                            <div key={y} style={{background: "#1f1f1f"}}>
                                                 <label style={{background: "#1f1f1f"}}
                                                        className={classes.customCheckbox}>
                                                     {x.name}
@@ -286,8 +291,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                                     </div>
                                     <div className={classes.filterPartStyle}>
                                         <h2 className={classes.title}>Facilities</h2>
-                                        {facilities.sort().map(x => (
-                                            <div style={{background: "#1f1f1f"}}>
+                                        {facilities.sort().map((x, y) => (
+                                            <div key={y} style={{background: "#1f1f1f"}}>
                                                 <label style={{background: "#1f1f1f"}}
                                                        className={classes.customCheckbox}>
                                                     {x}
@@ -308,8 +313,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                                         <h2 className={classes.title}>Years</h2>
                                         {years.sort((a, b) => {
                                             return b - a;
-                                        }).map(x => (
-                                            <div style={{background: "#1f1f1f"}}>
+                                        }).map((x, y) => (
+                                            <div key={y} style={{background: "#1f1f1f"}}>
                                                 <label style={{background: "#1f1f1f"}}
                                                        className={classes.customCheckbox}>
                                                     {x}
@@ -330,8 +335,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                                         <h2 className={classes.title}>Months</h2>
                                         {months.sort((a, b) => {
                                             return a - b;
-                                        }).map(x => (
-                                            <div style={{background: "#1f1f1f"}}>
+                                        }).map((x, y) => (
+                                            <div key={y} style={{background: "#1f1f1f"}}>
                                                 <label style={{background: "#1f1f1f"}}
                                                        className={classes.customCheckbox}>
                                                     {monthNames[Number(x) - 1]}
@@ -350,8 +355,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                                     </div>
                                     <div className={classes.filterPartStyle}>
                                         <h2 className={classes.title}>Rivals</h2>
-                                        {rivalNames.sort().map(x => (
-                                            <div style={{background: "#1f1f1f"}}>
+                                        {rivalNames.sort().map((x, y) => (
+                                            <div key={y} style={{background: "#1f1f1f"}}>
                                                 <label style={{background: "#1f1f1f"}}
                                                        className={classes.customCheckbox}>
                                                     {x}
@@ -370,8 +375,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                                     </div>
                                     <div className={classes.filterPartStyle}>
                                         <h2 className={classes.title}>Match Squad</h2>
-                                        {squadTypes.map(x => (
-                                            <div style={{background: "#1f1f1f"}}>
+                                        {squadTypes.map((x, y) => (
+                                            <div key={y} style={{background: "#1f1f1f"}}>
                                                 <label style={{background: "#1f1f1f"}}
                                                        className={classes.customCheckbox}>
                                                     {x}

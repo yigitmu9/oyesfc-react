@@ -35,7 +35,7 @@ const RivalsIndividualStats = ({data}) => {
     const rows = Object.values(TeamMembers).map(x => x.name);
     let playerTotalGoal = 0;
     let playerGoalData = [];
-    let playerAttendenceData = [];
+    let playerAttendanceData = [];
     let playerGoalPerGameData = [];
     let playerMatchData = [];
 
@@ -52,11 +52,11 @@ const RivalsIndividualStats = ({data}) => {
         const playerTotalMatch = Object.values(facilityData).filter(item =>
             Object.keys(item.oyesfc.squad).includes(member.name)).length;
 
-        const attendenceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
+        const attendanceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
         const goalsPerGame = (playerTotalGoal / playerTotalMatch)?.toFixed(2)
 
         playerGoalData.push(playerTotalGoal)
-        playerAttendenceData.push(attendenceRate)
+        playerAttendanceData.push(attendanceRate)
         playerMatchData.push(playerTotalMatch)
         playerGoalPerGameData.push(goalsPerGame)
     });
@@ -115,8 +115,8 @@ const RivalsIndividualStats = ({data}) => {
                             <label className={classes.colorStyle}>
                                 <select className={classes.select} onChange={handleChange}>
                                     <option>Select Rival</option>
-                                    {rivalNames.sort().map(x => (
-                                        <option value={x}>{x}</option>
+                                    {rivalNames.sort().map((x, y) => (
+                                        <option key={y} value={x}>{x}</option>
                                     ))}
                                 </select>
                             </label>
@@ -158,7 +158,7 @@ const RivalsIndividualStats = ({data}) => {
                                                 </TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchData[number]}</TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendenceData[number]}%</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceData[number]}%</TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameData[number]}</TableCell>
                                             </TableRow>
                                         ))}

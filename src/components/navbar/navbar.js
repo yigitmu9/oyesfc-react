@@ -7,11 +7,11 @@ import {
     NavBtn,
     NavBtnLink
 } from './navbarElements';
-import AddMatchComponent from "../AddMatch";
 import Message from "../Message";
 import classes from "../navbar/navbar.module.css"
 import SignInComponent from "../SignIn";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import OYesFCLogo from '../../images/oyesfc.PNG';
 
 const Navbar = ({databaseData}) => {
 
@@ -19,20 +19,13 @@ const Navbar = ({databaseData}) => {
         return window.innerWidth;
     }
 
-    const [isPopupOpen, setPopupOpen] = useState(false);
     const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
     const [isNavOpen, setNavOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
-    const [messageData, setmessageData] = useState(null);
-
-    const openPopup = () => {
-        if (innerWidth() <= 768) changeMobileNavbar()
-        document.body.style.overflow = 'hidden';
-        setPopupOpen(true);
-    };
+    const [messageData, setMessageData] = useState(null);
 
     const handleXClick = (messageData) => {
-        setmessageData(messageData);
+        setMessageData(messageData);
     };
 
     const changeMobileNavbar = () => {
@@ -57,7 +50,7 @@ const Navbar = ({databaseData}) => {
         <>
             <Nav>
                 <NavLink onClick={closeMobileNavbar} to='oyesfc-react/' style={{background:"darkred"}}>
-                    <img style={{ width: 60, height: 60, background:"darkred" }} src={require('../../images/oyesfc.PNG')}/>
+                    <img style={{ width: 60, height: 60, background:"darkred" }} src={OYesFCLogo}/>
                 </NavLink>
                 <Bars onClick={changeMobileNavbar}/>
                 <NavMenu className={ classes.navCloseMenuStyle}>

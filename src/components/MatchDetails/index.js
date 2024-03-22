@@ -6,6 +6,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import GroupsIcon from '@mui/icons-material/Groups';
+import FootballLogo from '../../images/football.png';
 
 export const MatchDetails = ({onClose, matchDetailsData}) => {
 
@@ -31,7 +32,7 @@ export const MatchDetails = ({onClose, matchDetailsData}) => {
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
-    }, [popupRef, onClose]);
+    });
 
     return (
         <div className={classes.overlay}>
@@ -63,7 +64,7 @@ export const MatchDetails = ({onClose, matchDetailsData}) => {
                                         key={imgIndex}
                                         className={classes.goalImage}
                                         style={{background: buttonBgColor}}
-                                        src={require('../../images/football.png')}
+                                        src={FootballLogo}
                                         alt={`Goal ${imgIndex + 1}`}
                                     />
                                 ))}
@@ -111,7 +112,7 @@ export const MatchDetails = ({onClose, matchDetailsData}) => {
                                 className={classes.iconStyle}
                                 style={{background: buttonBgColor, marginLeft: "10px"}}></GroupsIcon>
                             {Object.entries(matchDetailsData.oyesfc.squad).map((x, y) => (
-                                <span className={classes.dataStyle}
+                                <span key={y} className={classes.dataStyle}
                                     style={{
                                     background: buttonBgColor,
                                         marginLeft: "10px"}}>

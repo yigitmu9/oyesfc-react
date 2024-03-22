@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import PlayerCardsGrid from "../PlayerCardsGrid";
-import ChartsGrid from "../ChartsGrid";
+import ChartsGrid from "../ChartsGrid/charts-grid.js";
 import FacilitiesIndividualStats from "../FacilitiesIndividualStats";
 import WeatherIndividualStats from "../WeatherIndividualStats";
 import RakipbulPlayerStats from "../RakipbulPlayerStats";

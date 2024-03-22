@@ -47,11 +47,11 @@ const WeatherIndividualStats = ({data}) => {
         const playerTotalMatch = Object.values(hotWeatherData).filter(item =>
             Object.keys(item.oyesfc.squad).includes(member.name)).length;
 
-        const attendenceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
+        const attendanceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
         const goalsPerGame = (playerTotalGoal / playerTotalMatch)?.toFixed(2)
 
         playerGoalData.push(playerTotalGoal)
-        playerAttendanceData.push(attendenceRate)
+        playerAttendanceData.push(attendanceRate)
         playerMatchData.push(playerTotalMatch)
         playerGoalPerGameData.push(goalsPerGame)
     });
@@ -75,11 +75,11 @@ const WeatherIndividualStats = ({data}) => {
         const playerTotalMatchCold = Object.values(coldWeatherData).filter(item =>
             Object.keys(item.oyesfc.squad).includes(member.name)).length;
 
-        const attendenceRateCold = ((playerTotalMatchCold / numberOfMatchesCold) * 100)?.toFixed(0);
+        const attendanceRateCold = ((playerTotalMatchCold / numberOfMatchesCold) * 100)?.toFixed(0);
         const goalsPerGameCold = (playerTotalGoalCold / playerTotalMatchCold)?.toFixed(2)
 
         playerGoalDataCold.push(playerTotalGoalCold)
-        playerAttendanceDataCold.push(attendenceRateCold)
+        playerAttendanceDataCold.push(attendanceRateCold)
         playerMatchDataCold.push(playerTotalMatchCold)
         playerGoalPerGameDataCold.push(goalsPerGameCold)
     });

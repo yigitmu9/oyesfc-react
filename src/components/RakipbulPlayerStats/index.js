@@ -110,8 +110,8 @@ const RakipbulPlayerStats = () => {
                                 Select a Match:
                                 <select className={classes.select} onChange={handleChange}>
                                     <option value='Total of All Matches'>Total of All Matches</option>
-                                    {Object.values(DetailedRakipbulMatches).map(x => (
-                                        <option value={x.rival.name}>{x.rival.name}</option>
+                                    {Object.values(DetailedRakipbulMatches).map((x, y) => (
+                                        <option key={y} value={x.rival.name}>{x.rival.name}</option>
                                     ))}
                                 </select>
                             </label>

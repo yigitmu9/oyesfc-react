@@ -3,6 +3,7 @@ import classes from "./rival-comparison.module.css";
 import CardContent from "@mui/material/CardContent";
 import {FormControl, List, ListItem} from "@mui/material";
 import Card from "@mui/material/Card";
+import {TeamNames} from "../../constants/constants";
 
 const RivalComparison = ({data}) => {
 
@@ -89,8 +90,8 @@ const RivalComparison = ({data}) => {
                             <label className={classes.colorStyle}>
                                 <select className={classes.select} onChange={handleChange}>
                                     <option>Select Rival</option>
-                                    {rivalNames.sort().map(x => (
-                                        <option value={x}>{x}</option>
+                                    {rivalNames.sort().map((x, y) => (
+                                        <option key={y} value={x}>{x}</option>
                                     ))}
                                 </select>
                             </label>
@@ -113,7 +114,7 @@ const RivalComparison = ({data}) => {
                                         <div className={classes.colorTitleDiv}>
                                             <div className={classes.colorTitle}></div>
                                         </div>
-                                        <p className={classes.listItemSpanStyle}>O Yes FC</p>
+                                        <p className={classes.listItemSpanStyle}>{TeamNames.oYesFc}</p>
                                     </div>
                                     <div className={classes.subtitle}>
                                         <p className={classes.listItemSpanStyle2}>{rival === 'Select Rival' || rival === null ? 'Rival' : rival}</p>

@@ -3,7 +3,7 @@ import classes from "./rakipbul-team-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Doughnut} from "react-chartjs-2";
-import {DetailedRakipbulMatches} from "../../constants/constants";
+import {DetailedRakipbulMatches, TeamNames} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 import {Divider, List, ListItem} from "@mui/material";
 
@@ -24,7 +24,7 @@ const RakipbulIndividualStats = () => {
         labels: ['Goals', 'Missed chances'],
         datasets: [
             {
-                label: 'Rate of Converting Our Positions Into Goals (%)',
+                label: 'Rate of Converting O Yes FC Positions Into Goals (%)',
                 backgroundColor: ['green', 'blue'],
                 borderColor: 'black',
                 borderWidth: 0,
@@ -42,7 +42,6 @@ const RakipbulIndividualStats = () => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         }
@@ -52,7 +51,7 @@ const RakipbulIndividualStats = () => {
         labels: ['Goals Conceded', 'Evaded Positions'],
         datasets: [
             {
-                label: 'Rate of Converting Their Positions Into Goals (%)',
+                label: 'Rate of Converting Rival Positions Into Goals (%)',
                 backgroundColor: ['gray', 'darkred'],
                 borderColor: 'black',
                 borderWidth: 0,
@@ -70,7 +69,6 @@ const RakipbulIndividualStats = () => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         }
@@ -97,7 +95,7 @@ const RakipbulIndividualStats = () => {
                     <div className={classes.tableDiv}>
                         <List  component="nav" aria-label="mailbox folders" style={{backgroundColor: "#242424"}} className={classes.widthStyle}>
                             <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
-                                <p className={classes.listItemSpanStyle}>O Yes FC</p>
+                                <p className={classes.listItemSpanStyle}>{TeamNames.oYesFc}</p>
                                 <p className={classes.listItemSpanStyle}></p>
                             </ListItem>
                             <div className={classes.spaceStyle}></div>

@@ -8,7 +8,7 @@ import Filter5Icon from "@mui/icons-material/Filter5";
 import Filter6Icon from "@mui/icons-material/Filter6";
 import Filter7Icon from '@mui/icons-material/Filter7';
 import FilterListIcon from "@mui/icons-material/FilterList";
-import AdvancedFilters from "../AdvancedFilters";
+import AdvancedFilters from "../AdvancedFilters/advanced-filters";
 
 function FilterButtons({ databaseData, setAdvancedFilters }) {
     const [countFilter, setCountFilter] = useState(0);

@@ -2,15 +2,6 @@ import React from 'react';
 import classes from "./weather-team-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material";
-import {TeamMembers} from "../../constants/constants";
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 
@@ -25,63 +16,6 @@ const WeatherIndividualStats = ({data}) => {
         const parts = item.day.split('-');
         const month = parseInt(parts[1], 10);
         return month === 1 || month === 2 || month === 3 || month === 10 || month === 11 || month === 12;
-    });
-
-    const rows = Object.values(TeamMembers).map(x => x.name);
-    let playerTotalGoal = 0;
-    let playerGoalData = [];
-    let playerAttendanceData = [];
-    let playerGoalPerGameData = [];
-    let playerMatchData = [];
-
-    const numberOfMatches = Object.values(hotWeatherData).length;
-
-    Object.values(TeamMembers).forEach(member => {
-        playerTotalGoal = 0;
-        Object.values(hotWeatherData).forEach(item => {
-            if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
-                playerTotalGoal += item.oyesfc.squad[member.name].goal;
-            }
-        });
-
-        const playerTotalMatch = Object.values(hotWeatherData).filter(item =>
-            Object.keys(item.oyesfc.squad).includes(member.name)).length;
-
-        const attendenceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
-        const goalsPerGame = (playerTotalGoal / playerTotalMatch)?.toFixed(2)
-
-        playerGoalData.push(playerTotalGoal)
-        playerAttendanceData.push(attendenceRate)
-        playerMatchData.push(playerTotalMatch)
-        playerGoalPerGameData.push(goalsPerGame)
-    });
-
-    let playerTotalGoalCold = 0;
-    let playerGoalDataCold = [];
-    let playerAttendanceDataCold = [];
-    let playerGoalPerGameDataCold = [];
-    let playerMatchDataCold = [];
-
-    const numberOfMatchesCold = Object.values(coldWeatherData).length;
-
-    Object.values(TeamMembers).forEach(member => {
-        playerTotalGoalCold = 0;
-        Object.values(coldWeatherData).forEach(item => {
-            if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
-                playerTotalGoalCold += item.oyesfc.squad[member.name].goal;
-            }
-        });
-
-        const playerTotalMatchCold = Object.values(coldWeatherData).filter(item =>
-            Object.keys(item.oyesfc.squad).includes(member.name)).length;
-
-        const attendenceRateCold = ((playerTotalMatchCold / numberOfMatchesCold) * 100)?.toFixed(0);
-        const goalsPerGameCold = (playerTotalGoalCold / playerTotalMatchCold)?.toFixed(2)
-
-        playerGoalDataCold.push(playerTotalGoalCold)
-        playerAttendanceDataCold.push(attendenceRateCold)
-        playerMatchDataCold.push(playerTotalMatchCold)
-        playerGoalPerGameDataCold.push(goalsPerGameCold)
     });
 
     const numberOfColdMatches = Object.values(coldWeatherData)?.length;

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classes from "./sign-in.module.css";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AddMatchComponent from "../AddMatch";
+import AddMatchComponent from "../AddMatch/add-match";
 import Message from "../Message";
 import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/auth"
 import {auth} from "../../firebase"
@@ -35,12 +35,12 @@ const SignInComponent = ({onClose, openMessage, messageData, databaseData}) => {
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
-    }, [popupRef, onClose]);
+    });
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         await signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
+            .then(() => {
                 checkAuthState()
             })
             .catch((error) => {
@@ -71,7 +71,7 @@ const SignInComponent = ({onClose, openMessage, messageData, databaseData}) => {
 
     const logOut = async () => {
         await signOut(auth)
-            .then((x) => {
+            .then(() => {
                 if (signedIn) {
                     setSignedIn(false)
                     setCredentials(null)

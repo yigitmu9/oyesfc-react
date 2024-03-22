@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classes from "./add-match.module.css";
+import signInClasses from "../SignIn/sign-in.module.css";
 import {dataBase} from "../../firebase";
 import {ref, set} from "firebase/database";
 import {TeamMembers} from "../../constants/constants";
@@ -36,27 +37,36 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
-    }, [popupRef, onClose]);
+    });
+
+    const initialOYesFCSquadFormData = {};
+
+    const initialOYesFCFormData = {
+        goal: 0,
+        squad: initialOYesFCSquadFormData,
+    };
+
+    const initialRivalFormData = {
+        goal: 0,
+        name: '',
+    };
 
     const initialFormData = {
         day: '',
-        oyesfc: {
-            goal: 0,
-            squad: {},
-        },
+        oyesfc: initialOYesFCFormData,
         place: '',
         rakipbul: false,
-        rival: {
-            goal: 0,
-            name: '',
-        },
+        rival: initialRivalFormData,
         time: '',
     };
 
     const [formData, setFormData] = useState(initialFormData);
+    const [rivalFormData, setRivalFormData] = useState(initialRivalFormData);
+    const [oYesFCFormData, setOYesFCFormData] = useState(initialOYesFCFormData);
+    const [oYesFCSquadFormData, setOYesFCSquadFormData] = useState(initialOYesFCSquadFormData);
     const [newSquadMember, setNewSquadMember] = useState('');
 
-    const handleInputChange = (event) => {
+    const handleGeneralInputChange = (event) => {
         const {name, value, type, checked} = event.target;
         const inputValue = type === "checkbox" ? checked : value;
         if (type === "checkbox" && isRakipbul !== checked) {
@@ -68,30 +78,21 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
         }));
     };
 
-    const handleInput2Change = (event) => {
+    const handleOYesFCInputChange = (event) => {
         const {name, value, type} = event.target;
         const inputValue = type === "number" ? parseInt(value) : value;
-        setFormData((prevData) => ({
+        setOYesFCFormData((prevData) => ({
             ...prevData,
-            oyesfc: {
-                ...prevData.oyesfc,
-                [name]: inputValue,
-            }
+            [name]: inputValue,
         }));
     };
 
     const handleSquadInputChange = (member, event) => {
-        const {name, value} = event.target;
-        setFormData((prevData) => ({
+        const value = event.target.value;
+        setOYesFCSquadFormData((prevData) => ({
             ...prevData,
-            oyesfc: {
-                ...prevData.oyesfc,
-                squad: {
-                    ...prevData.oyesfc.squad,
-                    [member]: {
-                        goal: parseInt(value),
-                    },
-                },
+            [member]: {
+                goal: parseInt(value),
             },
         }));
     };
@@ -99,27 +100,18 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
     const handleRivalInputChange = (event) => {
         const {name, value, type} = event.target;
         const inputValue = type === "number" ? parseInt(value) : value;
-        setFormData((prevData) => ({
+        setRivalFormData((prevData) => ({
             ...prevData,
-            rival: {
-                ...prevData.rival,
-                [name]: inputValue,
-            }
+            [name]: inputValue,
         }));
     };
 
     const handleAddSquadMember = () => {
         if (newSquadMember.trim() !== '') {
-            setFormData((prevData) => ({
+            setOYesFCSquadFormData((prevData) => ({
                 ...prevData,
-                oyesfc: {
-                    ...prevData.oyesfc,
-                    squad: {
-                        ...prevData.oyesfc.squad,
-                        [newSquadMember]: {
-                            goal: 0,
-                        },
-                    },
+                [newSquadMember]: {
+                    goal: 0,
                 },
             }));
             setNewSquadMember('');
@@ -128,6 +120,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        finalizeData();
         setDayTime();
         try {
             await set(ref(dataBase, formData.day), formData);
@@ -176,6 +169,12 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
         onClose();
     }
 
+    const finalizeData = () => {
+        oYesFCFormData.squad = oYesFCSquadFormData;
+        formData.oyesfc = oYesFCFormData;
+        formData.rival = rivalFormData;
+    }
+
     return (
         <div className={classes.overlay}>
             <div className={classes.generalStyle} ref={popupRef}>
@@ -192,7 +191,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                     type="checkbox"
                                     name="rakipbul"
                                     checked={formData.rakipbul}
-                                    onChange={handleInputChange}
+                                    onChange={handleGeneralInputChange}
                                 />
                                 <span className={classes.checkmark}></span>
                             </label>
@@ -203,10 +202,10 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                         onChange={handleRivalInputChange}
                                         required={true}
                                         name="name"
-                                        value={formData.rival.name}>
+                                        value={rivalFormData.name}>
                                     <option value={'New Rival'}>New Rival</option>
-                                    {rivalNames.sort().map(x => (
-                                        <option value={x}>{x}</option>
+                                    {rivalNames.sort().map((x, y) => (
+                                        <option key={y} value={x}>{x}</option>
                                     ))}
                                 </select>
                             </label>
@@ -218,7 +217,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                     required={true}
                                     type="text"
                                     name="name"
-                                    value={formData.rival.name}
+                                    value={rivalFormData.name}
                                     onChange={handleRivalInputChange}
                                 />
                             </label>
@@ -232,20 +231,20 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                     type="datetime-local"
                                     name="day"
                                     value={formData.day}
-                                    onChange={handleInputChange}
+                                    onChange={handleGeneralInputChange}
                                 />
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
                                 Select a Facility:
                                 <select className={classes.select}
-                                        onChange={handleInputChange}
+                                        onChange={handleGeneralInputChange}
                                         required={true}
                                         name="place"
                                         value={formData.place}>
                                     <option value={'New Facility'}>New Facility</option>
-                                    {facilities.map(x => (
-                                        <option value={x}>{x}</option>
+                                    {facilities.map((x, y) => (
+                                        <option key={y} value={x}>{x}</option>
                                     ))}
                                 </select>
                             </label>
@@ -258,7 +257,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                     type="text"
                                     name="place"
                                     value={formData.place}
-                                    onChange={handleInputChange}
+                                    onChange={handleGeneralInputChange}
                                 />
                             </label>
                             <br/>
@@ -269,8 +268,8 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                     required={true}
                                     type="number"
                                     name="goal"
-                                    value={formData.oyesfc.goal}
-                                    onChange={handleInput2Change}
+                                    value={oYesFCFormData.goal}
+                                    onChange={handleOYesFCInputChange}
                                 />
                             </label>
                             <br/>
@@ -281,14 +280,14 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                     required={true}
                                     type="number"
                                     name="goal"
-                                    value={formData.rival.goal}
+                                    value={rivalFormData.goal}
                                     onChange={handleRivalInputChange}
                                 />
                             </label>
                             <br/>
                         </div>
                         <div className={classes.playersAlign}>
-                            {Object.keys(formData.oyesfc.squad).map((member) => (
+                            {Object.keys(oYesFCSquadFormData).map((member) => (
                                 <div key={member} style={{background: "#1f1f1f"}}>
                                     <label style={{background: "#1f1f1f"}}>
                                         {member} Goal:
@@ -296,7 +295,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                             className={classes.inputDesign}
                                             type="number"
                                             name={`oyesfc.squad.${member}.goal`}
-                                            value={formData.oyesfc.squad[member].goal}
+                                            value={oYesFCSquadFormData[member].goal}
                                             onChange={(e) => handleSquadInputChange(member, e)}
                                         />
                                     </label>
@@ -310,8 +309,8 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                             setNewSquadMember(e.target.value !== 'None' ? e.target.value : '')}
                                         value={newSquadMember}>
                                     <option>New Player</option>
-                                    {Object.values(TeamMembers).map(x => (
-                                        <option placeholder='yes' value={x.name}>{x.name}</option>
+                                    {Object.values(TeamMembers).map((x, y) => (
+                                        <option key={y} value={x.name}>{x.name}</option>
                                     ))}
                                 </select>
                             </label>
@@ -333,9 +332,9 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                         </div>
                     </div>
                     <div className={classes.buttonDivStyle}>
-                        <button className={classes.buttonStyle} style={{marginRight: "1rem"}} type="submit">Submit
+                        <button className={signInClasses.buttonStyle} style={{marginRight: "1rem"}} type="submit">Submit
                         </button>
-                        <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
+                        <button className={signInClasses.buttonStyle} onClick={handleClose}>Close</button>
                     </div>
                 </form>
             </div>

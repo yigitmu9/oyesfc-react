@@ -14,7 +14,7 @@ const Footer = () => {
         window.open("https://x.com/oyesfc?s=21", "_blank");
     };
 
-    const redirectToInsta = () => {
+    const redirectToInstagram = () => {
         window.open("https://www.instagram.com/oyesfc?igsh=MXRrbmp1a3lvdW4wNg==", "_blank");
 
     };
@@ -29,7 +29,7 @@ const Footer = () => {
                 </div>
 
                 <div className={classes.iconsGrid}>
-                    <InstagramIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToInsta}></InstagramIcon>
+                    <InstagramIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToInstagram}></InstagramIcon>
                     <XIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToTwitter}></XIcon>
                     <EmailIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToEmail}></EmailIcon>
                 </div>

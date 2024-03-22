@@ -31,7 +31,7 @@ const FacilitiesStats = ({data}) => {
     let rivalGoalsPerGameData = [];
     let goalsPerGameData = [];
 
-    facilities?.map((z, y) => {
+    facilities?.map(z => {
         win = 0;
         draw = 0;
         loss = 0;
@@ -60,6 +60,7 @@ const FacilitiesStats = ({data}) => {
         lossData.push(loss)
         gameData.push(game)
         winPercentData.push(winPercent)
+        return null
     })
 
     const chartDatasets = {
@@ -82,7 +83,6 @@ const FacilitiesStats = ({data}) => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         },
@@ -93,13 +93,11 @@ const FacilitiesStats = ({data}) => {
                 suggestedMax: 100,
                 ticks: {
                     color: 'lightgray',
-                    fontSize: 10
                 },
             },
             y: {
                 ticks: {
                     color: 'lightgray',
-                    fontSize: 10
                 },
             },
         },
