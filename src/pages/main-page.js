@@ -1,6 +1,6 @@
 import React from 'react';
-import SliderCard from "../components/SliderCard";
-import Footer from "../components/Footer";
+import SliderCard from "../components/SliderCard/slider-card";
+import Footer from "../components/Footer/footer";
 
 const MainPage = () => {
     return (

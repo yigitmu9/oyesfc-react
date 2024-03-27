@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import classes from "./team-stats-grid.module.css";
-import GeneralResults from "../GeneralResults";
+import GeneralResults from "../GeneralResults/general-results";
 import FacilitiesStats from "../FacilitiesStats";
-import WeatherTeamStats from "../WeatherTeamStats";
-import RakipbulTeamStats from "../RakipbulTeamStats";
-import FilterButtons from "../FilterButtons";
-import MainSquadStats from "../MainSquadStats";
-import RivalComparison from "../RivalComparison";
+import WeatherTeamStats from "../WeatherTeamStats/weather-team-stats";
+import RakipbulTeamStats from "../RakipbulTeamStats/rakipbul-team-stats";
+import FilterButtons from "../FilterButtons/filter-buttons";
+import MainSquadStats from "../MainSquadStats/main-squad-stats";
+import RivalComparison from "../RivalComparison/rival-comparison";
 
 const TeamStatsGrid = ({databaseData}) => {
 

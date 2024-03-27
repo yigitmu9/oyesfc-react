@@ -1,6 +1,6 @@
 import React from 'react';
 import {TeamMembers} from "../../constants/constants";
-import PlayerCards from "../PlayerCards";
+import PlayerCards from "../PlayerCards/player-cards";
 import classes from "./player-cards-grid.module.css";
 
 const PlayerCardsGrid = ({matchData}) => {

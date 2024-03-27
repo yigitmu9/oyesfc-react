@@ -32,19 +32,19 @@ const FacilitiesIndividualStats = ({data}) => {
     const facilityData = Object.values(data).filter(x => x.place === facility)
 
     const rows = Object.values(TeamMembers).map(x => x.name);
-    let playerTotalGoal = 0;
-    let playerGoalData = [];
-    let playerAttendanceData = [];
+    let playerTotalGoalFacilities = 0;
+    let playerGoalDataFacilities = [];
+    let playerAttendanceDataFacilities = [];
     let playerGoalPerGameData = [];
     let playerMatchData = [];
 
     const numberOfMatches = Object.values(facilityData).length;
 
     Object.values(TeamMembers).forEach(member => {
-        playerTotalGoal = 0;
+        playerTotalGoalFacilities = 0;
         Object.values(facilityData).forEach(item => {
             if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
-                playerTotalGoal += item.oyesfc.squad[member.name].goal;
+                playerTotalGoalFacilities += item.oyesfc.squad[member.name].goal;
             }
         });
 
@@ -52,10 +52,10 @@ const FacilitiesIndividualStats = ({data}) => {
             Object.keys(item.oyesfc.squad).includes(member.name)).length;
 
         const attendanceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
-        const goalsPerGame = (playerTotalGoal / playerTotalMatch)?.toFixed(2)
+        const goalsPerGame = (playerTotalGoalFacilities / playerTotalMatch)?.toFixed(2)
 
-        playerGoalData.push(playerTotalGoal)
-        playerAttendanceData.push(attendanceRate)
+        playerGoalDataFacilities.push(playerTotalGoalFacilities)
+        playerAttendanceDataFacilities.push(attendanceRate)
         playerMatchData.push(playerTotalMatch)
         playerGoalPerGameData.push(goalsPerGame)
     });
@@ -153,8 +153,8 @@ const FacilitiesIndividualStats = ({data}) => {
                                                     {row}
                                                 </TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceData[number]}%</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalDataFacilities[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceDataFacilities[number]}%</TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameData[number]}</TableCell>
                                             </TableRow>
                                         ))}

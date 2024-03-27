@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import {TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
+import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
 
 const RivalsIndividualStats = ({data}) => {
 
@@ -34,10 +35,10 @@ const RivalsIndividualStats = ({data}) => {
 
     const rows = Object.values(TeamMembers).map(x => x.name);
     let playerTotalGoal = 0;
-    let playerGoalData = [];
-    let playerAttendanceData = [];
-    let playerGoalPerGameData = [];
-    let playerMatchData = [];
+    let playerGoalDataIndividual = [];
+    let playerAttendanceDataIndividual = [];
+    let playerGoalPerGameDataIndividual = [];
+    let playerMatchDataIndividual = [];
 
     const numberOfMatches = Object.values(facilityData).length;
 
@@ -55,10 +56,10 @@ const RivalsIndividualStats = ({data}) => {
         const attendanceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
         const goalsPerGame = (playerTotalGoal / playerTotalMatch)?.toFixed(2)
 
-        playerGoalData.push(playerTotalGoal)
-        playerAttendanceData.push(attendanceRate)
-        playerMatchData.push(playerTotalMatch)
-        playerGoalPerGameData.push(goalsPerGame)
+        playerGoalDataIndividual.push(playerTotalGoal)
+        playerAttendanceDataIndividual.push(attendanceRate)
+        playerMatchDataIndividual.push(playerTotalMatch)
+        playerGoalPerGameDataIndividual.push(goalsPerGame)
     });
 
     const chartDatasets = {
@@ -69,7 +70,7 @@ const RivalsIndividualStats = ({data}) => {
                 backgroundColor: 'darkred',
                 borderColor: 'darkred',
                 borderWidth: 2,
-                data: playerGoalPerGameData,
+                data: playerGoalPerGameDataIndividual,
             }
         ]
     }
@@ -81,7 +82,6 @@ const RivalsIndividualStats = ({data}) => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         },
@@ -90,13 +90,11 @@ const RivalsIndividualStats = ({data}) => {
                 beginAtZero: true,
                 ticks: {
                     color: 'lightgray',
-                    fontSize: 10
                 },
             },
             y: {
                 ticks: {
                     color: 'lightgray',
-                    fontSize: 10
                 },
             },
         },
@@ -113,7 +111,7 @@ const RivalsIndividualStats = ({data}) => {
                     <div className={classes.selectionInsideGrid}>
                         <FormControl className={classes.colorStyle} fullWidth>
                             <label className={classes.colorStyle}>
-                                <select className={classes.select} onChange={handleChange}>
+                                <select className={facilitiesIndividualStatsClasses.select} onChange={handleChange}>
                                     <option>Select Rival</option>
                                     {rivalNames.sort().map((x, y) => (
                                         <option key={y} value={x}>{x}</option>
@@ -126,7 +124,7 @@ const RivalsIndividualStats = ({data}) => {
                 </div>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div className={classes.cardContentInsideStyle}>
-                        <div className={classes.chartStyle}>
+                        <div className={facilitiesIndividualStatsClasses.chartStyle}>
                             <Bar
                                 data={chartDatasets}
                                 width={"100%"}
@@ -134,7 +132,7 @@ const RivalsIndividualStats = ({data}) => {
                                 options={options}
                             />
                         </div>
-                        <div className={classes.tableStyle}>
+                        <div className={facilitiesIndividualStatsClasses.tableStyle}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
@@ -156,10 +154,10 @@ const RivalsIndividualStats = ({data}) => {
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
                                                     {row}
                                                 </TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceData[number]}%</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameData[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchDataIndividual[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalDataIndividual[number]}</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceDataIndividual[number]}%</TableCell>
+                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameDataIndividual[number]}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>

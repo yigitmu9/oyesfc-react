@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 
-const WeatherIndividualStats = ({data}) => {
+const WeatherTeamStats = ({data}) => {
 
     const hotWeatherData = Object.values(data).filter(item => {
         const parts = item.day.split('-');
@@ -69,4 +69,4 @@ const WeatherIndividualStats = ({data}) => {
     );
 };
 
-export default WeatherIndividualStats;
+export default WeatherTeamStats;

@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import PlayerCardsGrid from "../PlayerCardsGrid";
+import PlayerCardsGrid from "../PlayerCardsGrid/player-cards-grid";
 import ChartsGrid from "../ChartsGrid/charts-grid.js";
 import FacilitiesIndividualStats from "../FacilitiesIndividualStats";
 import WeatherIndividualStats from "../WeatherIndividualStats";
 import RakipbulPlayerStats from "../RakipbulPlayerStats";
-import FilterButtons from "../FilterButtons";
+import FilterButtons from "../FilterButtons/filter-buttons";
 import classes from "./individual-stats-grid.module.css";
 import {Divider} from "@mui/material";
 import RivalsIndividualStats from "../RivalsIndividualStats";
+import teamStatsClasses from "../TeamStatsGrid/team-stats-grid.module.css"
 
 const IndividualStatsGrid = ({databaseData}) => {
 
@@ -40,7 +41,7 @@ const IndividualStatsGrid = ({databaseData}) => {
                     <RakipbulPlayerStats/>
                 </div>
                 <div className={classes.divStyle}>
-                    <div className={classes.spanDivStyle}>
+                    <div className={teamStatsClasses.spanDivStyle}>
                         <span className={classes.spanStyle}>*Does not work with filters.</span>
                         <Divider sx={{bgcolor: "rgb(80,80,80)", margin: "7px 0 7px"}} variant="middle"/>
                         <span className={classes.spanStyle}>**These statistics are only valid for 10 specific

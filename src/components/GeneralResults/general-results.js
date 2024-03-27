@@ -34,9 +34,9 @@ const GeneralResults = ({data}) => {
                 borderColor: 'black',
                 borderWidth: 0,
                 data: [
-                    ((wonMatches / numberOfMatches) * 100)?.toFixed(0),
-                    ((drawMatches / numberOfMatches) * 100)?.toFixed(0),
-                    ((lostMatches / numberOfMatches) * 100)?.toFixed(0)
+                    Number(((wonMatches / numberOfMatches) * 100)?.toFixed(0)),
+                    Number(((drawMatches / numberOfMatches) * 100)?.toFixed(0)),
+                    Number(((lostMatches / numberOfMatches) * 100)?.toFixed(0))
                 ],
             }
         ]
@@ -48,7 +48,6 @@ const GeneralResults = ({data}) => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         }

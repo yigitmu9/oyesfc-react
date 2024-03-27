@@ -1,8 +1,8 @@
 import classes from "./scoreboards-grid.module.css";
-import Scoreboard from "../Scoreboard";
+import Scoreboard from "../Scoreboard/scoreboard";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails";
-import FilterButtons from "../FilterButtons";
+import FilterButtons from "../FilterButtons/filter-buttons";
 
 const ScoreboardsGrid = ({databaseData}) => {
 

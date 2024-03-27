@@ -9,7 +9,7 @@ import {
 } from './navbarElements';
 import Message from "../Message";
 import classes from "../navbar/navbar.module.css"
-import SignInComponent from "../SignIn";
+import SignIn from "../SignIn/sign-in";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import OYesFCLogo from '../../images/oyesfc.PNG';
 
@@ -84,7 +84,7 @@ const Navbar = ({databaseData}) => {
                                            className={classes.userButtonLinkStyle}></AccountCircleIcon>
                     </NavBtnLink>
                 </NavBtn>
-                {isSignInPopupOpen && <SignInComponent openMessage={() => setMessagePopupOpen(true)}
+                {isSignInPopupOpen && <SignIn openMessage={() => setMessagePopupOpen(true)}
                                                        onClose={() => setSignInPopupOpen(false)}
                                                        messageData={(messageData) => handleXClick(messageData)}
                                                        databaseData={databaseData}/>}

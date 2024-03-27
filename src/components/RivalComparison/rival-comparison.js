@@ -4,13 +4,14 @@ import CardContent from "@mui/material/CardContent";
 import {FormControl, List, ListItem} from "@mui/material";
 import Card from "@mui/material/Card";
 import {TeamNames} from "../../constants/constants";
+import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
 
 const RivalComparison = ({data}) => {
 
-    let rivalNames = [];
+    let rivalTeams = [];
     Object.values(data)?.forEach((x) => {
-        if (!rivalNames.includes(x.rival.name)) {
-            rivalNames.push(x.rival.name)
+        if (!rivalTeams.includes(x.rival.name)) {
+            rivalTeams.push(x.rival.name)
         }
     } )
 
@@ -88,9 +89,9 @@ const RivalComparison = ({data}) => {
                     <div className={classes.selectionInsideGrid}>
                         <FormControl className={classes.colorStyle} fullWidth>
                             <label className={classes.colorStyle}>
-                                <select className={classes.select} onChange={handleChange}>
+                                <select className={facilitiesIndividualStatsClasses.select} onChange={handleChange}>
                                     <option>Select Rival</option>
-                                    {rivalNames.sort().map((x, y) => (
+                                    {rivalTeams.sort().map((x, y) => (
                                         <option key={y} value={x}>{x}</option>
                                     ))}
                                 </select>

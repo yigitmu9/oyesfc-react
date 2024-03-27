@@ -7,7 +7,7 @@ import {DetailedRakipbulMatches, TeamNames} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 import {Divider, List, ListItem} from "@mui/material";
 
-const RakipbulIndividualStats = () => {
+const RakipbulTeamStats = () => {
 
     let goalsScored = 0
     let ourPositions = 0
@@ -149,4 +149,4 @@ const RakipbulIndividualStats = () => {
     );
 };
 
-export default RakipbulIndividualStats;
+export default RakipbulTeamStats;

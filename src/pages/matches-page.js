@@ -1,8 +1,8 @@
 import React from 'react';
-import ScoreboardsGrid from "../components/ScoreboardsGrid";
-import Footer from "../components/Footer";
+import ScoreboardsGrid from "../components/ScoreboardsGrid/scoreboards-grid";
+import Footer from "../components/Footer/footer";
 
-const Matches = ({databaseData}) => {
+const MatchesPage = ({databaseData}) => {
     return (
         <div>
             <main>
@@ -13,4 +13,4 @@ const Matches = ({databaseData}) => {
     );
 };
 
-export default Matches;
+export default MatchesPage;

@@ -1,8 +1,8 @@
 import React from 'react';
-import TeamStatsGrid from "../components/TeamStatsGrid";
-import Footer from "../components/Footer";
+import TeamStatsGrid from "../components/TeamStatsGrid/team-stats-grid";
+import Footer from "../components/Footer/footer";
 
-const TeamStats = ({databaseData}) => {
+const TeamStatsPage = ({databaseData}) => {
 
     return (
         <div>
@@ -14,4 +14,4 @@ const TeamStats = ({databaseData}) => {
     );
 };
 
-export default TeamStats;
+export default TeamStatsPage;

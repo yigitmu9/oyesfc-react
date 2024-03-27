@@ -14,22 +14,6 @@
     justify-content: center;
 }
 
-.spanDivStyle {
-    background-color: #242424;
-    padding: 15px 10px 15px;
-    color: rgb(128, 128, 128);
-    width: 100%;
-    height: auto;
-    margin-left: 14%;
-    margin-right: 14%;
-    margin-top: 20px;
-    border-radius: 25px;
-    @media screen and (max-width: 768px) {
-        margin-left: 3%;
-        margin-right: 3%;
-    }
-}
-
 .spanStyle {
     background-color: #242424;
 }

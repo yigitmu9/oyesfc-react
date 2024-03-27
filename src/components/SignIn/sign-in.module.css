@@ -160,21 +160,6 @@ input {
     margin: 20px;
 }
 
-.buttonSubmitStyle {
-    background-color: darkred;
-    color: lightgray;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 20px;
-    transition: background-color 0.3s ease;
-    @media (max-width: 768px) {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
-
 .buttonStyle {
     background-color: darkred;
     color: lightgray;

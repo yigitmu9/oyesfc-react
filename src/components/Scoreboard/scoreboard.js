@@ -1,7 +1,7 @@
 import classes from "./scoreboard.module.css";
 import TeamView from "../TeamView";
-import Result from "../Result";
-import GameStatus from "../GameStatus";
+import Result from "../Result/result";
+import GameStatus from "../GameStatus/game-status";
 import {useState} from "react";
 
 const Scoreboard = ({value, openPopup, matchDetailsData}) => {

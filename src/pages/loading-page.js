@@ -2,7 +2,7 @@ import React from 'react';
 import {ScaleLoader} from "react-spinners";
 import OYesFCLogo from '../images/oyesfc.PNG'
 
-const Loading = () => {
+const LoadingPage = () => {
     return (
         <div
             style={{
@@ -20,4 +20,4 @@ const Loading = () => {
     );
 };
 
-export default Loading;
+export default LoadingPage;

@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import {Bar} from "react-chartjs-2";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
+import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
 
 const FacilitiesStats = ({data}) => {
 
@@ -112,7 +113,7 @@ const FacilitiesStats = ({data}) => {
                 <h1 className={classes.titleStyle}>Statistics on Facilities</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div className={classes.cardContentInsideStyle}>
-                        <div className={classes.chartStyle}>
+                        <div className={facilitiesIndividualStatsClasses.chartStyle}>
                             <Bar
                                 data={chartDatasets}
                                 width={"100%"}
@@ -120,7 +121,7 @@ const FacilitiesStats = ({data}) => {
                                 options={options}
                             />
                         </div>
-                        <div className={classes.tableStyle}>
+                        <div className={facilitiesIndividualStatsClasses.tableStyle}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>

@@ -13,18 +13,19 @@ import {
 import {TeamMembers} from "../../constants/constants";
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import weatherTeamClasses from "../WeatherTeamStats/weather-team-stats.module.css"
 
 const WeatherIndividualStats = ({data}) => {
 
-    const hotWeatherData = Object.values(data).filter(item => {
-        const parts = item.day.split('-');
-        const month = parseInt(parts[1], 10);
-        return month === 4 || month === 5 || month === 6 || month === 7 || month === 8 || month === 9;
+    const hotWeather = Object.values(data).filter(item => {
+        const part = item.day.split('-');
+        const months = parseInt(part[1], 10);
+        return months === 4 || months === 5 || months === 6 || months === 7 || months === 8 || months === 9;
     });
-    const coldWeatherData = Object.values(data).filter(item => {
-        const parts = item.day.split('-');
-        const month = parseInt(parts[1], 10);
-        return month === 1 || month === 2 || month === 3 || month === 10 || month === 11 || month === 12;
+    const coldWeather = Object.values(data).filter(item => {
+        const part = item.day.split('-');
+        const months = parseInt(part[1], 10);
+        return months === 1 || months === 2 || months === 3 || months === 10 || months === 11 || months === 12;
     });
 
     const rows = Object.values(TeamMembers).map(x => x.name);
@@ -34,17 +35,17 @@ const WeatherIndividualStats = ({data}) => {
     let playerGoalPerGameData = [];
     let playerMatchData = [];
 
-    const numberOfMatches = Object.values(hotWeatherData).length;
+    const numberOfMatches = Object.values(hotWeather).length;
 
     Object.values(TeamMembers).forEach(member => {
         playerTotalGoal = 0;
-        Object.values(hotWeatherData).forEach(item => {
+        Object.values(hotWeather).forEach(item => {
             if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
                 playerTotalGoal += item.oyesfc.squad[member.name].goal;
             }
         });
 
-        const playerTotalMatch = Object.values(hotWeatherData).filter(item =>
+        const playerTotalMatch = Object.values(hotWeather).filter(item =>
             Object.keys(item.oyesfc.squad).includes(member.name)).length;
 
         const attendanceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
@@ -62,17 +63,17 @@ const WeatherIndividualStats = ({data}) => {
     let playerGoalPerGameDataCold = [];
     let playerMatchDataCold = [];
 
-    const numberOfMatchesCold = Object.values(coldWeatherData).length;
+    const numberOfMatchesCold = Object.values(coldWeather).length;
 
     Object.values(TeamMembers).forEach(member => {
         playerTotalGoalCold = 0;
-        Object.values(coldWeatherData).forEach(item => {
+        Object.values(coldWeather).forEach(item => {
             if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
                 playerTotalGoalCold += item.oyesfc.squad[member.name].goal;
             }
         });
 
-        const playerTotalMatchCold = Object.values(coldWeatherData).filter(item =>
+        const playerTotalMatchCold = Object.values(coldWeather).filter(item =>
             Object.keys(item.oyesfc.squad).includes(member.name)).length;
 
         const attendanceRateCold = ((playerTotalMatchCold / numberOfMatchesCold) * 100)?.toFixed(0);
@@ -85,7 +86,7 @@ const WeatherIndividualStats = ({data}) => {
     });
 
     return (
-        <div className={classes.grid}>
+        <div className={weatherTeamClasses.grid}>
             <div className={classes.cardGrid}>
                 <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
                     <h1 className={classes.titleStyle}>Cold Weather Statistics</h1>
@@ -93,7 +94,7 @@ const WeatherIndividualStats = ({data}) => {
                         <div className={classes.cardAlign}>
                             <div className={classes.iconDivStyle}>
                                 <AcUnitIcon sx={{width: "200px", height: "200px"}}
-                                            className={classes.iconStyle}></AcUnitIcon>
+                                            className={weatherTeamClasses.iconStyle}></AcUnitIcon>
                             </div>
                             <div className={classes.tableStyle}>
                                 <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
@@ -138,7 +139,7 @@ const WeatherIndividualStats = ({data}) => {
                         <div className={classes.cardAlign}>
                             <div className={classes.iconDivStyle}>
                                 <LocalFireDepartmentIcon sx={{width: "200px", height: "200px"}}
-                                    className={classes.iconStyle}></LocalFireDepartmentIcon>
+                                    className={weatherTeamClasses.iconStyle}></LocalFireDepartmentIcon>
                             </div>
                             <div className={classes.tableStyle}>
                                 <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>

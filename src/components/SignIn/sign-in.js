@@ -7,7 +7,7 @@ import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/
 import {auth} from "../../firebase"
 import AddIcon from "@mui/icons-material/Add";
 
-const SignInComponent = ({onClose, openMessage, messageData, databaseData}) => {
+const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
 
     const popupRef = useRef(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
@@ -161,4 +161,4 @@ const SignInComponent = ({onClose, openMessage, messageData, databaseData}) => {
     );
 };
 
-export default SignInComponent;
+export default SignIn;

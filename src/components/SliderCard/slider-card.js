@@ -126,7 +126,7 @@ const SliderCard = () => {
                                     component="img"
                                     sx={smallStyles.smallMedia}
                                     image={require(`../../images/${x.logo}`)}
-                                    className={classes.smallCardFoto}
+                                    className={classes.smallCardPhoto}
                                 />
                                 <CardContent
                                     style={{paddingBottom: '10px'}}

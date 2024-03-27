@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import {DetailedRakipbulMatches, TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
+import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
+import facilitiesStatsClasses from "../FacilitiesStats/facilities-stats.module.css";
 
 const RakipbulPlayerStats = () => {
 
@@ -71,7 +73,6 @@ const RakipbulPlayerStats = () => {
             legend: {
                 labels: {
                     color: 'lightgray',
-                    fontSize: 10,
                 },
             },
         },
@@ -82,7 +83,6 @@ const RakipbulPlayerStats = () => {
                 suggestedMax: 100,
                 ticks: {
                     color: 'lightgray',
-                    fontSize: 10
                 },
             },
             y: {
@@ -90,7 +90,6 @@ const RakipbulPlayerStats = () => {
                 suggestedMax: 100,
                 ticks: {
                     color: 'lightgray',
-                    fontSize: 10
                 },
             },
         },
@@ -108,7 +107,7 @@ const RakipbulPlayerStats = () => {
                         <FormControl className={classes.colorStyle} fullWidth>
                             <label className={classes.colorStyle}>
                                 Select a Match:
-                                <select className={classes.select} onChange={handleChange}>
+                                <select className={facilitiesStatsClasses.select} onChange={handleChange}>
                                     <option value='Total of All Matches'>Total of All Matches</option>
                                     {Object.values(DetailedRakipbulMatches).map((x, y) => (
                                         <option key={y} value={x.rival.name}>{x.rival.name}</option>
@@ -120,7 +119,7 @@ const RakipbulPlayerStats = () => {
                 </div>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div className={classes.cardContentInsideStyle}>
-                        <div className={classes.chartStyle}>
+                        <div className={facilitiesIndividualStatsClasses.chartStyle}>
                             <Bar
                                 data={chartDatasets}
                                 width={"100%"}
