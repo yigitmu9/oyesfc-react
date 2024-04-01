@@ -5,8 +5,11 @@ import {dataBase} from "../../firebase";
 import {ref, set} from "firebase/database";
 import {TeamMembers} from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import LoadingPage from "../../pages/loading-page";
 
 const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) => {
+
+    const [loading, setLoading] = useState(false);
 
     let facilities = [];
     Object.values(databaseData)?.forEach((x) => {
@@ -123,10 +126,12 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
         finalizeData();
         setDayTime();
         try {
+            setLoading(true)
             await set(ref(dataBase, formData.day), formData);
             setFormData(initialFormData);
             setNewSquadMember('');
             document.body.style.overflow = 'visible';
+            setLoading(false)
             onClose()
             const messageResponse = {
                 isValid: true,
@@ -135,11 +140,14 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
             messageData(messageResponse)
             openMessage(true)
         } catch (error) {
+            console.log(error)
             document.body.style.overflow = 'visible';
             onClose()
             const messageResponse = {
                 isValid: false,
-                message: 'An error occurred!'
+                message: error?.message === 'PERMISSION_DENIED: Permission denied' ?
+                    'This user does not have permission to add match!' :
+                    'An error occurred!'
             }
             messageData(messageResponse)
             openMessage(true)
@@ -173,6 +181,16 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
         oYesFCFormData.squad = oYesFCSquadFormData;
         formData.oyesfc = oYesFCFormData;
         formData.rival = rivalFormData;
+    }
+
+    if (loading) {
+        return (
+            <div className={classes.overlay}>
+                <div className={classes.generalStyle} ref={popupRef}>
+                    <LoadingPage/>
+                </div>
+            </div>
+        )
     }
 
     return (

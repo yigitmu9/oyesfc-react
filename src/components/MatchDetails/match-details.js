@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import classes from "./match-details.module.css"
-import TeamView from "../TeamView";
+import TeamView from "../TeamView/team-view";
 import Result from "../Result/result";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';

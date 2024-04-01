@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import classes from "./team-stats-grid.module.css";
 import GeneralResults from "../GeneralResults/general-results";
-import FacilitiesStats from "../FacilitiesStats";
+import FacilitiesStats from "../FacilitiesStats/facilities-stats";
 import WeatherTeamStats from "../WeatherTeamStats/weather-team-stats";
 import RakipbulTeamStats from "../RakipbulTeamStats/rakipbul-team-stats";
 import FilterButtons from "../FilterButtons/filter-buttons";
@@ -24,7 +24,7 @@ const TeamStatsGrid = ({databaseData}) => {
             <RivalComparison data={matchDetailsFilteredData}/>
             <WeatherTeamStats data={matchDetailsFilteredData}/>
             <MainSquadStats data={matchDetailsFilteredData}/>
-            <RakipbulTeamStats/>
+            <RakipbulTeamStats data={databaseData}/>
             <div className={classes.divStyle}>
                 <div className={classes.spanDivStyle}>
                     <span className={classes.spanStyle}>*These statistics are only valid for 10 specific

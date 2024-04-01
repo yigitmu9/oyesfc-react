@@ -3,17 +3,18 @@ import classes from "./rakipbul-team-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Doughnut} from "react-chartjs-2";
-import {DetailedRakipbulMatches, TeamNames} from "../../constants/constants";
+import {TeamNames} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 import {Divider, List, ListItem} from "@mui/material";
 
-const RakipbulTeamStats = () => {
+const RakipbulTeamStats = ({data}) => {
 
     let goalsScored = 0
     let ourPositions = 0
     let goalsConceded = 0
     let theirPositions = 0
-    Object.values(DetailedRakipbulMatches)?.forEach(item => {
+    let rakipbulData = Object.values(data).filter(x => x?.oyesfc?.position);
+    rakipbulData.forEach(item => {
         goalsScored += item?.oyesfc?.goal;
         ourPositions += item?.oyesfc?.position;
         goalsConceded += item?.rival?.goal;

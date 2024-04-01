@@ -1,0 +1,33 @@
+.userButtonLinkStyle {
+    &:hover {
+        transition: all 0.2s ease-in-out;
+        color: lightgray;
+    }
+}
+
+.imgStyle {
+    width: 50px;
+    height: 50px;
+    background-color: darkred;
+    cursor: pointer;
+}
+
+.desktopMenuItems {
+    background-color: darkred;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.mobileMenu {
+    background-color: darkred;
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+}
+
+.mobileMenuItems {
+    background-color: darkred;
+    padding: 20px;
+    cursor: pointer;
+    border-radius: 25px;
+}

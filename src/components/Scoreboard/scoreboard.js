@@ -1,5 +1,5 @@
 import classes from "./scoreboard.module.css";
-import TeamView from "../TeamView";
+import TeamView from "../TeamView/team-view";
 import Result from "../Result/result";
 import GameStatus from "../GameStatus/game-status";
 import {useState} from "react";

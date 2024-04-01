@@ -2,10 +2,11 @@ import React, {useEffect, useRef, useState} from 'react';
 import classes from "./sign-in.module.css";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddMatchComponent from "../AddMatch/add-match";
-import Message from "../Message";
+import Message from "../Message/message";
 import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/auth"
 import {auth} from "../../firebase"
 import AddIcon from "@mui/icons-material/Add";
+import LoadingPage from "../../pages/loading-page";
 
 const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
 
@@ -18,6 +19,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
     const [signedIn, setSignedIn] = useState(false)
     const [errorMessage, setErrorMessage] = useState(false)
     const [messageData2, setMessageData] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleOutsideClick = (event) => {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -39,6 +41,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
         await signInWithEmailAndPassword(auth, email, password)
             .then(() => {
                 checkAuthState()
@@ -47,6 +50,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
                 console.log(error)
                 setErrorMessage(true)
             })
+        setLoading(false);
     };
 
     const handleClose = () => {
@@ -69,18 +73,31 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
         })
     }
 
+    useEffect(() => {
+        const checkAuthState = async () => {
+            await onAuthStateChanged(auth, user => {
+                if (user && !signedIn) {
+                    setSignedIn(true)
+                    setCredentials(user)
+                } else if (!user && signedIn) {
+                    setSignedIn(false)
+                }
+            })
+        }
+        checkAuthState().then(r => r)
+    });
+
     const logOut = async () => {
+        setLoading(true)
         await signOut(auth)
             .then(() => {
                 if (signedIn) {
                     setSignedIn(false)
                     setCredentials(null)
                 }
-                handleClose()
             })
             .catch((error) => {
                 console.log(error)
-                onClose()
                 const messageResponse = {
                     isValid: false,
                     message: 'An error occurred!'
@@ -88,12 +105,24 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
                 messageData(messageResponse)
                 openMessage(true)
             })
+        setLoading(false)
     }
 
-    return (
-        <div className={classes.overlay}>
-            { !isPopupOpen && !isMessagePopupOpen && <div className={classes.generalStyle} ref={popupRef}>
-                { checkAuthState() && !signedIn ? <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
+    if (loading) {
+        return (
+            <div className={classes.overlay}>
+                <div className={classes.generalStyle} ref={popupRef}>
+                    <LoadingPage/>
+                </div>
+            </div>
+        )
+    }
+
+    if (!signedIn) {
+        return (
+            <div className={classes.overlay}>
+                {!isPopupOpen && !isMessagePopupOpen && <div className={classes.generalStyle} ref={popupRef}>
+                    <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
                         <div className={classes.infoAlign}>
                             <div className={classes.iconDivStyle}>
                                 <AccountCircleIcon sx={{width: "200px", height: "200px"}}
@@ -123,40 +152,49 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
                                     onChange={(event) => setPassword(event.target.value)}
                                 />
                             </label>
-                            { errorMessage && <span className={classes.errorMessage}>Invalid email or password!</span> }
+                            {errorMessage && <span className={classes.errorMessage}>Invalid email or password!</span>}
                         </div>
                         <div className={classes.buttonDivStyle}>
-                        <button className={classes.buttonStyle} style={{marginRight: "1rem"}} type="submit">Log In
-                        </button>
-                        <button className={classes.buttonStyle} onClick={handleClose}>Cancel</button>
-                    </div>
-                </form> :
-                    <div className={classes.signedInStyle}>
-                        <div className={classes.iconDivStyle}>
-                            <AccountCircleIcon sx={{width: "200px", height: "200px"}}
-                                               className={classes.iconStyle}></AccountCircleIcon>
-                        </div>
-                        <h1 className={classes.titleStyle}>Welcome</h1>
-                        <h1 className={classes.usernameStyle}>{credentials?.email}</h1>
-                        <div className={classes.addMatchButtonDiv}>
-                            <div className={classes.addMatchDiv} onClick={openAddMatchPopup}>
-                                <AddIcon className={classes.addIconStyle}></AddIcon>
-                                <span className={classes.addMatchSpan}>Add Match</span>
-                            </div>
-                        </div>
-                        <div className={classes.buttonDivStyle}>
-                            <button className={classes.buttonStyle} style={{marginRight: "1rem"}} onClick={logOut}>Log
-                                Out
+                            <button className={classes.buttonStyle} style={{marginRight: "1rem"}} type="submit">Log In
                             </button>
-                            <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
+                            <button className={classes.buttonStyle} onClick={handleClose}>Cancel</button>
                         </div>
-                    </div>}
+                    </form>
+                </div>}
+                {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)}/>}
+            </div>
+        )
+    }
+
+    return (
+        <div className={classes.overlay}>
+            {!isPopupOpen && !isMessagePopupOpen && <div className={classes.generalStyle} ref={popupRef}>
+                <div className={classes.signedInStyle}>
+                    <div className={classes.iconDivStyle}>
+                        <AccountCircleIcon sx={{width: "200px", height: "200px"}}
+                                           className={classes.iconStyle}></AccountCircleIcon>
+                    </div>
+                    <h1 className={classes.titleStyle}>Welcome</h1>
+                    <h1 className={classes.usernameStyle}>{credentials?.email}</h1>
+                    <div className={classes.addMatchButtonDiv}>
+                        <div className={classes.addMatchDiv} onClick={openAddMatchPopup}>
+                            <AddIcon className={classes.addIconStyle}></AddIcon>
+                            <span className={classes.addMatchSpan}>Add Match</span>
+                        </div>
+                    </div>
+                    <div className={classes.buttonDivStyle}>
+                        <button className={classes.buttonStyle} style={{marginRight: "1rem"}} onClick={logOut}>Log
+                            Out
+                        </button>
+                        <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
+                    </div>
+                </div>
             </div>}
             {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
                                                onClose={() => setPopupOpen(false)}
                                                messageData={(messageData) => handleXClick(messageData)}
                                                databaseData={databaseData}/>}
-            {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)} />}
+            {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)}/>}
         </div>
     );
 };

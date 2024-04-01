@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import PlayerCardsGrid from "../PlayerCardsGrid/player-cards-grid";
 import ChartsGrid from "../ChartsGrid/charts-grid.js";
-import FacilitiesIndividualStats from "../FacilitiesIndividualStats";
-import WeatherIndividualStats from "../WeatherIndividualStats";
-import RakipbulPlayerStats from "../RakipbulPlayerStats";
+import FacilitiesIndividualStats from "../FacilitiesIndividualStats/facilities-individual-stats";
+import WeatherIndividualStats from "../WeatherIndividualStats/weather-individual-stats";
+import RakipbulPlayerStats from "../RakipbulPlayerStats/rakipbul-player-stats";
 import FilterButtons from "../FilterButtons/filter-buttons";
 import classes from "./individual-stats-grid.module.css";
 import {Divider} from "@mui/material";
-import RivalsIndividualStats from "../RivalsIndividualStats";
+import RivalsIndividualStats from "../RivalsIndividualStats/rivals-individual-stats";
 import teamStatsClasses from "../TeamStatsGrid/team-stats-grid.module.css"
 
 const IndividualStatsGrid = ({databaseData}) => {
@@ -38,7 +38,7 @@ const IndividualStatsGrid = ({databaseData}) => {
                     <WeatherIndividualStats data={matchDetailsFilteredData}/>
                 </div>
                 <div className={classes.divStyle}>
-                    <RakipbulPlayerStats/>
+                    <RakipbulPlayerStats data={databaseData}/>
                 </div>
                 <div className={classes.divStyle}>
                     <div className={teamStatsClasses.spanDivStyle}>

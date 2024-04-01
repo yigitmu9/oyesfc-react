@@ -12,22 +12,23 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
-import {DetailedRakipbulMatches, TeamMembers} from "../../constants/constants";
+import {TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
 import facilitiesStatsClasses from "../FacilitiesStats/facilities-stats.module.css";
 
-const RakipbulPlayerStats = () => {
+const RakipbulPlayerStats = ({data}) => {
 
     const [match, setMatch] = React.useState('Total of All Matches');
+    let rakipbulData = Object.values(data).filter(x => x?.oyesfc?.position);
 
     const handleChange = (event) => {
         setMatch(event.target.value);
     };
 
-    const data = match === 'Total of All Matches' ?
-        Object.values(DetailedRakipbulMatches) :
-        Object.values(DetailedRakipbulMatches).filter(x => x.rival.name === match)
+    const matchData = match === 'Total of All Matches' ?
+        rakipbulData :
+        rakipbulData.filter(x => x.rival.name === match)
 
     const rows = Object.values(TeamMembers).map(x => x.name);
     let playerTotalGoal = 0;
@@ -39,7 +40,7 @@ const RakipbulPlayerStats = () => {
     Object.values(TeamMembers).forEach(member => {
         playerTotalGoal = 0;
         playerTotalPosition = 0;
-        Object.values(data).forEach(item => {
+        Object.values(matchData).forEach(item => {
             if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
                 playerTotalGoal += item.oyesfc.squad[member.name].goal;
                 playerTotalPosition += item.oyesfc.squad[member.name].position;
@@ -109,7 +110,7 @@ const RakipbulPlayerStats = () => {
                                 Select a Match:
                                 <select className={facilitiesStatsClasses.select} onChange={handleChange}>
                                     <option value='Total of All Matches'>Total of All Matches</option>
-                                    {Object.values(DetailedRakipbulMatches).map((x, y) => (
+                                    {rakipbulData.map((x, y) => (
                                         <option key={y} value={x.rival.name}>{x.rival.name}</option>
                                     ))}
                                 </select>

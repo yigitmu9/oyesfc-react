@@ -1,12 +1,13 @@
 import classes from "./message.module.css";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import React from "react";
 
 const Message = ({onClose, messageData}) => {
 
     document.body.style.overflow = 'hidden';
 
-    const handleClose = () => {
+    const handleClose = async () => {
         document.body.style.overflow = 'visible';
         onClose();
         if (messageData.isValid && messageData.message === 'Match successfully added.') {
