@@ -1,6 +1,5 @@
 import React from 'react';
 import GhostLogo from '../images/ghost.png'
-import {reloadWebsite} from "../App";
 
 const ErrorPage = () => {
     return (
