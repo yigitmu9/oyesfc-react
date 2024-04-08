@@ -19,3 +19,13 @@
   color: lightgray;
   margin-top: 20px;
 }
+
+.matchTitle {
+  color: lightgray;
+  margin-top: 20px;
+  margin-left: 14%;
+  @media (max-width: 767px) {
+    margin-left: 3%;
+    font-size: 25px;
+  }
+}

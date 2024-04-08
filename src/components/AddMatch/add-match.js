@@ -3,11 +3,11 @@ import classes from "./add-match.module.css";
 import signInClasses from "../SignIn/sign-in.module.css";
 import {dataBase} from "../../firebase";
 import {ref, set} from "firebase/database";
-import {TeamMembers} from "../../constants/constants";
+import {Facilities, TeamMembers} from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoadingPage from "../../pages/loading-page";
 
-const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) => {
+const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, selectedMatchData}) => {
 
     const [loading, setLoading] = useState(false);
 
@@ -42,25 +42,25 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
         };
     });
 
-    const initialOYesFCSquadFormData = {};
+    const initialOYesFCSquadFormData = selectedMatchData ? selectedMatchData?.oyesfc?.squad : {};
 
     const initialOYesFCFormData = {
-        goal: 0,
+        goal: selectedMatchData ? selectedMatchData?.oyesfc?.goal : 0,
         squad: initialOYesFCSquadFormData,
     };
 
     const initialRivalFormData = {
-        goal: 0,
-        name: '',
+        goal: selectedMatchData ? selectedMatchData?.rival?.goal : 0,
+        name: selectedMatchData ? selectedMatchData?.rival?.name : '',
     };
 
     const initialFormData = {
-        day: '',
+        day: selectedMatchData ? formatDateTime(selectedMatchData?.day, selectedMatchData?.time) : '',
         oyesfc: initialOYesFCFormData,
-        place: '',
-        rakipbul: false,
+        place: selectedMatchData ? selectedMatchData?.place : '',
+        rakipbul: selectedMatchData ? selectedMatchData?.rakipbul : false,
         rival: initialRivalFormData,
-        time: '',
+        time: selectedMatchData ? selectedMatchData?.time : '',
     };
 
     const [formData, setFormData] = useState(initialFormData);
@@ -135,7 +135,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
             onClose()
             const messageResponse = {
                 isValid: true,
-                message: 'Match successfully added.'
+                message: selectedMatchData ? 'Match successfully updated.' : 'Match successfully added.'
             }
             messageData(messageResponse)
             openMessage(true)
@@ -183,6 +183,13 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
         formData.rival = rivalFormData;
     }
 
+    function formatDateTime(day, time) {
+        const [dayStr, monthStr, yearStr] = day.split('-');
+        const [startTime] = time.split('-');
+
+        return `${yearStr}-${monthStr}-${dayStr}T${startTime}`;
+    }
+
     if (loading) {
         return (
             <div className={classes.overlay}>
@@ -199,7 +206,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                 <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
                     <div className={classes.formAlign}>
                         <div className={classes.infoAlign}>
-                            <h1 className={classes.generalTitle}>Add Match</h1>
+                            <h1 className={classes.generalTitle}>{selectedMatchData ? 'Edit Match' : 'Add Match'}</h1>
                             <label className={classes.matchTypeTitle}>
                                 Select Match Type:
                             </label>
@@ -261,8 +268,8 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData}) =>
                                         name="place"
                                         value={formData.place}>
                                     <option value={'New Facility'}>New Facility</option>
-                                    {facilities.map((x, y) => (
-                                        <option key={y} value={x}>{x}</option>
+                                    {Facilities.map((x, y) => (
+                                        <option key={y} value={x.name}>{x.name}</option>
                                     ))}
                                 </select>
                             </label>

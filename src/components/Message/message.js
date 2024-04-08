@@ -10,7 +10,7 @@ const Message = ({onClose, messageData}) => {
     const handleClose = async () => {
         document.body.style.overflow = 'visible';
         onClose();
-        if (messageData.isValid && messageData.message === 'Match successfully added.') {
+        if (messageData.isValid && (messageData.message === 'Match successfully added.' || messageData.message === 'Match successfully updated.')) {
             window.location.reload(false);
         }
     }

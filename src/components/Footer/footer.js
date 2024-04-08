@@ -16,7 +16,6 @@ const Footer = () => {
 
     const redirectToInstagram = () => {
         window.open("https://www.instagram.com/oyesfc?igsh=MXRrbmp1a3lvdW4wNg==", "_blank");
-
     };
 
     const packageJson = require('./../../../package.json');

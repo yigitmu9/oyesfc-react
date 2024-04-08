@@ -5,3 +5,11 @@
     font-size: .8em;
   }
 }
+
+.isDetailsStatus {
+  font-size: 1.4em;
+  color: dimgray;
+  @media (max-width: 768px) {
+    font-size: 1em;
+  }
+}

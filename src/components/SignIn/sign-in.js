@@ -7,12 +7,15 @@ import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/
 import {auth} from "../../firebase"
 import AddIcon from "@mui/icons-material/Add";
 import LoadingPage from "../../pages/loading-page";
+import SelectEditMatchModal from "../SelectEditMatchModal/select-edit-match-modal";
+import EditIcon from '@mui/icons-material/Edit';
 
 const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
 
     const popupRef = useRef(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
+    const [isEditPopupOpen, setEditPopupOpen] = useState(false);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [credentials, setCredentials] = useState(null)
@@ -59,7 +62,13 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
     }
 
     const openAddMatchPopup = () => {
+        document.body.style.overflow = 'hidden';
         setPopupOpen(true);
+    };
+
+    const openEditMatchPopup = () => {
+        document.body.style.overflow = 'hidden';
+        setEditPopupOpen(true);
     };
 
     const checkAuthState = async () => {
@@ -168,7 +177,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
 
     return (
         <div className={classes.overlay}>
-            {!isPopupOpen && !isMessagePopupOpen && <div className={classes.generalStyle} ref={popupRef}>
+            {!isPopupOpen && !isMessagePopupOpen && !isEditPopupOpen && <div className={classes.generalStyle} ref={popupRef}>
                 <div className={classes.signedInStyle}>
                     <div className={classes.iconDivStyle}>
                         <AccountCircleIcon sx={{width: "200px", height: "200px"}}
@@ -180,6 +189,12 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
                         <div className={classes.addMatchDiv} onClick={openAddMatchPopup}>
                             <AddIcon className={classes.addIconStyle}></AddIcon>
                             <span className={classes.addMatchSpan}>Add Match</span>
+                        </div>
+                    </div>
+                    <div className={classes.addMatchButtonDiv}>
+                        <div className={classes.addMatchDiv} onClick={openEditMatchPopup}>
+                            <EditIcon className={classes.addIconStyle}></EditIcon>
+                            <span className={classes.addMatchSpan}>Edit Match</span>
                         </div>
                     </div>
                     <div className={classes.buttonDivStyle}>
@@ -195,6 +210,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
                                                messageData={(messageData) => handleXClick(messageData)}
                                                databaseData={databaseData}/>}
             {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)}/>}
+            {isEditPopupOpen && <SelectEditMatchModal databaseData={databaseData} onClose={() => setEditPopupOpen(false)}/>}
         </div>
     );
 };

@@ -179,11 +179,77 @@
     border-radius: 25px;
     color: lightgray;
     border: none;
-    padding: 10px;
+    padding: 10px 25px 10px 25px;
 }
 
 .buttonBorderStyle {
+    display: flex;
     background: #404040;
     font-size: 14px;
     margin: 10px;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+}
+
+.threeButtons {
+    max-width: 30%;
+    background:  rgb(50, 50, 50);
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    border-radius: 25px;
+    margin: 10px;
+    flex: 1;
+    cursor: pointer;
+    @media (max-width: 768px) {
+        margin: 5px 5px 10px 10px;
+    }
+}
+
+.buttonIconStyle {
+    background:  rgb(50, 50, 50);
+    color: white;
+    font-size: 20px;
+    margin-right: 7px;
+    @media (max-width: 768px) {
+        font-size: 17px;
+    }
+}
+
+.threeButtonsDiv {
+    background:  rgb(50, 50, 50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 5px;
+    text-align: center;
+}
+
+.threeButtonsSpan {
+    background:  rgb(50, 50, 50);
+    text-align: center;
+    font-size: 14px;
+    color: lightgray;
+    @media screen and (max-width: 768px) {
+        font-size: 12px;
+    }
+}
+
+.divStyle {
+    display: flex;
+    background: #404040;
+}
+
+.buttonsGeneralStyle {
+    display: flex;
+    background: #404040;
+    width: 100%;
+    justify-content: space-between;
 }
