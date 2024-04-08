@@ -7,7 +7,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import GroupsIcon from '@mui/icons-material/Groups';
 import FootballLogo from '../../images/football.png';
-import AddToCalendarModal from "../add-to-calendar-modal/add-to-calendar-modal";
+import AddToCalendarModal from "../AddToCalendarModal/add-to-calendar-modal";
 import GameStatus from "../GameStatus/game-status";
 import MapsModal from "../MapsModal/maps-modal";
 

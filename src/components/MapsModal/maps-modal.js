@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import classes from "./maps-modal.module.css";
-import calendarClasses from "../add-to-calendar-modal/add-to-calendar-modal.module.css";
+import calendarClasses from "../AddToCalendarModal/add-to-calendar-modal.module.css";
 import signInClasses from "../SignIn/sign-in.module.css";
 import AppleMaps from "../../images/apple-maps-logo.png";
 import GoogleMaps from "../../images/google-maps-logo.png";
