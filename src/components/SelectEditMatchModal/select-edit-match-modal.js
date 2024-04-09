@@ -5,7 +5,7 @@ import signInClasses from "../SignIn/sign-in.module.css"
 import AddMatchComponent from "../AddMatch/add-match";
 import Message from "../Message/message";
 
-const SelectEditMatchModal = ({onClose, databaseData}) => {
+const SelectEditMatchModal = ({onClose, databaseData, reloadData}) => {
 
     const popupRef = useRef(null);
     const [messageData2, setMessageData] = useState(null);
@@ -42,6 +42,11 @@ const SelectEditMatchModal = ({onClose, databaseData}) => {
         setAddMatchPopupOpen(true)
     }
 
+    const handleReload = (data) => {
+        reloadData(data)
+        handleClose()
+    }
+
     return (
         <div className={classes.overlay}>
             {!isAddMatchPopupOpen && !isMessagePopupOpen && <div className={classes.generalStyle} ref={popupRef}>
@@ -54,7 +59,7 @@ const SelectEditMatchModal = ({onClose, databaseData}) => {
                                                        onClose={() => setAddMatchPopupOpen(false)}
                                                        messageData={(messageData) => handleMessageClick(messageData)}
                                                        databaseData={databaseData} selectedMatchData={matchDetailsData}/>}
-            {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)}/>}
+            {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)} reloadData={handleReload}/>}
         </div>
     );
 };

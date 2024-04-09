@@ -35,86 +35,85 @@ export const Facilities = [
     {
         name: 'Galatasaray Özlüce',
         googleUrl: 'https://maps.app.goo.gl/L35T1Saqi885Cz9n7',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRDIl4ep%2Barr%2BM4BEg4Irk0Q2Mn5nLXVmPaiARIOCK5NELGX%2BfD%2FnNaynwESDgiuTRD07s33g8OPk5cB'
+        appleUrl: 'https://maps.apple.com/?address=Levent%20Sk.%206,%2016250%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=14911890432876202952&ll=40.247388,28.906610&lsp=9902&q=Hal%C4%B1%20Saha'
     },
     {
         name: 'Vitamin',
         googleUrl: 'https://maps.app.goo.gl/q3qQsZ4munieVxja7',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRCZy4DY26%2BUg%2BsBEg4Irk0QyJeHqfmq6%2FjOARIOCK5NENjJ%2BZy11Zj2ogESDgiuTRCxl%2Fnw%2F5zWsp8BEg4Irk0Q9O7N94PDj5OXAQ%3D%3D'
+        appleUrl: 'https://maps.apple.com/?address=46.%20Sk.%201%E2%80%9329,%2016270%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=16935313049223439769&ll=40.208569,28.938554&lsp=9902&q=Vitamin%20Hal%C4%B1%20Saha'
     },
     {
         name: 'Galatasaray',
         googleUrl: 'https://maps.app.goo.gl/4gbCxTQofaKKVHEC7',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRCZy4DY26%2BUg%2BsBEg4Irk0QyJeHqfmq6%2FjOARIOCK5NENjJ%2BZy11Zj2ogESDgiuTRCxl%2Fnw%2F5zWsp8BEg4Irk0Q9O7N94PDj5OXAQ%3D%3D'
+        appleUrl: 'https://maps.apple.com/?address=Kaz%C4%B1m%20Karabekir/180.%20Cd.%2010,%2016265%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=2497846863891384065&ll=40.193414,28.992476&lsp=9902&q=Galatasaray%20Futbol%20Okulu'
     },
     {
         name: 'Dikkaldırım',
         googleUrl: 'https://maps.app.goo.gl/eBuarwu3uJk4Z9246',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDQiuTRCBjseM0c%2BI1SISDgiuTRCZy4DY26%2BUg%2BsBEg4Irk0QyJeHqfmq6%2FjOARIOCK5NENjJ%2BZy11Zj2ogESDgiuTRCxl%2Fnw%2F5zWsp8BEg4Irk0Q9O7N94PDj5OXAQ%3D%3D'
+        appleUrl: 'https://maps.apple.com/?address=3.%20Nil%C3%BCfer%20Cd.%203,%2016060%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=14909712082907719928&ll=40.195992,28.998150&lsp=9902&q=H%C3%BCdavendigar%20Dikkald%C4%B1r%C4%B1m%20Spor%20Tesisleri'
     },
     {
         name: 'Jimer',
         googleUrl: 'https://maps.app.goo.gl/X5o3aSKpteLyhVLb6',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRDRxqjYqdLv040BEg4Irk0Q44uVx8z4w%2F6EARIOCK5NEMiN1vbUqZDW%2FQESDgiuTRD40cGoz4T89M4BEg0Irk0QgY7HjNHPiNUiEg4Irk0QmcuA2NuvlIPrARIOCK5NEMiXh6n5quv4zgESDgiuTRDYyfmctdWY9qIBEg4Irk0QsZf58P%2Bc1rKfARIOCK5NEPTuzfeDw4%2BTlwE%3D'
+        appleUrl: 'https://maps.apple.com/?address=Mihrapl%C4%B1%20Cd.%2010A,%2016265%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=11751459912347828554&ll=40.206087,28.994256&lsp=9902&q=Wembley%20Hal%C4%B1%20Saha'
     },
     {
         name: 'Şükrü Şankaya',
         googleUrl: 'https://maps.app.goo.gl/f2m8bKGfzS6BekFHA',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRDKgvGd9NDkiqMBEg4Irk0Q0cao2KnS79ONARIOCK5NEOOLlcfM%2BMP%2BhAESDgiuTRDIjdb21KmQ1v0BEg4Irk0Q%2BNHBqM%2BE%2FPTOARINCK5NEIGOx4zRz4jVIhIOCK5NEJnLgNjbr5SD6wESDgiuTRDIl4ep%2Barr%2BM4BEg4Irk0Q2Mn5nLXVmPaiARIOCK5NELGX%2BfD%2FnNaynwESDgiuTRD07s33g8OPk5cB'
+        appleUrl: 'https://maps.apple.com/?address=Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=8709980759923149473&ll=40.218131,28.889067&lsp=9902&q=%C5%9E%C3%BCkr%C3%BC%20%C5%9Eankaya%20Hal%C4%B1saha'
     },
     {
         name: 'Karafatma',
         googleUrl: 'https://maps.app.goo.gl/YsyrRNsmu9bJ5Pkf8',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDQiuTRChldPdqKuE8HgSDgiuTRDKgvGd9NDkiqMBEg4Irk0Q0cao2KnS79ONARIOCK5NEOOLlcfM%2BMP%2BhAESDgiuTRDIjdb21KmQ1v0BEg4Irk0Q%2BNHBqM%2BE%2FPTOARINCK5NEIGOx4zRz4jVIhIOCK5NEJnLgNjbr5SD6wESDgiuTRDIl4ep%2Barr%2BM4BEg4Irk0Q2Mn5nLXVmPaiARIOCK5NELGX%2BfD%2FnNaynwESDgiuTRD07s33g8OPk5cB'
+        appleUrl: 'https://maps.apple.com/?address=Bilginler%20Cd.%2081,%2016265%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=13548917118078783685&ll=40.206893,28.972391&lsp=9902&q=ESAS%20Be%C5%9Fevler%20Spor%20Tesisi'
     },
     {
         name: 'Özlüce Timsaha',
         googleUrl: 'https://maps.app.goo.gl/MTQc4ayzi1rA6kfY8',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRDFoa7S1orbg7wBEg0Irk0QoZXT3airhPB4Eg4Irk0QyoLxnfTQ5IqjARIOCK5NENHGqNip0u%2FTjQESDgiuTRDji5XHzPjD%2FoQBEg4Irk0QyI3W9tSpkNb9ARIOCK5NEPjRwajPhPz0zgESDQiuTRCBjseM0c%2BI1SISDgiuTRCZy4DY26%2BUg%2BsBEg4Irk0QyJeHqfmq6%2FjOARIOCK5NENjJ%2BZy11Zj2ogESDgiuTRCxl%2Fnw%2F5zWsp8BEg4Irk0Q9O7N94PDj5OXAQ%3D%3D'
+        appleUrl: 'https://maps.apple.com/?address=Emek%20Sk.%2013,%2016235%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=1581426318664967868&ll=40.214641,28.917137&lsp=9902&q=Timsaha%20%C3%96zl%C3%BCce'
     },
     {
         name: 'Fenerbahçe',
         googleUrl: 'https://maps.app.goo.gl/PMiG35sMrnAvMJ167',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRDRxqjYqdLv040BEg4Irk0Q44uVx8z4w%2F6EARIOCK5NEMiN1vbUqZDW%2FQESDgiuTRD40cGoz4T89M4BEg0Irk0QgY7HjNHPiNUiEg4Irk0QmcuA2NuvlIPrARIOCK5NEMiXh6n5quv4zgESDgiuTRDYyfmctdWY9qIBEg4Irk0QsZf58P%2Bc1rKfARIOCK5NEPTuzfeDw4%2BTlwE%3D'
+        appleUrl: 'https://maps.apple.com/?address=Odunluk%20Cd.%204,%2016265%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=10207336617334154065&ll=40.203698,28.996648&lsp=9902&q=Bursa%20Fenerbah%C3%A7e%20Futbol%20Okulu'
     },
     {
         name: 'Trabzonspor',
         googleUrl: 'https://maps.app.goo.gl/cKLeTKvAZk4FLgp17',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRD40cGoz4T89M4BEg0Irk0QgY7HjNHPiNUiEg4Irk0QmcuA2NuvlIPrARIOCK5NEMiXh6n5quv4zgESDgiuTRDYyfmctdWY9qIBEg4Irk0QsZf58P%2Bc1rKfARIOCK5NEPTuzfeDw4%2BTlwE%3D'
+        appleUrl: 'https://maps.apple.com/?address=3.%20Nil%C3%BCfer%20Cd.%203,%2016060%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=18279056787880904392&ll=40.195413,28.997244&lsp=9902&q=Mihrapl%C4%B1%20Hal%C4%B1saha'
     },
     {
         name: 'Asya',
         googleUrl: 'https://maps.app.goo.gl/7VLP2n7Yj5gekCCY8',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISfRphT3l1biBFbmdlbCBUYW7EsW1heiBQYXJrxLEsIE95dW4gRW5nZWwgVGFuxLFtYXogUGFya8SxIMSww6dpIFlvbHUsIDE2MjAwIE5pbMO8ZmVyIEJ1cnNhLCBUw7xya2l5ZSISCaT%2BoCS8G0RAEYDmVPUz%2FTxAKgRBc3lhEg0Irk0QvM3q07rblvkVEg4Irk0QxaGu0taK24O8ARINCK5NEKGV092oq4TweBIOCK5NEMqC8Z300OSKowESDgiuTRDRxqjYqdLv040BEg4Irk0Q44uVx8z4w%2F6EARIOCK5NEMiN1vbUqZDW%2FQESDgiuTRD40cGoz4T89M4BEg0Irk0QgY7HjNHPiNUiEg4Irk0QmcuA2NuvlIPrARIOCK5NEMiXh6n5quv4zgESDgiuTRDYyfmctdWY9qIBEg4Irk0QsZf58P%2Bc1rKfARIOCK5NEPTuzfeDw4%2BTlwE%3D'
+        appleUrl: 'https://maps.apple.com/?address=Oyun%20Engel%20Tan%C4%B1maz%20Park%C4%B1,%20Oyun%20Engel%20Tan%C4%B1maz%20Park%C4%B1%20%C4%B0%C3%A7i%20Yolu,%2016200%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&ll=40.216679,28.989074&q=Eklenmi%C5%9F%20%C4%B0%C4%9Fne'
     },
     {
         name: 'Olimpik',
         googleUrl: 'https://maps.app.goo.gl/XtGpawxLtaLr3q3Q8',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISfRphT3l1biBFbmdlbCBUYW7EsW1heiBQYXJrxLEsIE95dW4gRW5nZWwgVGFuxLFtYXogUGFya8SxIMSww6dpIFlvbHUsIDE2MjAwIE5pbMO8ZmVyIEJ1cnNhLCBUw7xya2l5ZSISCaT%2BoCS8G0RAEYDmVPUz%2FTxAKgRBc3lhEg0Irk0QvM3q07rblvkVEg4Irk0QxaGu0taK24O8ARINCK5NEKGV092oq4TweBIOCK5NEMqC8Z300OSKowESDgiuTRDRxqjYqdLv040BEg4Irk0Q44uVx8z4w%2F6EARIOCK5NEMiN1vbUqZDW%2FQESDgiuTRD40cGoz4T89M4BEg0Irk0QgY7HjNHPiNUiEg4Irk0QmcuA2NuvlIPrARIOCK5NEMiXh6n5quv4zgESDgiuTRDYyfmctdWY9qIBEg4Irk0QsZf58P%2Bc1rKfARIOCK5NEPTuzfeDw4%2BTlwE%3D'
+        appleUrl: 'https://maps.apple.com/?address=Mudanya%20Cd.%20158,%2016940%20Mudanya%20Bursa,%20T%C3%BCrkiye&auid=16112852628900076155&ll=40.308404,28.937733&lsp=9902&q=Olimpik%20Marmara%20Hal%C4%B1%20Saha'
     },
     {
         name: 'Soğukkuyu',
         googleUrl: 'https://maps.app.goo.gl/NBgfWKwuZANThkRe8',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRD7tLv%2BisOWzt8BEn0aYU95dW4gRW5nZWwgVGFuxLFtYXogUGFya8SxLCBPeXVuIEVuZ2VsIFRhbsSxbWF6IFBhcmvEsSDEsMOnaSBZb2x1LCAxNjIwMCBOaWzDvGZlciBCdXJzYSwgVMO8cmtpeWUiEgmk%2FqAkvBtEQBGA5lT1M%2F08QCoEQXN5YRINCK5NELzN6tO625b5FRIOCK5NEMWhrtLWituDvAESDQiuTRChldPdqKuE8HgSDgiuTRDKgvGd9NDkiqMBEg4Irk0Q0cao2KnS79ONARIOCK5NEOOLlcfM%2BMP%2BhAESDgiuTRDIjdb21KmQ1v0BEg4Irk0Q%2BNHBqM%2BE%2FPTOARINCK5NEIGOx4zRz4jVIhIOCK5NEJnLgNjbr5SD6wESDgiuTRDIl4ep%2Barr%2BM4BEg4Irk0Q2Mn5nLXVmPaiARIOCK5NELGX%2BfD%2FnNaynwESDgiuTRD07s33g8OPk5cB'
+        appleUrl: 'https://maps.apple.com/?address=So%C4%9Fukkuyu%20Cd.%2011,%2016160%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=13941616684102419106&ll=40.213974,29.009026&lsp=9902&q=So%C4%9Fukkuyu%20Kamil%20Saker%20Spor%20Tesisi'
     },
     {
         name: 'Çamlıca',
         googleUrl: 'https://maps.app.goo.gl/aNuYdQiMWheoJPz68',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRCihdaUotCkvcEBEg4Irk0Q%2B7S7%2ForDls7fARJ9GmFPeXVuIEVuZ2VsIFRhbsSxbWF6IFBhcmvEsSwgT3l1biBFbmdlbCBUYW7EsW1heiBQYXJrxLEgxLDDp2kgWW9sdSwgMTYyMDAgTmlsw7xmZXIgQnVyc2EsIFTDvHJraXllIhIJpP6gJLwbREARgOZU9TP9PEAqBEFzeWESDQiuTRC8zerTutuW%2BRUSDgiuTRDFoa7S1orbg7wBEg0Irk0QoZXT3airhPB4Eg4Irk0QyoLxnfTQ5IqjARIOCK5NENHGqNip0u%2FTjQESDgiuTRDji5XHzPjD%2FoQBEg4Irk0QyI3W9tSpkNb9ARIOCK5NEPjRwajPhPz0zgESDQiuTRCBjseM0c%2BI1SISDgiuTRCZy4DY26%2BUg%2BsBEg4Irk0QyJeHqfmq6%2FjOARIOCK5NENjJ%2BZy11Zj2ogESDgiuTRCxl%2Fnw%2F5zWsp8BEg4Irk0Q9O7N94PDj5OXAQ%3D%3D'
+        appleUrl: 'https://maps.apple.com/?address=Zafer%20Cd.%2067/1,%2016260%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=12725208065590745105&ll=40.191603,28.979154&lsp=9902&q=%C3%87aml%C4%B1ca%20Hal%C4%B1%20Saha%20Tesisleri'
     },
     {
         name: 'Mudanya Timsaha',
         googleUrl: 'https://maps.app.goo.gl/RgqHkRmD65V6SAaQ7',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRCRsOPTiKrBzLABEg4Irk0QooXWlKLQpL3BARIOCK5NEPu0u%2F6Kw5bO3wESfRphT3l1biBFbmdlbCBUYW7EsW1heiBQYXJrxLEsIE95dW4gRW5nZWwgVGFuxLFtYXogUGFya8SxIMSww6dpIFlvbHUsIDE2MjAwIE5pbMO8ZmVyIEJ1cnNhLCBUw7xya2l5ZSISCaT%2BoCS8G0RAEYDmVPUz%2FTxAKgRBc3lhEg0Irk0QvM3q07rblvkVEg4Irk0QxaGu0taK24O8ARINCK5NEKGV092oq4TweBIOCK5NEMqC8Z300OSKowESDgiuTRDRxqjYqdLv040BEg4Irk0Q44uVx8z4w%2F6EARIOCK5NEMiN1vbUqZDW%2FQESDgiuTRD40cGoz4T89M4BEg0Irk0QgY7HjNHPiNUiEg4Irk0QmcuA2NuvlIPrARIOCK5NEMiXh6n5quv4zgESDgiuTRDYyfmctdWY9qIBEg4Irk0QsZf58P%2Bc1rKfARIOCK5NEPTuzfeDw4%2BTlwE%3D'
+        appleUrl: 'https://maps.apple.com/?address=2002.%20Sk.,%2016940%20Mudanya%20Bursa,%20T%C3%BCrkiye&auid=12554345338857972108&ll=40.291477,28.938139&lsp=9902&q=T%C4%B0MSAHA'
     },
     {
         name: 'Kültürpark Timsaha',
         googleUrl: 'https://maps.app.goo.gl/SimAGh63NoPTQygz6',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRCMw9exntL%2FnK4BEg4Irk0QkbDj04iqwcywARIOCK5NEKKF1pSi0KS9wQESDgiuTRD7tLv%2BisOWzt8BEn0aYU95dW4gRW5nZWwgVGFuxLFtYXogUGFya8SxLCBPeXVuIEVuZ2VsIFRhbsSxbWF6IFBhcmvEsSDEsMOnaSBZb2x1LCAxNjIwMCBOaWzDvGZlciBCdXJzYSwgVMO8cmtpeWUiEgmk%2FqAkvBtEQBGA5lT1M%2F08QCoEQXN5YRINCK5NELzN6tO625b5FRIOCK5NEMWhrtLWituDvAESDQiuTRChldPdqKuE8HgSDgiuTRDKgvGd9NDkiqMBEg4Irk0Q0cao2KnS79ONARIOCK5NEOOLlcfM%2BMP%2BhAESDgiuTRDIjdb21KmQ1v0BEg4Irk0Q%2BNHBqM%2BE%2FPTOARINCK5NEIGOx4zRz4jVIhIOCK5NEJnLgNjbr5SD6wESDgiuTRDIl4ep%2Barr%2BM4BEg4Irk0Q2Mn5nLXVmPaiARIOCK5NELGX%2BfD%2FnNaynwESDgiuTRD07s33g8OPk5cB'
-    },
+        appleUrl: 'https://maps.apple.com/?address=Doktor%20R%C3%BC%C5%9Ft%C3%BC%20Burlu%20Cd.%2010,%2016150%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=16847266177975834823&ll=40.198232,29.041377&lsp=9902&q=Alt%C4%B1n%20Ceylan%20Timsaha'},
     {
         name: 'Park Akademi',
         googleUrl: 'https://maps.app.goo.gl/p29dyuG2KaPyoXhCA',
-        appleUrl: 'https://guides.apple.com/?ug=CgxIYWzEsXNhaGFsYXISDgiuTRDIjdb21KmQ1v0BEg4Irk0Q%2BNHBqM%2BE%2FPTOARINCK5NEIGOx4zRz4jVIhIOCK5NEJnLgNjbr5SD6wESDgiuTRDIl4ep%2Barr%2BM4BEg4Irk0Q2Mn5nLXVmPaiARIOCK5NELGX%2BfD%2FnNaynwESDgiuTRD07s33g8OPk5cB'
+        appleUrl: 'https://maps.apple.com/?address=H%C3%BCdavendigar%20Park%C4%B1%20%C4%B0%C3%A7i%20Yolu,%2016265%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=9582832919972759011&ll=40.201712,28.996809&lsp=9902&q=Hal%C4%B1%20Saha'
     },
 ]

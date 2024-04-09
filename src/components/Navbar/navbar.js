@@ -13,7 +13,7 @@ import {useState} from "react";
 import SignIn from "../SignIn/sign-in";
 import Message from "../Message/message";
 
-function Navbar({databaseData}) {
+function Navbar({databaseData, reloadData}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
@@ -66,6 +66,10 @@ function Navbar({databaseData}) {
         document.body.style.overflow = 'hidden';
         setSignInPopupOpen(true);
     };
+
+    const handleReload = (data) => {
+        reloadData(data);
+    }
 
     return (
         <AppBar position="sticky" sx={{bgcolor: 'darkred'}}>
@@ -173,7 +177,7 @@ function Navbar({databaseData}) {
             {isSignInPopupOpen && <SignIn openMessage={() => setMessagePopupOpen(true)}
                                           onClose={() => setSignInPopupOpen(false)}
                                           messageData={(messageData) => handleXClick(messageData)}
-                                          databaseData={databaseData}/>}
+                                          databaseData={databaseData} reloadData={handleReload}/>}
             {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)}/>}
         </AppBar>
     );

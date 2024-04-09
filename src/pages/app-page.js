@@ -26,6 +26,10 @@ const AppPage = () => {
         }
     };
 
+    const handleReload = (data) => {
+        if (data) fetchData().then(r => r);
+    }
+
     if (!data) {
         fetchData().then(r => r);
     }
@@ -40,7 +44,7 @@ const AppPage = () => {
 
     return (
         <Router>
-            <Navbar databaseData={data}/>
+            <Navbar databaseData={data} reloadData={handleReload}/>
             <Routes>
                 <Route path='oyesfc-react/' element={<MainPage/>}/>
                 <Route path='oyesfc-react/matches' element={<MatchesPage databaseData={data}/>}/>

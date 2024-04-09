@@ -10,7 +10,7 @@ import LoadingPage from "../../pages/loading-page";
 import SelectEditMatchModal from "../SelectEditMatchModal/select-edit-match-modal";
 import EditIcon from '@mui/icons-material/Edit';
 
-const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
+const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData}) => {
 
     const popupRef = useRef(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
@@ -117,6 +117,11 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
         setLoading(false)
     }
 
+    const handleReload = (data) => {
+        reloadData(data)
+        handleClose()
+    }
+
     if (loading) {
         return (
             <div className={classes.overlay}>
@@ -209,8 +214,8 @@ const SignIn = ({onClose, openMessage, messageData, databaseData}) => {
                                                onClose={() => setPopupOpen(false)}
                                                messageData={(messageData) => handleXClick(messageData)}
                                                databaseData={databaseData}/>}
-            {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)}/>}
-            {isEditPopupOpen && <SelectEditMatchModal databaseData={databaseData} onClose={() => setEditPopupOpen(false)}/>}
+            {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)} reloadData={handleReload}/>}
+            {isEditPopupOpen && <SelectEditMatchModal databaseData={databaseData} onClose={() => setEditPopupOpen(false)} reloadData={handleReload}/>}
         </div>
     );
 };
