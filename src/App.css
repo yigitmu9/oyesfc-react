@@ -5,6 +5,49 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background-color: #121212;
 }
 
+.pitch .teams {
+
+}
+
+.team {
+
+}
+
+.goalkeeper {
+
+}
+
+.lines {
+
+
+}
+
+.line {
+
+}
+
+.player-view {
+
+}
+
+.player {
+
+}
+
+.number {
+  @media (max-width: 767px) {
+    font-size: 13px;
+  }
+}
+
+.name {
+  margin: -15px;
+  font-size: 18px;
+  font-weight: bolder;
+  @media (max-width: 767px) {
+    font-size: 16px;
+    margin: -12px;
+  }
+}

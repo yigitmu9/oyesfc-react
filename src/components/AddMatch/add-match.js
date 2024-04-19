@@ -3,7 +3,7 @@ import classes from "./add-match.module.css";
 import signInClasses from "../SignIn/sign-in.module.css";
 import {dataBase} from "../../firebase";
 import {ref, set} from "firebase/database";
-import {Facilities, TeamMembers} from "../../constants/constants";
+import {Facilities, FootballRoles, Jerseys, TeamMembers, WeatherSky} from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoadingPage from "../../pages/loading-page";
 
@@ -47,11 +47,17 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
     const initialOYesFCFormData = {
         goal: selectedMatchData ? selectedMatchData?.oyesfc?.goal : 0,
         squad: initialOYesFCSquadFormData,
+        jersey: selectedMatchData ? selectedMatchData?.oyesfc?.jersey : '',
     };
 
     const initialRivalFormData = {
         goal: selectedMatchData ? selectedMatchData?.rival?.goal : 0,
         name: selectedMatchData ? selectedMatchData?.rival?.name : '',
+    };
+
+    const initialWeatherFormData = {
+        sky: selectedMatchData ? selectedMatchData?.weather?.sky : '',
+        temperature: selectedMatchData ? selectedMatchData?.weather?.temperature : 0,
     };
 
     const initialFormData = {
@@ -61,11 +67,13 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         rakipbul: selectedMatchData ? selectedMatchData?.rakipbul : false,
         rival: initialRivalFormData,
         time: selectedMatchData ? selectedMatchData?.time : '',
+        weather: initialWeatherFormData
     };
 
     const [formData, setFormData] = useState(initialFormData);
     const [rivalFormData, setRivalFormData] = useState(initialRivalFormData);
     const [oYesFCFormData, setOYesFCFormData] = useState(initialOYesFCFormData);
+    const [weatherFormData, setWeatherFormData] = useState(initialWeatherFormData);
     const [oYesFCSquadFormData, setOYesFCSquadFormData] = useState(initialOYesFCSquadFormData);
     const [newSquadMember, setNewSquadMember] = useState('');
 
@@ -90,12 +98,23 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         }));
     };
 
-    const handleSquadInputChange = (member, event) => {
-        const value = event.target.value;
+    const handleWeatherInputChange = (event) => {
+        const {name, value, type} = event.target;
+        const inputValue = type === "number" ? parseInt(value) : value;
+        setWeatherFormData((prevData) => ({
+            ...prevData,
+            [name]: inputValue,
+        }));
+    };
+
+    const handleSquadInputChange = (member, event, goal, role) => {
+        const {name, value, type} = event.target;
+        const inputValue = type === "number" ? parseInt(value) : value;
         setOYesFCSquadFormData((prevData) => ({
             ...prevData,
             [member]: {
-                goal: parseInt(value),
+                'goal': name.includes('goal') ? inputValue : goal,
+                'role': name.includes('role') ? inputValue : role
             },
         }));
     };
@@ -181,6 +200,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         oYesFCFormData.squad = oYesFCSquadFormData;
         formData.oyesfc = oYesFCFormData;
         formData.rival = rivalFormData;
+        formData.weather = weatherFormData;
     }
 
     function formatDateTime(day, time) {
@@ -287,6 +307,46 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
+                                Weather:
+                                <select className={classes.select}
+                                        onChange={handleWeatherInputChange}
+                                        required={true}
+                                        name="sky"
+                                        value={weatherFormData.sky}>
+                                    <option>Select Weather</option>
+                                    {WeatherSky.map((x, y) => (
+                                        <option key={y} value={x}>{x}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <br/>
+                            <label style={{background: "#1f1f1f"}}>
+                                Temperature:
+                                <input
+                                    className={classes.inputDesign}
+                                    required={true}
+                                    type="number"
+                                    name="temperature"
+                                    value={weatherFormData.temperature}
+                                    onChange={handleWeatherInputChange}
+                                />
+                            </label>
+                            <br/>
+                            <label style={{background: "#1f1f1f"}}>
+                                O Yes FC Jersey:
+                                <select className={classes.select}
+                                        onChange={handleOYesFCInputChange}
+                                        required={true}
+                                        name="jersey"
+                                        value={oYesFCFormData.jersey}>
+                                    <option>Select Jersey</option>
+                                    {Jerseys.map((x, y) => (
+                                        <option key={y} value={x}>{x}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <br/>
+                            <label style={{background: "#1f1f1f"}}>
                                 O Yes FC Goal:
                                 <input
                                     className={classes.inputDesign}
@@ -321,8 +381,24 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
                                             type="number"
                                             name={`oyesfc.squad.${member}.goal`}
                                             value={oYesFCSquadFormData[member].goal}
-                                            onChange={(e) => handleSquadInputChange(member, e)}
+                                            onChange={(e) =>
+                                                handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role)}
                                         />
+                                    </label>
+                                    <br/>
+                                    <label style={{background: "#1f1f1f"}}>
+                                        {member} Role:
+                                        <select className={classes.select}
+                                                onChange={(e) =>
+                                                    handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role)}
+                                                required={true}
+                                                name={`oyesfc.squad.${member}.role`}
+                                                value={oYesFCSquadFormData[member].role}>
+                                            <option>Select Role</option>
+                                            {FootballRoles.map((x, y) => (
+                                                <option key={y} value={x}>{x}</option>
+                                            ))}
+                                        </select>
                                     </label>
                                     <br/>
                                 </div>

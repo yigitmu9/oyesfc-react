@@ -3,17 +3,17 @@ export const TeamNames = {
 }
 
 export const TeamMembers = {
-    can: {name: 'Can Şahin', number: 1},
-    atakan: {name: 'Atakan Rakipsiz', number: 2},
-    berk: {name: 'Berk Doğan', number: 5},
-    berent: {name: 'Berent Özsan', number: 99},
-    gokhan: {name: 'Gökhan Cömert', number: 4},
-    mehmet: {name: 'Mehmet Çelik', number: 8},
-    mert: {name: 'Mert Mutlu', number: 16},
-    oguzhan: {name: 'Oğuzhan Cesur', number: 18},
-    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10},
-    utku: {name: 'Utku Öztürk', number: 3},
-    yigit: {name: 'Yiğit Mutlu', number: 7}
+    can: {name: 'Can Şahin', number: 1, role: 'gk'},
+    atakan: {name: 'Atakan Rakipsiz', number: 2, role: 'df'},
+    berk: {name: 'Berk Doğan', number: 5, role: 'df'},
+    berent: {name: 'Berent Özsan', number: 99, role: 'fw'},
+    gokhan: {name: 'Gökhan Cömert', number: 4, role: 'fw'},
+    mehmet: {name: 'Mehmet Çelik', number: 8, role: 'df'},
+    mert: {name: 'Mert Mutlu', number: 16, role: 'fw'},
+    oguzhan: {name: 'Oğuzhan Cesur', number: 18, role: 'df'},
+    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10, role: 'fw'},
+    utku: {name: 'Utku Öztürk', number: 3, role: 'df'},
+    yigit: {name: 'Yiğit Mutlu', number: 7, role: 'fw'}
 }
 
 export const Facilities = [
@@ -116,4 +116,23 @@ export const Facilities = [
         googleUrl: 'https://maps.app.goo.gl/p29dyuG2KaPyoXhCA',
         appleUrl: 'https://maps.apple.com/?address=H%C3%BCdavendigar%20Park%C4%B1%20%C4%B0%C3%A7i%20Yolu,%2016265%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=9582832919972759011&ll=40.201712,28.996809&lsp=9902&q=Hal%C4%B1%20Saha'
     },
+]
+
+export const Jerseys = [
+    '10th Year Jersey',
+    'Red Jersey',
+    'Wavy Jersey',
+    'iOS Jersey',
+    'Chelsea Jersey',
+]
+
+export const WeatherSky = [
+    'Night',
+    'Daytime',
+    'Rain',
+    'Snow'
+]
+
+export const FootballRoles = [
+    'gk', 'df', 'cm', 'fw',
 ]

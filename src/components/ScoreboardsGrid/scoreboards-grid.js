@@ -125,7 +125,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData}) => {
                     {isPopupOpen &&
                         <MatchDetails matchDetailsData={matchDetailsData}
                                       onClose={() => setPopupOpen(false)}
-                                      fixture={fixtureType}
+                                      fixture={fixtureType} data={databaseData}
                         />}
                 </div>
 

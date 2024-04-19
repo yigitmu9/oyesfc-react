@@ -7,7 +7,7 @@ const TeamView = ({teamData, rakipbul, bgColor, isDetails}) => {
 
     return (
         <div>
-            <div className={classes.team} style={{background: bgColor}}>
+            <div className={classes.teamStyle} style={{background: bgColor}}>
                 {(teamData?.name && rakipbul)
                     ?
                     <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle} style={{background: bgColor }}

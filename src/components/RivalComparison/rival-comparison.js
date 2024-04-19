@@ -6,21 +6,22 @@ import Card from "@mui/material/Card";
 import {TeamNames} from "../../constants/constants";
 import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
 
-const RivalComparison = ({data}) => {
+const RivalComparison = ({data, selectedRival}) => {
 
     let rivalTeams = [];
     Object.values(data)?.forEach((x) => {
-        if (!rivalTeams.includes(x.rival.name)) {
-            rivalTeams.push(x.rival.name)
+        if (!rivalTeams.includes(x?.rival?.name)) {
+            rivalTeams.push(x?.rival?.name)
         }
     } )
 
-    const [rival, setRival] = React.useState(null);
+    const [rival, setRival] = React.useState(selectedRival);
 
     const handleChange = (event) => {
         setRival(event.target.value);
     };
 
+    const bgColor = selectedRival ? '#404040' : '#242424';
     const rivalData = Object.values(data).filter(x => x.rival.name === rival)
     const foreignNumberOfMatches = rivalData?.length;
     const mainNumberOfMatches = rivalData?.length;
@@ -81,61 +82,69 @@ const RivalComparison = ({data}) => {
     }
 
     return (
-        <div className={classes.grid}>
-            <Card sx={{borderRadius: "25px", width: "100%", height: "auto"}}
-                  style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 className={classes.titleStyle}>Comparison with Rival</h1>
-                <div className={classes.selectionGrid}>
-                    <div className={classes.selectionInsideGrid}>
-                        <FormControl className={classes.colorStyle} fullWidth>
-                            <label className={classes.colorStyle}>
-                                <select className={facilitiesIndividualStatsClasses.select} onChange={handleChange}>
-                                    <option>Select Rival</option>
-                                    {rivalTeams.sort().map((x, y) => (
-                                        <option key={y} value={x}>{x}</option>
-                                    ))}
-                                </select>
-                            </label>
-                        </FormControl>
-                    </div>
-                </div>
-                <CardContent style={{backgroundColor: "#242424", width: "100%"}}>
-                    <div className={classes.cardInsideDiv}>
-                        <div className={classes.tableDiv}>
+        <div className={ selectedRival ? classes.matchPageGrid : classes.grid}>
+            <Card sx={{borderRadius:  selectedRival ? "0" : "25px", width: "100%", height: "auto"}}
+                  style={{backgroundColor: selectedRival ? "#404040" : "#242424", justifyContent: "center", alignItems: "center"}}>
+                {
+                    !selectedRival ?
+                        <>
+                            <h1 className={classes.titleStyle}>Comparison with Rival</h1>
+                            <div className={classes.selectionGrid}>
+                                <div className={classes.selectionInsideGrid}>
+                                    <FormControl className={classes.colorStyle} fullWidth>
+                                        <label className={classes.colorStyle}>
+                                            <select className={facilitiesIndividualStatsClasses.select}
+                                                    onChange={handleChange}>
+                                                <option>Select Rival</option>
+                                                {rivalTeams.sort().map((x, y) => (
+                                                    <option key={y} value={x}>{x}</option>
+                                                ))}
+                                            </select>
+                                        </label>
+                                    </FormControl>
+                                </div>
+                            </div>
+                        </>
+                        :
+                        null
+                }
+                <CardContent style={{backgroundColor: selectedRival ? "#404040" : "#242424", width: "100%"}}>
+                    <div className={classes.cardInsideDiv} style={{backgroundColor: bgColor}}>
+                        <div className={selectedRival ? classes.matchPageTableDiv : classes.tableDiv} style={{backgroundColor: bgColor}}>
                             <List component="nav" aria-label="mailbox folders"
-                                  style={{backgroundColor: "#242424", width: "100%"}}>
+                                  style={{backgroundColor: selectedRival ? "#404040" : "#242424", width: "100%"}}>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end",
                                     marginBottom: "20px"
                                 }}>
-                                    <div className={classes.subtitle}>
-                                        <div className={classes.colorTitleDiv}>
-                                            <div className={classes.colorTitle}></div>
+                                    <div className={classes.subtitle} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.colorTitleDiv} style={{backgroundColor: bgColor}}>
+                                            <div className={classes.colorTitle} style={{backgroundColor: bgColor}}></div>
                                         </div>
-                                        <p className={classes.listItemSpanStyle}>{TeamNames.oYesFc}</p>
+                                        <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{TeamNames.oYesFc}</p>
                                     </div>
-                                    <div className={classes.subtitle}>
-                                        <p className={classes.listItemSpanStyle2}>{rival === 'Select Rival' || rival === null ? 'Rival' : rival}</p>
-                                        <div className={classes.colorTitleDiv}>
-                                            <div className={classes.colorTitle2}></div>
+                                    <div className={classes.subtitle} style={{backgroundColor: bgColor}}>
+                                        <p className={classes.listItemSpanStyle2} style={{backgroundColor: bgColor}}>{rival === 'Select Rival' || rival === null ? 'Rival' : rival}</p>
+                                        <div className={classes.colorTitleDiv} style={{backgroundColor: bgColor}}>
+                                            <div className={classes.colorTitle2} style={{backgroundColor: bgColor}}></div>
                                         </div>
                                     </div>
                                 </ListItem>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainWinRate}%</p>
-                                    <p className={classes.listItemSpanStyle}>Win Rate</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignWinRate}%</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainWinRate}%</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Win Rate</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignWinRate}%</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainGraphRate + '%',
                                         borderRadius: mainGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -146,17 +155,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainNumberOfMatches}</p>
-                                    <p className={classes.listItemSpanStyle}>Matches</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignNumberOfMatches}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainNumberOfMatches}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Matches</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignNumberOfMatches}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainMatchGraphRate + '%',
                                         borderRadius: mainMatchGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -167,17 +176,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainWonMatches}</p>
-                                    <p className={classes.listItemSpanStyle}>Wins</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignWonMatches}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainWonMatches}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Wins</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignWonMatches}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainWonGraphRate + '%',
                                         borderRadius: mainWonGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -188,17 +197,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainDrawMatches}</p>
-                                    <p className={classes.listItemSpanStyle}>Draws</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignDrawMatches}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainDrawMatches}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Draws</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignDrawMatches}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainDrawGraphRate + '%',
                                         borderRadius: mainDrawGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -209,17 +218,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainLostMatches}</p>
-                                    <p className={classes.listItemSpanStyle}>Losses</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignLostMatches}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainLostMatches}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Losses</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignLostMatches}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainLoseGraphRate + '%',
                                         borderRadius: mainLoseGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -230,17 +239,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainGoalsScored}</p>
-                                    <p className={classes.listItemSpanStyle}>Goals Scored</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignGoalsScored}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainGoalsScored}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Goals Scored</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignGoalsScored}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainScoredGraphRate + '%',
                                         borderRadius: mainScoredGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -251,17 +260,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainGoalsConceded}</p>
-                                    <p className={classes.listItemSpanStyle}>Goals Conceded</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignGoalsConceded}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainGoalsConceded}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Goals Conceded</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignGoalsConceded}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainConcededGraphRate + '%',
                                         borderRadius: mainConcededGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -272,17 +281,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainGoalDifference}</p>
-                                    <p className={classes.listItemSpanStyle}>Goal Difference</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignGoalDifference}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainGoalDifference}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Goal Difference</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignGoalDifference}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainDifferenceGraphRate + '%',
                                         borderRadius: mainDifferenceGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -293,17 +302,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainScoredGoalsPerGame}</p>
-                                    <p className={classes.listItemSpanStyle}>Scored per Match</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignScoredGoalsPerGame}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainScoredGoalsPerGame}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Scored per Match</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignScoredGoalsPerGame}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainScoredPerMatchGraphRate + '%',
                                         borderRadius: mainScoredPerMatchGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -314,17 +323,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainConcededGoalsPerGame}</p>
-                                    <p className={classes.listItemSpanStyle}>Conceded per Match</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignConcededGoalsPerGame}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainConcededGoalsPerGame}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Conceded per Match</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignConcededGoalsPerGame}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainConcededPerMatchGraphRate + '%',
                                         borderRadius: mainConcededPerMatchGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>
@@ -335,17 +344,17 @@ const RivalComparison = ({data}) => {
                                     }}></div>
                                 </div>
                                 <ListItem style={{
-                                    backgroundColor: "#242424",
+                                    backgroundColor: selectedRival ? "#404040" : "#242424",
                                     justifyContent: "space-between",
                                     display: "flex",
                                     textAlign: "end"
                                 }}>
-                                    <p className={classes.listItemSpanStyle}>{mainGoalDifferencePerMatch}</p>
-                                    <p className={classes.listItemSpanStyle}>Goal Difference per Match</p>
-                                    <p className={classes.listItemSpanStyle}>{foreignGoalDifferencePerMatch}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{mainGoalDifferencePerMatch}</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>Goal Difference per Match</p>
+                                    <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{foreignGoalDifferencePerMatch}</p>
                                 </ListItem>
-                                <div className={classes.graph}>
-                                    <div className={classes.line} style={{
+                                <div className={classes.graph} style={{backgroundColor: bgColor}}>
+                                    <div className={classes.line1} style={{
                                         width: mainGoalDifferencePerMatchGraphRate + '%',
                                         borderRadius: mainGoalDifferencePerMatchGraphRate === '100' ? '25px' : '25px 0 0 25px'
                                     }}></div>

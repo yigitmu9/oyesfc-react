@@ -14,7 +14,7 @@ const LoadingPage = () => {
                 color: 'lightgray'
             }}
         >
-            <img style={{ width: "200px", height: "200px", background: "#121212", marginBottom: "20px"}} src={OYesFCLogo} alt={'1'}/>
+            <img style={{ width: "200px", height: "200px", background: "transparent", marginBottom: "20px"}} src={OYesFCLogo} alt={'1'}/>
             <ScaleLoader color="red" speedMultiplier={0.7} />
         </div>
     );

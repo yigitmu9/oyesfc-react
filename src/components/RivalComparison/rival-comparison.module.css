@@ -14,6 +14,13 @@
     }
 }
 
+.matchPageGrid {
+    height: auto;
+    justify-content: center;
+    align-items: center;
+
+}
+
 .titleStyle {
     background-color: rgb(36, 36, 36);
     color: lightgray;
@@ -65,6 +72,17 @@
     }
 }
 
+.matchPageTableDiv {
+    width: 100%;
+    height: auto;
+    background-color: #242424;
+    text-align: center;
+    justify-content: center;
+    @media screen and (min-width: 1100px) {
+        margin: 0 10px 0;
+    }
+}
+
 .listItemSpanStyle {
     background-color: #242424;
     color: lightgray;
@@ -92,7 +110,7 @@
     border-radius: 25px;
 }
 
-.line {
+.line1 {
     height: 100%;
     float: left;
     background-color: darkred;

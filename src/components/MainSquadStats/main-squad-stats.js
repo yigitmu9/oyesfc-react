@@ -134,7 +134,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignWinRateStat}%</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainGraphRateStat + '%', borderRadius: mainGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainGraphRateStat + '%', borderRadius: mainGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignGraphRateStat + '%', borderRadius: foreignGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainWinRateStat, foreignWinRateStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -148,7 +148,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignNumberOfMatchesStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainMatchGraphRateStat + '%', borderRadius: mainMatchGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainMatchGraphRateStat + '%', borderRadius: mainMatchGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignMatchGraphRateStat + '%', borderRadius: foreignMatchGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainNumberOfMatchesStat, foreignNumberOfMatchesStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -162,7 +162,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignWonMatchesStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainWonGraphRateStat + '%', borderRadius: mainWonGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainWonGraphRateStat + '%', borderRadius: mainWonGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignWonGraphRateStat + '%', borderRadius: foreignWonGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainWonMatchesStat, foreignWonMatchesStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -176,7 +176,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignDrawMatchesStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainDrawGraphRateStat + '%', borderRadius: mainDrawGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainDrawGraphRateStat + '%', borderRadius: mainDrawGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignDrawGraphRateStat + '%', borderRadius: foreignDrawGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainDrawMatchesStat, foreignDrawMatchesStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -190,7 +190,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignLostMatchesStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainLoseGraphRateStat + '%', borderRadius: mainLoseGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainLoseGraphRateStat + '%', borderRadius: mainLoseGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignLoseGraphRateStat + '%', borderRadius: foreignLoseGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainLostMatchesStat, foreignLostMatchesStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -204,7 +204,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignGoalsScoredStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainScoredGraphRateStat + '%', borderRadius: mainScoredGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainScoredGraphRateStat + '%', borderRadius: mainScoredGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignScoredGraphRateStat + '%', borderRadius: foreignScoredGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainGoalsScoredStat, foreignGoalsScoredStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -218,7 +218,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignGoalsConcededStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainConcededGraphRateStat + '%', borderRadius: mainConcededGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainConcededGraphRateStat + '%', borderRadius: mainConcededGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignConcededGraphRateStat + '%', borderRadius: foreignConcededGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainGoalsConcededStat, foreignGoalsConcededStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -232,7 +232,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignGoalDifferenceStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainDifferenceGraphRateStat + '%', borderRadius: mainDifferenceGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainDifferenceGraphRateStat + '%', borderRadius: mainDifferenceGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignDifferenceGraphRateStat + '%', borderRadius: foreignDifferenceGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainGoalDifferenceStat, foreignGoalDifferenceStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -246,7 +246,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignScoredGoalsPerGameStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainScoredPerMatchGraphRateStat + '%', borderRadius: mainScoredPerMatchGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainScoredPerMatchGraphRateStat + '%', borderRadius: mainScoredPerMatchGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignScoredPerMatchGraphRateStat + '%', borderRadius: foreignScoredPerMatchGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainScoredGoalsPerGameStat, foreignScoredGoalsPerGameStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -260,7 +260,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignConcededGoalsPerGameStat}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainConcededPerMatchGraphRateStat + '%', borderRadius: mainConcededPerMatchGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainConcededPerMatchGraphRateStat + '%', borderRadius: mainConcededPerMatchGraphRateStat === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignConcededPerMatchGraphRateStat + '%', borderRadius: foreignConcededPerMatchGraphRateStat === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainConcededGoalsPerGameStat, foreignConcededGoalsPerGameStat)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -274,7 +274,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignGoalDifferencePerMatch}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: mainGoalDifferencePerMatchGraphRate + '%', borderRadius: mainGoalDifferencePerMatchGraphRate === '100' ? '25px' : '25px 0 0 25px'}}></div>
+                                    <div className={classes.line1} style={{width: mainGoalDifferencePerMatchGraphRate + '%', borderRadius: mainGoalDifferencePerMatchGraphRate === '100' ? '25px' : '25px 0 0 25px'}}></div>
                                     <div className={classes.line2} style={{width: foreignGoalDifferencePerMatchGraphRate + '%', borderRadius: foreignGoalDifferencePerMatchGraphRate === '100' ? '25px' : '0 25px 25px 0', backgroundColor: setBarColor(mainGoalDifferencePerMatch, foreignGoalDifferencePerMatch)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -288,7 +288,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignersTotalGoal}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: '0%', borderRadius: '25px'}}></div>
+                                    <div className={classes.line1} style={{width: '0%', borderRadius: '25px'}}></div>
                                     <div className={classes.line2} style={{width: '100%', borderRadius: '25px', backgroundColor: setBarColor('0', foreignersTotalGoal)}}></div>
                                 </div>
                                 <ListItem style={{
@@ -302,7 +302,7 @@ const MainSquadStats = ({data}) => {
                                     <p className={classes.listItemSpanStyle}>{foreignersGoalPerMatch}</p>
                                 </ListItem>
                                 <div className={classes.graph}>
-                                    <div className={classes.line} style={{width: '0%', borderRadius: '25px'}}></div>
+                                    <div className={classes.line1} style={{width: '0%', borderRadius: '25px'}}></div>
                                     <div className={classes.line2} style={{width: '100%', borderRadius: '25px', backgroundColor: setBarColor('0', foreignersGoalPerMatch)}}></div>
                                 </div>
                             </List>
