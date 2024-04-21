@@ -27,7 +27,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData}) => {
     const previousMatchesData = sortedData.filter(item => {
         const [day, month, year] = item.day.split('-').map(Number);
         const endTime = item.time.split('-')[1];
-        const [hour, minute] = endTime.split(':').map(Number);
+        const [hour, minute] = endTime === '00:00' ? [23, 59] : endTime.split(':').map(Number);
 
         const eventDateTime = new Date(year, month - 1, day, hour, minute);
 
@@ -125,10 +125,9 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData}) => {
                     {isPopupOpen &&
                         <MatchDetails matchDetailsData={matchDetailsData}
                                       onClose={() => setPopupOpen(false)}
-                                      fixture={fixtureType} data={databaseData}
+                                      fixture={fixtureType} data={previousMatchesData}
                         />}
                 </div>
-
                 :
                 <h1 className={classes.title}>No Match found</h1>
             }

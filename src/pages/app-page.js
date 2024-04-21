@@ -17,7 +17,7 @@ const AppPage = () => {
 
     const fetchData = async () => {
         try {
-            const response = await loadWebsite();
+            const response = await loadWebsite('matches');
             setData(response);
             setLoading(false);
         } catch (error) {

@@ -15,12 +15,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const distanceRef = ref(db)
 export const auth = getAuth(app)
 let data;
 
-const getDataFromFirebase = () => {
+const getDataFromFirebase = (path) => {
     return new Promise((resolve) => {
+        const distanceRef = ref(db, path)
         onValue(distanceRef, (snapshot) => {
             data = snapshot.val();
             resolve(data);
@@ -30,9 +30,9 @@ const getDataFromFirebase = () => {
 
 export const dataBase = db
 
-export async function loadWebsite() {
+export async function loadWebsite(path) {
     try {
-        return await getDataFromFirebase();
+        return await getDataFromFirebase(path);
     } catch (error) {
         console.error("Failed to get the Firebase data.", error);
     }

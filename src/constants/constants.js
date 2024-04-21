@@ -116,14 +116,34 @@ export const Facilities = [
         googleUrl: 'https://maps.app.goo.gl/p29dyuG2KaPyoXhCA',
         appleUrl: 'https://maps.apple.com/?address=H%C3%BCdavendigar%20Park%C4%B1%20%C4%B0%C3%A7i%20Yolu,%2016265%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=9582832919972759011&ll=40.201712,28.996809&lsp=9902&q=Hal%C4%B1%20Saha'
     },
+    {
+        name: 'Çalı',
+        googleUrl: 'https://maps.app.goo.gl/ctHq1UYPFSC6jsK77',
+        appleUrl: 'https://maps.apple.com/?address=Kanal%20Cd.%209,%2016275%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=17566516412372877532&ll=40.178750,28.921795&lsp=9902&q=Egemen%20Spor%20Tesisleri'
+    },
+    {
+        name: 'Görükle',
+        googleUrl: 'https://maps.app.goo.gl/S9tu8V8AkFG9MDnK9',
+        appleUrl: 'https://maps.apple.com/?address=Tercan%20Sk.%202A,%2016240%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=401403905846944860&ll=40.218530,28.845183&lsp=9902&q=G%C3%B6r%C3%BCkle%20Oru%C3%A7%20Arena'
+    },
+    {
+        name: 'Hürriyet',
+        googleUrl: 'https://maps.app.goo.gl/hEukhHZesCDGgm2d9',
+        appleUrl: 'https://maps.apple.com/?address=Necati%20Sezen%20Sk.%205,%2059030%20S%C3%BCleymanpa%C5%9Fa%20Tekirda%C4%9F,%20T%C3%BCrkiye&auid=12615159708468219331&ll=40.991107,27.564005&lsp=9902&q=H%C3%BCrriyet%20Hal%C4%B1%20Saha%20%26%20Cafe'
+    },
+    {
+        name: 'Ziraat',
+        googleUrl: 'https://maps.app.goo.gl/TTJUth2phjaq9XA88',
+        appleUrl: 'https://maps.apple.com/?address=1.%20%C4%B0hsaniye%20Cd.%207,%2016160%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=7141100465530524598&ll=40.227952,28.990638&lsp=9902&q=Yeni%20Karaman%20Spor%20Tesisleri'
+    },
 ]
 
 export const Jerseys = [
-    '10th Year Jersey',
-    'Red Jersey',
-    'Wavy Jersey',
     'iOS Jersey',
     'Chelsea Jersey',
+    'Wavy Jersey',
+    'Red Jersey',
+    '10th Year Jersey',
 ]
 
 export const WeatherSky = [

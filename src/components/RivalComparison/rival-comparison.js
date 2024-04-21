@@ -122,14 +122,14 @@ const RivalComparison = ({data, selectedRival}) => {
                                 }}>
                                     <div className={classes.subtitle} style={{backgroundColor: bgColor}}>
                                     <div className={classes.colorTitleDiv} style={{backgroundColor: bgColor}}>
-                                            <div className={classes.colorTitle} style={{backgroundColor: bgColor}}></div>
+                                            <div className={classes.colorTitle}></div>
                                         </div>
                                         <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{TeamNames.oYesFc}</p>
                                     </div>
                                     <div className={classes.subtitle} style={{backgroundColor: bgColor}}>
                                         <p className={classes.listItemSpanStyle2} style={{backgroundColor: bgColor}}>{rival === 'Select Rival' || rival === null ? 'Rival' : rival}</p>
                                         <div className={classes.colorTitleDiv} style={{backgroundColor: bgColor}}>
-                                            <div className={classes.colorTitle2} style={{backgroundColor: bgColor}}></div>
+                                            <div className={classes.colorTitle2}></div>
                                         </div>
                                     </div>
                                 </ListItem>

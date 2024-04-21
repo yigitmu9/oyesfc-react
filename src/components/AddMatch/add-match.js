@@ -146,7 +146,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         setDayTime();
         try {
             setLoading(true)
-            await set(ref(dataBase, formData.day), formData);
+            await set(ref(dataBase, `matches/${formData.day}`), formData);
             setFormData(initialFormData);
             setNewSquadMember('');
             document.body.style.overflow = 'visible';
