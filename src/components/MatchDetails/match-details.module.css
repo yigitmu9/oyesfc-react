@@ -451,3 +451,12 @@ input[type="radio"] {
     margin-bottom: 5px;
     margin-top: 5px;
 }
+
+.submitButtonDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    margin: 20px;
+}

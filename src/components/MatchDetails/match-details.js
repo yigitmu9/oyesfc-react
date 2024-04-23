@@ -25,6 +25,7 @@ import AcUnitIcon from '@mui/icons-material/AcUnit';
 import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 import NightlightRoundIcon from '@mui/icons-material/NightlightRound';
 import {AddToCalendarButton} from "add-to-calendar-button-react";
+import EditIcon from '@mui/icons-material/Edit';
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -399,7 +400,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data}) => {
                             }, '&.Mui-selected': {
                                 color: 'lightgray'
                             }
-                        }} label="urls" {...a11yProps(4)} />
+                        }} label="links" {...a11yProps(4)} />
                         <Tab sx={{
                             '&.MuiTab-root': {
                                 color: 'gray'
@@ -621,12 +622,27 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data}) => {
                                     }
                                 </div>
                             </div>
+                            <div className={classes.generalInfoDiv}>
+                                <EditIcon fontSize={"large"}
+                                                className={classes.generalInfoIcon}>
+                                </EditIcon>
+                                <span className={classes.generalInfoSpan}>
+                                    Edit Match
+                                </span>
+                            </div>
+                            <div className={classes.generalInfoDiv}>
+                                <div className={classes.mapsButtonsWrapper}>
+                                    <button className={classes.mapsButtons}>Edit
+                                    </button>
+                                </div>
+                            </div>
                         </section>
                     </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={5}>
                     {
-                        Object.entries(matchDetailsData.oyesfc.squad).map((x, y) => (
+                        Object.entries(matchDetailsData.oyesfc.squad).filter(a => Object.values(TeamMembers)
+                            ?.some(item => item?.name === a[0]))?.map((x, y) => (
                             <section key={y} className={classes.starSection}>
                                 <span className={classes.starSpan}>{x[0]}</span>
                                 <div className={classes.starDiv}>
@@ -655,10 +671,24 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data}) => {
                                         );
                                     })}
                                 </div>
-                                <span className={classes.starDetailSpan}>Your rating to {x[0] + ' is ' + oYesFCStarFormData[x[0]] + '.'}</span>
+                                {
+                                    oYesFCStarFormData[x[0]] ?
+                                        <span className={classes.starDetailSpan}>
+                                            Your rating to {x[0] + ' is ' + oYesFCStarFormData[x[0]] + '.'}
+                                        </span>
+                                        :
+                                        <span className={classes.starDetailSpan}>
+                                            Rate {x[0]}.
+                                        </span>
+                                }
+
                             </section>
                         ))
                     }
+                    <div className={classes.submitButtonDiv}>
+                        <button className={classes.mapsButtons}>Submit</button>
+                    </div>
+
                 </CustomTabPanel>
                 {
                     isMobile &&

@@ -1,25 +1,18 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classes from "./sign-in.module.css";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AddMatchComponent from "../AddMatch/add-match";
 import Message from "../Message/message";
 import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/auth"
 import {auth} from "../../firebase"
-import AddIcon from "@mui/icons-material/Add";
 import LoadingPage from "../../pages/loading-page";
-import SelectEditMatchModal from "../SelectEditMatchModal/select-edit-match-modal";
-import EditIcon from '@mui/icons-material/Edit';
 
-const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData}) => {
+const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData, credentials}) => {
 
     const popupRef = useRef(null);
-    const [isPopupOpen, setPopupOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
-    const [isEditPopupOpen, setEditPopupOpen] = useState(false);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [credentials, setCredentials] = useState(null)
-    const [signedIn, setSignedIn] = useState(false)
+    const [signedIn, setSignedIn] = useState(credentials?.signedIn)
     const [errorMessage, setErrorMessage] = useState(false)
     const [messageData2, setMessageData] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -61,21 +54,10 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData}) =
         onClose();
     }
 
-    const openAddMatchPopup = () => {
-        document.body.style.overflow = 'hidden';
-        setPopupOpen(true);
-    };
-
-    const openEditMatchPopup = () => {
-        document.body.style.overflow = 'hidden';
-        setEditPopupOpen(true);
-    };
-
     const checkAuthState = async () => {
         await onAuthStateChanged(auth, user => {
             if (user && !signedIn) {
                 setSignedIn(true)
-                setCredentials(user)
             } else if (!user && signedIn) {
                 setSignedIn(false)
             }
@@ -87,7 +69,6 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData}) =
             await onAuthStateChanged(auth, user => {
                 if (user && !signedIn) {
                     setSignedIn(true)
-                    setCredentials(user)
                 } else if (!user && signedIn) {
                     setSignedIn(false)
                 }
@@ -102,7 +83,6 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData}) =
             .then(() => {
                 if (signedIn) {
                     setSignedIn(false)
-                    setCredentials(null)
                 }
             })
             .catch((error) => {
@@ -135,7 +115,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData}) =
     if (!signedIn) {
         return (
             <div className={classes.overlay}>
-                {!isPopupOpen && !isMessagePopupOpen && <div className={classes.generalStyle} ref={popupRef}>
+                {<div className={classes.generalStyle} ref={popupRef}>
                     <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
                         <div className={classes.infoAlign}>
                             <div className={classes.iconDivStyle}>
@@ -182,26 +162,14 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData}) =
 
     return (
         <div className={classes.overlay}>
-            {!isPopupOpen && !isMessagePopupOpen && !isEditPopupOpen && <div className={classes.generalStyle} ref={popupRef}>
+            {!isMessagePopupOpen && <div className={classes.generalStyle} ref={popupRef}>
                 <div className={classes.signedInStyle}>
                     <div className={classes.iconDivStyle}>
                         <AccountCircleIcon sx={{width: "200px", height: "200px"}}
                                            className={classes.iconStyle}></AccountCircleIcon>
                     </div>
                     <h1 className={classes.titleStyle}>Welcome</h1>
-                    <h1 className={classes.usernameStyle}>{credentials?.email}</h1>
-                    <div className={classes.addMatchButtonDiv}>
-                        <div className={classes.addMatchDiv} onClick={openAddMatchPopup}>
-                            <AddIcon className={classes.addIconStyle}></AddIcon>
-                            <span className={classes.addMatchSpan}>Add Match</span>
-                        </div>
-                    </div>
-                    <div className={classes.addMatchButtonDiv}>
-                        <div className={classes.addMatchDiv} onClick={openEditMatchPopup}>
-                            <EditIcon className={classes.addIconStyle}></EditIcon>
-                            <span className={classes.addMatchSpan}>Edit Match</span>
-                        </div>
-                    </div>
+                    <h1 className={classes.usernameStyle}>{credentials?.userName}</h1>
                     <div className={classes.buttonDivStyle}>
                         <button className={classes.buttonStyle} style={{marginRight: "1rem"}} onClick={logOut}>Log
                             Out
@@ -210,12 +178,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData}) =
                     </div>
                 </div>
             </div>}
-            {isPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
-                                               onClose={() => setPopupOpen(false)}
-                                               messageData={(messageData) => handleXClick(messageData)}
-                                               databaseData={databaseData}/>}
             {isMessagePopupOpen && <Message messageData={messageData2} onClose={() => setMessagePopupOpen(false)} reloadData={handleReload}/>}
-            {isEditPopupOpen && <SelectEditMatchModal databaseData={databaseData} onClose={() => setEditPopupOpen(false)} reloadData={handleReload}/>}
         </div>
     );
 };
