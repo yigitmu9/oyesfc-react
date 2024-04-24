@@ -41,6 +41,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData, cr
         await signInWithEmailAndPassword(auth, email, password)
             .then(() => {
                 checkAuth(true)
+                setSignedIn(true)
             })
             .catch((error) => {
                 console.log(error)
@@ -60,6 +61,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData, cr
             .then(() => {
                 if (signedIn) {
                     checkAuth(true)
+                    setSignedIn(false)
                 }
             })
             .catch((error) => {

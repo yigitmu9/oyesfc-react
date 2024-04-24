@@ -18,6 +18,8 @@ import {auth, loadWebsite} from "../../firebase";
 import SelectEditMatchModal from "../SelectEditMatchModal/select-edit-match-modal";
 import {Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Typography} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import {TeamMembers} from "../../constants/constants";
+import CardMedia from "@mui/material/CardMedia";
 
 function Navbar({databaseData, reloadData}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -148,7 +150,7 @@ function Navbar({databaseData, reloadData}) {
     const drawer = (
         <Box onClick={handleDrawerToggle}>
             <div className={classes.closeIconDiv}>
-                <CloseIcon sx={{width: 40, height: 40, color: "black", cursor: "pointer", bgcolor: "rgb(0, 0, 0, 0)", margin: '8px'}}></CloseIcon>
+                <CloseIcon sx={{width: 40, height: 40, color: "black", cursor: "pointer", bgcolor: "rgb(0, 0, 0, 0)", margin: '8px', marginRight: '16px'}}></CloseIcon>
             </div>
             <Divider sx={{ bgcolor: 'black', marginLeft: '20px', marginRight: '20px' }} />
             <div className={classes.drawerRoutesDiv}>
@@ -179,22 +181,35 @@ function Navbar({databaseData, reloadData}) {
                         null
                 }
                 {
-                    credentials?.signedIn ?
+                    !credentials?.signedIn ?
                         <>
-                            <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
-                            <span className={classes.drawerRoutesSpan} onClick={openSignInPopup}>
-                                Profile
-                            </span>
-                            <span className={classes.drawerRoutesSpan}>
-                                Log out
-                            </span>
+
+                            <div style={{display: 'flex', bottom: '3%', position: 'absolute', padding: '10px'}}>
+                                <div>
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ height: 50, width: 50, borderRadius: '100%'}}
+                                        image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
+                                    />
+                                </div>
+                                <div style={{display: 'flex', flexDirection: 'column', marginLeft: '5px'}}>
+                                    <span style={{fontSize: '20px'}} onClick={openSignInPopup}>
+                                        {credentials?.userName}
+                                    </span>
+                                    <span style={{fontSize: '14px'}} onClick={openSignInPopup}>
+                                        {credentials?.email}
+                                    </span>
+                                </div>
+                            </div>
                         </>
                         :
                         <>
-                            <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
-                            <span className={classes.drawerRoutesSpan} onClick={openSignInPopup}>
-                                Sign In
-                            </span>
+                            <div style={{display: 'flex', bottom: '3%', position: 'absolute', padding: '10px', alignContent: 'center'}}>
+                                <AccountCircleIcon sx={{height: 50, width: 50}}></AccountCircleIcon>
+                                <span style={{fontSize: '20px'}} onClick={openSignInPopup}>
+                                    Sign In
+                                </span>
+                            </div>
                         </>
                 }
             </div>
