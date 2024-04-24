@@ -6,7 +6,7 @@ import {signInWithEmailAndPassword, onAuthStateChanged, signOut} from "firebase/
 import {auth} from "../../firebase"
 import LoadingPage from "../../pages/loading-page";
 
-const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData, credentials}) => {
+const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData, credentials, checkAuth}) => {
 
     const popupRef = useRef(null);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
@@ -40,7 +40,7 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData, cr
         setLoading(true);
         await signInWithEmailAndPassword(auth, email, password)
             .then(() => {
-                checkAuthState()
+                checkAuth(true)
             })
             .catch((error) => {
                 console.log(error)
@@ -54,35 +54,12 @@ const SignIn = ({onClose, openMessage, messageData, databaseData, reloadData, cr
         onClose();
     }
 
-    const checkAuthState = async () => {
-        await onAuthStateChanged(auth, user => {
-            if (user && !signedIn) {
-                setSignedIn(true)
-            } else if (!user && signedIn) {
-                setSignedIn(false)
-            }
-        })
-    }
-
-    useEffect(() => {
-        const checkAuthState = async () => {
-            await onAuthStateChanged(auth, user => {
-                if (user && !signedIn) {
-                    setSignedIn(true)
-                } else if (!user && signedIn) {
-                    setSignedIn(false)
-                }
-            })
-        }
-        checkAuthState().then(r => r)
-    });
-
     const logOut = async () => {
         setLoading(true)
         await signOut(auth)
             .then(() => {
                 if (signedIn) {
-                    setSignedIn(false)
+                    checkAuth(true)
                 }
             })
             .catch((error) => {

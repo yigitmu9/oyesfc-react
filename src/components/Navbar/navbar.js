@@ -16,6 +16,8 @@ import AddMatchComponent from "../AddMatch/add-match";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth, loadWebsite} from "../../firebase";
 import SelectEditMatchModal from "../SelectEditMatchModal/select-edit-match-modal";
+import {Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Typography} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 function Navbar({databaseData, reloadData}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -26,7 +28,6 @@ function Navbar({databaseData, reloadData}) {
     const [isEditPopupOpen, setEditPopupOpen] = useState(false);
     const [messageData, setMessageData] = useState(null);
     const [credentials, setCredentials] = useState(null)
-    const [signedIn, setSignedIn] = useState(false)
     const navigate = useNavigate()
     const location = useLocation();
     const matchesPath = '/oyesfc-react/matches';
@@ -107,25 +108,28 @@ function Navbar({databaseData, reloadData}) {
         reloadData(data);
     }
 
+    const checkAuth = (data) => {
+        if (data) checkAuthState().then(r => r);
+    }
+
     const checkAuthState = async () => {
         await onAuthStateChanged(auth, async user => {
-            if (user && !signedIn) {
-                setSignedIn(true)
+            if (user && !credentials?.signedIn) {
                 try {
                     const response = await loadWebsite('firebaseUID');
                     const userName = Object.entries(response?.users)?.find(x => x[1] === user?.uid)[0];
                     const isCaptain = Object.entries(response?.captain)?.some(x => x[1] === user?.uid);
                     const credentialsData = {
-                        signedIn: signedIn,
+                        signedIn: true,
                         userName: userName,
-                        isCaptain: isCaptain
+                        isCaptain: isCaptain,
+                        email: user?.email
                     }
                     setCredentials(credentialsData)
                 } catch (error) {
                     console.log(error)
                 }
-            } else if (!user && signedIn) {
-                setSignedIn(false)
+            } else if (!user && credentials?.signedIn) {
                 setCredentials(null)
             }
         })
@@ -134,6 +138,70 @@ function Navbar({databaseData, reloadData}) {
     useEffect(() => {
         checkAuthState().then(r => r)
     });
+
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+
+    const handleDrawerToggle = () => {
+        setMobileOpen((prevState) => !prevState);
+    };
+
+    const drawer = (
+        <Box onClick={handleDrawerToggle}>
+            <div className={classes.closeIconDiv}>
+                <CloseIcon sx={{width: 40, height: 40, color: "black", cursor: "pointer", bgcolor: "rgb(0, 0, 0, 0)", margin: '8px'}}></CloseIcon>
+            </div>
+            <Divider sx={{ bgcolor: 'black', marginLeft: '20px', marginRight: '20px' }} />
+            <div className={classes.drawerRoutesDiv}>
+                <span className={classes.drawerRoutesSpan}>
+                    Main Page
+                </span>
+                <span className={classes.drawerRoutesSpan}>
+                    Matches
+                </span>
+                <span className={classes.drawerRoutesSpan}>
+                    Individual Stats
+                </span>
+                <span className={classes.drawerRoutesSpan}>
+                    Team Stats
+                </span>
+                {
+                    credentials?.isCaptain ?
+                        <>
+                            <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
+                            <span className={classes.drawerRoutesSpan}>
+                                Add Match
+                            </span>
+                            <span className={classes.drawerRoutesSpan}>
+                                Edit Match
+                            </span>
+                        </>
+                        :
+                        null
+                }
+                {
+                    credentials?.signedIn ?
+                        <>
+                            <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
+                            <span className={classes.drawerRoutesSpan} onClick={openSignInPopup}>
+                                Profile
+                            </span>
+                            <span className={classes.drawerRoutesSpan}>
+                                Log out
+                            </span>
+                        </>
+                        :
+                        <>
+                            <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
+                            <span className={classes.drawerRoutesSpan} onClick={openSignInPopup}>
+                                Sign In
+                            </span>
+                        </>
+                }
+            </div>
+        </Box>
+    );
+
+    const container = window !== undefined ? () => window.document.body : undefined;
 
     return (
         <AppBar position="sticky" sx={{bgcolor: 'darkred'}}>
@@ -206,7 +274,7 @@ function Navbar({databaseData, reloadData}) {
                                     style={{color: 'black'}}
                                     onClick={openSignInPopup}
                                 >
-                                    {signedIn ? 'Profile' : 'Sign In'}
+                                    {credentials?.signedIn ? 'Profile' : 'Sign In'}
                                 </span>
                                 {
                                     credentials?.isCaptain ?
@@ -236,7 +304,7 @@ function Navbar({databaseData, reloadData}) {
                     <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}, bgcolor: 'darkred'}}>
                         <MenuIcon
                             sx={{width: 40, height: 40, color: "black", cursor: "pointer", bgcolor: "rgb(0, 0, 0, 0)"}}
-                            onClick={handleOpenNavMenu}>
+                            onClick={handleDrawerToggle}>
                         </MenuIcon>
                         <Menu
                             id="menu-appbar"
@@ -288,18 +356,58 @@ function Navbar({databaseData, reloadData}) {
                                     className={classes.mobileMenuItems}
                                     onClick={openSignInPopup}
                                 >
-                                    Profile
+                                    {credentials?.signedIn ? 'Profile' : 'Sign In'}
                                 </span>
+                                {
+                                    credentials?.isCaptain ?
+                                        <>
+                                            <span
+                                                className={classes.mobileMenuItems}
+                                                style={{color: 'black'}}
+                                                onClick={openAddMatchPopup}
+                                            >
+                                                Add Match
+                                            </span>
+                                            <span
+                                                className={classes.mobileMenuItems}
+                                                style={{color: 'black'}}
+                                                onClick={openEditMatchPopup}
+                                            >
+                                                Edit Match
+                                            </span>
+                                        </>
+
+                                        :
+                                        null
+                                }
                             </div>
                         </Menu>
                     </Box>
                 </Toolbar>
+                <nav>
+                    <Drawer
+                        container={container}
+                        variant="temporary"
+                        anchor="right"
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                        sx={{
+                            display: {xs: 'block', sm: 'none'},
+                            '& .MuiDrawer-paper': {boxSizing: 'border-box', width: '100%', background: 'darkred'},
+                        }}
+                    >
+                        {drawer}
+                    </Drawer>
+                </nav>
             </Container>
             {isSignInPopupOpen && <SignIn openMessage={() => setMessagePopupOpen(true)}
                                           onClose={() => setSignInPopupOpen(false)}
                                           messageData={(messageData) => handleXClick(messageData)}
                                           databaseData={databaseData} reloadData={handleReload}
-                                          credentials={credentials}/>}
+                                          credentials={credentials} checkAuth={checkAuth}/>}
             {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)}/>}
             {isAddMatchPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
                                                onClose={() => setAddMatchPopupOpen(false)}
