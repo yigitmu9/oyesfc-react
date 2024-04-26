@@ -2,19 +2,16 @@ import classes from "./message.module.css";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import React from "react";
-import {useNavigate} from "react-router-dom";
 
 const Message = ({onClose, messageData, reloadData}) => {
 
     document.body.style.overflow = 'hidden';
-    const navigate = useNavigate()
 
     const handleClose = async () => {
         document.body.style.overflow = 'visible';
         onClose();
         if (messageData.isValid && (messageData.message === 'Match successfully added.' || messageData.message === 'Match successfully updated.')) {
             reloadData(true)
-            navigate('/oyesfc-react/');
         }
     }
 

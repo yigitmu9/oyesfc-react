@@ -175,3 +175,12 @@
     background: #242424;
     text-align: center;
 }
+
+.topTitle {
+    color: lightgray;
+    text-align: center;
+    margin-bottom: 10px;
+    @media (max-width: 767px) {
+        font-size: 25px;
+    }
+}

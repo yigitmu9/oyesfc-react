@@ -104,6 +104,7 @@ const SliderCard = () => {
     return (
         <>
             <div className={classes.grid} style={{minHeight: windowHeight}}>
+                <h1 className={classes.topTitle}>{cards[currentCard].title}</h1>
                 <div className={classes.insideGrid}>
                     <Card sx={styles.card} className={classes.cardStyle}>
                         <CardMedia
@@ -112,7 +113,6 @@ const SliderCard = () => {
                             image={require(`../../images/${cards[currentCard].logo}`)}
                         />
                         <CardContent sx={styles.content}>
-                            <h1 className={classes.title}>{cards[currentCard].title}</h1>
                             <span className={classes.content}>{cards[currentCard].content}</span>
                         </CardContent>
                     </Card>

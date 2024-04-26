@@ -97,7 +97,7 @@ const MainSquadStats = ({data}) => {
         <div className={classes.grid}>
             <Card sx={{borderRadius: "25px", width: "100%", height: "auto"}}
                   style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 className={classes.titleStyle}>Main Squad Statistics</h1>
+                <h1 className={classes.titleStyle}>Main Squad</h1>
                 <CardContent style={{backgroundColor: "#242424", width: "100%"}}>
                     <div className={classes.cardInsideDiv}>
                         <div className={classes.tableDiv}>

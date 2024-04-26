@@ -14,10 +14,20 @@ const LoadingPage = () => {
                 color: 'lightgray'
             }}
         >
-            <img style={{ width: "200px", height: "200px", background: "transparent", marginBottom: "20px"}} src={OYesFCLogo} alt={'1'}/>
-            <ScaleLoader color="red" speedMultiplier={0.7} />
+            {Loading()}
         </div>
     );
 };
 
 export default LoadingPage;
+
+export function Loading() {
+    return (
+        <>
+            <img style={{width: "200px", height: "200px", background: "transparent", marginBottom: "20px"}}
+                 src={OYesFCLogo}
+                 alt={'1'}/>
+            <ScaleLoader color="red" speedMultiplier={0.7}/>
+        </>
+    )
+}

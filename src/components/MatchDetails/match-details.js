@@ -26,6 +26,8 @@ import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 import NightlightRoundIcon from '@mui/icons-material/NightlightRound';
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import EditIcon from '@mui/icons-material/Edit';
+import AddMatchComponent from "../AddMatch/add-match";
+import Message from "../Message/message";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -60,8 +62,9 @@ function a11yProps(index) {
     };
 }
 
-export const MatchDetails = ({onClose, matchDetailsData, fixture, data}) => {
+export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadData}) => {
 
+    document.body.style.overflow = 'hidden';
     const initialOYesFCStarFormData = {};
     const isMobile = window.innerWidth <= 768;
     const buttonBgColor = '#323232'
@@ -75,6 +78,9 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data}) => {
     const lastFiveGames = Object.values(data).filter((x, y) => x && (y === 0 || y === 1 || y === 2 || y === 3 || y === 4));
     const [oYesFCStarFormData, setOYesFCStarFormData] = useState(initialOYesFCStarFormData);
     const totalStars = 10;
+    const [messageData, setMessageData] = useState(null);
+    const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
+    const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     let jerseyImage;
     let jerseyName;
     let oyesfcSquad;
@@ -303,9 +309,22 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data}) => {
         }));
     };
 
+    const handleMessageClick = (messageData) => {
+        setMessageData(messageData);
+    };
+
+    const handleReload = (data) => {
+        reloadData(data)
+        handleClose()
+    }
+
+    const editMatch = () => {
+        setAddMatchPopupOpen(true)
+    }
+
     return (
         <div className={classes.overlay}>
-            <div className={classes.popupContainer} ref={popupRef}>
+            { !isAddMatchPopupOpen && !isMessagePopupOpen && <div className={classes.popupContainer} ref={popupRef}>
                 <section className={classes.scoreboard} style={{background: buttonBgColor}}>
                     <div className={classes.scoreboardInsideDiv}>
                         <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
@@ -632,7 +651,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data}) => {
                             </div>
                             <div className={classes.generalInfoDiv}>
                                 <div className={classes.mapsButtonsWrapper}>
-                                    <button className={classes.mapsButtons}>Edit
+                                    <button className={classes.mapsButtons} onClick={editMatch}>Edit
                                     </button>
                                 </div>
                             </div>
@@ -696,8 +715,12 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data}) => {
                         <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
                     </div>
                 }
-            </div>
-
+            </div>}
+            {isAddMatchPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
+                                                       onClose={() => setAddMatchPopupOpen(false)}
+                                                       messageData={(messageData) => handleMessageClick(messageData)}
+                                                       databaseData={data} selectedMatchData={matchDetailsData}/>}
+            {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} reloadData={handleReload}/>}
         </div>
     );
 };

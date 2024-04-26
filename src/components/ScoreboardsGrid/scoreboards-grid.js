@@ -2,12 +2,11 @@ import classes from "./scoreboards-grid.module.css";
 import Scoreboard from "../Scoreboard/scoreboard";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails/match-details";
-import FilterButtons from "../FilterButtons/filter-buttons";
 
-const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData}) => {
+const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData}) => {
 
     const today = new Date();
-    const [matchDetailsFilteredData, setMatchDetailsFilteredData] = useState(Object.values(databaseData));
+    const matchDetailsFilteredData = Object.values(databaseData);
     const [fixtureType, setFixtureType] = useState(null);
     const sortedData = matchDetailsFilteredData?.slice().sort((a, b) => {
         if (a.day && b.day) {
@@ -68,13 +67,12 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData}) => {
         setMatchDetailsData(matchDetailsData);
     };
 
-    const setAdvancedFilters = (filteredData) => {
-        setMatchDetailsFilteredData(filteredData);
-    };
+    const handleReload = (data) => {
+        reloadData(data)
+    }
 
     return (
         <>
-            <FilterButtons databaseData={databaseData} setAdvancedFilters={setAdvancedFilters}></FilterButtons>
             {matchDetailsFilteredData.length > 0 ?
                 <div style={{minHeight: windowHeight}}>
                     {liveMatchData.length > 0 ?
@@ -109,7 +107,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData}) => {
                         null}
                     {previousMatchesData.length > 0 ?
                         <>
-                            <h1 className={classes.matchTitle}>Previous Matches</h1>
+                        {<h1 className={classes.matchTitle}>Previous Matches</h1>}
                             <div className={classes.grid}>
                                 {previousMatchesData?.map((x, y) => (
                                     <Scoreboard
@@ -125,7 +123,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData}) => {
                     {isPopupOpen &&
                         <MatchDetails matchDetailsData={matchDetailsData}
                                       onClose={() => setPopupOpen(false)}
-                                      fixture={fixtureType} data={previousMatchesData}
+                                      fixture={fixtureType} data={previousMatchesData} reloadData={handleReload}
                         />}
                 </div>
                 :

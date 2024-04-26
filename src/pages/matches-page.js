@@ -2,11 +2,16 @@ import React from 'react';
 import ScoreboardsGrid from "../components/ScoreboardsGrid/scoreboards-grid";
 import Footer from "../components/Footer/footer";
 
-const MatchesPage = ({databaseData}) => {
+const MatchesPage = ({databaseData, reloadData}) => {
+
+    const handleReload = (data) => {
+        reloadData(data)
+    }
+
     return (
         <div>
             <main>
-                <ScoreboardsGrid databaseData={databaseData}/>
+                <ScoreboardsGrid databaseData={databaseData} reloadData={handleReload}/>
                 <Footer></Footer>
             </main>
         </div>

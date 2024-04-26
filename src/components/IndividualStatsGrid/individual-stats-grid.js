@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PlayerCardsGrid from "../PlayerCardsGrid/player-cards-grid";
 import ChartsGrid from "../ChartsGrid/charts-grid.js";
 import FacilitiesIndividualStats from "../FacilitiesIndividualStats/facilities-individual-stats";
 import WeatherIndividualStats from "../WeatherIndividualStats/weather-individual-stats";
 import RakipbulPlayerStats from "../RakipbulPlayerStats/rakipbul-player-stats";
-import FilterButtons from "../FilterButtons/filter-buttons";
 import classes from "./individual-stats-grid.module.css";
 import {Divider} from "@mui/material";
 import RivalsIndividualStats from "../RivalsIndividualStats/rivals-individual-stats";
@@ -12,19 +11,16 @@ import teamStatsClasses from "../TeamStatsGrid/team-stats-grid.module.css"
 
 const IndividualStatsGrid = ({databaseData}) => {
 
-    const [matchDetailsFilteredData, setMatchDetailsFilteredData] = useState(Object.values(databaseData));
-
-    const setAdvancedFilters = (filteredData) => {
-        setMatchDetailsFilteredData(filteredData);
-    };
+    const matchDetailsFilteredData= Object.values(databaseData);
 
     return (
         <div className={classes.grid}>
             <div className={classes.generalStyle}>
-                <FilterButtons databaseData={databaseData} setAdvancedFilters={setAdvancedFilters}></FilterButtons>
+                <h1 className={classes.firstTitle}>Players</h1>
                 <div className={classes.divStyle}>
                     <PlayerCardsGrid matchData={matchDetailsFilteredData}/>
                 </div>
+                <h1 className={classes.secondTitle}>Individual Statistics</h1>
                 <div className={classes.divStyle}>
                     <ChartsGrid matchData={matchDetailsFilteredData} databaseData={databaseData}/>
                 </div>

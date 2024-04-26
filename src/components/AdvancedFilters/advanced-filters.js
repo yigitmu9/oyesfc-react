@@ -3,6 +3,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {TeamMembers} from "../../constants/constants";
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import matchDetailsClasses from '../MatchDetails/match-details.module.css'
 
 const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters, applyFilters}) => {
 
@@ -243,7 +244,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
     };
 
     return (
-        <div className={classes.overlay}>
+        <div className={matchDetailsClasses.overlay}>
             <div className={classes.popupContainer} style={{display: "block", background: "#1f1f1f"}} ref={popupRef}>
                 <div style={{background: "#1f1f1f", display: "block"}}>
                     <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
@@ -406,13 +407,15 @@ const AdvancedFilters = ({onClose, databaseData, setFilters, sendAppliedFilters,
                             : null
                         }
                         <div className={classes.buttonDivStyle}>
-                            <button className={classes.buttonStyle} style={{marginRight: "1rem"}} type="submit">Apply
+                            <button className={matchDetailsClasses.mapsButtons} style={{marginRight: "1rem"}}
+                                    type="submit">Apply
                             </button>
-                            <FilterListOffIcon className={classes.iconStyle}
-                                               style={{height: "40px", width: "40px", marginRight: "1rem"}}
-                                               onClick={resetFilters}>
-                            </FilterListOffIcon>
-                            <button className={classes.buttonStyle} onClick={handleClose}>Cancel</button>
+                            <button className={matchDetailsClasses.mapsButtons} style={{marginRight: "1rem"}}
+                                    onClick={resetFilters}>
+                                <FilterListOffIcon style={{height: "20px", width: "20px"}}>
+                                </FilterListOffIcon>
+                            </button>
+                            <button className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Cancel</button>
                         </div>
                     </form>
                 </div>

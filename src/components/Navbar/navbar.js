@@ -15,21 +15,22 @@ import Message from "../Message/message";
 import AddMatchComponent from "../AddMatch/add-match";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth, loadWebsite} from "../../firebase";
-import SelectEditMatchModal from "../SelectEditMatchModal/select-edit-match-modal";
-import {Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Typography} from "@mui/material";
+import {Divider, Drawer} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import {TeamMembers} from "../../constants/constants";
 import CardMedia from "@mui/material/CardMedia";
+import AdvancedFilters from "../AdvancedFilters/advanced-filters";
 
-function Navbar({databaseData, reloadData}) {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
+function Navbar({databaseData, reloadData, setAdvancedFilters}) {
     const [desktopMenu, setDesktopMenu] = React.useState(null);
     const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
-    const [isEditPopupOpen, setEditPopupOpen] = useState(false);
     const [messageData, setMessageData] = useState(null);
-    const [credentials, setCredentials] = useState(null)
+    const [credentials, setCredentials] = useState(null);
+    const [countFilter, setCountFilter] = useState(0);
+    const [advancedFiltersModal, setAdvancedFiltersModal] = useState(false);
+    const [applyFilters, setApplyFilters] = useState(null);
     const navigate = useNavigate()
     const location = useLocation();
     const matchesPath = '/oyesfc-react/matches';
@@ -37,16 +38,27 @@ function Navbar({databaseData, reloadData}) {
     const teamPath = '/oyesfc-react/team-stats';
     const mainPath = '/oyesfc-react/';
 
-    const handleOpenNavMenu = (event) => {
-        if (!anchorElNav) {
-            setAnchorElNav(event.currentTarget);
-        } else {
-            setAnchorElNav(null);
-        }
+    const openFiltersModal = () => {
+        setDesktopMenu(null)
+        document.body.style.overflow = 'hidden';
+        setAdvancedFiltersModal(true)
     };
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
+    const setFilters = (filteredData) => {
+        setAdvancedFilters(filteredData);
+    };
+
+    const sendAppliedFilters = (appliedFilters) => {
+        let count = 0;
+        if (appliedFilters?.appliedFacilities?.length > 0) count = count + 1
+        if (appliedFilters?.appliedMonths?.length > 0) count = count + 1
+        if (appliedFilters?.appliedPlayers?.length > 0) count = count + 1
+        if (appliedFilters?.appliedRivals?.length > 0) count = count + 1
+        if (appliedFilters?.appliedYears?.length > 0) count = count + 1
+        if (appliedFilters?.appliedType === 'rakipbul' || appliedFilters?.appliedType === 'normal') count = count + 1
+        if (appliedFilters?.appliedSquad === 'Main Squad' || appliedFilters?.appliedSquad === 'Squad Including Foreigners') count = count + 1
+        setCountFilter(count)
+        setApplyFilters(appliedFilters)
     };
 
     const handleOpenDesktopMenu = (event) => {
@@ -63,22 +75,18 @@ function Navbar({databaseData, reloadData}) {
 
     const navigateMatches = () => {
         navigate(matchesPath);
-        setAnchorElNav(null);
     };
 
     const navigateIndividualStats = () => {
         navigate(individualPath);
-        setAnchorElNav(null);
     };
 
     const navigateTeamStats = () => {
         navigate(teamPath);
-        setAnchorElNav(null);
     };
 
     const navigateMainPage = () => {
         navigate(mainPath);
-        setAnchorElNav(null);
     };
 
     const handleXClick = (messageData) => {
@@ -86,24 +94,15 @@ function Navbar({databaseData, reloadData}) {
     };
 
     const openSignInPopup = () => {
-        setAnchorElNav(null);
         setDesktopMenu(null)
         document.body.style.overflow = 'hidden';
         setSignInPopupOpen(true);
     };
 
     const openAddMatchPopup = () => {
-        setAnchorElNav(null);
         setDesktopMenu(null)
         document.body.style.overflow = 'hidden';
         setAddMatchPopupOpen(true);
-    };
-
-    const openEditMatchPopup = () => {
-        setAnchorElNav(null);
-        setDesktopMenu(null)
-        document.body.style.overflow = 'hidden';
-        setEditPopupOpen(true);
     };
 
     const handleReload = (data) => {
@@ -125,7 +124,8 @@ function Navbar({databaseData, reloadData}) {
                         signedIn: true,
                         userName: userName,
                         isCaptain: isCaptain,
-                        email: user?.email
+                        email: user?.email,
+                        id: user?.uid
                     }
                     setCredentials(credentialsData)
                 } catch (error) {
@@ -150,65 +150,76 @@ function Navbar({databaseData, reloadData}) {
     const drawer = (
         <Box onClick={handleDrawerToggle}>
             <div className={classes.closeIconDiv}>
-                <CloseIcon sx={{width: 40, height: 40, color: "black", cursor: "pointer", bgcolor: "rgb(0, 0, 0, 0)", margin: '8px', marginRight: '16px'}}></CloseIcon>
+                <CloseIcon sx={{
+                    width: 40,
+                    height: 40,
+                    color: "black",
+                    cursor: "pointer",
+                    bgcolor: "rgb(0, 0, 0, 0)",
+                    margin: '8px',
+                    marginRight: '16px'
+                }}></CloseIcon>
             </div>
-            <Divider sx={{ bgcolor: 'black', marginLeft: '20px', marginRight: '20px' }} />
+            <Divider sx={{bgcolor: 'black', marginLeft: '20px', marginRight: '20px'}}/>
             <div className={classes.drawerRoutesDiv}>
-                <span className={classes.drawerRoutesSpan}>
+                <span className={classes.drawerRoutesSpan} onClick={navigateMainPage}>
                     Main Page
                 </span>
-                <span className={classes.drawerRoutesSpan}>
+                <span className={classes.drawerRoutesSpan} onClick={navigateMatches}>
                     Matches
                 </span>
-                <span className={classes.drawerRoutesSpan}>
+                <span className={classes.drawerRoutesSpan} onClick={navigateIndividualStats}>
                     Individual Stats
                 </span>
-                <span className={classes.drawerRoutesSpan}>
+                <span className={classes.drawerRoutesSpan} onClick={navigateTeamStats}>
                     Team Stats
                 </span>
+                <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
+                <span className={classes.drawerRoutesSpan} onClick={openFiltersModal}>
+                    Filters
+                </span>
                 {
-                    credentials?.isCaptain ?
+                    credentials?.isCaptain &&
                         <>
                             <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
-                            <span className={classes.drawerRoutesSpan}>
+                            <span className={classes.drawerRoutesSpan} onClick={openAddMatchPopup}>
                                 Add Match
                             </span>
-                            <span className={classes.drawerRoutesSpan}>
-                                Edit Match
-                            </span>
                         </>
-                        :
-                        null
                 }
                 {
-                    !credentials?.signedIn ?
+                    credentials?.signedIn ?
                         <>
-
-                            <div style={{display: 'flex', bottom: '3%', position: 'absolute', padding: '10px'}}>
-                                <div>
-                                    <CardMedia
-                                        component="img"
-                                        sx={{ height: 50, width: 50, borderRadius: '100%'}}
-                                        image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
-                                    />
-                                </div>
-                                <div style={{display: 'flex', flexDirection: 'column', marginLeft: '5px'}}>
-                                    <span style={{fontSize: '20px'}} onClick={openSignInPopup}>
-                                        {credentials?.userName}
-                                    </span>
-                                    <span style={{fontSize: '14px'}} onClick={openSignInPopup}>
-                                        {credentials?.email}
-                                    </span>
-                                </div>
+                            <div className={classes.mobileUserDiv}>
+                                <section className={classes.mobileUserSection} onClick={openSignInPopup}>
+                                    <div>
+                                        <CardMedia
+                                            component="img"
+                                            sx={{height: 50, width: 50, borderRadius: '100%'}}
+                                            image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
+                                        />
+                                    </div>
+                                    <div className={classes.mobileUserDetailsDiv}>
+                                        <span className={classes.mobileUserNameSpan}>
+                                            {credentials?.userName}
+                                        </span>
+                                        <span className={classes.mobileEmailSpan}>
+                                            {credentials?.email}
+                                        </span>
+                                    </div>
+                                </section>
                             </div>
                         </>
                         :
                         <>
-                            <div style={{display: 'flex', bottom: '3%', position: 'absolute', padding: '10px', alignContent: 'center'}}>
-                                <AccountCircleIcon sx={{height: 50, width: 50}}></AccountCircleIcon>
-                                <span style={{fontSize: '20px'}} onClick={openSignInPopup}>
+                            <div className={classes.mobileUserDiv}>
+                                <section className={classes.mobileUserSection} onClick={openSignInPopup}>
+                                    <AccountCircleIcon sx={{height: 50, width: 50, color: 'lightgray'}}></AccountCircleIcon>
+                                    <span className={classes.mobileUserNameSpan}>
                                     Sign In
                                 </span>
+                                </section>
+
                             </div>
                         </>
                 }
@@ -253,12 +264,24 @@ function Navbar({databaseData, reloadData}) {
                         bgcolor: 'darkred',
                         width: 59,
                         height: 59,
-                        display: {xs: 'none', md: 'flex'}
+                        display: {xs: 'none', md: 'flex'},
+                        alignContent: 'center',
+                        alignItems: 'center'
                     }}>
-                        <AccountCircleIcon
-                            sx={{width: 59, height: 59, background: "0, 0, 0, 0", color: "black", cursor: "pointer"}}
-                            onClick={handleOpenDesktopMenu} className={classes.userButtonLinkStyle}>
-                        </AccountCircleIcon>
+                        {
+                            credentials?.signedIn ?
+                                <CardMedia
+                                    component="img"
+                                    sx={{height: 50, width: 50, borderRadius: '100%', background: "0, 0, 0, 0", cursor: "pointer"}}
+                                    onClick={handleOpenDesktopMenu}
+                                    image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
+                                />
+                                :
+                                <AccountCircleIcon
+                                    sx={{width: 59, height: 59, background: "0, 0, 0, 0", color: "black", cursor: "pointer"}}
+                                    onClick={handleOpenDesktopMenu} className={classes.userButtonLinkStyle}>
+                                </AccountCircleIcon>
+                        }
                         <Menu
                             id="menu-appbar"
                             anchorEl={desktopMenu}
@@ -286,32 +309,26 @@ function Navbar({databaseData, reloadData}) {
                             <div className={classes.mobileMenu}>
                                 <span
                                     className={classes.mobileMenuItems}
-                                    style={{color: 'black'}}
                                     onClick={openSignInPopup}
                                 >
                                     {credentials?.signedIn ? 'Profile' : 'Sign In'}
                                 </span>
+                                <span
+                                    className={classes.mobileMenuItems}
+                                    onClick={openFiltersModal}
+                                >
+                                    Filters
+                                </span>
                                 {
-                                    credentials?.isCaptain ?
+                                    credentials?.isCaptain &&
                                         <>
                                             <span
                                                 className={classes.mobileMenuItems}
-                                                style={{color: 'black'}}
                                                 onClick={openAddMatchPopup}
                                             >
                                                 Add Match
                                             </span>
-                                            <span
-                                                className={classes.mobileMenuItems}
-                                                style={{color: 'black'}}
-                                                onClick={openEditMatchPopup}
-                                            >
-                                                Edit Match
-                                            </span>
                                         </>
-
-                                        :
-                                        null
                                 }
                             </div>
                         </Menu>
@@ -321,82 +338,6 @@ function Navbar({databaseData, reloadData}) {
                             sx={{width: 40, height: 40, color: "black", cursor: "pointer", bgcolor: "rgb(0, 0, 0, 0)"}}
                             onClick={handleDrawerToggle}>
                         </MenuIcon>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: {xs: 'block', md: 'block'},
-                                bgcolor: 'rgb(0,0,0,0)',
-                                zIndex: 99,
-                                "& .MuiPaper-root":
-                                    {backgroundColor: 'darkred', borderRadius: '25px'},
-                                "& .MuiList-root":
-                                    {backgroundColor: 'darkred', borderRadius: '25px'},
-                            }}
-                        >
-                            <div className={classes.mobileMenu}>
-                                <span
-                                    className={classes.mobileMenuItems}
-                                    style={{color: location.pathname === matchesPath ? 'white' : 'black'}}
-                                    onClick={navigateMatches}
-                                >
-                                    Matches
-                                </span>
-                                <span
-                                    className={classes.mobileMenuItems}
-                                    style={{color: location.pathname === individualPath ? 'white' : 'black'}}
-                                    onClick={navigateIndividualStats}
-                                >
-                                    Individual Stats
-                                </span>
-                                <span
-                                    className={classes.mobileMenuItems}
-                                    style={{color: location.pathname === teamPath ? 'white' : 'black'}}
-                                    onClick={navigateTeamStats}
-                                >
-                                    Team Stats
-                                </span>
-                                <span
-                                    className={classes.mobileMenuItems}
-                                    onClick={openSignInPopup}
-                                >
-                                    {credentials?.signedIn ? 'Profile' : 'Sign In'}
-                                </span>
-                                {
-                                    credentials?.isCaptain ?
-                                        <>
-                                            <span
-                                                className={classes.mobileMenuItems}
-                                                style={{color: 'black'}}
-                                                onClick={openAddMatchPopup}
-                                            >
-                                                Add Match
-                                            </span>
-                                            <span
-                                                className={classes.mobileMenuItems}
-                                                style={{color: 'black'}}
-                                                onClick={openEditMatchPopup}
-                                            >
-                                                Edit Match
-                                            </span>
-                                        </>
-
-                                        :
-                                        null
-                                }
-                            </div>
-                        </Menu>
                     </Box>
                 </Toolbar>
                 <nav>
@@ -407,10 +348,10 @@ function Navbar({databaseData, reloadData}) {
                         open={mobileOpen}
                         onClose={handleDrawerToggle}
                         ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
+                            keepMounted: true,
                         }}
                         sx={{
-                            display: {xs: 'block', sm: 'none'},
+                            display: {xs: 'block', md: 'none'},
                             '& .MuiDrawer-paper': {boxSizing: 'border-box', width: '100%', background: 'darkred'},
                         }}
                     >
@@ -420,15 +361,16 @@ function Navbar({databaseData, reloadData}) {
             </Container>
             {isSignInPopupOpen && <SignIn openMessage={() => setMessagePopupOpen(true)}
                                           onClose={() => setSignInPopupOpen(false)}
-                                          messageData={(messageData) => handleXClick(messageData)}
-                                          databaseData={databaseData} reloadData={handleReload}
                                           credentials={credentials} checkAuth={checkAuth}/>}
-            {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)}/>}
+            {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)}
+                                            reloadData={handleReload}/>}
             {isAddMatchPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
                                                onClose={() => setAddMatchPopupOpen(false)}
                                                messageData={(messageData) => handleXClick(messageData)}
                                                databaseData={databaseData}/>}
-            {isEditPopupOpen && <SelectEditMatchModal databaseData={databaseData} onClose={() => setEditPopupOpen(false)} reloadData={handleReload}/>}
+            {advancedFiltersModal && <AdvancedFilters databaseData={databaseData} onClose={() => setAdvancedFiltersModal(false)}
+                                                      setFilters={setFilters} sendAppliedFilters={sendAppliedFilters}
+                                                      applyFilters={applyFilters}/>}
         </AppBar>
     );
 }

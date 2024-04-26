@@ -1,24 +1,19 @@
-import React, {useState} from 'react';
+import React from 'react';
 import classes from "./team-stats-grid.module.css";
 import GeneralResults from "../GeneralResults/general-results";
 import FacilitiesStats from "../FacilitiesStats/facilities-stats";
 import WeatherTeamStats from "../WeatherTeamStats/weather-team-stats";
 import RakipbulTeamStats from "../RakipbulTeamStats/rakipbul-team-stats";
-import FilterButtons from "../FilterButtons/filter-buttons";
 import MainSquadStats from "../MainSquadStats/main-squad-stats";
 import RivalComparison from "../RivalComparison/rival-comparison";
 
 const TeamStatsGrid = ({databaseData}) => {
 
-    const [matchDetailsFilteredData, setMatchDetailsFilteredData] = useState(Object.values(databaseData));
-
-    const setAdvancedFilters = (filteredData) => {
-        setMatchDetailsFilteredData(filteredData);
-    };
+    const matchDetailsFilteredData = Object.values(databaseData);
 
     return (
         <div className={classes.grid}>
-            <FilterButtons databaseData={databaseData} setAdvancedFilters={setAdvancedFilters}></FilterButtons>
+            <h1 className={classes.title}>Team Statistics</h1>
             <GeneralResults data={matchDetailsFilteredData}/>
             <FacilitiesStats data={matchDetailsFilteredData}/>
             <RivalComparison data={matchDetailsFilteredData}/>

@@ -59,7 +59,7 @@ const GeneralResults = ({data}) => {
     return (
         <div className={classes.grid}>
             <Card sx={{ borderRadius: "25px", width: "100%", height: "auto" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 className={classes.titleStyle}>O Yes FC General Statistics</h1>
+                <h1 className={classes.titleStyle}>General</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div className={classes.cardInsideDiv}>
                         <div className={classes.chartDiv}>

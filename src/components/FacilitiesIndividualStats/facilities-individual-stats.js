@@ -104,7 +104,7 @@ const FacilitiesIndividualStats = ({data}) => {
     return (
         <div className={classes.grid}>
             <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center" }}>
-                <h1 className={classes.titleStyle}>Facilities Statistics</h1>
+                <h1 className={classes.titleStyle}>Facilities</h1>
                 <div className={classes.selectionGrid}>
                     <div className={classes.selectionInsideGrid}>
                         <FormControl className={classes.colorStyle} fullWidth>

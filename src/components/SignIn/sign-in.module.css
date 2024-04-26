@@ -155,8 +155,14 @@ input {
 }
 
 .buttonDivStyle {
+    display: flex;
+    flex-direction: row;
     background: #1f1f1f;
     text-align: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
     margin: 20px;
 }
 
@@ -189,9 +195,14 @@ input {
 }
 
 .iconDivStyle {
-    display: block;
+    display: flex;
+    flex-direction: column;
     background-color: #1f1f1f;
     text-align: center;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
     @media screen and (max-width: 1500px) {
         width: 100%;
         margin-right: 0;
@@ -223,6 +234,7 @@ input {
     font-size: 50px;
     @media screen and (max-width: 768px) {
         font-size: 40px;
+        margin: 10px;
     }
 }
 
@@ -233,20 +245,15 @@ input {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.usernameStyle {
-    background-color: #1f1f1f;
-    color: lightgray;
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 20px;
-    @media screen and (max-width: 768px) {
-        font-size: 16px;
-    }
-}
-
 .errorMessage {
     background-color: #1f1f1f;
     color: red;
+}
+
+.errorMessageLogOut {
+    background-color: #1f1f1f;
+    color: red;
+    text-align: center;
 }
 
 .addMatchDiv {
@@ -288,4 +295,33 @@ input {
     @media screen and (max-width: 768px) {
         margin-bottom: 20px;
     }
+}
+
+.emailStyle {
+    background-color: #1f1f1f;
+    color: gray;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 15px;
+}
+
+.usernameStyle {
+    background-color: #1f1f1f;
+    color: lightgray;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 30px;
+    @media screen and (max-width: 768px) {
+        font-size: 25px;
+    }
+}
+
+.loadingDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 460px;
+    color: lightgray;
+    background: #1f1f1f;
 }

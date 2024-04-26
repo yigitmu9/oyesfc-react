@@ -30,6 +30,7 @@
     padding: 20px;
     cursor: pointer;
     border-radius: 25px;
+    color: black;
 }
 
 .drawerRoutesSpan {
@@ -49,4 +50,43 @@
     justify-content: right;
     width: 100%;
     display: flex;
+}
+
+.mobileUserDiv {
+    display: flex;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    padding: 20px;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+}
+
+.mobileUserDetailsDiv {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.mobileUserNameSpan {
+    font-size: 20px;
+    color: lightgray;
+    margin-left: 5px;
+}
+
+.mobileEmailSpan {
+    font-size: 14px;
+    color: lightgray;
+    margin-left: 5px;
+}
+
+.mobileUserSection {
+    background-color: #323232;
+    display: flex;
+    border-radius: 25px;
+    padding: 10px;
+    width: 100%;
+    align-items: center;
+    align-content: center;
 }

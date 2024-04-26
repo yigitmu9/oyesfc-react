@@ -81,7 +81,7 @@ const RakipbulTeamStats = ({data}) => {
     return (
     <div className={classes.grid}>
         <Card sx={{ borderRadius: "25px", width: "100%", height: "auto" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-            <h1 className={classes.titleStyle}>Statistics of 10 Specific Rakipbul Matches*</h1>
+            <h1 className={classes.titleStyle}>10 Specific Rakipbul Matches*</h1>
             <CardContent style={{backgroundColor: "#242424", marginBottom: "50px"}}>
                 <div className={classes.cardContentInsideStyle}>
                     <div className={classes.chartStyle}>
