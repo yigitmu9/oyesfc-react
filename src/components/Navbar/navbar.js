@@ -21,16 +21,14 @@ import {TeamMembers} from "../../constants/constants";
 import CardMedia from "@mui/material/CardMedia";
 import AdvancedFilters from "../AdvancedFilters/advanced-filters";
 
-function Navbar({databaseData, reloadData, setAdvancedFilters}) {
+function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials}) {
     const [desktopMenu, setDesktopMenu] = React.useState(null);
     const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     const [messageData, setMessageData] = useState(null);
     const [credentials, setCredentials] = useState(null);
-    const [countFilter, setCountFilter] = useState(0);
     const [advancedFiltersModal, setAdvancedFiltersModal] = useState(false);
-    const [applyFilters, setApplyFilters] = useState(null);
     const navigate = useNavigate()
     const location = useLocation();
     const matchesPath = '/oyesfc-react/matches';
@@ -46,19 +44,6 @@ function Navbar({databaseData, reloadData, setAdvancedFilters}) {
 
     const setFilters = (filteredData) => {
         setAdvancedFilters(filteredData);
-    };
-
-    const sendAppliedFilters = (appliedFilters) => {
-        let count = 0;
-        if (appliedFilters?.appliedFacilities?.length > 0) count = count + 1
-        if (appliedFilters?.appliedMonths?.length > 0) count = count + 1
-        if (appliedFilters?.appliedPlayers?.length > 0) count = count + 1
-        if (appliedFilters?.appliedRivals?.length > 0) count = count + 1
-        if (appliedFilters?.appliedYears?.length > 0) count = count + 1
-        if (appliedFilters?.appliedType === 'rakipbul' || appliedFilters?.appliedType === 'normal') count = count + 1
-        if (appliedFilters?.appliedSquad === 'Main Squad' || appliedFilters?.appliedSquad === 'Squad Including Foreigners') count = count + 1
-        setCountFilter(count)
-        setApplyFilters(appliedFilters)
     };
 
     const handleOpenDesktopMenu = (event) => {
@@ -128,11 +113,13 @@ function Navbar({databaseData, reloadData, setAdvancedFilters}) {
                         id: user?.uid
                     }
                     setCredentials(credentialsData)
+                    sendCredentials(credentialsData)
                 } catch (error) {
                     console.log(error)
                 }
             } else if (!user && credentials?.signedIn) {
                 setCredentials(null)
+                sendCredentials(null)
             }
         })
     }
@@ -214,7 +201,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters}) {
                         <>
                             <div className={classes.mobileUserDiv}>
                                 <section className={classes.mobileUserSection} onClick={openSignInPopup}>
-                                    <AccountCircleIcon sx={{height: 50, width: 50, color: 'lightgray'}}></AccountCircleIcon>
+                                    <AccountCircleIcon sx={{height: 50, width: 50, color: 'darkred'}}></AccountCircleIcon>
                                     <span className={classes.mobileUserNameSpan}>
                                     Sign In
                                 </span>
@@ -369,8 +356,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters}) {
                                                messageData={(messageData) => handleXClick(messageData)}
                                                databaseData={databaseData}/>}
             {advancedFiltersModal && <AdvancedFilters databaseData={databaseData} onClose={() => setAdvancedFiltersModal(false)}
-                                                      setFilters={setFilters} sendAppliedFilters={sendAppliedFilters}
-                                                      applyFilters={applyFilters}/>}
+                                                      setFilters={setFilters}/>}
         </AppBar>
     );
 }

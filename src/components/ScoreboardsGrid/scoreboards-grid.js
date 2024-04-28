@@ -3,7 +3,7 @@ import Scoreboard from "../Scoreboard/scoreboard";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails/match-details";
 
-const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData}) => {
+const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData, credentials, allData}) => {
 
     const today = new Date();
     const matchDetailsFilteredData = Object.values(databaseData);
@@ -12,6 +12,21 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
         if (a.day && b.day) {
             const [dayA, monthA, yearA] = a.day.split('-').map(Number);
             const [dayB, monthB, yearB] = b.day.split('-').map(Number);
+            if (yearA !== yearB) {
+                return yearB - yearA;
+            }
+            if (monthA !== monthB) {
+                return monthB - monthA;
+            }
+            return dayB - dayA;
+        } else {
+            return null
+        }
+    });
+    const sortedAllData = Object.values(allData)?.slice().sort((x, y) => {
+        if (x.day && y.day) {
+            const [dayA, monthA, yearA] = x.day.split('-').map(Number);
+            const [dayB, monthB, yearB] = y.day.split('-').map(Number);
             if (yearA !== yearB) {
                 return yearB - yearA;
             }
@@ -124,7 +139,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                         <MatchDetails matchDetailsData={matchDetailsData}
                                       onClose={() => setPopupOpen(false)}
                                       fixture={fixtureType} data={previousMatchesData} reloadData={handleReload}
-                        />}
+                                      credentials={credentials} allData={sortedAllData}/>}
                 </div>
                 :
                 <h1 className={classes.title}>No Match found</h1>

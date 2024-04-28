@@ -2,7 +2,7 @@ import React from 'react';
 import ScoreboardsGrid from "../components/ScoreboardsGrid/scoreboards-grid";
 import Footer from "../components/Footer/footer";
 
-const MatchesPage = ({databaseData, reloadData}) => {
+const MatchesPage = ({databaseData, reloadData, credentials, allData}) => {
 
     const handleReload = (data) => {
         reloadData(data)
@@ -11,7 +11,7 @@ const MatchesPage = ({databaseData, reloadData}) => {
     return (
         <div>
             <main>
-                <ScoreboardsGrid databaseData={databaseData} reloadData={handleReload}/>
+                <ScoreboardsGrid databaseData={databaseData} reloadData={handleReload} credentials={credentials} allData={allData} />
                 <Footer></Footer>
             </main>
         </div>

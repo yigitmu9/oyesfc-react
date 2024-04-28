@@ -17,7 +17,7 @@ import Kit3 from '../../images/kit3.PNG';
 import Kit4 from '../../images/kit4.PNG';
 import Kit5 from '../../images/kit5.PNG';
 import Box from "@mui/material/Box";
-import {Tab, Tabs, Typography} from "@mui/material";
+import {Divider, Tab, Tabs, Typography} from "@mui/material";
 import PropTypes from "prop-types";
 import SoccerLineUp from "react-soccer-lineup";
 import RivalComparison from "../RivalComparison/rival-comparison";
@@ -28,6 +28,14 @@ import {AddToCalendarButton} from "add-to-calendar-button-react";
 import EditIcon from '@mui/icons-material/Edit';
 import AddMatchComponent from "../AddMatch/add-match";
 import Message from "../Message/message";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import {ref, set} from "firebase/database";
+import {dataBase, loadWebsite} from "../../firebase";
+import PersonIcon from '@mui/icons-material/Person';
+import StarIcon from '@mui/icons-material/Star';
+import GroupsIcon from '@mui/icons-material/Groups';
+import InfoIcon from '@mui/icons-material/Info';
+import LabelIcon from '@mui/icons-material/Label';
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -62,10 +70,11 @@ function a11yProps(index) {
     };
 }
 
-export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadData}) => {
+export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadData, credentials, allData}) => {
 
     document.body.style.overflow = 'hidden';
     const initialOYesFCStarFormData = {};
+    const [ratesData, setRatesData] = useState(null);
     const isMobile = window.innerWidth <= 768;
     const buttonBgColor = '#323232'
     const matchDetails = Object.entries(matchDetailsData.oyesfc.squad).filter(x => x[1].goal > 0)
@@ -75,12 +84,22 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     const endTimeForCalendar = getEndTime(matchDetailsData.time) === '00:00' ? '23:59' : getEndTime(matchDetailsData.time);
     const popupRef = useRef(null);
     const [tabValue, setTabValue] = React.useState(0);
-    const lastFiveGames = Object.values(data).filter((x, y) => x && (y === 0 || y === 1 || y === 2 || y === 3 || y === 4));
+    const matchIndex = Object.values(allData).findIndex(x => x === matchDetailsData)
+    const lastFiveGames = Object.values(allData).filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3 || y === matchIndex + 4 || y === matchIndex + 5));
     const [oYesFCStarFormData, setOYesFCStarFormData] = useState(initialOYesFCStarFormData);
     const totalStars = 10;
     const [messageData, setMessageData] = useState(null);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
+    const [starsErrorMessage, setStarsErrorMessage] = useState(null);
+    const [notesErrorMessage, setNotesErrorMessage] = useState(null);
+    const [starsSubmitButton, setStarsSubmitButton] = useState('Submit');
+    const [notesSubmitButton, setNotesSubmitButton] = useState('Submit');
+    const [matchNotes, setMatchNotes] = useState(null);
+    const [noteFormData, setNoteFormData] = useState({});
+    const [squadRatings, setSquadRatings] = useState(null);
+    const [bestOfMatch, setBestOfMatch] = useState(null);
+    const matchInformations = createMatchInfos();
     let jerseyImage;
     let jerseyName;
     let oyesfcSquad;
@@ -102,6 +121,12 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     };
 
     useEffect(() => {
+        if (!ratesData) {
+            fetchRatesData().then(r => r)
+        }
+        if (!matchNotes) {
+            fetchNotesData().then(r => r)
+        }
         document.addEventListener('mousedown', handleOutsideClick);
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
@@ -303,10 +328,12 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     };
 
     const handleStarChange = (player, rating) => {
-        setOYesFCStarFormData((prevData) => ({
-            ...prevData,
-            [player]: parseInt(rating)
-        }));
+        if (starsSubmitButton !== 'Submitted') {
+            setOYesFCStarFormData((prevData) => ({
+                ...prevData,
+                [player]: parseInt(rating)
+            }));
+        }
     };
 
     const handleMessageClick = (messageData) => {
@@ -320,6 +347,160 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
 
     const editMatch = () => {
         setAddMatchPopupOpen(true)
+    }
+
+    const submitStars = async () => {
+        if (Object.keys(oYesFCStarFormData).length === (Object.entries(matchDetailsData.oyesfc.squad).length - 1)) {
+            if (starsErrorMessage) setStarsErrorMessage(null)
+            try {
+                await set(ref(dataBase, `rates/${matchDetailsData?.day}/rates/${credentials?.id}`), oYesFCStarFormData);
+                setStarsSubmitButton('Submitted')
+            } catch (error) {
+                console.log(error)
+                setStarsErrorMessage(error?.message)
+            }
+        } else {
+            setStarsErrorMessage('Rate everyone!')
+        }
+    };
+
+    const fetchRatesData = async () => {
+        try {
+            const response = await loadWebsite(`rates/${matchDetailsData?.day}`);
+            //const notesResponse = await loadWebsite(`notes/${matchDetailsData?.day}`);
+            setRatesData(response)
+            if (response?.rates) {
+                if (Object.entries(response?.rates).some(x => x[0] === credentials?.id)) {
+                    const form = Object.entries(response?.rates).find(x => x[0] === credentials?.id)[1]
+                    setOYesFCStarFormData(form)
+                    setStarsSubmitButton('Submitted')
+                }
+                if (Object.entries(response?.rates)?.length > 3) {
+                    calculatePlayerRatings(response?.rates);
+                }
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const fetchNotesData = async () => {
+        try {
+            const response = await loadWebsite(`notes/${matchDetailsData?.day}`);
+            if (response?.notes) {
+                const notesArray = Object.entries(response?.notes)
+                setMatchNotes(notesArray)
+                if (Object.entries(response?.notes).some(x => x[0] === credentials?.userName)) {
+                    setNotesSubmitButton('Submitted')
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleNoteInputChange = (event) => {
+        const value = event.target.value;
+        setNoteFormData((prevData) => ({
+            ...prevData,
+            note: value,
+        }));
+    };
+
+    const calculatePlayerRatings = (ratingResponse) => {
+        let ratingsArray = [];
+        let bestPlayer;
+        Object.entries(matchDetailsData.oyesfc.squad).forEach(playerName => {
+            let points = 0;
+            Object.values(ratingResponse).forEach((value) => {
+                points += value[playerName[0]]
+            })
+            const averageRating = points / Object.entries(ratingResponse)?.length
+            const ratingOfPlayer = {
+                name: playerName[0],
+                rating: averageRating,
+                goal: playerName[1].goal,
+            }
+            if (!bestPlayer || bestPlayer?.rating < averageRating) {
+                bestPlayer = ratingOfPlayer;
+            } else if (bestPlayer?.rating === averageRating) {
+                if (playerName[1].goal > bestPlayer.goal) {
+                    bestPlayer = ratingOfPlayer;
+                }
+            }
+            ratingsArray.push(ratingOfPlayer)
+        })
+        setSquadRatings(ratingsArray)
+        setBestOfMatch(bestPlayer)
+    }
+
+
+    const submitNote = async () => {
+        if (noteFormData['note']?.length > 0) {
+            if (notesErrorMessage) setNotesErrorMessage(null)
+            try {
+                await set(ref(dataBase, `notes/${matchDetailsData?.day}/notes/${credentials?.userName}`), noteFormData);
+                setNotesSubmitButton('Submitted')
+                const newNote = [
+                    credentials?.userName,
+                    noteFormData
+                ]
+                setMatchNotes((prevData) => ([
+                    ...prevData,
+                    newNote
+                ]));
+            } catch (error) {
+                console.log(error)
+                setStarsErrorMessage(error?.message)
+            }
+        } else {
+            setNotesErrorMessage('Add a note!')
+        }
+    };
+
+    function createMatchInfos() {
+        let infosForMatch = [];
+        const examples = [
+            'Yiğit is the player who scored the most goals against the opponent in the o yes FC team.',
+            'Yiğit scored 9 or more goals in the last 3 matches.',
+        ]
+        const lastThreeGames = Object.values(allData)?.filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3));
+        const lastTwoGamesInFacility = Object.values(allData)?.filter((x, y) => x?.place === matchDetailsData?.place && y > matchIndex)?.filter((a, b) => a && b < 2);
+        const lastThreeGamesWithRival = Object.values(allData)?.filter((x, y) => x?.rival?.name === matchDetailsData?.rival?.name && y > matchIndex)?.filter((a, b) => a && b < 3);
+        if (lastThreeGames?.length > 2 && lastThreeGames?.every(x => x?.oyesfc?.goal > x?.rival?.goal)) {
+            const no1 = 'O Yes FC won their last 3 matches.'
+            infosForMatch.push(no1)
+        }
+        if (lastThreeGames?.length > 2 && lastThreeGames?.every(x => x?.oyesfc?.goal <= x?.rival?.goal)) {
+            const no1 = 'O Yes FC could not win in the last 3 matches.'
+            infosForMatch.push(no1)
+        }
+        if (lastThreeGames?.length > 2 && lastThreeGames?.every(x => x?.oyesfc?.goal > 7)) {
+            const no2 = 'O Yes FC has scored 7 goals or more in each of its last 3 matches.'
+            infosForMatch.push(no2)
+        }
+        if (lastThreeGames?.length > 2 && lastThreeGames?.every(x => x?.rival?.goal > 7)) {
+            const no3 = 'O Yes FC has conceded 7 goals or more in each of its last 3 matches.'
+            infosForMatch.push(no3)
+        }
+        if (lastTwoGamesInFacility?.length > 1 && lastTwoGamesInFacility?.every(x => x?.oyesfc?.goal >= x?.rival?.goal)) {
+            const no4 = `O Yes FC did not lose the last 2 matches played in ${matchDetailsData?.place}.`
+            infosForMatch.push(no4)
+        }
+        if (lastThreeGamesWithRival?.length > 2 && lastThreeGamesWithRival?.every(x => x?.oyesfc?.goal >= x?.rival?.goal)) {
+            const no5 = `O yes FC has never lost to the ${matchDetailsData?.rival?.name} in the last 3 matches.`
+            infosForMatch.push(no5)
+        }
+        if (lastTwoGamesInFacility?.length > 1 && lastTwoGamesInFacility?.every(x => x?.oyesfc?.goal < x?.rival?.goal)) {
+            const no4 = `O Yes FC lost the last 2 matches played in ${matchDetailsData?.place}.`
+            infosForMatch.push(no4)
+        }
+        if (lastThreeGamesWithRival?.length > 2 && lastThreeGamesWithRival?.every(x => x?.oyesfc?.goal < x?.rival?.goal)) {
+            const no5 = `O yes FC has lost to the ${matchDetailsData?.rival?.name} in the last 3 matches.`
+            infosForMatch.push(no5)
+        }
+        return infosForMatch
     }
 
     return (
@@ -420,17 +601,47 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 color: 'lightgray'
                             }
                         }} label="links" {...a11yProps(4)} />
-                        <Tab sx={{
-                            '&.MuiTab-root': {
-                                color: 'gray'
-                            }, '&.Mui-selected': {
-                                color: 'lightgray'
-                            }
-                        }} label="rating" {...a11yProps(5)} />
+                        {
+                            credentials?.signedIn && fixture === 'previous' &&
+                            <Tab sx={{
+                                '&.MuiTab-root': {
+                                    color: 'gray'
+                                }, '&.Mui-selected': {
+                                    color: 'lightgray'
+                                }
+                            }} label="rating" {...a11yProps(5)} />
+                        }
+                        {
+                            credentials?.signedIn && fixture === 'previous' &&
+                            <Tab sx={{
+                                '&.MuiTab-root': {
+                                    color: 'gray'
+                                }, '&.Mui-selected': {
+                                    color: 'lightgray'
+                                }
+                            }} label="notes" {...a11yProps(6)} />
+                        }
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={tabValue} index={0}>
                     <div className={classes.generalTabDiv}>
+                        {
+                            bestOfMatch &&
+                            <section className={classes.momSection}>
+                                <div>
+                                    <StarIcon fontSize={"large"} className={classes.starIcon}>
+                                    </StarIcon>
+                                </div>
+                                <div className={classes.momDetailsDiv}>
+                                    <span className={classes.momNameSpan}>
+                                        {bestOfMatch?.name}
+                                    </span>
+                                    <span className={classes.momSmallSpan}>
+                                        Man of the Match
+                                    </span>
+                                </div>
+                            </section>
+                        }
                         <section className={classes.generalTabSection}>
                             <div className={classes.generalInfoDiv}>
                                 <LocationOnIcon fontSize={"large"}
@@ -501,214 +712,351 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 null
                             }
                         </section>
-                        <section className={classes.teamFormSection}>
-                            <div className={classes.formTitleDiv}>
-                                <span className={classes.formTitleSpan}>{TeamNames.oYesFc + ' Form'}</span>
-                            </div>
-                            <div className={classes.formScoresDiv}>
+                        {
+                            lastFiveGames.length > 0 &&
+                            <section className={classes.teamFormSection}>
+                                <div className={classes.formTitleDiv}>
+                                    <span className={classes.formTitleSpan}>{TeamNames.oYesFc + ' Form'}</span>
+                                </div>
+                                <div className={classes.formScoresDiv}>
+                                    {
+                                        lastFiveGames.map((x, y) => (
+                                            <div className={classes.lastGamesDiv}>
+                                                <span className={
+                                                    x.oyesfc.goal > x.rival.goal ?
+                                                        classes.formScoresWinSpan
+                                                        : x.oyesfc.goal === x.rival.goal ?
+                                                            classes.formScoresDrawSpan
+                                                            : classes.formScoresLoseSpan
+                                                } key={y}>
+                                                    {x.oyesfc.goal + ' - ' + x.rival.goal}
+                                                </span>
+                                                {
+                                                    y === 0 &&
+                                                    <div className={
+                                                        x.oyesfc.goal > x.rival.goal ?
+                                                            classes.lastWinMatch
+                                                            : x.oyesfc.goal === x.rival.goal ?
+                                                                classes.lastDrawMatch
+                                                                : classes.lastLostMatch
+                                                    }></div>
+                                                }
+                                            </div>
+
+                                        ))
+                                    }
+                                </div>
+                            </section>
+                        }
+                        {
+                            matchInformations?.length > 1 &&
+                            <section className={classes.generalTabSection}>
+                                <div className={classes.generalInfoDiv}>
+                                    <InfoIcon fontSize={"large"} className={classes.generalInfoIcon}>
+                                    </InfoIcon>
+                                    <span className={classes.generalInfoSpan}>
+                                    Information
+                                </span>
+                                </div>
+                                <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                                 {
-                                    lastFiveGames.map((x, y) => (
-                                        <span className={
-                                            x.oyesfc.goal > x.rival.goal ?
-                                                classes.formScoresWinSpan
-                                                : x.oyesfc.goal === x.rival.goal ?
-                                                    classes.formScoresDrawSpan
-                                                    : classes.formScoresLoseSpan
-                                        } key={y}>
-                                            {x.oyesfc.goal + ' - ' + x.rival.goal}
+                                    matchInformations?.map((x, y) => (
+                                        <div key={y} className={classes.generalInfoDiv}>
+                                            <LabelIcon fontSize={"large"} className={classes.generalInfoIcon}>
+                                            </LabelIcon>
+                                            <span className={classes.generalInfoSpan}>
+                                            {x}
                                         </span>
+                                        </div>
                                     ))
                                 }
-                            </div>
-                        </section>
+                            </section>
+                        }
                     </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={1}>
+                    <section className={classes.squadSection}>
+                        <div className={classes.generalInfoDiv}>
+                            <GroupsIcon fontSize={"large"} className={classes.generalInfoIcon}>
+                            </GroupsIcon>
+                            <span className={classes.generalInfoSpan}>
+                            Squad
+                        </span>
+                        </div>
+                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                        {
+                            Object.keys(matchDetailsData?.oyesfc?.squad).map((x, y) => (
+                                <div key={y} className={classes.generalInfoDiv}>
+                                    {
+                                        squadRatings ?
+                                            <span
+                                                className={squadRatings?.find(rating => rating?.name === x)?.rating >= 7 ? classes.goodRating :
+                                                    squadRatings?.find(rating => rating?.name === x)?.rating < 5 ? classes.badRating : classes.midRating}>
+                                                    {squadRatings?.find(rating => rating?.name === x)?.rating.toFixed(1)}
+                                            </span>
+                                            :
+                                            <PersonIcon fontSize={"large"} className={classes.generalInfoIcon}>
+                                            </PersonIcon>
+                                    }
+                                    <span className={classes.generalInfoSpan}>
+                                        {x}
+                                    </span>
+                                </div>
+                            ))
+                        }
+                    </section>
                     <div className={classes.pitchStyleDiv}>
                         <SoccerLineUp
                             size={"responsive"}
                             homeTeam={oyesfcSquad}
-                            color={'#404040'}
+                            color={'green'}
                         />
                     </div>
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={2}>
-                    <div className={classes.kitStyleDiv}>
+                    <section className={classes.squadSection}>
                         <span className={classes.kitSpan}>{jerseyName}</span>
+                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                         <img
                             key={'1'}
                             className={classes.kitImage}
                             src={jerseyImage}
                             alt={`1`}
                         />
-                    </div>
+                    </section>
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={3}>
                     <>
-                        <RivalComparison data={data} selectedRival={matchDetailsData?.rival.name}/>
+                        <RivalComparison data={allData} selectedRival={matchDetailsData?.rival.name}/>
                     </>
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={4}>
-                    <div className={classes.generalTabDiv}>
-                        <section className={classes.urlTabSection}>
-                            <div className={classes.generalInfoDiv}>
-                                <LocationOnIcon fontSize={"large"}
-                                                className={classes.generalInfoIcon}>
-                                </LocationOnIcon>
-                                <span className={classes.generalInfoSpan}>
+                    <>
+                        <div className={classes.urlTabSection}>
+                            <section className={classes.firstLinksSection}>
+                                <div className={classes.urlInfoDiv}>
+                                    <LocationOnIcon fontSize={"large"}
+                                                    className={classes.generalInfoIcon}>
+                                    </LocationOnIcon>
+                                    <span className={classes.generalInfoSpan}>
                                         {matchDetailsData.place}
                                     </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
-                                <div className={classes.mapsButtonsWrapper}>
-                                    <button className={classes.mapsButtons} onClick={redirectToAppleMaps}>Apple Maps
-                                    </button>
-                                    <button className={classes.mapsButtons} onClick={redirectToGoogleMaps}>Google Maps
-                                    </button>
                                 </div>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
-                                <CalendarMonthIcon fontSize={"large"}
-                                                   className={classes.generalInfoIcon}>
-                                </CalendarMonthIcon>
-                                <span className={classes.generalInfoSpan}>
+                                <div className={classes.generalInfoDiv}>
+                                    <div className={classes.mapsButtonsWrapper}>
+                                        <button className={classes.mapsButtons} onClick={redirectToAppleMaps}>Apple Maps
+                                        </button>
+                                        <button className={classes.mapsButtons} onClick={redirectToGoogleMaps}>Google
+                                            Maps
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
+                            <section className={classes.linksSection}>
+                                <div className={classes.urlInfoDiv}>
+                                    <CalendarMonthIcon fontSize={"large"}
+                                                       className={classes.generalInfoIcon}>
+                                    </CalendarMonthIcon>
+                                    <span className={classes.generalInfoSpan}>
                                         {matchDetailsData.day.replace(/-/g, '/') + ' ' + matchDetailsData.time}
                                     </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
-                                <AddToCalendarButton
-                                    name="Halısaha"
-                                    description={rivalForCalendar}
-                                    startDate={formattedDateForCalendar}
-                                    startTime={startTimeForCalendar}
-                                    endTime={endTimeForCalendar}
-                                    timeZone="Europe/Istanbul"
-                                    location={matchDetailsData.place}
-                                    options="'Apple','Google','Outlook.com'"
-                                    listStyle="overlay"
-                                    availability="busy"
-                                    buttonStyle="round"
-                                    trigger="click"
-                                    hideIconButton
-                                    buttonsList
-                                    hideBackground
-                                    hideCheckmark
-                                    size="4"
-                                    lightMode="dark"
-                                ></AddToCalendarButton>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
-                                {
-                                    matchDetailsData?.weather?.sky === WeatherSky[1] ?
-                                        <WbSunnyIcon fontSize={"large"}
-                                                     className={classes.generalInfoIcon}>
-                                        </WbSunnyIcon>
-                                        : matchDetailsData?.weather?.sky === WeatherSky[2] ?
-                                            <ThunderstormIcon fontSize={"large"}
-                                                              className={classes.generalInfoIcon}>
-                                            </ThunderstormIcon>
-                                            : matchDetailsData?.weather?.sky === WeatherSky[3] ?
-                                                <AcUnitIcon fontSize={"large"}
-                                                            className={classes.generalInfoIcon}>
-                                                </AcUnitIcon>
-                                                : <NightlightRoundIcon fontSize={"large"}
-                                                                       className={classes.generalInfoIcon}>
-                                                </NightlightRoundIcon>
-                                }
-                                {
-                                    matchDetailsData?.weather ?
-                                        <span className={classes.generalInfoSpan}>
+                                </div>
+                                <div className={classes.generalInfoDiv}>
+                                    <AddToCalendarButton
+                                        name="Halısaha"
+                                        description={rivalForCalendar}
+                                        startDate={formattedDateForCalendar}
+                                        startTime={startTimeForCalendar}
+                                        endTime={endTimeForCalendar}
+                                        timeZone="Europe/Istanbul"
+                                        location={matchDetailsData.place}
+                                        options="'Apple','Google','Outlook.com'"
+                                        listStyle="overlay"
+                                        availability="busy"
+                                        buttonStyle="round"
+                                        trigger="click"
+                                        hideIconButton
+                                        buttonsList
+                                        hideBackground
+                                        hideCheckmark
+                                        size="4"
+                                        lightMode="dark"
+                                    ></AddToCalendarButton>
+                                </div>
+                            </section>
+                            <section className={classes.linksSection}>
+                                <div className={classes.urlInfoDiv}>
+                                    {
+                                        matchDetailsData?.weather?.sky === WeatherSky[1] ?
+                                            <WbSunnyIcon fontSize={"large"}
+                                                         className={classes.generalInfoIcon}>
+                                            </WbSunnyIcon>
+                                            : matchDetailsData?.weather?.sky === WeatherSky[2] ?
+                                                <ThunderstormIcon fontSize={"large"}
+                                                                  className={classes.generalInfoIcon}>
+                                                </ThunderstormIcon>
+                                                : matchDetailsData?.weather?.sky === WeatherSky[3] ?
+                                                    <AcUnitIcon fontSize={"large"}
+                                                                className={classes.generalInfoIcon}>
+                                                    </AcUnitIcon>
+                                                    : <NightlightRoundIcon fontSize={"large"}
+                                                                           className={classes.generalInfoIcon}>
+                                                    </NightlightRoundIcon>
+                                    }
+                                    {
+                                        matchDetailsData?.weather ?
+                                            <span className={classes.generalInfoSpan}>
                                             {matchDetailsData?.weather?.sky + ' ' + matchDetailsData?.weather?.temperature}&#176;
                                         </span>
-                                        :
-                                        <span className={classes.generalInfoSpan}>
+                                            :
+                                            <span className={classes.generalInfoSpan}>
                                             No data available
                                         </span>
-                                }
-                            </div>
-                            <div className={classes.generalInfoDiv}>
-                                <div className={classes.mapsButtonsWrapper}>
-                                    {
-                                        fixture === 'previous' ?
-                                            <button className={classes.mapsButtons}
-                                                    onClick={redirectToTimeAndDateWeather}>
-                                                Timeanddate Weather
-                                            </button>
-                                            :
-                                            <button className={classes.mapsButtons} onClick={redirectToWeatherApp}>
-                                                Weather App
-                                            </button>
                                     }
                                 </div>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
-                                <EditIcon fontSize={"large"}
-                                                className={classes.generalInfoIcon}>
-                                </EditIcon>
-                                <span className={classes.generalInfoSpan}>
-                                    Edit Match
-                                </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
-                                <div className={classes.mapsButtonsWrapper}>
-                                    <button className={classes.mapsButtons} onClick={editMatch}>Edit
-                                    </button>
+                                <div className={classes.generalInfoDiv}>
+                                    <div className={classes.mapsButtonsWrapper}>
+                                        {
+                                            fixture === 'previous' ?
+                                                <button className={classes.mapsButtons}
+                                                        onClick={redirectToTimeAndDateWeather}>
+                                                    Timeanddate Weather
+                                                </button>
+                                                :
+                                                <button className={classes.mapsButtons} onClick={redirectToWeatherApp}>
+                                                    Weather App
+                                                </button>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                        </section>
-                    </div>
+                            </section>
+                            {
+                                credentials?.isCaptain &&
+                                <section className={classes.linksSection}>
+                                    <div className={classes.urlInfoDiv}>
+                                        <EditIcon fontSize={"large"}
+                                                  className={classes.generalInfoIcon}>
+                                        </EditIcon>
+                                        <span className={classes.generalInfoSpan}>
+                                            Edit Match
+                                        </span>
+                                    </div>
+                                    <div className={classes.generalInfoDiv}>
+                                        <div className={classes.mapsButtonsWrapper}>
+                                            <button className={classes.mapsButtons} onClick={editMatch}>Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </section>
+                            }
+                        </div>
+                    </>
                 </CustomTabPanel>
-                <CustomTabPanel value={tabValue} index={5}>
-                    {
-                        Object.entries(matchDetailsData.oyesfc.squad).filter(a => Object.values(TeamMembers)
-                            ?.some(item => item?.name === a[0]))?.map((x, y) => (
-                            <section key={y} className={classes.starSection}>
-                                <span className={classes.starSpan}>{x[0]}</span>
-                                <div className={classes.starDiv}>
-                                    {[...Array(totalStars)].map((star, index) => {
-                                        const currentRating = index + 1;
-                                        return (
+                {
+                    credentials?.signedIn && fixture === 'previous' &&
+                    <>
+                        <CustomTabPanel value={tabValue} index={5}>
+                            {
+                                Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== credentials?.userName)?.map((x, y) => (
+                                    <section key={y} className={classes.starSection}>
+                                        <span className={classes.starSpan}>{x[0]}</span>
+                                        <div className={classes.starDiv}>
+                                            {[...Array(totalStars)].map((star, index) => {
+                                                const currentRating = index + 1;
+                                                return (
 
-                                            <label key={index} className={classes.starLabel}>
-                                                <input
-                                                    key={star}
-                                                    type="radio"
-                                                    name="rating"
-                                                    value={oYesFCStarFormData[x[0]]}
-                                                    onChange={() =>
-                                                        handleStarChange(x[0], currentRating)}
-                                                />
-                                                <span
-                                                    className={classes.star}
-                                                    style={{
-                                                        color:
-                                                            currentRating <= (oYesFCStarFormData[x[0]]) ? "#ffc107" : "#e4e5e9",
-                                                    }}>
+                                                    <label key={index} className={classes.starLabel}>
+                                                        <input
+                                                            key={star}
+                                                            type="radio"
+                                                            name="rating"
+                                                            value={oYesFCStarFormData[x[0]]}
+                                                            onChange={() =>
+                                                                handleStarChange(x[0], currentRating)}
+                                                        />
+                                                        <span
+                                                            className={classes.star}
+                                                            style={{
+                                                                color:
+                                                                    currentRating <= (oYesFCStarFormData[x[0]]) ? "#ffc107" : "#e4e5e9",
+                                                            }}>
                                                         &#9733;
                                                     </span>
-                                            </label>
-                                        );
-                                    })}
-                                </div>
-                                {
-                                    oYesFCStarFormData[x[0]] ?
-                                        <span className={classes.starDetailSpan}>
-                                            Your rating to {x[0] + ' is ' + oYesFCStarFormData[x[0]] + '.'}
-                                        </span>
-                                        :
-                                        <span className={classes.starDetailSpan}>
-                                            Rate {x[0]}.
-                                        </span>
-                                }
+                                                    </label>
+                                                );
+                                            })}
+                                        </div>
+                                        {
+                                            oYesFCStarFormData[x[0]] ?
+                                                <span className={classes.starDetailSpan}>
+                                                Your rating to {x[0] + ' is ' + oYesFCStarFormData[x[0]] + '.'}</span>
+                                                :
+                                                <span className={classes.starDetailSpan}>
+                                                Rate {x[0]}.
+                                            </span>
+                                        }
 
-                            </section>
-                        ))
-                    }
-                    <div className={classes.submitButtonDiv}>
-                        <button className={classes.mapsButtons}>Submit</button>
-                    </div>
-
-                </CustomTabPanel>
+                                    </section>
+                                ))
+                            }
+                            {
+                                starsErrorMessage &&
+                                <section className={classes.starSection}>
+                                <span className={classes.starsErrorSpan}>
+                                    <ErrorOutlineIcon fontSize={"large"} className={classes.errorIcon}>
+                                    </ErrorOutlineIcon>
+                                    {starsErrorMessage}
+                                </span>
+                                </section>
+                            }
+                            <div className={classes.submitButtonDiv}>
+                                <button className={classes.mapsButtons} disabled={starsSubmitButton === 'Submitted'} onClick={submitStars}>{starsSubmitButton}</button>
+                            </div>
+                        </CustomTabPanel>
+                        <CustomTabPanel value={tabValue} index={6}>
+                            {
+                                matchNotes && matchNotes?.map((x, y) => (
+                                    <section key={y} className={classes.notesSection}>
+                                        <span className={classes.noteWriterSpan}>{x[0]}</span>
+                                        <Divider sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
+                                        <span className={classes.starSpan}>{x[1]?.note}</span>
+                                    </section>
+                                ))
+                            }
+                            {
+                                notesSubmitButton !== 'Submitted' &&
+                                <section className={classes.notesSection}>
+                                    <label className={classes.labelStyle}>
+                                        Add your note:
+                                        <input
+                                            className={classes.inputDesign}
+                                            required={true}
+                                            type="text"
+                                            name="note"
+                                            value={noteFormData[credentials?.userName]}
+                                            onChange={handleNoteInputChange}
+                                            maxLength={250}
+                                        />
+                                    </label>
+                                </section>
+                            }
+                            {
+                                notesErrorMessage &&
+                                <section className={classes.starSection}>
+                                    <span className={classes.starsErrorSpan}>
+                                        <ErrorOutlineIcon fontSize={"large"} className={classes.errorIcon}>
+                                        </ErrorOutlineIcon>
+                                        {notesErrorMessage}
+                                    </span>
+                                </section>
+                            }
+                            <div className={classes.submitButtonDiv}>
+                                <button className={classes.mapsButtons} disabled={notesSubmitButton === 'Submitted'}
+                                        onClick={submitNote}>{notesSubmitButton}</button>
+                            </div>
+                        </CustomTabPanel>
+                    </>
+                }
                 {
                     isMobile &&
                     <div className={classes.buttonBorderStyle}>

@@ -8,6 +8,7 @@ import {loadWebsite} from "../firebase";
 import LoadingPage from "../pages/loading-page";
 import ErrorPage from "../pages/error-page";
 import Navbar from '../components/Navbar/navbar';
+import {returnFilteredData} from "../components/AdvancedFilters/advanced-filters";
 
 const AppPage = () => {
 
@@ -16,12 +17,25 @@ const AppPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [key, setKey] = useState(0);
+    const [credentials, setCredentials] = useState(null);
 
     const fetchData = async () => {
         try {
             const response = await loadWebsite('matches');
             setData(response);
-            setFilteredData(response)
+            const filtersInStorage = JSON.parse(localStorage.getItem('filters'));
+            if (filtersInStorage?.appliedType ||
+                filtersInStorage?.appliedPlayers ||
+                filtersInStorage?.appliedFacilities ||
+                filtersInStorage?.appliedYears ||
+                filtersInStorage?.appliedMonths ||
+                filtersInStorage?.appliedRivals ||
+                filtersInStorage?.appliedSquad) {
+                const filterData = returnFilteredData(response, filtersInStorage)
+                setFilteredData(filterData)
+            } else {
+                setFilteredData(response);
+            }
             setKey(prevKey => prevKey + 1);
             setLoading(false);
         } catch (error) {
@@ -39,6 +53,11 @@ const AppPage = () => {
         setKey(prevKey => prevKey + 1);
     };
 
+    const setUpCredentials = (credentialsData) => {
+        setCredentials(credentialsData);
+        setKey(prevKey => prevKey + 1);
+    };
+
     if (!data) {
         fetchData().then(r => r);
     }
@@ -53,10 +72,10 @@ const AppPage = () => {
 
     return (
         <Router>
-            <Navbar databaseData={data} reloadData={handleReload} setAdvancedFilters={setAdvancedFilters}/>
+            <Navbar databaseData={data} reloadData={handleReload} setAdvancedFilters={setAdvancedFilters} sendCredentials={setUpCredentials} />
             <Routes key={key}>
                 <Route path='oyesfc-react/' element={<MainPage/>}/>
-                <Route path='oyesfc-react/matches' element={<MatchesPage databaseData={filteredData} reloadData={handleReload}/>}/>
+                <Route path='oyesfc-react/matches' element={<MatchesPage databaseData={filteredData} reloadData={handleReload} credentials={credentials} allData={data}/>}/>
                 <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage databaseData={filteredData}/>}/>
                 <Route path='oyesfc-react/team-stats' element={<TeamStatsPage databaseData={filteredData}/>}/>
             </Routes>

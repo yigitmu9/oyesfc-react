@@ -71,18 +71,20 @@
 
 .mobileUserNameSpan {
     font-size: 20px;
-    color: lightgray;
+    color: darkred;
     margin-left: 5px;
+    font-weight: bolder;
 }
 
 .mobileEmailSpan {
     font-size: 14px;
-    color: lightgray;
+    color: darkred;
     margin-left: 5px;
+    font-weight: bolder;
 }
 
 .mobileUserSection {
-    background-color: #323232;
+    background-color: black;
     display: flex;
     border-radius: 25px;
     padding: 10px;

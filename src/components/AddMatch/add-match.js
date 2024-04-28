@@ -9,6 +9,7 @@ import LoadingPage from "../../pages/loading-page";
 
 const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, selectedMatchData}) => {
 
+    document.body.style.overflow = 'hidden';
     const [loading, setLoading] = useState(false);
 
     let facilities = [];

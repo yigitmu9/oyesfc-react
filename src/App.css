@@ -37,8 +37,9 @@
 }
 
 .number {
+  font-weight: bolder;
   @media (max-width: 767px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 }
 
