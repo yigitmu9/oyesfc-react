@@ -249,7 +249,9 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
             if (Object.values(TeamMembers)?.find(member => member?.name === x[0])?.role !== FootballRoles[0]) {
                 player = {
                     name: Object.values(TeamMembers)?.some(item => item?.name === x[0]) ? x[0]?.split(' ')[0] : x[0],
-                    number: Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number
+                    number: Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number ?
+                        Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number :
+                        Math.floor(Math.random() * (98 - 19 + 1)) + 19
                 }
             } else {
                 player = {
@@ -461,27 +463,55 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
 
     function createMatchInfos() {
         let infosForMatch = [];
-        const examples = [
-            'Yiğit is the player who scored the most goals against the opponent in the o yes FC team.',
-            'Yiğit scored 9 or more goals in the last 3 matches.',
-        ]
         const lastThreeGames = Object.values(allData)?.filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3));
         const lastTwoGamesInFacility = Object.values(allData)?.filter((x, y) => x?.place === matchDetailsData?.place && y > matchIndex)?.filter((a, b) => a && b < 2);
         const lastThreeGamesWithRival = Object.values(allData)?.filter((x, y) => x?.rival?.name === matchDetailsData?.rival?.name && y > matchIndex)?.filter((a, b) => a && b < 3);
         if (lastThreeGames?.length > 2 && lastThreeGames?.every(x => x?.oyesfc?.goal > x?.rival?.goal)) {
-            const no1 = 'O Yes FC won their last 3 matches.'
+            let consecutiveHigherGoals = 0;
+            for (let i = matchIndex + 1; i < Object.values(allData)?.length; i++) {
+                const match = Object.values(allData)[i];
+                const oyesfcGoals = match?.oyesfc?.goal;
+                const rivalGoals = match?.rival?.goal;
+
+                if (oyesfcGoals > rivalGoals) {
+                    consecutiveHigherGoals++;
+                } else {
+                    break;
+                }
+            }
+            const no1 = `O Yes FC won in last ${consecutiveHigherGoals} matches.`
             infosForMatch.push(no1)
         }
         if (lastThreeGames?.length > 2 && lastThreeGames?.every(x => x?.oyesfc?.goal <= x?.rival?.goal)) {
-            const no1 = 'O Yes FC could not win in the last 3 matches.'
+            let consecutiveLessGoals = 0;
+            for (let i = matchIndex + 1; i < Object.values(allData)?.length; i++) {
+                const match = Object.values(allData)[i];
+                const oyesfcGoals = match?.oyesfc?.goal;
+                const rivalGoals = match?.rival?.goal;
+
+                if (oyesfcGoals <= rivalGoals) {
+                    consecutiveLessGoals++;
+                } else {
+                    break;
+                }
+            }
+            const no1 = `O Yes FC hasn't won in last ${consecutiveLessGoals} matches.`
             infosForMatch.push(no1)
         }
         if (lastThreeGames?.length > 2 && lastThreeGames?.every(x => x?.oyesfc?.goal > 7)) {
-            const no2 = 'O Yes FC has scored 7 goals or more in each of its last 3 matches.'
+            let minScoredGoalVal = 0;
+            lastThreeGames.forEach(x => {
+                if (!minScoredGoalVal || minScoredGoalVal > x?.oyesfc?.goal) minScoredGoalVal = x?.oyesfc?.goal
+            })
+            const no2 = `O Yes FC has scored at least ${minScoredGoalVal} goals in each of its last 3 matches.`
             infosForMatch.push(no2)
         }
         if (lastThreeGames?.length > 2 && lastThreeGames?.every(x => x?.rival?.goal > 7)) {
-            const no3 = 'O Yes FC has conceded 7 goals or more in each of its last 3 matches.'
+            let minConcededGoalVal = 0;
+            lastThreeGames.forEach(x => {
+                if (!minConcededGoalVal || minConcededGoalVal > x?.rival?.goal) minConcededGoalVal = x?.rival?.goal
+            })
+            const no3 = `O Yes FC has conceded at least ${minConcededGoalVal} goals in each of its last 3 matches.`
             infosForMatch.push(no3)
         }
         if (lastTwoGamesInFacility?.length > 1 && lastTwoGamesInFacility?.every(x => x?.oyesfc?.goal >= x?.rival?.goal)) {
@@ -500,13 +530,59 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
             const no5 = `O yes FC has lost to the ${matchDetailsData?.rival?.name} in the last 3 matches.`
             infosForMatch.push(no5)
         }
+        let topScorerPlayers = {};
+        lastThreeGames.forEach(match => {
+            const squad = match.oyesfc.squad;
+            Object.keys(squad).forEach(player => {
+                const goals = squad[player].goal;
+                topScorerPlayers[player] = (topScorerPlayers[player] || 0) + goals;
+            });
+        });
+        Object.keys(topScorerPlayers).forEach(player => {
+            if (topScorerPlayers[player] >= 9) {
+                if (Object.values(TeamMembers).map(x => x.name).includes(player)) {
+                    const no6 = `${player} scored ${topScorerPlayers[player]} goals in the last 3 matches.`
+                    infosForMatch.push(no6)
+                }
+            }
+        });
+        if (infosForMatch?.length > 0) {
+            let playerGoals = {};
+            Object.values(allData).filter(x => x?.rival?.name === matchDetailsData?.rival?.name).forEach(match => {
+                const squad = match.oyesfc.squad;
+                Object.keys(squad).forEach(player => {
+                    const goals = squad[player].goal;
+                    playerGoals[player] = (playerGoals[player] || 0) + goals;
+                });
+            });
+            let topScorer = '';
+            let maxGoals = 0;
+            Object.keys(playerGoals).forEach(player => {
+                if (playerGoals[player] > maxGoals) {
+                    topScorer = player;
+                    maxGoals = playerGoals[player];
+                }
+            });
+            if (lastThreeGamesWithRival?.length > 0 && maxGoals > 0) {
+                if (Object.values(TeamMembers).map(x => x.name).includes(topScorer)) {
+                    const no7 = `${topScorer} is the player who scored the most goals against ${matchDetailsData?.rival?.name} with ${maxGoals} goals.`
+                    infosForMatch.push(no7)
+                }
+            }
+        }
         return infosForMatch
     }
 
+    const closeButton = (
+        <div className={classes.buttonBorderStyle}>
+            <button className={classes.mapsButtons} onClick={handleClose}>Close</button>
+        </div>
+    )
+
     return (
         <div className={classes.overlay}>
-            { !isAddMatchPopupOpen && !isMessagePopupOpen && <div className={classes.popupContainer} ref={popupRef}>
-                <section className={classes.scoreboard} style={{background: buttonBgColor}}>
+            {!isAddMatchPopupOpen && !isMessagePopupOpen && <div className={classes.popupContainer} ref={popupRef}>
+            <section className={classes.scoreboard} style={{background: buttonBgColor}}>
                     <div className={classes.scoreboardInsideDiv}>
                         <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
                                   bgColor={buttonBgColor} isDetails={true}/>
@@ -579,7 +655,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             }, '&.Mui-selected': {
                                 color: 'lightgray'
                             }
-                        }} label="lineup" {...a11yProps(1)} />
+                        }} label="squad" {...a11yProps(1)} />
                         <Tab sx={{
                             '&.MuiTab-root': {
                                 color: 'gray'
@@ -628,10 +704,10 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                         {
                             bestOfMatch &&
                             <section className={classes.momSection}>
-                                <div>
-                                    <StarIcon fontSize={"large"} className={classes.starIcon}>
+                                <>
+                                    <StarIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.starIcon}>
                                     </StarIcon>
-                                </div>
+                                </>
                                 <div className={classes.momDetailsDiv}>
                                     <span className={classes.momNameSpan}>
                                         {bestOfMatch?.name}
@@ -644,7 +720,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                         }
                         <section className={classes.generalTabSection}>
                             <div className={classes.generalInfoDiv}>
-                                <LocationOnIcon fontSize={"large"}
+                                <LocationOnIcon fontSize={isMobile ? 'medium' : 'large'}
                                                 className={classes.generalInfoIcon}>
                                 </LocationOnIcon>
                                 <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
@@ -652,7 +728,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                     </span>
                             </div>
                             <div className={classes.generalInfoDiv}>
-                                <CalendarMonthIcon fontSize={"large"}
+                                <CalendarMonthIcon fontSize={isMobile ? 'medium' : 'large'}
                                                    className={classes.generalInfoIcon}>
                                 </CalendarMonthIcon>
                                 <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
@@ -660,7 +736,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                     </span>
                             </div>
                             <div className={classes.generalInfoDiv}>
-                                <AccessTimeIcon fontSize={"large"}
+                                <AccessTimeIcon fontSize={isMobile ? 'medium' : 'large'}
                                                 className={classes.generalInfoIcon}>
                                 </AccessTimeIcon>
                                 <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
@@ -672,18 +748,18 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                     <div className={classes.generalInfoDiv}>
                                         {
                                             matchDetailsData?.weather?.sky === WeatherSky[1] ?
-                                                <WbSunnyIcon fontSize={"large"}
+                                                <WbSunnyIcon fontSize={isMobile ? 'medium' : 'large'}
                                                              className={classes.generalInfoIcon}>
                                                 </WbSunnyIcon>
                                                 : matchDetailsData?.weather?.sky === WeatherSky[2] ?
-                                                    <ThunderstormIcon fontSize={"large"}
+                                                    <ThunderstormIcon fontSize={isMobile ? 'medium' : 'large'}
                                                                       className={classes.generalInfoIcon}>
                                                     </ThunderstormIcon>
                                                     : matchDetailsData?.weather?.sky === WeatherSky[3] ?
-                                                        <AcUnitIcon fontSize={"large"}
+                                                        <AcUnitIcon fontSize={isMobile ? 'medium' : 'large'}
                                                                     className={classes.generalInfoIcon}>
                                                         </AcUnitIcon>
-                                                        : <NightlightRoundIcon fontSize={"large"}
+                                                        : <NightlightRoundIcon fontSize={isMobile ? 'medium' : 'large'}
                                                                                className={classes.generalInfoIcon}>
                                                         </NightlightRoundIcon>
                                         }
@@ -692,7 +768,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                             </span>
                                     </div>
                                     <div className={classes.generalInfoDiv}>
-                                        <ThermostatIcon fontSize={"large"}
+                                        <ThermostatIcon fontSize={isMobile ? 'medium' : 'large'}
                                                         className={classes.generalInfoIcon}>
                                         </ThermostatIcon>
                                         <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
@@ -700,7 +776,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                             </span>
                                     </div>
                                     <div className={classes.generalInfoDiv}>
-                                        <CheckroomIcon fontSize={"large"}
+                                        <CheckroomIcon fontSize={isMobile ? 'medium' : 'large'}
                                                        className={classes.generalInfoIcon}>
                                         </CheckroomIcon>
                                         <span className={classes.generalInfoSpan} onClick={redirectToKitsTab}>
@@ -752,7 +828,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             matchInformations?.length > 1 &&
                             <section className={classes.generalTabSection}>
                                 <div className={classes.generalInfoDiv}>
-                                    <InfoIcon fontSize={"large"} className={classes.generalInfoIcon}>
+                                    <InfoIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
                                     </InfoIcon>
                                     <span className={classes.generalInfoSpan}>
                                     Information
@@ -762,7 +838,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 {
                                     matchInformations?.map((x, y) => (
                                         <div key={y} className={classes.generalInfoDiv}>
-                                            <LabelIcon fontSize={"large"} className={classes.generalInfoIcon}>
+                                            <LabelIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
                                             </LabelIcon>
                                             <span className={classes.generalInfoSpan}>
                                             {x}
@@ -773,11 +849,12 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             </section>
                         }
                     </div>
+                    {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={1}>
                     <section className={classes.squadSection}>
                         <div className={classes.generalInfoDiv}>
-                            <GroupsIcon fontSize={"large"} className={classes.generalInfoIcon}>
+                            <GroupsIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
                             </GroupsIcon>
                             <span className={classes.generalInfoSpan}>
                             Squad
@@ -795,7 +872,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                                     {squadRatings?.find(rating => rating?.name === x)?.rating.toFixed(1)}
                                             </span>
                                             :
-                                            <PersonIcon fontSize={"large"} className={classes.generalInfoIcon}>
+                                            <PersonIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
                                             </PersonIcon>
                                     }
                                     <span className={classes.generalInfoSpan}>
@@ -812,6 +889,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             color={'green'}
                         />
                     </div>
+                    {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={2}>
                     <section className={classes.squadSection}>
@@ -824,24 +902,27 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             alt={`1`}
                         />
                     </section>
+                    {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={3}>
                     <>
                         <RivalComparison data={allData} selectedRival={matchDetailsData?.rival.name}/>
                     </>
+                    {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={4}>
                     <>
                         <div className={classes.urlTabSection}>
                             <section className={classes.firstLinksSection}>
                                 <div className={classes.urlInfoDiv}>
-                                    <LocationOnIcon fontSize={"large"}
+                                    <LocationOnIcon fontSize={isMobile ? 'medium' : 'large'}
                                                     className={classes.generalInfoIcon}>
                                     </LocationOnIcon>
                                     <span className={classes.generalInfoSpan}>
                                         {matchDetailsData.place}
                                     </span>
                                 </div>
+                                <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                                 <div className={classes.generalInfoDiv}>
                                     <div className={classes.mapsButtonsWrapper}>
                                         <button className={classes.mapsButtons} onClick={redirectToAppleMaps}>Apple Maps
@@ -854,13 +935,14 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             </section>
                             <section className={classes.linksSection}>
                                 <div className={classes.urlInfoDiv}>
-                                    <CalendarMonthIcon fontSize={"large"}
+                                    <CalendarMonthIcon fontSize={isMobile ? 'medium' : 'large'}
                                                        className={classes.generalInfoIcon}>
                                     </CalendarMonthIcon>
                                     <span className={classes.generalInfoSpan}>
                                         {matchDetailsData.day.replace(/-/g, '/') + ' ' + matchDetailsData.time}
                                     </span>
                                 </div>
+                                <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                                 <div className={classes.generalInfoDiv}>
                                     <AddToCalendarButton
                                         name="Halısaha"
@@ -888,18 +970,18 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 <div className={classes.urlInfoDiv}>
                                     {
                                         matchDetailsData?.weather?.sky === WeatherSky[1] ?
-                                            <WbSunnyIcon fontSize={"large"}
+                                            <WbSunnyIcon fontSize={isMobile ? 'medium' : 'large'}
                                                          className={classes.generalInfoIcon}>
                                             </WbSunnyIcon>
                                             : matchDetailsData?.weather?.sky === WeatherSky[2] ?
-                                                <ThunderstormIcon fontSize={"large"}
+                                                <ThunderstormIcon fontSize={isMobile ? 'medium' : 'large'}
                                                                   className={classes.generalInfoIcon}>
                                                 </ThunderstormIcon>
                                                 : matchDetailsData?.weather?.sky === WeatherSky[3] ?
-                                                    <AcUnitIcon fontSize={"large"}
+                                                    <AcUnitIcon fontSize={isMobile ? 'medium' : 'large'}
                                                                 className={classes.generalInfoIcon}>
                                                     </AcUnitIcon>
-                                                    : <NightlightRoundIcon fontSize={"large"}
+                                                    : <NightlightRoundIcon fontSize={isMobile ? 'medium' : 'large'}
                                                                            className={classes.generalInfoIcon}>
                                                     </NightlightRoundIcon>
                                     }
@@ -914,6 +996,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                         </span>
                                     }
                                 </div>
+                                <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                                 <div className={classes.generalInfoDiv}>
                                     <div className={classes.mapsButtonsWrapper}>
                                         {
@@ -932,15 +1015,16 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             </section>
                             {
                                 credentials?.isCaptain &&
-                                <section className={classes.linksSection}>
+                                <section className={classes.lastLinksSection}>
                                     <div className={classes.urlInfoDiv}>
-                                        <EditIcon fontSize={"large"}
+                                        <EditIcon fontSize={isMobile ? 'medium' : 'large'}
                                                   className={classes.generalInfoIcon}>
                                         </EditIcon>
                                         <span className={classes.generalInfoSpan}>
                                             Edit Match
                                         </span>
                                     </div>
+                                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                                     <div className={classes.generalInfoDiv}>
                                         <div className={classes.mapsButtonsWrapper}>
                                             <button className={classes.mapsButtons} onClick={editMatch}>Edit
@@ -951,6 +1035,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             }
                         </div>
                     </>
+                    {isMobile && closeButton}
                 </CustomTabPanel>
                 {
                     credentials?.signedIn && fixture === 'previous' &&
@@ -1002,15 +1087,16 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             {
                                 starsErrorMessage &&
                                 <section className={classes.starSection}>
-                                <span className={classes.starsErrorSpan}>
-                                    <ErrorOutlineIcon fontSize={"large"} className={classes.errorIcon}>
-                                    </ErrorOutlineIcon>
-                                    {starsErrorMessage}
-                                </span>
+                                    <span className={classes.starsErrorSpan}>
+                                        <ErrorOutlineIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.errorIcon}>
+                                        </ErrorOutlineIcon>
+                                        {starsErrorMessage}
+                                    </span>
                                 </section>
                             }
                             <div className={classes.submitButtonDiv}>
                                 <button className={classes.mapsButtons} disabled={starsSubmitButton === 'Submitted'} onClick={submitStars}>{starsSubmitButton}</button>
+                                {isMobile && <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
                             </div>
                         </CustomTabPanel>
                         <CustomTabPanel value={tabValue} index={6}>
@@ -1044,7 +1130,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 notesErrorMessage &&
                                 <section className={classes.starSection}>
                                     <span className={classes.starsErrorSpan}>
-                                        <ErrorOutlineIcon fontSize={"large"} className={classes.errorIcon}>
+                                        <ErrorOutlineIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.errorIcon}>
                                         </ErrorOutlineIcon>
                                         {notesErrorMessage}
                                     </span>
@@ -1052,16 +1138,13 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             }
                             <div className={classes.submitButtonDiv}>
                                 <button className={classes.mapsButtons} disabled={notesSubmitButton === 'Submitted'}
-                                        onClick={submitNote}>{notesSubmitButton}</button>
+                                        onClick={submitNote}>
+                                    {notesSubmitButton}
+                                </button>
+                                {isMobile && <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
                             </div>
                         </CustomTabPanel>
                     </>
-                }
-                {
-                    isMobile &&
-                    <div className={classes.buttonBorderStyle}>
-                        <button className={classes.buttonStyle} onClick={handleClose}>Close</button>
-                    </div>
                 }
             </div>}
             {isAddMatchPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}

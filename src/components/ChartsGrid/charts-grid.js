@@ -212,9 +212,9 @@ const ChartsGrid = ({matchData, databaseData}) => {
     };
 
     CustomLine.propTypes = {
-        backgroundColor: PropTypes.string,
-        borderColor: PropTypes.string,
-        borderWidth: PropTypes.number,
+        backgroundcolor: PropTypes.string,
+        bordercolor: PropTypes.string,
+        borderwidth: PropTypes.number,
     };
 
     return (
@@ -236,9 +236,9 @@ const ChartsGrid = ({matchData, databaseData}) => {
                         width={"100%"}
                         className={classes.goalsPerGameChart}
                         options={options}
-                        backgroundColor="darkred"
-                        borderColor="darkred"
-                        borderWidth={2}
+                        backgroundcolor="darkred"
+                        bordercolor="darkred"
+                        borderwidth={2}
                     />
                 </div>
             </div>

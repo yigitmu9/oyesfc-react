@@ -69,7 +69,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
     });
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [matchDetailsData, setMatchDetailsData] = useState(null);
-    const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 320) + 'px' : (window.innerHeight - 350) + 'px';
+    const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 200) + 'px' : (window.innerHeight - 230) + 'px';
 
     const openPopup = (x, fixture) => {
         document.body.style.overflow = 'hidden';
@@ -142,7 +142,9 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                       credentials={credentials} allData={sortedAllData}/>}
                 </div>
                 :
-                <h1 className={classes.title}>No Match found</h1>
+                <div style={{minHeight: windowHeight, textAlign: 'center', alignItems: 'center', display: 'flex', justifyContent: 'center'}}>
+                    <h1 className={classes.title}>No Match found</h1>
+                </div>
             }
         </>
     );

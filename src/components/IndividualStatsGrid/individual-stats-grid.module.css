@@ -36,3 +36,57 @@
         font-size: 25px;
     }
 }
+
+.test {
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    @media (max-width: 767px) {
+        margin-right: 3%;
+        margin-left: 3%;
+        height: 500px;
+    }
+}
+
+.test2 {
+    display: flex;
+    height: 25%;
+    justify-content: space-between;
+}
+.test3 {
+    display: flex;
+    height: 25%;
+    justify-content: center;
+}
+.test4 {
+    display: flex;
+    height: 25%;
+    justify-content: space-between;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+.test5 {
+    display: flex;
+    height: 25%;
+    justify-content: space-between;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+.test6 {
+    display: flex;
+    height: 25%;
+    justify-content: space-between;
+    margin-left: 32%;
+    margin-right: 32%;
+}
+
+.deneme {
+    cursor: pointer;
+}
+
+.deneme:hover {
+    transform: scale(1.2);
+}

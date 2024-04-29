@@ -8,14 +8,70 @@ import classes from "./individual-stats-grid.module.css";
 import {Divider} from "@mui/material";
 import RivalsIndividualStats from "../RivalsIndividualStats/rivals-individual-stats";
 import teamStatsClasses from "../TeamStatsGrid/team-stats-grid.module.css"
+import Fifa from "../../images/fifa.jpeg";
+import {TeamMembers} from "../../constants/constants";
+import CardMedia from "@mui/material/CardMedia";
 
 const IndividualStatsGrid = ({databaseData}) => {
 
     const matchDetailsFilteredData= Object.values(databaseData);
+    const isMobile = window.innerWidth / 12;
+    const forwards = ['MERT', 'YİĞİT', 'BERENT']
+    const midfielders = ['BERK', 'GÖKHAN', 'OĞULCAN', 'UTKU']
+    const backs = ['ATAKAN', 'MEHMET', 'OĞUZHAN']
 
     return (
         <div className={classes.grid}>
             <div className={classes.generalStyle}>
+                <div className={classes.test} style={{backgroundImage: `url(${Fifa})`}}>
+                    <div className={classes.test6}>
+                        {
+                            forwards.map((x, y) => (
+                                <CardMedia
+                                    key={y}
+                                    component="img"
+                                    sx={{height: 'auto', width: isMobile}}
+                                    image={require(`../../images/${x}.png`)}
+                                    className={classes.deneme}
+                                />
+                            ))
+                        }
+                    </div>
+                    <div className={classes.test5}>
+                        {
+                            midfielders.map((x, y) => (
+                                <CardMedia
+                                    key={y}
+                                    component="img"
+                                    sx={{height: 'auto', width: isMobile}}
+                                    image={require(`../../images/${x}.png`)}
+                                    className={classes.deneme}
+                                />
+                            ))
+                        }
+                    </div>
+                    <div className={classes.test4}>
+                        {
+                            backs.map((x, y) => (
+                                <CardMedia
+                                    key={y}
+                                    component="img"
+                                    sx={{height: 'auto', width: isMobile}}
+                                    image={require(`../../images/${x}.png`)}
+                                    className={classes.deneme}
+                                />
+                            ))
+                        }
+                    </div>
+                    <div className={classes.test3}>
+                        <CardMedia
+                            component="img"
+                            sx={{height: 'auto', width: 140}}
+                            image={require(`../../images/CAN.png`)}
+                            className={classes.deneme}
+                        />
+                    </div>
+                </div>
                 <h1 className={classes.firstTitle}>Players</h1>
                 <div className={classes.divStyle}>
                     <PlayerCardsGrid matchData={matchDetailsFilteredData}/>

@@ -55,6 +55,9 @@
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     border-radius: 0;
     min-width: 0;
+    @media (max-width: 768px) {
+        padding: 20px;
+    }
 }
 
 .scoreboardInsideDiv {
@@ -73,6 +76,9 @@
 
 .playerGoalsDiv {
     margin-top: 30px;
+    @media (max-width: 768px) {
+        margin-top: 20px;
+    }
 }
 
 .goalNames {
@@ -160,6 +166,9 @@
     border-radius: 25px;
     background: #323232;
     margin: 20px 10px;
+    @media (max-width: 768px) {
+        margin: 10px;
+    }
 }
 
 .squadSection {
@@ -168,7 +177,10 @@
     padding: 10px;
     border-radius: 25px;
     background: #323232;
-    margin: 20px
+    margin: 20px;
+    @media (max-width: 768px) {
+        margin: 10px;
+    }
 }
 
 .linksSection {
@@ -178,6 +190,21 @@
     border-radius: 25px;
     background: #323232;
     margin: 0 20px 20px 20px;
+    @media (max-width: 768px) {
+        margin: 0 10px 10px 10px;
+    }
+}
+
+.lastLinksSection {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 25px;
+    background: #323232;
+    margin: 0 20px 20px 20px;
+    @media (max-width: 768px) {
+        margin: 0 10px;
+    }
 }
 
 .firstLinksSection {
@@ -186,7 +213,10 @@
     padding: 10px;
     border-radius: 25px;
     background: #323232;
-    margin: 20px 20px 20px 20px;
+    margin: 20px;
+    @media (max-width: 768px) {
+        margin: 10px;
+    }
 }
 
 .generalInfoDiv {
@@ -198,7 +228,7 @@
 .urlInfoDiv {
     display: flex;
     align-items: center;
-    margin: 10px 10px 0;
+    margin: 10px;
 }
 
 .generalInfoSpan {
@@ -234,12 +264,15 @@
     padding: 10px;
     margin: 20px;
     background: green;
+    @media (max-width: 768px) {
+        margin: 10px;
+    }
 }
 
 .generalTabDiv {
     margin: 10px;
     @media (max-width: 768px) {
-        margin: 5px;
+        margin: 0;
     }
 }
 
@@ -277,6 +310,11 @@
     -webkit-tap-highlight-color: transparent;
     width: auto;
     z-index: 1;
+    &:hover {
+        background-color: #373737;
+        color: #f1f1f1;
+        box-shadow: rgba(0 0 0 / 90%) 2px 5px 20px -4px, rgba(0 0 0 / 50%) 1px 2px 6px -2px;
+    }
 }
 
 .mapsButtonsWrapper {
@@ -346,6 +384,7 @@
     width: 95%;
     @media (max-width: 768px) {
         margin: 5px 5px 0;
+        font-size: 14px;
     }
 }
 
@@ -356,6 +395,9 @@
     background: #323232;
     border-radius: 25px;
     margin: 10px 10px 20px;
+    @media (max-width: 768px) {
+        margin: 10px;
+    }
 }
 
 .formTitleDiv {
@@ -376,7 +418,7 @@
     justify-content: space-between;
     align-items: flex-start;
     @media (max-width: 768px) {
-        flex-direction: column;
+        margin: 5px;
     }
 }
 
@@ -390,6 +432,7 @@
     text-align: center;
     @media (max-width: 768px) {
         font-size: 14px;
+        padding: 3px 5px;
     }
 }
 
@@ -403,6 +446,7 @@
     text-align: center;
     @media (max-width: 768px) {
         font-size: 14px;
+        padding: 3px 5px;
     }
 }
 
@@ -416,6 +460,7 @@
     text-align: center;
     @media (max-width: 768px) {
         font-size: 14px;
+        padding: 3px 5px;
     }
 }
 
@@ -425,6 +470,9 @@
     height: 3px;
     border-radius: 25px;
     margin-top: 3px;
+    @media (max-width: 768px) {
+        width: 30px;
+    }
 }
 
 .lastDrawMatch {
@@ -433,6 +481,9 @@
     height: 3px;
     border-radius: 25px;
     margin-top: 3px;
+    @media (max-width: 768px) {
+        width: 30px;
+    }
 }
 
 .lastLostMatch {
@@ -441,6 +492,9 @@
     height: 3px;
     border-radius: 25px;
     margin-top: 3px;
+    @media (max-width: 768px) {
+        width: 30px;
+    }
 }
 
 .lastGamesDiv {
@@ -449,6 +503,9 @@
     justify-content: center;
     align-items: center;
     width: 80px;
+    @media (max-width: 768px) {
+        width: 55px;
+    }
 }
 
 input[type="radio"] {
@@ -475,7 +532,7 @@ input[type="radio"] {
     border-radius: 25px;
     @media (max-width: 768px) {
         margin: 10px;
-        padding: 10px;
+        padding: 15px;
     }
 }
 
@@ -507,6 +564,9 @@ input[type="radio"] {
     align-content: center;
     justify-items: center;
     margin: 20px;
+    @media (max-width: 768px) {
+        margin: 10px;
+    }
 }
 
 .starsErrorSpan {
@@ -534,7 +594,7 @@ input[type="radio"] {
     flex-direction: column;
     @media (max-width: 768px) {
         margin: 10px;
-        padding: 10px;
+        padding: 15px;
     }
 }
 
@@ -573,13 +633,17 @@ input[type="radio"] {
     font-size: 18px;
     padding: 5px;
     border-radius: 25px;
-    width: 50px;
-    height: 40px;
+    width: 45px;
+    height: 35px;
     text-align: center;
     align-content: center;
     align-items: center;
     color: lightgray;
-
+    @media (max-width: 768px) {
+        font-size: 14px;
+        width: 40px;
+        height: 30px;
+    }
 }
 
 .midRating {
@@ -587,15 +651,19 @@ input[type="radio"] {
     font-size: 18px;
     padding: 5px;
     border-radius: 25px;
-    width: 50px;
+    width: 45px;
     justify-items: center;
     justify-content: center;
-    height: 40px;
+    height: 35px;
     text-align: center;
     align-content: center;
     align-items: center;
     color: lightgray;
-
+    @media (max-width: 768px) {
+        font-size: 14px;
+        width: 40px;
+        height: 30px;
+    }
 }
 
 .badRating {
@@ -603,14 +671,19 @@ input[type="radio"] {
     font-size: 18px;
     padding: 5px;
     border-radius: 25px;
-    width: 50px;
-    height: 40px;
+    width: 45px;
+    height: 35px;
     text-align: center;
     align-content: center;
     align-items: center;
     color: lightgray;
     justify-items: center;
     justify-content: center;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        width: 40px;
+        height: 30px;
+    }
 }
 
 .momDetailsDiv {
@@ -622,12 +695,18 @@ input[type="radio"] {
     font-size: 18px;
     color: lightgray;
     font-weight: bolder;
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
 }
 
 .momSmallSpan {
     font-size: 14px;
     color: gray;
     font-weight: bolder;
+    @media (max-width: 768px) {
+        font-size: 10px;
+    }
 }
 
 .momSection {
@@ -638,6 +717,9 @@ input[type="radio"] {
     align-items: center;
     align-content: center;
     margin: 20px 10px;
+    @media (max-width: 768px) {
+        margin: 10px;
+    }
 }
 
 .starIcon {

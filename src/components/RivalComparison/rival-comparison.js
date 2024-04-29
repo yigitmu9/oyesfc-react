@@ -82,7 +82,7 @@ const RivalComparison = ({data, selectedRival}) => {
     }
 
     return (
-        <div className={ selectedRival ? classes.matchPageGrid : classes.grid}>
+        <div className={ selectedRival ? classes.matchPageGrid : classes.grid} style={{backgroundColor: selectedRival ? "#404040" : "#242424"}}>
             <Card sx={{borderRadius:  selectedRival ? "0" : "25px", width: "100%", height: "auto"}}
                   style={{backgroundColor: selectedRival ? "#404040" : "#242424", justifyContent: "center", alignItems: "center"}}>
                 {
