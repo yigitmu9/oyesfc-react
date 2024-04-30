@@ -1,12 +1,52 @@
 .fontStyle {
-    background-color: #242424;
     color: lightgray;
-    font-size: 14px
+    font-size: 18px
 }
 
-.titleStyle {
-    background-color: #242424;
+.playerNameTitle {
+    width: 100%;
+    text-align: center;
+    background: #323232;
     color: lightgray;
-    margin-bottom: 10px;
+    padding-top: 10px;
 }
 
+.generalInfoDiv {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    margin: 20px 60px 20px 50px;
+    @media (max-width: 767px) {
+
+    }
+}
+
+.generalPointsDiv {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    margin: 20px 70px;
+    @media (max-width: 767px) {
+
+    }
+}
+
+.generalInfoInsideDiv {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}
+
+.iconStyle {
+    color: white;
+}
+
+.belowIconSpan {
+    color: lightgray;
+    font-size: 18px;
+    margin-top: 5px;
+}

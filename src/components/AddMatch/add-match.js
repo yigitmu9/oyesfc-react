@@ -36,14 +36,14 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         }
     };
 
+    const initialOYesFCSquadFormData = selectedMatchData ? selectedMatchData?.oyesfc?.squad : {};
+
     useEffect(() => {
         document.addEventListener('mousedown', handleOutsideClick);
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
     });
-
-    const initialOYesFCSquadFormData = selectedMatchData ? selectedMatchData?.oyesfc?.squad : {};
 
     const initialOYesFCFormData = {
         goal: selectedMatchData ? selectedMatchData?.oyesfc?.goal : 0,

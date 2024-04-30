@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PlayerCardsGrid from "../PlayerCardsGrid/player-cards-grid";
 import ChartsGrid from "../ChartsGrid/charts-grid.js";
 import FacilitiesIndividualStats from "../FacilitiesIndividualStats/facilities-individual-stats";
@@ -8,73 +8,28 @@ import classes from "./individual-stats-grid.module.css";
 import {Divider} from "@mui/material";
 import RivalsIndividualStats from "../RivalsIndividualStats/rivals-individual-stats";
 import teamStatsClasses from "../TeamStatsGrid/team-stats-grid.module.css"
-import Fifa from "../../images/fifa.jpeg";
-import {TeamMembers} from "../../constants/constants";
-import CardMedia from "@mui/material/CardMedia";
+import UltimateTeam from "../UltimateTeam/ultimate-team";
+import PlayerDetails from "../PlayerDetails/player-details";
 
 const IndividualStatsGrid = ({databaseData}) => {
 
     const matchDetailsFilteredData= Object.values(databaseData);
-    const isMobile = window.innerWidth / 12;
-    const forwards = ['MERT', 'YİĞİT', 'BERENT']
-    const midfielders = ['BERK', 'GÖKHAN', 'OĞULCAN', 'UTKU']
-    const backs = ['ATAKAN', 'MEHMET', 'OĞUZHAN']
+    const [isPopupOpen, setPopupOpen] = useState(false);
+    const [player, setPlayer] = useState(null);
+
+    const openPlayerDetails = (data) => {
+        setPlayer(data)
+        document.body.style.overflow = 'hidden';
+        setPopupOpen(true)
+    }
 
     return (
         <div className={classes.grid}>
             <div className={classes.generalStyle}>
-                <div className={classes.test} style={{backgroundImage: `url(${Fifa})`}}>
-                    <div className={classes.test6}>
-                        {
-                            forwards.map((x, y) => (
-                                <CardMedia
-                                    key={y}
-                                    component="img"
-                                    sx={{height: 'auto', width: isMobile}}
-                                    image={require(`../../images/${x}.png`)}
-                                    className={classes.deneme}
-                                />
-                            ))
-                        }
-                    </div>
-                    <div className={classes.test5}>
-                        {
-                            midfielders.map((x, y) => (
-                                <CardMedia
-                                    key={y}
-                                    component="img"
-                                    sx={{height: 'auto', width: isMobile}}
-                                    image={require(`../../images/${x}.png`)}
-                                    className={classes.deneme}
-                                />
-                            ))
-                        }
-                    </div>
-                    <div className={classes.test4}>
-                        {
-                            backs.map((x, y) => (
-                                <CardMedia
-                                    key={y}
-                                    component="img"
-                                    sx={{height: 'auto', width: isMobile}}
-                                    image={require(`../../images/${x}.png`)}
-                                    className={classes.deneme}
-                                />
-                            ))
-                        }
-                    </div>
-                    <div className={classes.test3}>
-                        <CardMedia
-                            component="img"
-                            sx={{height: 'auto', width: 140}}
-                            image={require(`../../images/CAN.png`)}
-                            className={classes.deneme}
-                        />
-                    </div>
-                </div>
+                <UltimateTeam onClickCard={openPlayerDetails}/>
                 <h1 className={classes.firstTitle}>Players</h1>
                 <div className={classes.divStyle}>
-                    <PlayerCardsGrid matchData={matchDetailsFilteredData}/>
+
                 </div>
                 <h1 className={classes.secondTitle}>Individual Statistics</h1>
                 <div className={classes.divStyle}>
@@ -102,6 +57,9 @@ const IndividualStatsGrid = ({databaseData}) => {
                     </div>
                 </div>
             </div>
+            {isPopupOpen &&
+                <PlayerDetails matchDetailsData={matchDetailsFilteredData}
+                               onClose={() => setPopupOpen(false)} player={player}/>}
         </div>
     );
 };
