@@ -7,7 +7,7 @@ import GameStatus from "../GameStatus/game-status";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import {WeatherSky} from "../../constants/constants";
 import Box from "@mui/material/Box";
-import {Divider, Tab, Tabs, Typography} from "@mui/material";
+import {Divider, Tab, Tabs} from "@mui/material";
 import PropTypes from "prop-types";
 import RivalComparison from "../RivalComparison/rival-comparison";
 import AcUnitIcon from '@mui/icons-material/AcUnit';

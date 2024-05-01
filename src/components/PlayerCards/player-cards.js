@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import {Divider, List, ListItem, Tab, Tabs, Typography} from "@mui/material";
+import {Divider, List, ListItem, Tab, Tabs} from "@mui/material";
 import {TeamMembers} from "../../constants/constants";
 import classes from "../PlayerCards/player-cards.module.css"
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
