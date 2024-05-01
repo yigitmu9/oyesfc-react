@@ -34,3 +34,26 @@
 .scoreboard:hover {
   transform: scale(1.05);
 }
+
+.scoreboardPlayerDetails {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  border-radius: 25px;
+  margin: 5px;
+  max-width: 500px;
+  min-width: 560px;
+  cursor: pointer;
+  width: calc(33.33% - 20px);
+  max-height: 128px;
+  @media (max-width: 768px) {
+    max-width: 100%;
+    min-width: 100px;
+    width: 100%;
+    margin-bottom: -10px;
+    max-height: 97px;
+
+  }
+}

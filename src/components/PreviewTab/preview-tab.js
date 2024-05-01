@@ -110,6 +110,30 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
                 }
             }
         });
+
+        let allTimePlayerGoals = {};
+        Object.values(allData).filter((x, y) => x && y > matchIndex).forEach(match => {
+            const squad = match.oyesfc.squad;
+            Object.keys(squad).forEach(player => {
+                if (Object.keys(matchDetailsData.oyesfc.squad).includes(player) && Object.values(TeamMembers).map(x => x.name).includes(player)) {
+                    const goals = squad[player].goal;
+                    allTimePlayerGoals[player] = Number((allTimePlayerGoals[player] || 0) + goals);
+                }
+            });
+        });
+
+        const filteredNames = Object.entries(allTimePlayerGoals).filter(value => {
+            const remainder = value[1] < 50 ? 50 - value[1] : 50 - (value[1] % 50);
+            return remainder >= 1 && remainder <= 3 && (value[1] + remainder) % 50 === 0;
+        }).map(([name, value]) => ({ name, remainder: value < 50 ? 50 - value : 50 - (value % 50), goal: value }));
+
+        if (filteredNames?.length > 0) {
+            filteredNames?.forEach((person) => {
+                const no5 = `There are ${person.remainder} goals left for ${person.name} to reach the ${person.goal + person.remainder}-goal threshold with O Yes FC jersey.`
+                infosForMatch.push(no5)
+            })
+        }
+
         if (infosForMatch?.length > 0) {
             let playerGoals = {};
             Object.values(allData).filter(x => x?.rival?.name === matchDetailsData?.rival?.name).forEach(match => {
@@ -219,7 +243,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
                     <div className={classes.formScoresDiv}>
                         {
                             lastFiveGames.map((x, y) => (
-                                <div className={classes.lastGamesDiv}>
+                                <div key={y} className={classes.lastGamesDiv}>
                                                 <span className={
                                                     x.oyesfc.goal > x.rival.goal ?
                                                         classes.formScoresWinSpan

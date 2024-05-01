@@ -1,0 +1,78 @@
+.titleStyle {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    text-align: center;
+    margin-top: 20px;
+    @media screen and (max-width: 768px) {
+        font-size: 25px;
+        margin: 20px;
+    }
+}
+
+.grid {
+    margin-top: 50px;
+    margin-left: 14%;
+    margin-right: 14%;
+    display: flex;
+    justify-content: space-between;
+    overflow-x: hidden;
+    @media screen and (max-width: 768px) {
+        margin-top: 0;
+        margin-left: 3%;
+        margin-right: 3%;
+        display: block;
+        justify-content: center;
+    }
+}
+
+.cardAlign {
+    display: flex;
+    background-color: #242424;
+    @media screen and (max-width: 1500px) {
+        display: block;
+        justify-content: center;
+    }
+}
+
+.iconDivStyle {
+    display: block;
+    width: 40%;
+    margin-right: 30px;
+    height: 300px;
+    background-color: #242424;
+    text-align: center;
+    @media screen and (max-width: 1500px) {
+        width: 100%;
+        margin-right: 0;
+        height: auto;
+    }
+}
+
+.cardGrid {
+    border-radius: 25px;
+    width: 48%;
+    height: 340px;
+    background-color: #242424;
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        height: auto;
+        margin-bottom: 50px;
+    }
+    @media screen and (max-width: 1500px) {
+        height: auto;
+    }
+}
+
+.tableStyle {
+    display: flex;
+    width: 50%;
+    height: 230px;
+    background-color: #242424;
+    text-align: center;
+    justify-content: center;
+    margin-right: 30px;
+    margin-left: 15px;
+    @media screen and (max-width: 1500px) {
+        width: 93%;
+    }
+}

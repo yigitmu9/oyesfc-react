@@ -2,6 +2,7 @@ import classes from "./message.module.css";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import React from "react";
+import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 
 const Message = ({onClose, messageData, reloadData}) => {
 
@@ -25,7 +26,9 @@ const Message = ({onClose, messageData, reloadData}) => {
                         <ReportProblemIcon style={{marginBottom: "10px", width: "5rem", height: "5rem",  background: "#404040", color: "lightgray"}}></ReportProblemIcon>
                     }
                     <h4 style={{marginBottom: "10px",  background: "#404040", color: "lightgray"}}>{messageData.message}</h4>
-                    <button className={classes.buttonStyle} onClick={handleClose}>Ok</button>
+                    <div className={classes.buttonDiv}>
+                        <button className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Ok</button>
+                    </div>
                 </div>
             </div>
         </div>

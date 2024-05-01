@@ -245,13 +245,22 @@ label {
 }
 
 .iconStyle {
-    background: #1f1f1f;
-    font-size: 30px;
-    color: darkred;
+    background: transparent;
+    font-size: 20px;
+    color: lightgray;
 }
 
 .addPlayerSpan {
     background: #1f1f1f;
     font-size: 20px;
     color: darkred;
+}
+
+.matchSubmitButtonDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.addPlayerButtonDiv {
+    width: 60px;
 }

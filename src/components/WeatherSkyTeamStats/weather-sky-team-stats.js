@@ -1,15 +1,18 @@
 import React from 'react';
-import classes from "./weather-team-stats.module.css";
+import classes from "./weather-sky-team-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import SevereColdIcon from '@mui/icons-material/SevereCold';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import {Divider, List, ListItem} from "@mui/material";
 import generalResultsClasses from '../GeneralResults/general-results.module.css'
+import {WeatherSky} from "../../constants/constants";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import ThunderstormIcon from "@mui/icons-material/Thunderstorm";
+import NightlightRoundIcon from "@mui/icons-material/NightlightRound";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
 
-const WeatherTeamStats = ({data}) => {
+const WeatherSkyTeamStats = ({data, selectedSky}) => {
 
-    const hotWeatherData = Object.values(data).filter(item => item?.weather?.temperature > 15);
+    const hotWeatherData = Object.values(data).filter(item => item?.weather?.sky === selectedSky[0]);
     const numberOfMatches = Object.values(hotWeatherData)?.length;
     const wonMatches = Object.values(hotWeatherData)?.filter(x => x?.oyesfc?.goal > x?.rival?.goal)?.length;
     const lostMatches = Object.values(hotWeatherData)?.filter(x => x?.oyesfc?.goal < x?.rival?.goal)?.length;
@@ -27,7 +30,7 @@ const WeatherTeamStats = ({data}) => {
     const concededGoalsPerGame = (goalsConceded / numberOfMatches)?.toFixed(2);
     const goalDifferencePerGame = (goalDifference / numberOfMatches)?.toFixed(2);
 
-    const coldWeatherData = Object.values(data).filter(item => item?.weather?.temperature < 16);
+    const coldWeatherData = Object.values(data).filter(item => item?.weather?.sky === selectedSky[1]);
     const numberOfMatchesCold = Object.values(coldWeatherData)?.length;
     const wonMatchesCold = Object.values(coldWeatherData)?.filter(x => x?.oyesfc?.goal > x?.rival?.goal)?.length;
     const lostMatchesCold = Object.values(coldWeatherData)?.filter(x => x?.oyesfc?.goal < x?.rival?.goal)?.length;
@@ -45,17 +48,44 @@ const WeatherTeamStats = ({data}) => {
     const concededGoalsPerGameCold = (goalsConcededCold / numberOfMatchesCold)?.toFixed(2);
     const goalDifferencePerGameCold = (goalDifferenceCold / numberOfMatchesCold)?.toFixed(2);
 
+    const firstIcon = selectedSky[0] === WeatherSky[1] ?
+        (
+            <div className={classes.iconDivStyle}>
+                <WbSunnyIcon sx={{width: "200px", height: "200px"}} className={classes.iconStyle}>
+                </WbSunnyIcon>
+            </div>
+        )
+        :
+        (
+            <div className={classes.iconDivStyle}>
+                <ThunderstormIcon sx={{width: "200px", height: "200px"}} className={classes.iconStyle}>
+                </ThunderstormIcon>
+            </div>
+        )
+
+    const secondIcon = selectedSky[1] === WeatherSky[0] ?
+        (
+            <div className={classes.iconDivStyle}>
+                <NightlightRoundIcon sx={{width: "200px", height: "200px"}} className={classes.iconStyle}>
+                </NightlightRoundIcon>
+            </div>
+        )
+        :
+        (
+            <div className={classes.iconDivStyle}>
+                <AcUnitIcon sx={{width: "200px", height: "200px"}} className={classes.iconStyle}>
+                </AcUnitIcon>
+            </div>
+        )
+
     return (
         <div className={classes.grid}>
             <div className={classes.cardGrid}>
                 <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                    <h1 className={classes.titleStyle}>Hot Weather{' (>15'}&#176;{')'}</h1>
+                    <h1 className={classes.titleStyle}>{selectedSky[0]}</h1>
                     <CardContent style={{backgroundColor: "#242424"}}>
                         <div className={classes.cardAlign}>
-                            <div className={classes.iconDivStyle}>
-                                <LocalFireDepartmentIcon sx={{width: "200px", height: "200px"}}
-                                              className={classes.iconStyle}></LocalFireDepartmentIcon>
-                            </div>
+                            {firstIcon}
                             <div className={classes.percentageDiv}>
                                 <List  component="nav" aria-label="mailbox folders" style={{backgroundColor: "#242424", width: "100%"}}>
                                     <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
@@ -100,13 +130,10 @@ const WeatherTeamStats = ({data}) => {
             </div>
             <div className={classes.cardGrid}>
                 <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                    <h1 className={classes.titleStyle}>Cold Weather{' (<15'}&#176;{')'}</h1>
+                    <h1 className={classes.titleStyle}>{selectedSky[1]}</h1>
                     <CardContent style={{backgroundColor: "#242424"}}>
                         <div className={classes.cardAlign}>
-                            <div className={classes.iconDivStyle}>
-                                <SevereColdIcon sx={{width: "200px", height: "200px"}}
-                                                           className={classes.iconStyle}></SevereColdIcon>
-                            </div>
+                            {secondIcon}
                             <div className={classes.percentageDiv}>
                                 <List  component="nav" aria-label="mailbox folders" style={{backgroundColor: "#242424", width: "100%"}}>
                                     <ListItem style={{backgroundColor: "#242424",  justifyContent: "space-between", display: "flex", textAlign: "end"}}>
@@ -153,4 +180,4 @@ const WeatherTeamStats = ({data}) => {
     );
 };
 
-export default WeatherTeamStats;
+export default WeatherSkyTeamStats;

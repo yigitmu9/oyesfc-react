@@ -1,0 +1,89 @@
+.grid {
+    margin-top: 50px;
+    margin-left: 14%;
+    margin-right: 14%;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    @media screen and (max-width: 768px) {
+        margin-left: 3%;
+        margin-right: 3%;
+
+    }
+    @media screen and (min-width: 769px) and (max-width: 1700px) {
+
+    }
+}
+
+.chart {
+    background-color: rgb(36, 36, 36);
+}
+
+.select {
+    background-color: #404040;
+    color: lightgray;
+    margin-left: 30px;
+    border-color: #404040;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    font-size: 16px;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+        width: 170px;
+        height: 40px;
+    }
+}
+
+.titleStyle {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    text-align: center;
+    margin-top: 20px;
+    @media screen and (max-width: 768px) {
+        font-size: 25px;
+    }
+}
+
+.selectionGrid {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.selectionInsideGrid {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+}
+
+.colorStyle {
+    background-color: rgb(36, 36, 36);
+    color: lightgray;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+
+.cardContentInsideStyle {
+    display: flex;
+    background-color: #242424;
+
+    @media screen and (max-width: 768px) {
+        display: block;
+    }
+    @media screen and (min-width: 769px) and (max-width: 1700px) {
+        display: block;
+    }
+}

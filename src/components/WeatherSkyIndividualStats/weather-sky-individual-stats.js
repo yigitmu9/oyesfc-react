@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from "./weather-individual-stats.module.css";
+import classes from "./weather-sky-individual-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {
@@ -10,15 +10,17 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
-import {TeamMembers} from "../../constants/constants";
-import SevereColdIcon from '@mui/icons-material/SevereCold';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import {TeamMembers, WeatherSky} from "../../constants/constants";
 import weatherTeamClasses from "../WeatherTeamStats/weather-team-stats.module.css"
+import AcUnitIcon from '@mui/icons-material/AcUnit';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import NightlightRoundIcon from '@mui/icons-material/NightlightRound';
+import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 
-const WeatherIndividualStats = ({data}) => {
+const WeatherSkyIndividualStats = ({data, selectedSky}) => {
 
-    const hotWeather = Object.values(data).filter(item => item?.weather?.temperature > 15);
-    const coldWeather = Object.values(data).filter(item => item?.weather?.temperature < 16);
+    const secondWeather = Object.values(data).filter(item => item?.weather?.sky === selectedSky[1]);
+    const firstWeather = Object.values(data).filter(item => item?.weather?.sky === selectedSky[0]);
     const rows = Object.values(TeamMembers).map(x => x.name);
     let playerTotalGoal = 0;
     let playerGoalData = [];
@@ -26,17 +28,17 @@ const WeatherIndividualStats = ({data}) => {
     let playerGoalPerGameData = [];
     let playerMatchData = [];
 
-    const numberOfMatches = Object.values(hotWeather).length;
+    const numberOfMatches = Object.values(secondWeather).length;
 
     Object.values(TeamMembers).forEach(member => {
         playerTotalGoal = 0;
-        Object.values(hotWeather).forEach(item => {
+        Object.values(secondWeather).forEach(item => {
             if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
                 playerTotalGoal += item.oyesfc.squad[member.name].goal;
             }
         });
 
-        const playerTotalMatch = Object.values(hotWeather).filter(item =>
+        const playerTotalMatch = Object.values(secondWeather).filter(item =>
             Object.keys(item.oyesfc.squad).includes(member.name)).length;
 
         const attendanceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
@@ -54,17 +56,17 @@ const WeatherIndividualStats = ({data}) => {
     let playerGoalPerGameDataCold = [];
     let playerMatchDataCold = [];
 
-    const numberOfMatchesCold = Object.values(coldWeather).length;
+    const numberOfMatchesCold = Object.values(firstWeather).length;
 
     Object.values(TeamMembers).forEach(member => {
         playerTotalGoalCold = 0;
-        Object.values(coldWeather).forEach(item => {
+        Object.values(firstWeather).forEach(item => {
             if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
                 playerTotalGoalCold += item.oyesfc.squad[member.name].goal;
             }
         });
 
-        const playerTotalMatchCold = Object.values(coldWeather).filter(item =>
+        const playerTotalMatchCold = Object.values(firstWeather).filter(item =>
             Object.keys(item.oyesfc.squad).includes(member.name)).length;
 
         const attendanceRateCold = ((playerTotalMatchCold / numberOfMatchesCold) * 100)?.toFixed(0);
@@ -76,17 +78,45 @@ const WeatherIndividualStats = ({data}) => {
         playerGoalPerGameDataCold.push(goalsPerGameCold)
     });
 
+    const firstIcon = selectedSky[0] === WeatherSky[1] ?
+        (
+            <div className={classes.iconDivStyle}>
+                <WbSunnyIcon sx={{width: "200px", height: "200px"}} className={weatherTeamClasses.iconStyle}>
+                </WbSunnyIcon>
+            </div>
+        )
+        :
+        (
+            <div className={classes.iconDivStyle}>
+                <ThunderstormIcon sx={{width: "200px", height: "200px"}} className={weatherTeamClasses.iconStyle}>
+                </ThunderstormIcon>
+            </div>
+        )
+
+    const secondIcon = selectedSky[1] === WeatherSky[0] ?
+        (
+            <div className={classes.iconDivStyle}>
+                <NightlightRoundIcon sx={{width: "200px", height: "200px"}} className={weatherTeamClasses.iconStyle}>
+                </NightlightRoundIcon>
+            </div>
+        )
+        :
+        (
+            <div className={classes.iconDivStyle}>
+                <AcUnitIcon sx={{width: "200px", height: "200px"}} className={weatherTeamClasses.iconStyle}>
+                </AcUnitIcon>
+            </div>
+        )
+
     return (
-        <div className={weatherTeamClasses.grid}>
+        <div className={classes.grid}>
             <div className={classes.cardGrid}>
-                <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                    <h1 className={classes.titleStyle}>Cold Weather{' (<15'}&#176;{')'}</h1>
+                <Card sx={{borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424"}}
+                      style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
+                    <h1 className={classes.titleStyle}>{selectedSky[0]}</h1>
                     <CardContent style={{backgroundColor: "#242424"}}>
                         <div className={classes.cardAlign}>
-                            <div className={classes.iconDivStyle}>
-                                <SevereColdIcon sx={{width: "200px", height: "200px"}}
-                                            className={weatherTeamClasses.iconStyle}></SevereColdIcon>
-                            </div>
+                            {firstIcon}
                             <div className={classes.tableStyle}>
                                 <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
@@ -125,13 +155,10 @@ const WeatherIndividualStats = ({data}) => {
             </div>
             <div className={classes.cardGrid}>
                 <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                    <h1 className={classes.titleStyle}>Hot Weather{' (>15'}&#176;{')'}</h1>
+                    <h1 className={classes.titleStyle}>{selectedSky[1]}</h1>
                     <CardContent style={{backgroundColor: "#242424"}}>
                         <div className={classes.cardAlign}>
-                            <div className={classes.iconDivStyle}>
-                                <LocalFireDepartmentIcon sx={{width: "200px", height: "200px"}}
-                                    className={weatherTeamClasses.iconStyle}></LocalFireDepartmentIcon>
-                            </div>
+                            {secondIcon}
                             <div className={classes.tableStyle}>
                                 <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
@@ -172,4 +199,4 @@ const WeatherIndividualStats = ({data}) => {
     );
 };
 
-export default WeatherIndividualStats;
+export default WeatherSkyIndividualStats;

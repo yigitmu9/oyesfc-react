@@ -2,12 +2,12 @@ import React from 'react';
 import TeamStatsGrid from "../components/TeamStatsGrid/team-stats-grid";
 import Footer from "../components/Footer/footer";
 
-const TeamStatsPage = ({databaseData}) => {
+const TeamStatsPage = ({databaseData, credentials}) => {
 
     return (
         <div>
             <main>
-                <TeamStatsGrid databaseData={databaseData}/>
+                <TeamStatsGrid databaseData={databaseData} credentials={credentials}/>
                 <Footer></Footer>
             </main>
         </div>

@@ -1,15 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classes from "./add-match.module.css";
-import signInClasses from "../SignIn/sign-in.module.css";
 import {dataBase} from "../../firebase";
 import {ref, set} from "firebase/database";
 import {Facilities, FootballRoles, Jerseys, TeamMembers, WeatherSky} from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoadingPage from "../../pages/loading-page";
+import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 
 const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, selectedMatchData}) => {
 
     document.body.style.overflow = 'hidden';
+    const isMobile = window.innerWidth <= 768;
     const [loading, setLoading] = useState(false);
 
     let facilities = [];
@@ -425,18 +426,19 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
                                     value={newSquadMember}
                                     onChange={(e) => setNewSquadMember(e.target.value)}
                                 />
-                                <div className={classes.addPlayerDiv} onClick={handleAddSquadMember}>
-                                    <PersonAddAlt1Icon className={classes.iconStyle}></PersonAddAlt1Icon>
-                                    <span className={classes.addPlayerSpan}>Add</span>
+                                <div className={classes.addPlayerButtonDiv}>
+                                    <div className={matchDetailsClasses.mapsButtons} onClick={handleAddSquadMember}>
+                                        <PersonAddAlt1Icon className={classes.iconStyle}></PersonAddAlt1Icon>
+                                    </div>
                                 </div>
                             </label>
                             <br/>
                         </div>
                     </div>
-                    <div className={classes.buttonDivStyle}>
-                        <button className={signInClasses.buttonStyle} style={{marginRight: "1rem"}} type="submit">Submit
+                    <div className={classes.matchSubmitButtonDiv}>
+                        <button className={matchDetailsClasses.mapsButtons} style={{marginRight: "1rem"}} type="submit">Submit
                         </button>
-                        <button className={signInClasses.buttonStyle} onClick={handleClose}>Close</button>
+                        {isMobile && <button className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Close</button>}
                     </div>
                 </form>
             </div>

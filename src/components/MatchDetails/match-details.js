@@ -36,7 +36,7 @@ function CustomTabPanel(props) {
         >
             {value === index && (
                 <Box>
-                    <Typography>{children}</Typography>
+                    <>{children}</>
                 </Box>
             )}
         </div>
@@ -155,7 +155,6 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     const fetchRatesData = async () => {
         try {
             const response = await loadWebsite(`rates/${matchDetailsData?.day}`);
-            //const notesResponse = await loadWebsite(`notes/${matchDetailsData?.day}`);
             setRatesData(response)
             if (response?.rates) {
                 if (Object.entries(response?.rates).some(x => x[0] === credentials?.id)) {
@@ -201,10 +200,10 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         let bestPlayer;
         Object.entries(matchDetailsData.oyesfc.squad).forEach(playerName => {
             let points = 0;
-            Object.values(ratingResponse).forEach((value) => {
-                points += value[playerName[0]]
+            Object.values(ratingResponse)?.forEach((value) => {
+                if (value[playerName[0]]) points += value[playerName[0]]
             })
-            const averageRating = points / Object.entries(ratingResponse)?.length
+            const averageRating = points / Object.entries(ratingResponse)?.filter(z => Object.keys(z[1]).includes(playerName[0])).length;
             const ratingOfPlayer = {
                 name: playerName[0],
                 rating: averageRating,
@@ -325,7 +324,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                 </section>
                 <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: '#323232'}}>
                     <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
-                          scrollButtons allowScrollButtonsMobilex variant="scrollable"
+                          scrollButtons variant="scrollable"
                           sx={{
                               '& .MuiTabs-indicator': {
                                   backgroundColor: 'lightgray',

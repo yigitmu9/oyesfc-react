@@ -4,16 +4,16 @@ import Result from "../Result/result";
 import GameStatus from "../GameStatus/game-status";
 import {useState} from "react";
 
-const Scoreboard = ({value, openPopup, matchDetailsData, fixture}) => {
+const Scoreboard = ({value, openPopup, matchDetailsData, fixture, playerDetails}) => {
 
-    const [buttonBgColor, setButtonBgColor] = useState('#242424');
+    const [buttonBgColor, setButtonBgColor] = useState(playerDetails ? '#323232' : '#242424');
 
     const handleButtonHover = () => {
-        setButtonBgColor('#323232');
+        if (!playerDetails) setButtonBgColor('#323232');
     };
 
     const handleButtonLeave = () => {
-        setButtonBgColor('#242424');
+        if (!playerDetails) setButtonBgColor('#242424');
     };
 
     const handleXClick = () => {
@@ -22,7 +22,7 @@ const Scoreboard = ({value, openPopup, matchDetailsData, fixture}) => {
     };
 
     return (
-        <section className={classes.scoreboard} onClick={handleXClick} onMouseEnter={handleButtonHover}
+        <section className={playerDetails ? classes.scoreboardPlayerDetails : classes.scoreboard} onClick={handleXClick} onMouseEnter={handleButtonHover}
                  onMouseLeave={handleButtonLeave} style={{background: buttonBgColor}}>
             <TeamView teamData={value?.oyesfc} rakipbul={value?.rakipbul} bgColor={buttonBgColor}/>
             <main className={classes.score} style={{background: buttonBgColor}}>

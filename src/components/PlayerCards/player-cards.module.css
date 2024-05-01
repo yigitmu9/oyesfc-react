@@ -1,6 +1,9 @@
 .fontStyle {
     color: lightgray;
-    font-size: 18px
+    font-size: 18px;
+    @media (max-width: 767px) {
+        font-size: 14px;
+    }
 }
 
 .playerNameTitle {
@@ -15,9 +18,9 @@
     display: flex;
     justify-content: space-between;
     align-content: center;
-    margin: 20px 60px 20px 50px;
+    margin: 20px 60px 20px 70px;
     @media (max-width: 767px) {
-
+        margin: 20px 60px 20px 60px;
     }
 }
 
@@ -27,7 +30,7 @@
     align-content: center;
     margin: 20px 70px;
     @media (max-width: 767px) {
-
+        margin: 20px 60px;
     }
 }
 
@@ -49,4 +52,24 @@
     color: lightgray;
     font-size: 18px;
     margin-top: 5px;
+    @media (max-width: 767px) {
+        font-size: 14px;
+    }
+}
+
+.captainDiv {
+    margin: 10px;
+    @media (max-width: 767px) {
+        margin: 0;
+    }
+}
+
+.matchesDiv {
+    margin-top: -5px;
+    margin-bottom: 20px;
+    @media (max-width: 767px) {
+        margin-top: -15px;
+        margin-right: -10px;
+        margin-left: -10px;
+    }
 }

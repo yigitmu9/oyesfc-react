@@ -31,8 +31,16 @@
 .secondTitle {
     color: lightgray;
     text-align: center;
+    margin-top: 50px;
     margin-bottom: 20px;
     @media (max-width: 767px) {
         font-size: 25px;
     }
+}
+
+.ultimateDivStyle {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

@@ -3,7 +3,7 @@ import Scoreboard from "../Scoreboard/scoreboard";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails/match-details";
 
-const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData, credentials, allData}) => {
+const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData, credentials, allData, playerDetails}) => {
 
     const today = new Date();
     const matchDetailsFilteredData = Object.values(databaseData);
@@ -92,7 +92,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                 <div style={{minHeight: windowHeight}}>
                     {liveMatchData.length > 0 ?
                         <>
-                            <h1 className={classes.matchTitle}>Live Match</h1>
+                        {!playerDetails && <h1 className={classes.matchTitle}>Live Match</h1>}
                             <div className={classes.grid}>
                                 {liveMatchData?.map((x, y) => (
                                     <Scoreboard
@@ -100,14 +100,14 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                         value={x}
                                         openPopup={() => openPopup(x, 'live')}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={'live'}/>))}
+                                        fixture={'live'} playerDetails={playerDetails}/>))}
                             </div>
                         </>
                         :
                         null}
                     {upcomingMatchesData.length > 0 ?
                         <>
-                            <h1 className={classes.matchTitle}>Upcoming Matches</h1>
+                        {!playerDetails && <h1 className={classes.matchTitle}>Upcoming Matches</h1>}
                             <div className={classes.grid}>
                                 {upcomingMatchesData?.map((x, y) => (
                                     <Scoreboard
@@ -115,14 +115,14 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                         value={x}
                                         openPopup={() => openPopup(x, 'upcoming')}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={'upcoming'}/>))}
+                                        fixture={'upcoming'} playerDetails={playerDetails}/>))}
                             </div>
                         </>
                         :
                         null}
                     {previousMatchesData.length > 0 ?
                         <>
-                        {<h1 className={classes.matchTitle}>Previous Matches</h1>}
+                        {!playerDetails && <h1 className={classes.matchTitle}>Previous Matches</h1>}
                             <div className={classes.grid}>
                                 {previousMatchesData?.map((x, y) => (
                                     <Scoreboard
@@ -130,7 +130,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                         value={x}
                                         openPopup={() => openPopup(x, 'previous')}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={'previous'}/>))}
+                                        fixture={'previous'} playerDetails={playerDetails}/>))}
                             </div>
                         </>
                         :

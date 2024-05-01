@@ -76,8 +76,8 @@ const AppPage = () => {
             <Routes key={key}>
                 <Route path='oyesfc-react/' element={<MainPage/>}/>
                 <Route path='oyesfc-react/matches' element={<MatchesPage databaseData={filteredData} reloadData={handleReload} credentials={credentials} allData={data}/>}/>
-                <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage databaseData={filteredData}/>}/>
-                <Route path='oyesfc-react/team-stats' element={<TeamStatsPage databaseData={filteredData}/>}/>
+                <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage databaseData={filteredData} credentials={credentials} allData={data} reloadData={handleReload}/>}/>
+                <Route path='oyesfc-react/team-stats' element={<TeamStatsPage databaseData={filteredData} credentials={credentials}/>}/>
             </Routes>
         </Router>
     );

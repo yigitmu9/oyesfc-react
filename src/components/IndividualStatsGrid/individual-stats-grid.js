@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import PlayerCardsGrid from "../PlayerCardsGrid/player-cards-grid";
 import ChartsGrid from "../ChartsGrid/charts-grid.js";
 import FacilitiesIndividualStats from "../FacilitiesIndividualStats/facilities-individual-stats";
 import WeatherIndividualStats from "../WeatherIndividualStats/weather-individual-stats";
@@ -10,10 +9,12 @@ import RivalsIndividualStats from "../RivalsIndividualStats/rivals-individual-st
 import teamStatsClasses from "../TeamStatsGrid/team-stats-grid.module.css"
 import UltimateTeam from "../UltimateTeam/ultimate-team";
 import PlayerDetails from "../PlayerDetails/player-details";
+import JerseysIndividualStats from "../JerseysIndividualStats/jerseys-individual-stats";
+import WeatherSkyIndividualStats from "../WeatherSkyIndividualStats/weather-sky-individual-stats";
 
-const IndividualStatsGrid = ({databaseData}) => {
+const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) => {
 
-    const matchDetailsFilteredData= Object.values(databaseData);
+    const filteredData= Object.values(databaseData);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [player, setPlayer] = useState(null);
 
@@ -23,26 +24,38 @@ const IndividualStatsGrid = ({databaseData}) => {
         setPopupOpen(true)
     }
 
+    const handleReload = (data) => {
+        reloadData(data)
+    }
+
     return (
         <div className={classes.grid}>
             <div className={classes.generalStyle}>
-                <UltimateTeam onClickCard={openPlayerDetails}/>
-                <h1 className={classes.firstTitle}>Players</h1>
-                <div className={classes.divStyle}>
-
+                <h1 className={classes.firstTitle}>Lineup</h1>
+                <div className={classes.ultimateDivStyle}>
+                    <UltimateTeam onClickCard={openPlayerDetails}/>
                 </div>
                 <h1 className={classes.secondTitle}>Individual Statistics</h1>
                 <div className={classes.divStyle}>
-                    <ChartsGrid matchData={matchDetailsFilteredData} databaseData={databaseData}/>
+                    <ChartsGrid matchData={filteredData} databaseData={databaseData}/>
                 </div>
                 <div className={classes.divStyle}>
-                    <FacilitiesIndividualStats data={matchDetailsFilteredData}/>
+                    <FacilitiesIndividualStats data={filteredData}/>
                 </div>
                 <div className={classes.divStyle}>
-                    <RivalsIndividualStats data={matchDetailsFilteredData}/>
+                    <RivalsIndividualStats data={filteredData}/>
                 </div>
                 <div className={classes.divStyle}>
-                    <WeatherIndividualStats data={matchDetailsFilteredData}/>
+                    <JerseysIndividualStats data={filteredData}/>
+                </div>
+                <div className={classes.divStyle}>
+                    <WeatherIndividualStats data={filteredData}/>
+                </div>
+                <div className={classes.divStyle}>
+                    <WeatherSkyIndividualStats data={filteredData} selectedSky={['Daytime', 'Night']}/>
+                </div>
+                <div className={classes.divStyle}>
+                    <WeatherSkyIndividualStats data={filteredData} selectedSky={['Rain', 'Snow']}/>
                 </div>
                 <div className={classes.divStyle}>
                     <RakipbulPlayerStats data={databaseData}/>
@@ -58,8 +71,9 @@ const IndividualStatsGrid = ({databaseData}) => {
                 </div>
             </div>
             {isPopupOpen &&
-                <PlayerDetails matchDetailsData={matchDetailsFilteredData}
-                               onClose={() => setPopupOpen(false)} player={player}/>}
+                <PlayerDetails data={filteredData}
+                               onClose={() => setPopupOpen(false)} player={player}
+                               credentials={credentials} allData={allData} reloadData={handleReload}/>}
         </div>
     );
 };

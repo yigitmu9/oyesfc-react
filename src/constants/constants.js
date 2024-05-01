@@ -3,17 +3,17 @@ export const TeamNames = {
 }
 
 export const TeamMembers = {
-    can: {name: 'Can Şahin', number: 1, role: 'gk'},
-    atakan: {name: 'Atakan Rakipsiz', number: 2, role: 'df'},
-    berk: {name: 'Berk Doğan', number: 5, role: 'df'},
-    berent: {name: 'Berent Özsan', number: 99, role: 'fw'},
-    gokhan: {name: 'Gökhan Cömert', number: 4, role: 'fw'},
-    mehmet: {name: 'Mehmet Çelik', number: 8, role: 'df'},
-    mert: {name: 'Mert Mutlu', number: 16, role: 'fw'},
-    oguzhan: {name: 'Oğuzhan Cesur', number: 18, role: 'df'},
-    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10, role: 'fw'},
-    utku: {name: 'Utku Öztürk', number: 3, role: 'df'},
-    yigit: {name: 'Yiğit Mutlu', number: 7, role: 'fw'}
+    can: {name: 'Can Şahin', number: 1, role: 'gk', birthYear: 1998},
+    atakan: {name: 'Atakan Rakipsiz', number: 2, role: 'df', birthYear: 1998},
+    berk: {name: 'Berk Doğan', number: 5, role: 'df', birthYear: 1998},
+    berent: {name: 'Berent Özsan', number: 99, role: 'fw', birthYear: 1999},
+    gokhan: {name: 'Gökhan Cömert', number: 4, role: 'fw', birthYear: 1999},
+    mehmet: {name: 'Mehmet Çelik', number: 8, role: 'df', birthYear: 1999},
+    mert: {name: 'Mert Mutlu', number: 16, role: 'fw', birthYear: 2005},
+    oguzhan: {name: 'Oğuzhan Cesur', number: 18, role: 'df', birthYear: 1999},
+    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10, role: 'fw', birthYear: 1998},
+    utku: {name: 'Utku Öztürk', number: 3, role: 'df', birthYear: 1999},
+    yigit: {name: 'Yiğit Mutlu', number: 7, role: 'fw', birthYear: 1999}
 }
 
 export const Facilities = [

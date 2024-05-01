@@ -10,7 +10,7 @@
     margin-right: 14%;
     margin-top: 50px;
     @media (max-width: 768px) {
-        margin: 0 3% 50px;
+        margin: 50px 3% 50px;
     }
 }
 

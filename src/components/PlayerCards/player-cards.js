@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -8,17 +9,20 @@ import classes from "../PlayerCards/player-cards.module.css"
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
-import StarIcon from "@mui/icons-material/Star";
 import TransferWithinAStationIcon from '@mui/icons-material/TransferWithinAStation';
-import DoNotStepIcon from '@mui/icons-material/DoNotStep';
-import PublicIcon from '@mui/icons-material/Public';
 import NumbersIcon from '@mui/icons-material/Numbers';
-import HeightIcon from '@mui/icons-material/Height';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
-import FlagIcon from '@mui/icons-material/Flag';
-import {Soap} from "@mui/icons-material";
+import CopyrightIcon from '@mui/icons-material/Copyright';
+import SoccerLineUp from "react-soccer-lineup";
+import LooksOneIcon from '@mui/icons-material/LooksOne';
+import LooksTwoIcon from '@mui/icons-material/LooksTwo';
+import Looks3Icon from '@mui/icons-material/Looks3';
+import PushPinIcon from '@mui/icons-material/PushPin';
+import ScoreboardsGrid from "../ScoreboardsGrid/scoreboards-grid";
+import {loadWebsite} from "../../firebase";
+import CakeIcon from '@mui/icons-material/Cake';
 
 function CustomTabs(props) {
     const {children, value, index, ...other} = props;
@@ -33,7 +37,7 @@ function CustomTabs(props) {
         >
             {value === index && (
                 <Box>
-                    <Typography>{children}</Typography>
+                    <>{children}</>
                 </Box>
             )}
         </div>
@@ -53,14 +57,23 @@ function a11yProps(index) {
     };
 }
 
-const PlayerCards = ({playerName, data}) => {
+const PlayerCards = ({playerName, data, close , credentials, allData , reloadData}) => {
 
     const isMobile = window.innerWidth <= 768;
-    let playerTotalGoal = 0;
     const [tabValue, setTabValue] = React.useState(0);
     const numberOfMatches = Object.values(data).length;
+    const playerNumber = Object.values(TeamMembers).find(x => x.name === playerName).number;
+    const imageUrl = Object.entries(TeamMembers).find(x => x[1].name === playerName)[0];
     const playerFoot = playerName === TeamMembers.atakan.name ? 'Left' :
         (playerName === TeamMembers.yigit.name || playerName === TeamMembers.mert.name) ? 'Both' : 'Right';
+    const filteredWithPlayerData = Object.values(data).filter(x => {
+        return Object.keys(x.oyesfc.squad).includes(playerName)
+    })
+    const [ratesData, setRatesData] = useState(null);
+    const [playerRatingMvp, setPlayerRatingMvp] = useState({rating: '-', mvp: 0});
+    const thisYear = new Date().getFullYear()
+    const birthYear = thisYear - Object.values(TeamMembers).find(x => x.name === playerName).birthYear;
+    let playerTotalGoal = 0;
 
     Object.values(data).forEach(item => {
         if (item?.oyesfc?.squad[playerName] && playerName !== TeamMembers.can.name) {
@@ -71,18 +84,11 @@ const PlayerCards = ({playerName, data}) => {
     const playerTotalMatch = Object.values(data).filter(item =>
         Object.keys(item.oyesfc.squad).includes(playerName)).length;
 
-    const playerNumber = Object.values(TeamMembers).find(x => x.name === playerName).number;
-
-    const imageUrl = Object.entries(TeamMembers).find(x => x[1].name === playerName)[0];
-
-    const getPlayerName = () => {
-        if (playerName === TeamMembers.yigit.name) {
-            return playerName + ' (C) ';
-        } else if (playerName === TeamMembers.can.name) {
-            return playerName + ' (GK) ';
+    useEffect(() => {
+        if (!ratesData) {
+            fetchRatesData().then(r => r)
         }
-        return playerName
-    };
+    });
 
     const handleTabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
@@ -102,7 +108,7 @@ const PlayerCards = ({playerName, data}) => {
         },
         content: {
             position: 'absolute',
-            bottom: '50%',
+            bottom: '49.5%',
             left: 0,
             right: 0,
             backgroundColor: '#323232',
@@ -112,6 +118,240 @@ const PlayerCards = ({playerName, data}) => {
             textAlign: 'center'
         },
     };
+
+    const handleClose = () => {
+        close(true);
+    };
+
+    const closeButton = (
+        <div className={matchDetailsClasses.buttonBorderStyle}>
+            <button className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Close</button>
+        </div>
+    )
+
+    const positionStyle = {
+        color: 'black',
+        numberColor: 'goldenrod',
+        nameColor: 'black',
+    }
+
+    const oyesfcSquad = {
+        [TeamMembers.atakan.name]: {
+            squad: {
+                df: [
+                    {name: 'LB', number: 2},
+                    {name: 'CB', number: 1},
+                    {name: 'RB', number: 3},
+                ],
+                cm: [],
+                fw: [],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.yigit.name]: {
+            squad: {
+                df: [],
+                cdm: [],
+                cm: [{name: 'CM', number: 3}],
+                cam: [{name: 'CAM', number: 1}],
+                fw: [{name: 'CF', number: 2}],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.can.name]: {
+            squad: {
+                gk: {name: 'GK', number: 1},
+            },
+            style: positionStyle
+        },
+        [TeamMembers.mert.name]: {
+            squad: {
+                df: [],
+                cm: [],
+                fw: [
+                    {name: 'LW', number: 1},
+                    {name: 'CF', number: 3},
+                    {name: 'RW', number: 2},
+                ],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.oguzhan.name]: {
+            squad: {
+                df: [
+                    {name: 'LB', number: 3},
+                    {name: 'CB', number: 2},
+                    {name: 'RB', number: 1},
+                ],
+                cm: [],
+                fw: [],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.berent.name]: {
+            squad: {
+                df: [],
+                cm: [],
+                fw: [
+                    {name: 'LW', number: 2},
+                    {name: 'CF', number: 3},
+                    {name: 'RW', number: 1},
+                ],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.berk.name]: {
+            squad: {
+                df: [{name: 'LWB', number: 1},
+                    {name: 'CB', number: 2},
+                    {name: 'RWB', number: 3}
+                ],
+                cm: [],
+                fw: [],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.mehmet.name]: {
+            squad: {
+                df: [{name: 'CB', number: 1}],
+                cm: [],
+                fw: [],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.gokhan.name]: {
+            squad: {
+                df: [],
+                cdm: [{name: 'CDM', number: 2}],
+                cm: [{name: 'CM', number: 1}],
+                cam: [{name: 'CAM', number: 3}],
+                fw: [],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.ogulcan.name]: {
+            squad: {
+                df: [],
+                cdm: [{name: 'CDM', number: 3}],
+                cm: [{name: 'CM', number: 1}],
+                cam: [{name: 'CAM', number: 2}],
+                fw: [],
+            },
+            style: positionStyle
+        },
+        [TeamMembers.utku.name]: {
+            squad: {
+                df: [{name: 'LWB', number: 2},
+                    {color: 'green',},
+                    {name: 'RWB', number: 1},],
+                cm: [],
+                fw: [],
+            },
+            style: positionStyle
+        }
+    }
+
+    const handleReload = (data) => {
+        reloadData(data)
+    }
+
+    const playersPositions = {
+        [TeamMembers.atakan.name]: ['Centre Back', 'Left Back', 'Right Back'],
+        [TeamMembers.yigit.name]: ['Attacking Midfielder', 'Centre Forward', 'Centre Midfielder'],
+        [TeamMembers.can.name]: ['Goalkeeper'],
+        [TeamMembers.mert.name]: ['Left Wing', 'Right Wing', 'Centre Forward'],
+        [TeamMembers.oguzhan.name]: ['Right Back', 'Centre Back', 'Left Back'],
+        [TeamMembers.berent.name]: ['Right Wing', 'Left Wing', 'Centre Forward'],
+        [TeamMembers.berk.name]: ['Left Wing Back', 'Centre Back', 'Right Wing Back'],
+        [TeamMembers.mehmet.name]: ['Centre Back'],
+        [TeamMembers.gokhan.name]: ['Centre Midfielder', 'Defensive Midfielder', 'Attacking Midfielder'],
+        [TeamMembers.ogulcan.name]: ['Centre Midfielder', 'Attacking Midfielder', 'Defensive Midfielder'],
+        [TeamMembers.utku.name]: ['Right Wing Back', 'Left Wing Back'],
+    }
+
+    const fetchRatesData = async () => {
+        try {
+            const response = await loadWebsite(`rates`);
+            if (response) {
+                calculatePlayerRatings(response)
+                setRatesData(response)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const calculatePlayerRatings = (response) => {
+        const superFilteredData = Object.entries(response)?.filter(x => {
+            return Object.values(data)?.map(x => x?.day)?.includes(x[0]) && Object.values(x[1]?.rates)?.length > 3
+        })
+        const matchCount = superFilteredData.length;
+        let totalRating = 0;
+        let eachMatchRatings = [];
+        let eachMatchRatingsTotal = 0;
+
+        if (superFilteredData.length > 0) {
+            superFilteredData?.forEach(matchData => {
+                totalRating = 0;
+                const ratings = Object.values(matchData[1]?.rates).filter(y => Object.keys(y).includes(playerName)).map(x => x[playerName]);
+                ratings.forEach(x => {
+                    totalRating += x
+                });
+                totalRating = ratings?.length ? (totalRating / ratings?.length) : 0
+                eachMatchRatings.push(totalRating)
+            });
+            eachMatchRatings.forEach(x => {
+                eachMatchRatingsTotal += x
+            });
+            const averageRating = matchCount ? (eachMatchRatingsTotal / matchCount) : 0;
+            if (averageRating !== 0) {
+                const mvpCount = calculateAverageRatings(superFilteredData);
+                const ratingMvp = {
+                    rating: averageRating ? Number(averageRating.toFixed(2)) : '-',
+                    mvp: mvpCount
+                }
+                setPlayerRatingMvp(ratingMvp)
+            }
+        }
+    }
+
+    const calculateAverageRatings = (data) => {
+        let averageRatings = {};
+        let bestOfMatches = [];
+        let count = 0;
+
+        data?.forEach(matchData => {
+            if (!matchData || !matchData[1]?.rates) return;
+            const matchRatings = matchData[1]?.rates;
+            Object.keys(matchRatings)?.forEach(key => {
+                averageRatings = {};
+                const ratings = matchRatings[key];
+                Object.keys(ratings)?.forEach(player => {
+                    const rating = ratings[player];
+                    averageRatings[player] = (averageRatings[player] || 0) + rating;
+                });
+            });
+            Object.keys(averageRatings)?.forEach(player => {
+                averageRatings[player] /= Object.values(matchRatings)?.filter(x => Object.keys(x)?.includes(player))?.length
+            });
+            const topPlayerOfThisMatch = findTopPlayers(averageRatings);
+            bestOfMatches.push(topPlayerOfThisMatch[0])
+        });
+
+        bestOfMatches?.forEach(name => {
+            if (name === playerName) {
+                count++;
+            }
+        });
+
+        return count;
+    };
+
+    const findTopPlayers = (averageRatings) => {
+        const maxAverage = Math.max(...Object.values(averageRatings));
+        return Object.keys(averageRatings)?.filter(player => averageRatings[player] === maxAverage);
+    };
+
 
     return (
         <Card sx={styles.card}>
@@ -125,7 +365,7 @@ const PlayerCards = ({playerName, data}) => {
             </CardContent>
             <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: '#323232', justifyContent: 'center', display: 'flex'}}>
                 <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
-                      scrollButtons allowScrollButtonsMobilex variant="scrollable"
+                      scrollButtons variant="scrollable"
                       sx={{
                           '& .MuiTabs-indicator': {
                               backgroundColor: 'lightgray',
@@ -140,7 +380,7 @@ const PlayerCards = ({playerName, data}) => {
                         }, '&.Mui-selected': {
                             color: 'lightgray'
                         }
-                    }} label="preview" {...a11yProps(0)} />
+                    }} label="profile" {...a11yProps(0)} />
                     <Tab sx={{
                         '&.MuiTab-root': {
                             color: 'gray'
@@ -158,13 +398,32 @@ const PlayerCards = ({playerName, data}) => {
                 </Tabs>
             </Box>
             <CustomTabs value={tabValue} index={0}>
-
+                {
+                    playerName === TeamMembers.yigit.name &&
+                    <div className={classes.captainDiv}>
+                        <section className={matchDetailsClasses.momSection}>
+                            <>
+                                <CopyrightIcon fontSize={isMobile ? 'medium' : 'large'}
+                                               className={matchDetailsClasses.starIcon}>
+                                </CopyrightIcon>
+                            </>
+                            <div className={matchDetailsClasses.momDetailsDiv}>
+                            <span className={matchDetailsClasses.momNameSpan}>
+                                {TeamMembers.yigit.name}
+                            </span>
+                                <span className={matchDetailsClasses.momSmallSpan}>
+                                Captain
+                            </span>
+                            </div>
+                        </section>
+                    </div>
+                }
                 <section className={matchDetailsClasses.squadSection}>
                     <div className={classes.generalPointsDiv}>
                         <div className={classes.generalInfoInsideDiv}>
                             <StarHalfIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
                             </StarHalfIcon>
-                            <span className={classes.belowIconSpan}>?</span>
+                            <span className={classes.belowIconSpan}>{playerRatingMvp?.rating}</span>
                         </div>
                         <div className={classes.generalInfoInsideDiv}>
                             <SportsSoccerIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
@@ -176,7 +435,7 @@ const PlayerCards = ({playerName, data}) => {
                             <MilitaryTechIcon fontSize={isMobile ? 'medium' : 'large'}
                                               className={classes.iconStyle}>
                             </MilitaryTechIcon>
-                            <span className={classes.belowIconSpan}>?</span>
+                            <span className={classes.belowIconSpan}>{playerRatingMvp?.mvp}</span>
                         </div>
                     </div>
                 </section>
@@ -213,30 +472,85 @@ const PlayerCards = ({playerName, data}) => {
                 <section className={matchDetailsClasses.squadSection}>
                     <div className={classes.generalInfoDiv}>
                         <div className={classes.generalInfoInsideDiv}>
-                            <FlagIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
-                            </FlagIcon>
-                            <span className={classes.belowIconSpan}>Turkey</span>
+                            <CakeIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
+                            </CakeIcon>
+                            <span className={classes.belowIconSpan}>{birthYear}</span>
                         </div>
                         <div className={classes.generalInfoInsideDiv}>
                             <NumbersIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
                             </NumbersIcon>
                             <span className={classes.belowIconSpan}>
-                                {Object.values(TeamMembers).find(x => x.name === playerName).number}
+                                {playerNumber}
                             </span>
                         </div>
                         <div className={classes.generalInfoInsideDiv}>
-                            <TransferWithinAStationIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
+                            <TransferWithinAStationIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                        className={classes.iconStyle}>
                             </TransferWithinAStationIcon>
                             <span className={classes.belowIconSpan}>{playerFoot}</span>
                         </div>
                     </div>
                 </section>
+                {isMobile && closeButton}
             </CustomTabs>
             <CustomTabs value={tabValue} index={1}>
-
+                <>
+                    <section className={matchDetailsClasses.squadSection}>
+                        <div className={matchDetailsClasses.generalInfoDiv}>
+                            <PushPinIcon fontSize={isMobile ? 'medium' : 'large'}
+                                         className={matchDetailsClasses.generalInfoIcon}>
+                            </PushPinIcon>
+                            <span className={matchDetailsClasses.generalInfoSpan}>
+                            Positions
+                        </span>
+                        </div>
+                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                        <div className={matchDetailsClasses.generalInfoDiv}>
+                            <LooksOneIcon fontSize={isMobile ? 'medium' : 'large'}
+                                          className={matchDetailsClasses.generalInfoIcon}>
+                            </LooksOneIcon>
+                            <span className={matchDetailsClasses.generalInfoSpan}>
+                                {Object.entries(playersPositions).find(x => x[0] === playerName)[1][0]}
+                            </span>
+                        </div>
+                        {
+                            (playerName !== TeamMembers.can.name && playerName !== TeamMembers.mehmet.name) &&
+                            <div className={matchDetailsClasses.generalInfoDiv}>
+                                <LooksTwoIcon fontSize={isMobile ? 'medium' : 'large'}
+                                              className={matchDetailsClasses.generalInfoIcon}>
+                                </LooksTwoIcon>
+                                <span className={matchDetailsClasses.generalInfoSpan}>
+                                    {Object.entries(playersPositions).find(x => x[0] === playerName)[1][1]}
+                                </span>
+                            </div>
+                        }
+                        {
+                            (playerName !== TeamMembers.can.name && playerName !== TeamMembers.utku.name && playerName !== TeamMembers.mehmet.name) &&
+                            <div className={matchDetailsClasses.generalInfoDiv}>
+                                <Looks3Icon fontSize={isMobile ? 'medium' : 'large'}
+                                            className={matchDetailsClasses.generalInfoIcon}>
+                                </Looks3Icon>
+                                <span className={matchDetailsClasses.generalInfoSpan}>
+                                    {Object.entries(playersPositions).find(x => x[0] === playerName)[1][2]}
+                            </span>
+                            </div>
+                        }
+                    </section>
+                    <div className={matchDetailsClasses.pitchStyleDiv}>
+                        <SoccerLineUp
+                            size={"responsive"}
+                            homeTeam={oyesfcSquad[playerName]}
+                            color={'green'}
+                        />
+                    </div>
+                    {isMobile && closeButton}
+                </>
             </CustomTabs>
             <CustomTabs value={tabValue} index={2}>
-
+                <div className={classes.matchesDiv}>
+                    <ScoreboardsGrid databaseData={filteredWithPlayerData} reloadData={handleReload} credentials={credentials} allData={allData} playerDetails={true}/>
+                </div>
+                {isMobile && closeButton}
             </CustomTabs>
         </Card>
     );
