@@ -3,17 +3,17 @@ export const TeamNames = {
 }
 
 export const TeamMembers = {
-    can: {name: 'Can Şahin', number: 1, role: 'gk', birthYear: 1998},
-    atakan: {name: 'Atakan Rakipsiz', number: 2, role: 'df', birthYear: 1998},
-    berk: {name: 'Berk Doğan', number: 5, role: 'df', birthYear: 1998},
-    berent: {name: 'Berent Özsan', number: 99, role: 'fw', birthYear: 1999},
-    gokhan: {name: 'Gökhan Cömert', number: 4, role: 'fw', birthYear: 1999},
-    mehmet: {name: 'Mehmet Çelik', number: 8, role: 'df', birthYear: 1999},
-    mert: {name: 'Mert Mutlu', number: 16, role: 'fw', birthYear: 2005},
-    oguzhan: {name: 'Oğuzhan Cesur', number: 18, role: 'df', birthYear: 1999},
-    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10, role: 'fw', birthYear: 1998},
-    utku: {name: 'Utku Öztürk', number: 3, role: 'df', birthYear: 1999},
-    yigit: {name: 'Yiğit Mutlu', number: 7, role: 'fw', birthYear: 1999}
+    can: {name: 'Can Şahin', number: 1, role: 'gk', birthYear: 1998, birthMonth: 12, birthDay: 23},
+    atakan: {name: 'Atakan Rakipsiz', number: 2, role: 'df', birthYear: 1998, birthMonth: 10, birthDay: 11},
+    berk: {name: 'Berk Doğan', number: 5, role: 'df', birthYear: 1998, birthMonth: 10, birthDay: 2},
+    berent: {name: 'Berent Özsan', number: 99, role: 'fw', birthYear: 1999, birthMonth: 5, birthDay: 26},
+    gokhan: {name: 'Gökhan Cömert', number: 4, role: 'fw', birthYear: 1999, birthMonth: 10, birthDay: 20},
+    mehmet: {name: 'Mehmet Çelik', number: 8, role: 'df', birthYear: 1999, birthMonth: 10, birthDay: 22},
+    mert: {name: 'Mert Mutlu', number: 16, role: 'fw', birthYear: 2005, birthMonth: 2, birthDay: 3},
+    oguzhan: {name: 'Oğuzhan Cesur', number: 18, role: 'df', birthYear: 1999, birthMonth: 2, birthDay: 19},
+    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10, role: 'fw', birthYear: 1998, birthMonth: 5, birthDay: 19},
+    utku: {name: 'Utku Öztürk', number: 3, role: 'df', birthYear: 1999, birthMonth: 3, birthDay: 6},
+    yigit: {name: 'Yiğit Mutlu', number: 7, role: 'fw', birthYear: 1999, birthMonth: 6, birthDay: 16}
 }
 
 export const Facilities = [

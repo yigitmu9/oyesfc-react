@@ -80,7 +80,7 @@ const WeatherIndividualStats = ({data}) => {
         <div className={weatherTeamClasses.grid}>
             <div className={classes.cardGrid}>
                 <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                    <h1 className={classes.titleStyle}>Cold Weather{' (<15'}&#176;{')'}</h1>
+                    <h1 className={classes.titleStyle}>Cold Weather{' (<16'}&#176;{')'}</h1>
                     <CardContent style={{backgroundColor: "#242424"}}>
                         <div className={classes.cardAlign}>
                             <div className={classes.iconDivStyle}>

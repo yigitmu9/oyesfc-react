@@ -71,8 +71,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     })
     const [ratesData, setRatesData] = useState(null);
     const [playerRatingMvp, setPlayerRatingMvp] = useState({rating: '-', mvp: 0});
-    const thisYear = new Date().getFullYear()
-    const birthYear = thisYear - Object.values(TeamMembers).find(x => x.name === playerName).birthYear;
+    const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
     let playerTotalGoal = 0;
 
     Object.values(data).forEach(item => {
@@ -80,6 +79,18 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
             playerTotalGoal += item.oyesfc.squad[playerName].goal;
         }
     });
+
+    const calculateAge = () => {
+        const year = Object.values(TeamMembers).find(x => x.name === playerName).birthYear
+        const month = Object.values(TeamMembers).find(x => x.name === playerName).birthMonth
+        const day = Object.values(TeamMembers).find(x => x.name === playerName).birthDay
+        const inputDateTime = new Date(year, month - 1, day);
+        const now = new Date();
+        const thisYearBirthDate = new Date(now.getFullYear(), month - 1, day);
+        if (thisYearBirthDate > now) return (now.getFullYear() - inputDateTime.getFullYear()) - 1;
+        return now.getFullYear() - inputDateTime.getFullYear();
+    };
+
 
     const playerTotalMatch = Object.values(data).filter(item =>
         Object.keys(item.oyesfc.squad).includes(playerName)).length;
@@ -101,7 +112,8 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
             borderRadius: '25px',
             width: '100%',
             height: '100%',
-            overflow: 'auto'
+            overflow: 'auto',
+            overflowX: 'hidden'
         },
         media: {
             height: '50%',
@@ -257,15 +269,15 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
 
     const playersPositions = {
         [TeamMembers.atakan.name]: ['Centre Back', 'Left Back', 'Right Back'],
-        [TeamMembers.yigit.name]: ['Attacking Midfielder', 'Centre Forward', 'Centre Midfielder'],
+        [TeamMembers.yigit.name]: ['Centre Attacking Midfielder', 'Centre Forward', 'Centre Midfielder'],
         [TeamMembers.can.name]: ['Goalkeeper'],
         [TeamMembers.mert.name]: ['Left Wing', 'Right Wing', 'Centre Forward'],
         [TeamMembers.oguzhan.name]: ['Right Back', 'Centre Back', 'Left Back'],
         [TeamMembers.berent.name]: ['Right Wing', 'Left Wing', 'Centre Forward'],
         [TeamMembers.berk.name]: ['Left Wing Back', 'Centre Back', 'Right Wing Back'],
         [TeamMembers.mehmet.name]: ['Centre Back'],
-        [TeamMembers.gokhan.name]: ['Centre Midfielder', 'Defensive Midfielder', 'Attacking Midfielder'],
-        [TeamMembers.ogulcan.name]: ['Centre Midfielder', 'Attacking Midfielder', 'Defensive Midfielder'],
+        [TeamMembers.gokhan.name]: ['Centre Midfielder', 'Centre Defensive Midfielder', 'Centre Attacking Midfielder'],
+        [TeamMembers.ogulcan.name]: ['Centre Midfielder', 'Centre Attacking Midfielder', 'Centre Defensive Midfielder'],
         [TeamMembers.utku.name]: ['Right Wing Back', 'Left Wing Back'],
     }
 
@@ -283,7 +295,9 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
 
     const calculatePlayerRatings = (response) => {
         const superFilteredData = Object.entries(response)?.filter(x => {
-            return Object.values(data)?.map(x => x?.day)?.includes(x[0]) && Object.values(x[1]?.rates)?.length > 3
+            const oyesfcMemberLength = Object.entries(Object.values(allData)?.find(match => match?.day === x[0])?.oyesfc?.squad)
+                ?.map(a => a[0])?.filter(b => oyesfcMembers?.includes(b))?.length
+            return Object.values(data)?.map(x => x?.day)?.includes(x[0]) && Object.values(x[1]?.rates)?.length >= oyesfcMemberLength
         })
         const matchCount = superFilteredData.length;
         let totalRating = 0;
@@ -474,7 +488,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                         <div className={classes.generalInfoInsideDiv}>
                             <CakeIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
                             </CakeIcon>
-                            <span className={classes.belowIconSpan}>{birthYear}</span>
+                            <span className={classes.belowIconSpan}>{calculateAge()}</span>
                         </div>
                         <div className={classes.generalInfoInsideDiv}>
                             <NumbersIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>

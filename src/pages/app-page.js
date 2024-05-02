@@ -30,6 +30,9 @@ const AppPage = () => {
                 filtersInStorage?.appliedYears ||
                 filtersInStorage?.appliedMonths ||
                 filtersInStorage?.appliedRivals ||
+                filtersInStorage?.appliedJersey ||
+                filtersInStorage?.appliedSky ||
+                filtersInStorage?.appliedTemperature ||
                 filtersInStorage?.appliedSquad) {
                 const filterData = returnFilteredData(response, filtersInStorage)
                 setFilteredData(filterData)

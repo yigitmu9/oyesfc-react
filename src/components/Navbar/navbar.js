@@ -182,7 +182,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
                                     <div>
                                         <CardMedia
                                             component="img"
-                                            sx={{height: 50, width: 50, borderRadius: '100%'}}
+                                            sx={{height: 35, width: 35, borderRadius: '100%'}}
                                             image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
                                         />
                                     </div>
@@ -201,7 +201,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
                         <>
                             <div className={classes.mobileUserDiv}>
                                 <section className={classes.mobileUserSection} onClick={openSignInPopup}>
-                                    <AccountCircleIcon sx={{height: 50, width: 50, color: 'darkred'}}></AccountCircleIcon>
+                                    <AccountCircleIcon sx={{height: 35, width: 35, color: 'darkred'}}></AccountCircleIcon>
                                     <span className={classes.mobileUserNameSpan}>
                                     Sign In
                                 </span>

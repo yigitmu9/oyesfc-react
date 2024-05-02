@@ -13,9 +13,9 @@
         min-width: 97%;
         width: 97%;
         max-width: 97%;
-        min-height: 75%;
-        height: 75%;
-        max-height: 75%;
+        min-height: 90%;
+        height: 90%;
+        max-height: 90%;
     }
     @media (min-width: 601px) and (max-width: 767px) {
         min-width: 600px;
@@ -56,7 +56,7 @@
     border-radius: 0;
     min-width: 0;
     @media (max-width: 768px) {
-        padding: 20px;
+        padding: 20px 20px 10px;
     }
 }
 
@@ -191,7 +191,7 @@
     background: #323232;
     margin: 0 20px 20px 20px;
     @media (max-width: 768px) {
-        margin: 0 10px 10px 10px;
+        margin: 10px 10px 10px 10px;
     }
 }
 
@@ -203,7 +203,7 @@
     background: #323232;
     margin: 0 20px 20px 20px;
     @media (max-width: 768px) {
-        margin: 0 10px;
+        margin: 10px;
     }
 }
 
@@ -231,11 +231,20 @@
     margin: 10px;
 }
 
-.generalInfoSpan {
+.generalInfoSpanCursor {
     margin-left: 10px;
     font-size: 18px;
     color: lightgray;
     cursor: pointer;
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+
+.generalInfoSpan {
+    margin-left: 10px;
+    font-size: 18px;
+    color: lightgray;
     @media (max-width: 768px) {
         font-size: 14px;
     }
@@ -431,8 +440,8 @@
     height: auto;
     text-align: center;
     @media (max-width: 768px) {
-        font-size: 14px;
-        padding: 3px 5px;
+        font-size: 12px;
+        padding: 4px 5px;
     }
 }
 
@@ -445,8 +454,8 @@
     height: auto;
     text-align: center;
     @media (max-width: 768px) {
-        font-size: 14px;
-        padding: 3px 5px;
+        font-size: 12px;
+        padding: 4px 5px;
     }
 }
 
@@ -459,8 +468,8 @@
     height: auto;
     text-align: center;
     @media (max-width: 768px) {
-        font-size: 14px;
-        padding: 3px 5px;
+        font-size: 12px;
+        padding: 4px 5px;
     }
 }
 
@@ -471,7 +480,9 @@
     border-radius: 25px;
     margin-top: 3px;
     @media (max-width: 768px) {
-        width: 30px;
+        width: 35px;
+        height: 2px;
+        margin-top: 2px;
     }
 }
 
@@ -482,7 +493,9 @@
     border-radius: 25px;
     margin-top: 3px;
     @media (max-width: 768px) {
-        width: 30px;
+        width: 35px;
+        height: 2px;
+        margin-top: 2px;
     }
 }
 
@@ -493,7 +506,9 @@
     border-radius: 25px;
     margin-top: 3px;
     @media (max-width: 768px) {
-        width: 30px;
+        width: 35px;
+        height: 2px;
+        margin-top: 2px;
     }
 }
 
@@ -503,8 +518,9 @@
     justify-content: center;
     align-items: center;
     width: 80px;
+    height: auto;
     @media (max-width: 768px) {
-        width: 55px;
+        width: 62px;
     }
 }
 

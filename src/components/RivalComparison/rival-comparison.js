@@ -83,7 +83,7 @@ const RivalComparison = ({data, selectedRival}) => {
 
     return (
         <div className={ selectedRival ? classes.matchPageGrid : classes.grid} style={{backgroundColor: selectedRival ? "#404040" : "#242424"}}>
-            <Card sx={{borderRadius:  selectedRival ? "0" : "25px", width: "100%", height: "auto"}}
+            <Card sx={{borderRadius:  selectedRival ? "0" : "25px", width: "100%", height: "auto", boxShadow: 0}}
                   style={{backgroundColor: selectedRival ? "#404040" : "#242424", justifyContent: "center", alignItems: "center"}}>
                 {
                     !selectedRival ?
@@ -127,7 +127,7 @@ const RivalComparison = ({data, selectedRival}) => {
                                         <p className={classes.listItemSpanStyle} style={{backgroundColor: bgColor}}>{TeamNames.oYesFc}</p>
                                     </div>
                                     <div className={classes.subtitle} style={{backgroundColor: bgColor}}>
-                                        <p className={classes.listItemSpanStyle2} style={{backgroundColor: bgColor}}>{rival === 'Select Rival' || rival === null ? 'Rival' : rival}</p>
+                                        <p className={classes.listItemSpanStyle2} style={{backgroundColor: bgColor}}>{rival === 'Select Rival' || rival === null || !selectedRival ? 'Rival' : rival}</p>
                                         <div className={classes.colorTitleDiv} style={{backgroundColor: bgColor}}>
                                             <div className={classes.colorTitle2}></div>
                                         </div>

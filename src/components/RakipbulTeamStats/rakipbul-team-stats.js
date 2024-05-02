@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import classes from "./rakipbul-team-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -6,20 +6,37 @@ import {Doughnut} from "react-chartjs-2";
 import {TeamNames} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 import {Divider, List, ListItem} from "@mui/material";
+import {loadWebsite} from "../../firebase";
 
-const RakipbulTeamStats = ({data}) => {
+const RakipbulTeamStats = () => {
 
+    const [rakipbulData, setRakipbulData] = React.useState(null);
     let goalsScored = 0
     let ourPositions = 0
     let goalsConceded = 0
     let theirPositions = 0
-    let rakipbulData = Object.values(data).filter(x => x?.oyesfc?.position);
-    rakipbulData.forEach(item => {
-        goalsScored += item?.oyesfc?.goal;
-        ourPositions += item?.oyesfc?.position;
-        goalsConceded += item?.rival?.goal;
-        theirPositions += item?.rival?.position;
+
+    useEffect(() => {
+        if (!rakipbulData) fetchRakipbulData().then(r => r)
     });
+
+    const fetchRakipbulData = async () => {
+        try {
+            const response = await loadWebsite(`rakipbul`);
+            setRakipbulData(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    if (rakipbulData) {
+        Object.values(rakipbulData)?.forEach(item => {
+            goalsScored += item?.oyesfc?.goal;
+            ourPositions += item?.oyesfc?.position;
+            goalsConceded += item?.rival?.goal;
+            theirPositions += item?.rival?.position;
+        });
+    }
 
     const chartDatasets = {
         labels: ['Goals', 'Missed chances'],

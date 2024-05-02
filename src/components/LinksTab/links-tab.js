@@ -54,8 +54,8 @@ const LinksTab = ({matchDetailsData, weatherIcons, editMatch, credentials, fixtu
 
     return (
         <>
-            <div className={classes.urlTabSection}>
-                <section className={classes.firstLinksSection}>
+            <div className={classes.generalTabDiv}>
+                <section className={classes.generalTabSection}>
                     <div className={classes.urlInfoDiv}>
                         <LocationOnIcon fontSize={isMobile ? 'medium' : 'large'}
                                         className={classes.generalInfoIcon}>
@@ -75,7 +75,7 @@ const LinksTab = ({matchDetailsData, weatherIcons, editMatch, credentials, fixtu
                         </div>
                     </div>
                 </section>
-                <section className={classes.linksSection}>
+                <section className={classes.generalTabSection}>
                     <div className={classes.urlInfoDiv}>
                         <CalendarMonthIcon fontSize={isMobile ? 'medium' : 'large'}
                                            className={classes.generalInfoIcon}>
@@ -108,7 +108,7 @@ const LinksTab = ({matchDetailsData, weatherIcons, editMatch, credentials, fixtu
                         ></AddToCalendarButton>
                     </div>
                 </section>
-                <section className={classes.linksSection}>
+                <section className={classes.generalTabSection}>
                     <div className={classes.urlInfoDiv}>
                         {weatherIcons}
                         {
@@ -141,7 +141,7 @@ const LinksTab = ({matchDetailsData, weatherIcons, editMatch, credentials, fixtu
                 </section>
                 {
                     credentials?.isCaptain &&
-                    <section className={classes.lastLinksSection}>
+                    <section className={classes.generalTabSection}>
                         <div className={classes.urlInfoDiv}>
                             <EditIcon fontSize={isMobile ? 'medium' : 'large'}
                                       className={classes.generalInfoIcon}>

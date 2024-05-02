@@ -5,7 +5,7 @@ import Result from "../Result/result";
 import FootballLogo from '../../images/football.png';
 import GameStatus from "../GameStatus/game-status";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import {WeatherSky} from "../../constants/constants";
+import {TeamMembers, WeatherSky} from "../../constants/constants";
 import Box from "@mui/material/Box";
 import {Divider, Tab, Tabs} from "@mui/material";
 import PropTypes from "prop-types";
@@ -58,11 +58,26 @@ function a11yProps(index) {
 
 export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadData, credentials, allData}) => {
 
+    const checkButton = () => {
+        const [day, month, year] = matchDetailsData.day.split('-');
+        const time = matchDetailsData.time.split('-');
+        const endTime = time[1] === '00:00' ? '23:59' : time[1]
+        const [hour, minute] = endTime.split(':');
+        const inputDateTime = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
+        const now = new Date();
+        const differenceInHours = (now - inputDateTime) / (1000 * 60 * 60);
+        if (differenceInHours >= 48 || !Object.keys(matchDetailsData?.oyesfc?.squad)?.includes(credentials?.userName)) {
+            return 'Not Available'
+        }
+        return 'Submit'
+    };
+
     document.body.style.overflow = 'hidden';
     const initialOYesFCStarFormData = {};
     const [ratesData, setRatesData] = useState(null);
     const isMobile = window.innerWidth <= 768;
     const buttonBgColor = '#323232'
+    const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
     const matchDetails = Object.entries(matchDetailsData.oyesfc.squad).filter(x => x[1].goal > 0)
     const popupRef = useRef(null);
     const [tabValue, setTabValue] = React.useState(0);
@@ -73,7 +88,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     const [starsErrorMessage, setStarsErrorMessage] = useState(null);
     const [notesErrorMessage, setNotesErrorMessage] = useState(null);
-    const [starsSubmitButton, setStarsSubmitButton] = useState('Submit');
+    const [starsSubmitButton, setStarsSubmitButton] = useState(checkButton());
     const [notesSubmitButton, setNotesSubmitButton] = useState('Submit');
     const [matchNotes, setMatchNotes] = useState(null);
     const [noteFormData, setNoteFormData] = useState({});
@@ -162,7 +177,8 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                     setOYesFCStarFormData(form)
                     setStarsSubmitButton('Submitted')
                 }
-                if (Object.entries(response?.rates)?.length > 3) {
+                const oyesfcMemberLengthOfThisMatch = Object.keys(matchDetailsData?.oyesfc?.squad)?.filter(a => oyesfcMembers?.includes(a))?.length
+                if (Object.entries(response?.rates)?.length >= oyesfcMemberLengthOfThisMatch) {
                     calculatePlayerRatings(response?.rates);
                 }
             }
@@ -356,7 +372,8 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                         }} label="Jersey" {...a11yProps(2)} />
                         <Tab sx={{
                             '&.MuiTab-root': {
-                                color: 'gray'
+                                color: 'gray',
+                                size: 14
                             }, '&.Mui-selected': {
                                 color: 'lightgray'
                             }
@@ -469,7 +486,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 </section>
                             }
                             <div className={classes.submitButtonDiv}>
-                                <button className={classes.mapsButtons} disabled={starsSubmitButton === 'Submitted'}
+                                <button className={classes.mapsButtons} disabled={starsSubmitButton === 'Submitted' || starsSubmitButton === 'Not Available'}
                                         onClick={submitStars}>{starsSubmitButton}</button>
                                 {isMobile && <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
                             </div>
@@ -485,7 +502,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 ))
                             }
                             {
-                                notesSubmitButton !== 'Submitted' &&
+                                (notesSubmitButton !== 'Submitted' && notesSubmitButton !== 'Not Available') &&
                                 <section className={classes.notesSection}>
                                     <label className={classes.labelStyle}>
                                         Add your note:
@@ -512,7 +529,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 </section>
                             }
                             <div className={classes.submitButtonDiv}>
-                                <button className={classes.mapsButtons} disabled={notesSubmitButton === 'Submitted'}
+                                <button className={classes.mapsButtons} disabled={notesSubmitButton === 'Submitted' || notesSubmitButton === 'Not Available'}
                                         onClick={submitNote}>
                                     {notesSubmitButton}
                                 </button>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import classes from "./rakipbul-player-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -16,11 +16,26 @@ import {TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
 import facilitiesStatsClasses from "../FacilitiesStats/facilities-stats.module.css";
+import {loadWebsite} from "../../firebase";
 
-const RakipbulPlayerStats = ({data}) => {
+const RakipbulPlayerStats = () => {
 
     const [match, setMatch] = React.useState('Total of All Matches');
-    let rakipbulData = Object.values(data).filter(x => x?.oyesfc?.position);
+    const [rakipbulData, setRakipbulData] = React.useState(null);
+    let rakipbulRivals = [];
+
+    useEffect(() => {
+        if (!rakipbulData) fetchRakipbulData().then(r => r)
+    });
+
+    const fetchRakipbulData = async () => {
+        try {
+            const response = await loadWebsite(`rakipbul`);
+            setRakipbulData(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleChange = (event) => {
         setMatch(event.target.value);
@@ -37,22 +52,28 @@ const RakipbulPlayerStats = ({data}) => {
     let playerPositionData = [];
     let goalPositionData = [];
 
-    Object.values(TeamMembers).forEach(member => {
-        playerTotalGoal = 0;
-        playerTotalPosition = 0;
-        Object.values(matchData).forEach(item => {
-            if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
-                playerTotalGoal += item.oyesfc.squad[member.name].goal;
-                playerTotalPosition += item.oyesfc.squad[member.name].position;
-            }
+    if (rakipbulData) {
+        Object.values(rakipbulData).forEach(x => {
+            const name = x?.rival?.name + ' (' + x?.oyesfc?.goal + '-' + x?.rival?.goal + ')'
+            rakipbulRivals.push(name)
+        })
+        Object.values(TeamMembers).forEach(member => {
+            playerTotalGoal = 0;
+            playerTotalPosition = 0;
+            Object.values(matchData).forEach(item => {
+                if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
+                    playerTotalGoal += item.oyesfc.squad[member.name].goal;
+                    playerTotalPosition += item.oyesfc.squad[member.name].position;
+                }
+            });
+
+            const goalPositionRate = ((playerTotalGoal / playerTotalPosition) * 100)?.toFixed(0);
+
+            playerGoalData.push(playerTotalGoal)
+            playerPositionData.push(playerTotalPosition)
+            goalPositionData.push(goalPositionRate)
         });
-
-        const goalPositionRate = ((playerTotalGoal / playerTotalPosition) * 100)?.toFixed(0);
-
-        playerGoalData.push(playerTotalGoal)
-        playerPositionData.push(playerTotalPosition)
-        goalPositionData.push(goalPositionRate)
-    });
+    }
 
     const chartDatasets = {
         labels: Object.values(TeamMembers).map(x => x.name),
@@ -110,8 +131,8 @@ const RakipbulPlayerStats = ({data}) => {
                                 Select a Match:
                                 <select className={facilitiesStatsClasses.select} onChange={handleChange}>
                                     <option value='Total of All Matches'>Total of All Matches</option>
-                                    {rakipbulData.map((x, y) => (
-                                        <option key={y} value={x.rival.name}>{x.rival.name}</option>
+                                    {rakipbulRivals?.map((x, y) => (
+                                        <option key={y} value={x}>{x}</option>
                                     ))}
                                 </select>
                             </label>

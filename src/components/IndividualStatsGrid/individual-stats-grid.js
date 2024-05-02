@@ -58,7 +58,7 @@ const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) =
                     <WeatherSkyIndividualStats data={filteredData} selectedSky={['Rain', 'Snow']}/>
                 </div>
                 <div className={classes.divStyle}>
-                    <RakipbulPlayerStats data={databaseData}/>
+                    <RakipbulPlayerStats/>
                 </div>
                 <div className={classes.divStyle}>
                     <div className={teamStatsClasses.spanDivStyle}>

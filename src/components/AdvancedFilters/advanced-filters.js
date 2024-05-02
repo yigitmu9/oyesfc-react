@@ -1,6 +1,6 @@
 import classes from "./advanced-filters.module.css";
 import React, {useEffect, useRef, useState} from "react";
-import {TeamMembers} from "../../constants/constants";
+import {Jerseys, TeamMembers, WeatherSky} from "../../constants/constants";
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import matchDetailsClasses from '../MatchDetails/match-details.module.css'
 
@@ -15,6 +15,9 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
     const [filteredYears, setFilteredYears] = useState(!filtersInStorage?.appliedYears ? [] : filtersInStorage?.appliedYears);
     const [filteredMonths, setFilteredMonths] = useState(!filtersInStorage?.appliedMonths ? [] : filtersInStorage?.appliedMonths);
     const [filteredRivals, setFilteredRivals] = useState(!filtersInStorage?.appliedRivals ? [] : filtersInStorage?.appliedRivals);
+    const [filteredJersey, setFilteredJersey] = useState(!filtersInStorage?.appliedJersey ? [] : filtersInStorage?.appliedJersey);
+    const [filteredSky, setFilteredSky] = useState(!filtersInStorage?.appliedSky ? [] : filtersInStorage?.appliedSky);
+    const [filteredTemperature, setFilteredTemperature] = useState(!filtersInStorage?.appliedTemperature ? [] : filtersInStorage?.appliedTemperature);
     const [filteredSquad, setFilteredSquad] = useState(!filtersInStorage?.appliedSquad ? 'All' : filtersInStorage?.appliedSquad);
     let facilities = [];
     let years = [];
@@ -80,6 +83,9 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
         setFilteredYears([])
         setFilteredMonths([])
         setFilteredRivals([])
+        setFilteredTemperature([])
+        setFilteredJersey([])
+        setFilteredSky([])
         setFilteredSquad('All')
     }
 
@@ -150,6 +156,36 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
         }
     };
 
+    const handleJerseyChange = (event) => {
+        const {name} = event.target;
+        const checked = event.target.checked;
+        if (filteredJersey?.includes(name) && !checked) {
+            setFilteredJersey(filteredJersey?.filter(x => x !== name));
+        } else if (!filteredJersey?.includes(name) && checked) {
+            setFilteredJersey(prevFilteredJersey => [...prevFilteredJersey, name]);
+        }
+    };
+
+    const handleSkyChange = (event) => {
+        const {name} = event.target;
+        const checked = event.target.checked;
+        if (filteredSky?.includes(name) && !checked) {
+            setFilteredSky(filteredSky?.filter(x => x !== name));
+        } else if (!filteredSky?.includes(name) && checked) {
+            setFilteredSky(prevFilteredSky => [...prevFilteredSky, name]);
+        }
+    };
+
+    const handleTemperatureChange = (event) => {
+        const {name} = event.target;
+        const checked = event.target.checked;
+        if (filteredTemperature?.includes(name) && !checked) {
+            setFilteredTemperature(filteredTemperature?.filter(x => x !== name));
+        } else if (!filteredTemperature?.includes(name) && checked) {
+            setFilteredTemperature(prevFilteredTemperature => [...prevFilteredTemperature, name]);
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -159,6 +195,9 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
             filteredYears?.length > 0 ||
             filteredMonths?.length > 0 ||
             filteredRivals?.length > 0 ||
+            filteredJersey?.length > 0 ||
+            filteredSky?.length > 0 ||
+            filteredTemperature?.length > 0 ||
             filteredSquad !== 'All') {
             appliedFilters = {
                 appliedType: matchType,
@@ -167,6 +206,9 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                 appliedYears: filteredYears,
                 appliedMonths: filteredMonths,
                 appliedRivals: filteredRivals,
+                appliedJersey: filteredJersey,
+                appliedSky: filteredSky,
+                appliedTemperature: filteredTemperature,
                 appliedSquad: filteredSquad
             }
             localStorage.setItem('filters', JSON.stringify(appliedFilters))
@@ -324,6 +366,75 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                         </div>
                                     ))}
                                 </div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Jersey</h2>
+                                    {Jerseys.map((x, y) => (
+                                        <div key={y} style={{background: "#1f1f1f"}}>
+                                            <label style={{background: "#1f1f1f"}}
+                                                   className={classes.customCheckbox}>
+                                                {x}
+                                                <input
+                                                    type="checkbox"
+                                                    name={x}
+                                                    onChange={handleJerseyChange}
+                                                    checked={filteredJersey?.includes(x)}
+                                                />
+                                                <span className={classes.checkmark}></span>
+                                            </label>
+                                            <br/>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Sky</h2>
+                                    {WeatherSky.map((x, y) => (
+                                        <div key={y} style={{background: "#1f1f1f"}}>
+                                            <label style={{background: "#1f1f1f"}}
+                                                   className={classes.customCheckbox}>
+                                                {x}
+                                                <input
+                                                    type="checkbox"
+                                                    name={x}
+                                                    onChange={handleSkyChange}
+                                                    checked={filteredSky?.includes(x)}
+                                                />
+                                                <span className={classes.checkmark}></span>
+                                            </label>
+                                            <br/>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Temperature</h2>
+                                    <div style={{background: "#1f1f1f"}}>
+                                        <label style={{background: "#1f1f1f"}}
+                                               className={classes.customCheckbox}>
+                                            Cold Weather{' (<16'}&#176;{')'}
+                                            <input
+                                                type="checkbox"
+                                                name={'Cold Weather'}
+                                                onChange={handleTemperatureChange}
+                                                checked={filteredTemperature?.includes('Cold Weather')}
+                                            />
+                                            <span className={classes.checkmark}></span>
+                                        </label>
+                                        <br/>
+                                    </div>
+                                    <div style={{background: "#1f1f1f"}}>
+                                        <label style={{background: "#1f1f1f"}}
+                                               className={classes.customCheckbox}>
+                                            Hot Weather{' (>15'}&#176;{')'}
+                                            <input
+                                                type="checkbox"
+                                                name={'Hot Weather'}
+                                                onChange={handleTemperatureChange}
+                                                checked={filteredTemperature?.includes('Hot Weather')}
+                                            />
+                                            <span className={classes.checkmark}></span>
+                                        </label>
+                                        <br/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className={classes.buttonDivStyle}>
@@ -331,7 +442,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     onClick={handleSubmit}>Apply
                             </button>
                             <div className={matchDetailsClasses.mapsButtons}
-                                    onClick={resetFilters}>
+                                 onClick={resetFilters}>
                                 <FilterListOffIcon style={{height: "21px", width: "21px"}}>
                                 </FilterListOffIcon>
                             </div>
@@ -382,6 +493,23 @@ export function returnFilteredData(databaseData, confirmedFilters) {
 
     if (filteredData?.length > 0 && confirmedFilters?.appliedRivals?.length > 0) {
         filteredData = filteredData?.filter(x => confirmedFilters?.appliedRivals?.includes(x?.rival.name))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedJersey?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedJersey?.includes(x?.oyesfc?.jersey))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedSky?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedSky?.includes(x?.weather?.sky))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedTemperature?.length > 0) {
+        if (confirmedFilters?.appliedTemperature?.includes('Hot Weather')) {
+            filteredData = Object.values(filteredData).filter(x => x?.weather?.temperature > 15)
+        }
+        if (confirmedFilters?.appliedTemperature?.includes('Cold Weather')) {
+            filteredData = Object.values(filteredData).filter(x => x?.weather?.temperature < 16)
+        }
     }
 
     if (filteredData?.length > 0 && confirmedFilters?.appliedSquad !== 'All') {

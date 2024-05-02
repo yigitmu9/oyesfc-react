@@ -25,7 +25,7 @@ const TeamStatsGrid = ({databaseData, credentials}) => {
             <WeatherTeamStats data={matchDetailsFilteredData}/>
             <WeatherSkyTeamStats data={matchDetailsFilteredData} selectedSky={['Daytime', 'Night']}/>
             <WeatherSkyTeamStats data={matchDetailsFilteredData} selectedSky={['Rain', 'Snow']}/>
-            <RakipbulTeamStats data={databaseData}/>
+            <RakipbulTeamStats/>
             <div className={classes.divStyle}>
                 <div className={classes.spanDivStyle}>
                     <span className={classes.spanStyle}>*These statistics are only valid for 10 specific

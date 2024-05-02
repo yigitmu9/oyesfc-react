@@ -12,6 +12,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
     document.body.style.overflow = 'hidden';
     const isMobile = window.innerWidth <= 768;
     const [loading, setLoading] = useState(false);
+    const allFacilities = Facilities.map(x => x.name)
 
     let facilities = [];
     Object.values(databaseData)?.forEach((x) => {
@@ -290,8 +291,8 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
                                         name="place"
                                         value={formData.place}>
                                     <option value={'New Facility'}>New Facility</option>
-                                    {Facilities.map((x, y) => (
-                                        <option key={y} value={x.name}>{x.name}</option>
+                                    {allFacilities.sort().map((x, y) => (
+                                        <option key={y} value={x}>{x}</option>
                                     ))}
                                 </select>
                             </label>
@@ -395,7 +396,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
                                                     handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role)}
                                                 required={true}
                                                 name={`oyesfc.squad.${member}.role`}
-                                                value={oYesFCSquadFormData[member].role}>
+                                                value={oYesFCSquadFormData[member].role ? oYesFCSquadFormData[member].role : (Object.values(TeamMembers).find(x => x?.name === member)?.role || oYesFCSquadFormData[member].role) }>
                                             <option>Select Role</option>
                                             {FootballRoles.map((x, y) => (
                                                 <option key={y} value={x}>{x}</option>

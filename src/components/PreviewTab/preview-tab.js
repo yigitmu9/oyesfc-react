@@ -136,7 +136,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
 
         if (infosForMatch?.length > 0) {
             let playerGoals = {};
-            Object.values(allData).filter(x => x?.rival?.name === matchDetailsData?.rival?.name).forEach(match => {
+            Object.values(allData).filter((x, y) => x && y > matchIndex).filter(x => x?.rival?.name === matchDetailsData?.rival?.name).forEach(match => {
                 const squad = match.oyesfc.squad;
                 Object.keys(squad).forEach(player => {
                     const goals = squad[player].goal;
@@ -185,7 +185,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
                     <LocationOnIcon fontSize={isMobile ? 'medium' : 'large'}
                                     className={classes.generalInfoIcon}>
                     </LocationOnIcon>
-                    <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
+                    <span className={classes.generalInfoSpanCursor} onClick={redirectToUrlTab}>
                                         {matchDetailsData.place}
                                     </span>
                 </div>
@@ -193,7 +193,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
                     <CalendarMonthIcon fontSize={isMobile ? 'medium' : 'large'}
                                        className={classes.generalInfoIcon}>
                     </CalendarMonthIcon>
-                    <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
+                    <span className={classes.generalInfoSpanCursor} onClick={redirectToUrlTab}>
                                         {matchDetailsData.day.replace(/-/g, '/')}
                                     </span>
                 </div>
@@ -201,15 +201,15 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
                     <AccessTimeIcon fontSize={isMobile ? 'medium' : 'large'}
                                     className={classes.generalInfoIcon}>
                     </AccessTimeIcon>
-                    <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
+                    <span className={classes.generalInfoSpanCursor} onClick={redirectToUrlTab}>
                                         {matchDetailsData.time}
                                     </span>
                 </div>
-                {matchDetailsData?.weather && matchDetailsData?.oyesfc?.jersey ?
+                {matchDetailsData?.weather && matchDetailsData?.oyesfc?.jersey &&
                     <>
                         <div className={classes.generalInfoDiv}>
                             {weatherIcons}
-                            <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
+                            <span className={classes.generalInfoSpanCursor} onClick={redirectToUrlTab}>
                                                 {matchDetailsData?.weather?.sky}
                                             </span>
                         </div>
@@ -217,7 +217,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
                             <ThermostatIcon fontSize={isMobile ? 'medium' : 'large'}
                                             className={classes.generalInfoIcon}>
                             </ThermostatIcon>
-                            <span className={classes.generalInfoSpan} onClick={redirectToUrlTab}>
+                            <span className={classes.generalInfoSpanCursor} onClick={redirectToUrlTab}>
                                                 {matchDetailsData?.weather?.temperature}&#176;
                                             </span>
                         </div>
@@ -225,13 +225,11 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
                             <CheckroomIcon fontSize={isMobile ? 'medium' : 'large'}
                                            className={classes.generalInfoIcon}>
                             </CheckroomIcon>
-                            <span className={classes.generalInfoSpan} onClick={redirectToKitsTab}>
+                            <span className={classes.generalInfoSpanCursor} onClick={redirectToKitsTab}>
                                                 {matchDetailsData?.oyesfc?.jersey}
                                             </span>
                         </div>
                     </>
-                    :
-                    null
                 }
             </section>
             {
