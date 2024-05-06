@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import {TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
+import facilitiesTeamStatsClasses from '../FacilitiesStats/facilities-stats.module.css'
 
 const FacilitiesIndividualStats = ({data}) => {
 

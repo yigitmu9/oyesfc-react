@@ -23,6 +23,10 @@
         display: block;
         justify-content: center;
     }
+    @media screen and (min-width: 769px) and (max-width: 1100px) {
+        margin-left: 7%;
+        margin-right: 7%;
+    }
 }
 
 .cardAlign {

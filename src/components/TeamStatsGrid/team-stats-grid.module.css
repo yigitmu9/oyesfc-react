@@ -7,15 +7,20 @@
     background-color: #242424;
     padding: 15px 10px 15px;
     color: rgb(128, 128, 128);
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
     height: auto;
-    margin-left: 14%;
-    margin-right: 14%;
-    margin-top: 20px;
+    margin: 50px 14% 20px;
+    width: 100%;
     border-radius: 25px;
     @media screen and (max-width: 768px) {
         margin-left: 3%;
         margin-right: 3%;
+    }
+    @media screen and (min-width: 769px) and (max-width: 1100px) {
+        margin-left: 7%;
+        margin-right: 7%;
     }
 }
 

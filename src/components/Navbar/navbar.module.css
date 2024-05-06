@@ -37,7 +37,10 @@
     color: black;
     margin: 10px;
     padding: 10px;
-    font-size: 14px;
+    font-size: 18px;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+    }
 }
 
 .drawerRoutesDiv {
@@ -74,14 +77,20 @@
     color: darkred;
     margin-left: 5px;
     font-weight: bolder;
-    font-size: 14px;
+    font-size: 18px;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+    }
 }
 
 .mobileEmailSpan {
-    font-size: 10px;
     color: darkred;
     margin-left: 5px;
     font-weight: bolder;
+    font-size: 14px;
+    @media screen and (max-width: 768px) {
+        font-size: 10px;
+    }
 }
 
 .mobileUserSection {

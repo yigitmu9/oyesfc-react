@@ -14,7 +14,7 @@ import WeatherSkyIndividualStats from "../WeatherSkyIndividualStats/weather-sky-
 
 const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) => {
 
-    const filteredData= Object.values(databaseData);
+    const filteredData = Object.values(databaseData);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [player, setPlayer] = useState(null);
 
@@ -30,44 +30,24 @@ const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) =
 
     return (
         <div className={classes.grid}>
-            <div className={classes.generalStyle}>
-                <h1 className={classes.firstTitle}>Lineup</h1>
-                <div className={classes.ultimateDivStyle}>
-                    <UltimateTeam onClickCard={openPlayerDetails}/>
-                </div>
-                <h1 className={classes.secondTitle}>Individual Statistics</h1>
-                <div className={classes.divStyle}>
-                    <ChartsGrid matchData={filteredData} databaseData={databaseData}/>
-                </div>
-                <div className={classes.divStyle}>
-                    <FacilitiesIndividualStats data={filteredData}/>
-                </div>
-                <div className={classes.divStyle}>
-                    <RivalsIndividualStats data={filteredData}/>
-                </div>
-                <div className={classes.divStyle}>
-                    <JerseysIndividualStats data={filteredData}/>
-                </div>
-                <div className={classes.divStyle}>
-                    <WeatherIndividualStats data={filteredData}/>
-                </div>
-                <div className={classes.divStyle}>
-                    <WeatherSkyIndividualStats data={filteredData} selectedSky={['Daytime', 'Night']}/>
-                </div>
-                <div className={classes.divStyle}>
-                    <WeatherSkyIndividualStats data={filteredData} selectedSky={['Rain', 'Snow']}/>
-                </div>
-                <div className={classes.divStyle}>
-                    <RakipbulPlayerStats/>
-                </div>
-                <div className={classes.divStyle}>
-                    <div className={teamStatsClasses.spanDivStyle}>
-                        <span className={classes.spanStyle}>*Does not work with filters.</span>
-                        <Divider sx={{bgcolor: "rgb(80,80,80)", margin: "7px 0 7px"}} variant="middle"/>
-                        <span className={classes.spanStyle}>**These statistics are only valid for 10 specific
+            <h1 className={classes.firstTitle}>Lineup</h1>
+            <UltimateTeam onClickCard={openPlayerDetails}/>
+            <h1 className={classes.secondTitle}>Individual Statistics</h1>
+            <ChartsGrid matchData={filteredData} databaseData={databaseData}/>
+            <FacilitiesIndividualStats data={filteredData}/>
+            <RivalsIndividualStats data={filteredData}/>
+            <JerseysIndividualStats data={filteredData}/>
+            <WeatherIndividualStats data={filteredData}/>
+            <WeatherSkyIndividualStats data={filteredData} selectedSky={['Daytime', 'Night']}/>
+            <WeatherSkyIndividualStats data={filteredData} selectedSky={['Rain', 'Snow']}/>
+            <RakipbulPlayerStats/>
+            <div className={teamStatsClasses.divStyle}>
+                <div className={teamStatsClasses.spanDivStyle}>
+                    <span className={teamStatsClasses.spanStyle}>*Does not work with filters.</span>
+                    <Divider sx={{bgcolor: "rgb(80,80,80)", margin: "7px 0 7px"}} variant="middle"/>
+                    <span className={teamStatsClasses.spanStyle}>**These statistics are only valid for 10 specific
                             Rakipbul matches for which position data is available.
                             Does not work with filters.</span>
-                    </div>
                 </div>
             </div>
             {isPopupOpen &&

@@ -1,19 +1,17 @@
 .grid {
     margin-left: 14%;
     margin-right: 14%;
-    width: 100%;
     justify-content: center;
     align-items: center;
     align-content: center;
     @media screen and (max-width: 768px) {
-        margin-left: 13%;
-        margin-right: 13%;
-        width: 95%;
+        margin-left: 3%;
+        margin-right: 3%;
+
     }
-    @media screen and (min-width: 769px) and (max-width: 1700px) {
-        margin-left: 13%;
-        margin-right: 13%;
-        width: 72%;
+    @media screen and (min-width: 769px) and (max-width: 1100px) {
+        margin-left: 7%;
+        margin-right: 7%;
     }
 }
 

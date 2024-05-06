@@ -1,18 +1,6 @@
 .grid {
-    display: flex;
-    justify-content: center;
+    align-items: center;
     margin-top: 30px;
-}
-
-.generalStyle {
-    color: lightgray;
-    max-width: 100%;
-}
-
-.divStyle {
-    display: flex;
-    width: 100%;
-    justify-content: center;
 }
 
 .spanStyle {

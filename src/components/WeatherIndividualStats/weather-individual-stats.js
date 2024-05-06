@@ -77,7 +77,7 @@ const WeatherIndividualStats = ({data}) => {
     });
 
     return (
-        <div className={weatherTeamClasses.grid}>
+        <div className={classes.grid}>
             <div className={classes.cardGrid}>
                 <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
                     <h1 className={classes.titleStyle}>Cold Weather{' (<16'}&#176;{')'}</h1>

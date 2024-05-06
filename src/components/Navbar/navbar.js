@@ -35,6 +35,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
     const individualPath = '/oyesfc-react/individual-stats';
     const teamPath = '/oyesfc-react/team-stats';
     const mainPath = '/oyesfc-react/';
+    const isMobile = window.innerWidth <= 768;
 
     const openFiltersModal = () => {
         setDesktopMenu(null)
@@ -182,7 +183,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
                                     <div>
                                         <CardMedia
                                             component="img"
-                                            sx={{height: 35, width: 35, borderRadius: '100%'}}
+                                            sx={{height: isMobile ? 35 : 45, width: isMobile ? 35 : 45, borderRadius: '100%'}}
                                             image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
                                         />
                                     </div>

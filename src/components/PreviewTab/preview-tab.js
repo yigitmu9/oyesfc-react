@@ -134,6 +134,28 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
             })
         }
 
+        let allTimeMatchesCount = {};
+        Object.values(allData).filter((x, y) => x && y >= matchIndex).forEach(match => {
+            const squad = match.oyesfc.squad;
+            Object.keys(squad).forEach(player => {
+                if (Object.keys(matchDetailsData.oyesfc.squad).includes(player) && Object.values(TeamMembers).map(x => x.name).includes(player)) {
+                    const count = squad[player] ? 1 : 0;
+                    allTimeMatchesCount[player] = Number((allTimeMatchesCount[player] || 0) + count);
+                }
+            });
+        });
+
+        const filteredNamesOfMatches = Object.entries(allTimeMatchesCount).filter(value => {
+            return value[1] % 25 === 0;
+        }).map(([name, value]) => ({ name, match: value }));
+
+        if (filteredNamesOfMatches?.length > 0) {
+            filteredNamesOfMatches?.forEach((person) => {
+                const no5 = `${person.name} is playing his ${person.match}th match with the O Yes FC jersey.`
+                infosForMatch.push(no5)
+            })
+        }
+
         if (infosForMatch?.length > 0) {
             let playerGoals = {};
             Object.values(allData).filter((x, y) => x && y > matchIndex).filter(x => x?.rival?.name === matchDetailsData?.rival?.name).forEach(match => {
