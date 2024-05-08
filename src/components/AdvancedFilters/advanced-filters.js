@@ -19,10 +19,12 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
     const [filteredSky, setFilteredSky] = useState(!filtersInStorage?.appliedSky ? [] : filtersInStorage?.appliedSky);
     const [filteredTemperature, setFilteredTemperature] = useState(!filtersInStorage?.appliedTemperature ? [] : filtersInStorage?.appliedTemperature);
     const [filteredSquad, setFilteredSquad] = useState(!filtersInStorage?.appliedSquad ? 'All' : filtersInStorage?.appliedSquad);
+    const [filteredNumberOfPlayers, setFilteredNumberOfPlayers] = useState(!filtersInStorage?.appliedNumberOfPlayers ? [] : filtersInStorage?.appliedNumberOfPlayers);
     let facilities = [];
     let years = [];
     let months = [];
     let rivalNames = [];
+    let playerLengthArray = [];
     let appliedFilters = {};
     const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -57,6 +59,12 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
         }
     })
 
+    Object.values(databaseData)?.forEach(x => {
+        const playerLength = Object.keys(x?.oyesfc?.squad)?.length
+        if (!playerLengthArray.includes(playerLength)) playerLengthArray.push(playerLength)
+    });
+    playerLengthArray = playerLengthArray.sort()
+
     const handleClose = () => {
         document.body.style.overflow = 'visible';
         onClose();
@@ -86,6 +94,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
         setFilteredTemperature([])
         setFilteredJersey([])
         setFilteredSky([])
+        setFilteredNumberOfPlayers([])
         setFilteredSquad('All')
     }
 
@@ -186,6 +195,16 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
         }
     };
 
+    const handleNumberOfPlayersChange = (event) => {
+        const {name} = event.target;
+        const checked = event.target.checked;
+        if (filteredNumberOfPlayers?.includes(name) && !checked) {
+            setFilteredNumberOfPlayers(filteredNumberOfPlayers?.filter(x => x !== name));
+        } else if (!filteredNumberOfPlayers?.includes(name) && checked) {
+            setFilteredNumberOfPlayers(prevFilteredNumberOfPlayers => [...prevFilteredNumberOfPlayers, name]);
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -198,6 +217,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
             filteredJersey?.length > 0 ||
             filteredSky?.length > 0 ||
             filteredTemperature?.length > 0 ||
+            filteredNumberOfPlayers?.length > 0 ||
             filteredSquad !== 'All') {
             appliedFilters = {
                 appliedType: matchType,
@@ -209,6 +229,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                 appliedJersey: filteredJersey,
                 appliedSky: filteredSky,
                 appliedTemperature: filteredTemperature,
+                appliedNumberOfPlayers: filteredNumberOfPlayers,
                 appliedSquad: filteredSquad
             }
             localStorage.setItem('filters', JSON.stringify(appliedFilters))
@@ -435,6 +456,25 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                         <br/>
                                     </div>
                                 </div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Number of Players</h2>
+                                    {playerLengthArray?.map((x, y) => (
+                                        <div key={y} style={{background: "#1f1f1f"}}>
+                                            <label style={{background: "#1f1f1f"}}
+                                                   className={classes.customCheckbox}>
+                                                {x + 'v' + x}
+                                                <input
+                                                    type="checkbox"
+                                                    name={x}
+                                                    onChange={handleNumberOfPlayersChange}
+                                                    checked={filteredNumberOfPlayers?.includes(x.toString())}
+                                                />
+                                                <span className={classes.checkmark}></span>
+                                            </label>
+                                            <br/>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                         <div className={classes.buttonDivStyle}>
@@ -510,6 +550,10 @@ export function returnFilteredData(databaseData, confirmedFilters) {
         if (confirmedFilters?.appliedTemperature?.includes('Cold Weather')) {
             filteredData = Object.values(filteredData).filter(x => x?.weather?.temperature < 16)
         }
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedNumberOfPlayers?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedNumberOfPlayers?.includes(Object.keys(x?.oyesfc?.squad)?.length?.toString()))
     }
 
     if (filteredData?.length > 0 && confirmedFilters?.appliedSquad !== 'All') {

@@ -11,6 +11,7 @@ import UltimateTeam from "../UltimateTeam/ultimate-team";
 import PlayerDetails from "../PlayerDetails/player-details";
 import JerseysIndividualStats from "../JerseysIndividualStats/jerseys-individual-stats";
 import WeatherSkyIndividualStats from "../WeatherSkyIndividualStats/weather-sky-individual-stats";
+import NumberOfPlayersIndividualStats from "../NumberOfPlayersIndividualStats/number-of-players-individual-stats";
 
 const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) => {
 
@@ -37,6 +38,7 @@ const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) =
             <FacilitiesIndividualStats data={filteredData}/>
             <RivalsIndividualStats data={filteredData}/>
             <JerseysIndividualStats data={filteredData}/>
+            <NumberOfPlayersIndividualStats data={filteredData}/>
             <WeatherIndividualStats data={filteredData}/>
             <WeatherSkyIndividualStats data={filteredData} selectedSky={['Daytime', 'Night']}/>
             <WeatherSkyIndividualStats data={filteredData} selectedSky={['Rain', 'Snow']}/>

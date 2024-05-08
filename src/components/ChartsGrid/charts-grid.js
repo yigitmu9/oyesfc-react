@@ -156,9 +156,7 @@ const ChartsGrid = ({matchData, databaseData}) => {
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                labels: {
-                    color: 'lightgray',
-                },
+                display: false
             },
         },
         scales: {
@@ -187,22 +185,31 @@ const ChartsGrid = ({matchData, databaseData}) => {
     };
 
     const radarOptions = {
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                labels: {
-                    color: 'lightgray',
-                },
-            },
-        },
+        locale: 'en-US',
+        scale: {},
         scales: {
             r: {
-                pointLabels: {
-                    color: 'lightgray',
+                angleLines: {
+                    color: 'black'
                 },
-            },
+                grid: {
+                    color: 'black'
+                },
+                pointLabels: {
+                    color: 'lightgray'
+                },
+                ticks: {
+                    color: 'transparent',
+                    backdropColor: 'transparent'
+                }
+            }
         },
-    };
+        plugins: {
+            legend: {
+                display: false
+            },
+        }
+    }
 
     Chart.register(CategoryScale);
     linear.register(CategoryScale)
@@ -255,12 +262,12 @@ const ChartsGrid = ({matchData, databaseData}) => {
                     </div>
                 </div>
                 <div className={classes.goalsPerGameDiv}>
-                    <h3 className={classes.titleStyle}>Regular Matches Compared to the Rakipbul*</h3>
-                    <div className={classes.chartStyle}>
+                    <h3 className={classes.titleStyle}>Regular Matches Compared to the Rakipbul Performance Increase Percentage*</h3>
+                    <div className={classes.radarChartStyle}>
                         <Radar
                             data={performanceRateDatasets}
                             width={"100%"}
-                            className={classes.goalsPerGameChart}
+                            className={classes.realRadarChartStyle}
                             options={radarOptions}
                         />
                     </div>

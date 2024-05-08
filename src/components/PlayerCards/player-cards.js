@@ -23,6 +23,7 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import ScoreboardsGrid from "../ScoreboardsGrid/scoreboards-grid";
 import {loadWebsite} from "../../firebase";
 import CakeIcon from '@mui/icons-material/Cake';
+import PlayerRadarChart from "../PlayerRadarChart/player-radar-chart";
 
 function CustomTabs(props) {
     const {children, value, index, ...other} = props;
@@ -73,10 +74,18 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     const [playerRatingMvp, setPlayerRatingMvp] = useState({rating: '-', mvp: 0});
     const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
     let playerTotalGoal = 0;
+    let playerYellowCard = 0;
+    let playerRedCard = 0;
 
     Object.values(data).forEach(item => {
         if (item?.oyesfc?.squad[playerName] && playerName !== TeamMembers.can.name) {
             playerTotalGoal += item.oyesfc.squad[playerName].goal;
+        }
+        if (item?.oyesfc?.squad[playerName]?.card === 'yellow') {
+            playerYellowCard += 1;
+        }
+        if (item?.oyesfc?.squad[playerName]?.card === 'red') {
+            playerRedCard += 1;
         }
     });
 
@@ -401,7 +410,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                         }, '&.Mui-selected': {
                             color: 'lightgray'
                         }
-                    }} label="position" {...a11yProps(1)} />
+                    }} label="statistics" {...a11yProps(1)} />
                     <Tab sx={{
                         '&.MuiTab-root': {
                             color: 'gray'
@@ -422,16 +431,88 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                                 </CopyrightIcon>
                             </>
                             <div className={matchDetailsClasses.momDetailsDiv}>
-                            <span className={matchDetailsClasses.momNameSpan}>
-                                {TeamMembers.yigit.name}
-                            </span>
-                                <span className={matchDetailsClasses.momSmallSpan}>
+
+                                <span className={matchDetailsClasses.momNameSpan}>
                                 Captain
                             </span>
                             </div>
                         </section>
                     </div>
                 }
+                <section className={matchDetailsClasses.squadSection}>
+                    <div className={classes.generalInfoDiv}>
+                        <div className={classes.generalInfoInsideDiv}>
+                            <CakeIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
+                            </CakeIcon>
+                            <span className={classes.belowIconSpan}>{calculateAge()}</span>
+                        </div>
+                        <div className={classes.generalInfoInsideDiv}>
+                            <NumbersIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
+                            </NumbersIcon>
+                            <span className={classes.belowIconSpan}>
+                                {playerNumber}
+                            </span>
+                        </div>
+                        <div className={classes.generalInfoInsideDiv}>
+                            <TransferWithinAStationIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                        className={classes.iconStyle}>
+                            </TransferWithinAStationIcon>
+                            <span className={classes.belowIconSpan}>{playerFoot}</span>
+                        </div>
+                    </div>
+                </section>
+                <section className={matchDetailsClasses.squadSection}>
+                    <div className={matchDetailsClasses.generalInfoDiv}>
+                        <PushPinIcon fontSize={isMobile ? 'medium' : 'large'}
+                                     className={matchDetailsClasses.generalInfoIcon}>
+                        </PushPinIcon>
+                        <span className={matchDetailsClasses.generalInfoSpan}>
+                            Positions
+                        </span>
+                    </div>
+                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                    <div className={matchDetailsClasses.generalInfoDiv}>
+                        <LooksOneIcon fontSize={isMobile ? 'medium' : 'large'}
+                                      className={matchDetailsClasses.generalInfoIcon}>
+                        </LooksOneIcon>
+                        <span className={matchDetailsClasses.generalInfoSpan}>
+                                {Object.entries(playersPositions).find(x => x[0] === playerName)[1][0]}
+                            </span>
+                    </div>
+                    {
+                        (playerName !== TeamMembers.can.name && playerName !== TeamMembers.mehmet.name) &&
+                        <div className={matchDetailsClasses.generalInfoDiv}>
+                            <LooksTwoIcon fontSize={isMobile ? 'medium' : 'large'}
+                                          className={matchDetailsClasses.generalInfoIcon}>
+                            </LooksTwoIcon>
+                            <span className={matchDetailsClasses.generalInfoSpan}>
+                                    {Object.entries(playersPositions).find(x => x[0] === playerName)[1][1]}
+                                </span>
+                        </div>
+                    }
+                    {
+                        (playerName !== TeamMembers.can.name && playerName !== TeamMembers.utku.name && playerName !== TeamMembers.mehmet.name) &&
+                        <div className={matchDetailsClasses.generalInfoDiv}>
+                            <Looks3Icon fontSize={isMobile ? 'medium' : 'large'}
+                                        className={matchDetailsClasses.generalInfoIcon}>
+                            </Looks3Icon>
+                            <span className={matchDetailsClasses.generalInfoSpan}>
+                                    {Object.entries(playersPositions).find(x => x[0] === playerName)[1][2]}
+                            </span>
+                        </div>
+                    }
+                    <div className={matchDetailsClasses.pitchStyleDiv}>
+                        <SoccerLineUp
+                            size={"responsive"}
+                            homeTeam={oyesfcSquad[playerName]}
+                            color={'green'}
+                        />
+                    </div>
+                </section>
+                <PlayerRadarChart playerName={playerName}/>
+                {isMobile && closeButton}
+            </CustomTabs>
+            <CustomTabs value={tabValue} index={1}>
                 <section className={matchDetailsClasses.squadSection}>
                     <div className={classes.generalPointsDiv}>
                         <div className={classes.generalInfoInsideDiv}>
@@ -469,10 +550,37 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                             display: "flex",
                             textAlign: "end"
                         }}>
+                            <p className={classes.fontStyle}>Goals</p>
+                            <p className={classes.fontStyle}>{playerTotalGoal}</p>
+                        </ListItem>
+                        <Divider sx={{bgcolor: "#646464"}} variant="middle" color="red"/>
+                        <ListItem style={{
+                            justifyContent: "space-between",
+                            display: "flex",
+                            textAlign: "end"
+                        }}>
                             <p className={classes.fontStyle}>Goal per Game</p>
                             <p className={classes.fontStyle}>{(playerTotalGoal / playerTotalMatch).toFixed(2)}</p>
                         </ListItem>
                         <Divider sx={{bgcolor: "#646464"}} variant="middle"/>
+                        <ListItem style={{
+                            justifyContent: "space-between",
+                            display: "flex",
+                            textAlign: "end"
+                        }}>
+                            <p className={classes.fontStyle}>Rating</p>
+                            <p className={classes.fontStyle}>{playerRatingMvp?.rating}</p>
+                        </ListItem>
+                        <Divider sx={{bgcolor: "#646464"}} variant="middle" color="red"/>
+                        <ListItem style={{
+                            justifyContent: "space-between",
+                            display: "flex",
+                            textAlign: "end"
+                        }}>
+                            <p className={classes.fontStyle}>Man of the Match Awards</p>
+                            <p className={classes.fontStyle}>{playerRatingMvp?.mvp}</p>
+                        </ListItem>
+                        <Divider sx={{bgcolor: "#646464"}} variant="middle" color="red"/>
                         <ListItem style={{
                             justifyContent: "space-between",
                             display: "flex",
@@ -484,81 +592,18 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                     </List>
                 </section>
                 <section className={matchDetailsClasses.squadSection}>
-                    <div className={classes.generalInfoDiv}>
+                    <div className={classes.yellowAndRedCardsDiv}>
                         <div className={classes.generalInfoInsideDiv}>
-                            <CakeIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
-                            </CakeIcon>
-                            <span className={classes.belowIconSpan}>{calculateAge()}</span>
+                            <div className={classes.yellowCardStyle}></div>
+                            <span className={classes.belowIconSpan}>{playerYellowCard}</span>
                         </div>
                         <div className={classes.generalInfoInsideDiv}>
-                            <NumbersIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
-                            </NumbersIcon>
-                            <span className={classes.belowIconSpan}>
-                                {playerNumber}
-                            </span>
-                        </div>
-                        <div className={classes.generalInfoInsideDiv}>
-                            <TransferWithinAStationIcon fontSize={isMobile ? 'medium' : 'large'}
-                                                        className={classes.iconStyle}>
-                            </TransferWithinAStationIcon>
-                            <span className={classes.belowIconSpan}>{playerFoot}</span>
+                            <div className={classes.redCardStyle}></div>
+                            <span className={classes.belowIconSpan}>{playerRedCard}</span>
                         </div>
                     </div>
                 </section>
                 {isMobile && closeButton}
-            </CustomTabs>
-            <CustomTabs value={tabValue} index={1}>
-                <>
-                    <section className={matchDetailsClasses.squadSection}>
-                        <div className={matchDetailsClasses.generalInfoDiv}>
-                            <PushPinIcon fontSize={isMobile ? 'medium' : 'large'}
-                                         className={matchDetailsClasses.generalInfoIcon}>
-                            </PushPinIcon>
-                            <span className={matchDetailsClasses.generalInfoSpan}>
-                            Positions
-                        </span>
-                        </div>
-                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
-                        <div className={matchDetailsClasses.generalInfoDiv}>
-                            <LooksOneIcon fontSize={isMobile ? 'medium' : 'large'}
-                                          className={matchDetailsClasses.generalInfoIcon}>
-                            </LooksOneIcon>
-                            <span className={matchDetailsClasses.generalInfoSpan}>
-                                {Object.entries(playersPositions).find(x => x[0] === playerName)[1][0]}
-                            </span>
-                        </div>
-                        {
-                            (playerName !== TeamMembers.can.name && playerName !== TeamMembers.mehmet.name) &&
-                            <div className={matchDetailsClasses.generalInfoDiv}>
-                                <LooksTwoIcon fontSize={isMobile ? 'medium' : 'large'}
-                                              className={matchDetailsClasses.generalInfoIcon}>
-                                </LooksTwoIcon>
-                                <span className={matchDetailsClasses.generalInfoSpan}>
-                                    {Object.entries(playersPositions).find(x => x[0] === playerName)[1][1]}
-                                </span>
-                            </div>
-                        }
-                        {
-                            (playerName !== TeamMembers.can.name && playerName !== TeamMembers.utku.name && playerName !== TeamMembers.mehmet.name) &&
-                            <div className={matchDetailsClasses.generalInfoDiv}>
-                                <Looks3Icon fontSize={isMobile ? 'medium' : 'large'}
-                                            className={matchDetailsClasses.generalInfoIcon}>
-                                </Looks3Icon>
-                                <span className={matchDetailsClasses.generalInfoSpan}>
-                                    {Object.entries(playersPositions).find(x => x[0] === playerName)[1][2]}
-                            </span>
-                            </div>
-                        }
-                    </section>
-                    <div className={matchDetailsClasses.pitchStyleDiv}>
-                        <SoccerLineUp
-                            size={"responsive"}
-                            homeTeam={oyesfcSquad[playerName]}
-                            color={'green'}
-                        />
-                    </div>
-                    {isMobile && closeButton}
-                </>
             </CustomTabs>
             <CustomTabs value={tabValue} index={2}>
                 <div className={classes.matchesDiv}>

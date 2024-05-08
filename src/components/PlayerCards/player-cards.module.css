@@ -44,6 +44,16 @@
     align-items: center;
 }
 
+.yellowAndRedCardsDiv {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    margin: 20px 120px;
+    @media (max-width: 767px) {
+        margin: 20px 100px;
+    }
+}
+
 .iconStyle {
     color: white;
 }
@@ -71,5 +81,29 @@
         margin-top: -15px;
         margin-right: -10px;
         margin-left: -10px;
+    }
+}
+
+.yellowCardStyle {
+    background: yellow;
+    height: 30px;
+    width: 20px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    @media (max-width: 767px) {
+        height: 25px;
+        width: 15px;
+    }
+}
+
+.redCardStyle {
+    background: red;
+    height: 30px;
+    width: 20px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    @media (max-width: 767px) {
+        height: 25px;
+        width: 15px;
     }
 }

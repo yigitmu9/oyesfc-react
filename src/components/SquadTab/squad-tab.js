@@ -5,6 +5,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import PersonIcon from "@mui/icons-material/Person";
 import SoccerLineUp from "react-soccer-lineup";
 import {FootballRoles, Jerseys, TeamMembers} from "../../constants/constants";
+import squadTabClasses from './squad-tab.module.css'
 
 const SquadTab = ({matchDetailsData, squadRatings}) => {
 
@@ -168,14 +169,14 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                 </div>
                 <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                 {
-                    Object.keys(matchDetailsData?.oyesfc?.squad).map((x, y) => (
+                    Object.entries(matchDetailsData?.oyesfc?.squad).map((x, y) => (
                         <div key={y} className={classes.generalInfoDiv}>
                             {
                                 squadRatings ?
                                     <span
-                                        className={squadRatings?.find(rating => rating?.name === x)?.rating >= 7 ? classes.goodRating :
-                                            squadRatings?.find(rating => rating?.name === x)?.rating < 5 ? classes.badRating : classes.midRating}>
-                                                    {squadRatings?.find(rating => rating?.name === x)?.rating.toFixed(1)}
+                                        className={squadRatings?.find(rating => rating?.name === x[0])?.rating >= 7 ? classes.goodRating :
+                                            squadRatings?.find(rating => rating?.name === x[0])?.rating < 5 ? classes.badRating : classes.midRating}>
+                                                    {squadRatings?.find(rating => rating?.name === x[0])?.rating.toFixed(1)}
                                             </span>
                                     :
                                     <PersonIcon fontSize={isMobile ? 'medium' : 'large'}
@@ -183,8 +184,11 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                                     </PersonIcon>
                             }
                             <span className={classes.generalInfoSpan}>
-                                        {x}
-                                    </span>
+                                {x[0]}
+                            </span>
+                            {x[1]?.card &&
+                                <div className={x[1]?.card === 'yellow' ? squadTabClasses.yellowCardStyle : squadTabClasses.redCardStyle}></div>
+                            }
                         </div>
                     ))
                 }

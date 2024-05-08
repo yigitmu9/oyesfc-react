@@ -9,6 +9,7 @@ import RivalComparison from "../RivalComparison/rival-comparison";
 import JerseyTeamStats from "../JerseyTeamStats/jersey-team-stats";
 import WeatherSkyTeamStats from "../WeatherSkyTeamStats/weather-sky-team-stats";
 import {Divider} from "@mui/material";
+import NumberOfPlayersTeamStats from "../NumberOfPlayersTeamStats/number-of-players-team-stats";
 
 const TeamStatsGrid = ({databaseData, credentials}) => {
 
@@ -21,6 +22,7 @@ const TeamStatsGrid = ({databaseData, credentials}) => {
             <FacilitiesStats data={matchDetailsFilteredData}/>
             <RivalComparison data={matchDetailsFilteredData}/>
             <JerseyTeamStats data={matchDetailsFilteredData}/>
+            <NumberOfPlayersTeamStats data={matchDetailsFilteredData}/>
             {credentials?.signedIn && <MainSquadStats data={matchDetailsFilteredData}/>}
             <WeatherTeamStats data={matchDetailsFilteredData}/>
             <WeatherSkyTeamStats data={matchDetailsFilteredData} selectedSky={['Daytime', 'Night']}/>

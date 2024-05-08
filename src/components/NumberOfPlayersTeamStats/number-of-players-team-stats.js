@@ -1,18 +1,19 @@
 import React from 'react';
-import classes from "./jersey-team-stats.module.css";
+import classes from "./number-of-players-team-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {PolarArea} from "react-chartjs-2";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
-import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
-import {Jerseys} from "../../constants/constants";
-import numberOfPlayersTeamStatsClasses from '../NumberOfPlayersTeamStats/number-of-players-team-stats.module.css';
 
-const JerseyTeamStats = ({data}) => {
+const NumberOfPlayersTeamStats = ({data}) => {
 
-    const jerseys = Jerseys;
-    const rows = jerseys;
+    let playerLengthArray = [];
+    Object.values(data).forEach(x => {
+        const playerLength = Object.keys(x?.oyesfc?.squad)?.length
+        if (!playerLengthArray.includes(playerLength)) playerLengthArray.push(playerLength)
+    });
+    playerLengthArray = playerLengthArray.sort()
     let win = 0;
     let draw = 0;
     let loss = 0;
@@ -29,21 +30,21 @@ const JerseyTeamStats = ({data}) => {
     let rivalGoalsPerGameData = [];
     let goalsPerGameData = [];
 
-    jerseys?.map(z => {
+    playerLengthArray?.map(z => {
         win = 0;
         draw = 0;
         loss = 0;
         game = 0;
         goals = 0;
         rivalGoals = 0;
-        game = Object.values(data)?.filter(item => item.oyesfc.jersey === z)?.length;
-        win = Object.values(data)?.filter(item => item.oyesfc.jersey === z && item.oyesfc.goal > item.rival.goal)?.length;
-        draw = Object.values(data)?.filter(item => item.oyesfc.jersey === z && item.oyesfc.goal === item.rival.goal)?.length;
-        loss = Object.values(data)?.filter(item => item.oyesfc.jersey === z && item.oyesfc.goal < item.rival.goal)?.length;
-        Object.values(data)?.filter(item => item.oyesfc.jersey === z)?.forEach(item => {
+        game = Object.values(data)?.filter(item => Object.keys(item?.oyesfc?.squad)?.length === z)?.length;
+        win = Object.values(data)?.filter(item => Object.keys(item?.oyesfc?.squad)?.length === z && item.oyesfc.goal > item.rival.goal)?.length;
+        draw = Object.values(data)?.filter(item => Object.keys(item?.oyesfc?.squad)?.length === z && item.oyesfc.goal === item.rival.goal)?.length;
+        loss = Object.values(data)?.filter(item => Object.keys(item?.oyesfc?.squad)?.length === z && item.oyesfc.goal < item.rival.goal)?.length;
+        Object.values(data)?.filter(item => Object.keys(item?.oyesfc?.squad)?.length === z)?.forEach(item => {
             goals += item?.oyesfc?.goal;
         });
-        Object.values(data)?.filter(item => item.oyesfc.jersey === z)?.forEach(item => {
+        Object.values(data)?.filter(item => Object.keys(item?.oyesfc?.squad)?.length === z)?.forEach(item => {
             rivalGoals += item?.rival?.goal;
         });
         const winPercent = ((win / game) * 100)?.toFixed(0);
@@ -62,16 +63,17 @@ const JerseyTeamStats = ({data}) => {
     })
 
     const chartDatasets = {
-        labels: jerseys,
+        labels: playerLengthArray.map(x => {
+            return x + 'v' + x
+        }),
         datasets: [
             {
                 label: 'Win Rate (%)',
                 backgroundColor: [
                     'lightgray',
-                    'dodgerblue',
-                    'purple',
+                    'goldenrod',
                     'darkred',
-                    'goldenrod'
+                    'dodgerblue',
                 ],
                 borderColor: 'black',
                 borderWidth: 0,
@@ -115,10 +117,10 @@ const JerseyTeamStats = ({data}) => {
     return (
         <div className={classes.grid}>
             <Card sx={{ borderRadius: "25px", width: "100%", height: "auto" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 className={classes.titleStyle}>Jerseys</h1>
+                <h1 className={classes.titleStyle}>Number Of Players</h1>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div className={classes.cardContentInsideStyle}>
-                        <div className={numberOfPlayersTeamStatsClasses.chartStyle}>
+                        <div className={classes.chartStyle}>
                             <PolarArea
                                 data={chartDatasets}
                                 width={"100%"}
@@ -126,12 +128,12 @@ const JerseyTeamStats = ({data}) => {
                                 options={options}
                             />
                         </div>
-                        <div className={numberOfPlayersTeamStatsClasses.tableStyle}>
+                        <div className={classes.tableStyle}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                     <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                         <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Jerseys</TableCell>
+                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Number of Players</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Wins</TableCell>
                                             <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Draws</TableCell>
@@ -143,14 +145,14 @@ const JerseyTeamStats = ({data}) => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rows.map((row, number) => (
+                                        {playerLengthArray.map((row, number) => (
                                             <TableRow
                                                 key={row}
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
                                             >
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
-                                                    {row}
+                                                    {row + 'v' + row}
                                                 </TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{gameData[number]}</TableCell>
                                                 <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{winData[number]}</TableCell>
@@ -173,4 +175,4 @@ const JerseyTeamStats = ({data}) => {
     );
 };
 
-export default JerseyTeamStats;
+export default NumberOfPlayersTeamStats;

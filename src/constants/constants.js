@@ -3,17 +3,17 @@ export const TeamNames = {
 }
 
 export const TeamMembers = {
-    can: {name: 'Can Şahin', number: 1, role: 'gk', birthYear: 1998, birthMonth: 12, birthDay: 23},
-    atakan: {name: 'Atakan Rakipsiz', number: 2, role: 'df', birthYear: 1998, birthMonth: 10, birthDay: 11},
-    berk: {name: 'Berk Doğan', number: 5, role: 'df', birthYear: 1998, birthMonth: 10, birthDay: 2},
-    berent: {name: 'Berent Özsan', number: 99, role: 'fw', birthYear: 1999, birthMonth: 5, birthDay: 26},
-    gokhan: {name: 'Gökhan Cömert', number: 4, role: 'fw', birthYear: 1999, birthMonth: 10, birthDay: 20},
-    mehmet: {name: 'Mehmet Çelik', number: 8, role: 'df', birthYear: 1999, birthMonth: 10, birthDay: 22},
-    mert: {name: 'Mert Mutlu', number: 16, role: 'fw', birthYear: 2005, birthMonth: 2, birthDay: 3},
-    oguzhan: {name: 'Oğuzhan Cesur', number: 18, role: 'df', birthYear: 1999, birthMonth: 2, birthDay: 19},
-    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10, role: 'fw', birthYear: 1998, birthMonth: 5, birthDay: 19},
-    utku: {name: 'Utku Öztürk', number: 3, role: 'df', birthYear: 1999, birthMonth: 3, birthDay: 6},
-    yigit: {name: 'Yiğit Mutlu', number: 7, role: 'fw', birthYear: 1999, birthMonth: 6, birthDay: 16}
+    can: {name: 'Can Şahin', number: 1, role: 'gk', birthYear: 1998, birthMonth: 12, birthDay: 23, ratings: [3, 4.5, 2, 7, 8, 3]},
+    atakan: {name: 'Atakan Rakipsiz', number: 2, role: 'df', birthYear: 1998, birthMonth: 10, birthDay: 11, ratings: [5, 5, 8.5, 7, 6, 6]},
+    berk: {name: 'Berk Doğan', number: 5, role: 'df', birthYear: 1998, birthMonth: 10, birthDay: 2, ratings: [7, 6, 7, 8, 8, 7.5]},
+    berent: {name: 'Berent Özsan', number: 99, role: 'fw', birthYear: 1999, birthMonth: 5, birthDay: 26, ratings: [8.5, 7.5, 7.5, 6, 7, 7]},
+    gokhan: {name: 'Gökhan Cömert', number: 4, role: 'fw', birthYear: 1999, birthMonth: 10, birthDay: 20, ratings: [7, 7, 6, 6, 5, 6]},
+    mehmet: {name: 'Mehmet Çelik', number: 8, role: 'df', birthYear: 1999, birthMonth: 10, birthDay: 22, ratings: [4, 4, 6, 7, 7, 5.5]},
+    mert: {name: 'Mert Mutlu', number: 16, role: 'fw', birthYear: 2005, birthMonth: 2, birthDay: 3, ratings: [8.5, 8, 7, 6, 5, 7]},
+    oguzhan: {name: 'Oğuzhan Cesur', number: 18, role: 'df', birthYear: 1999, birthMonth: 2, birthDay: 19, ratings: [2, 3, 6, 5, 8, 5.5]},
+    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10, role: 'fw', birthYear: 1998, birthMonth: 5, birthDay: 19, ratings: [8, 8, 7, 5.5, 6, 6.5]},
+    utku: {name: 'Utku Öztürk', number: 3, role: 'df', birthYear: 1999, birthMonth: 3, birthDay: 6, ratings: [6, 6, 6, 6.5, 8, 6]},
+    yigit: {name: 'Yiğit Mutlu', number: 7, role: 'fw', birthYear: 1999, birthMonth: 6, birthDay: 16, ratings: [8, 8.5, 6.5, 5.5, 6, 6.5]}
 }
 
 export const Facilities = [
@@ -110,7 +110,8 @@ export const Facilities = [
     {
         name: 'Kültürpark Timsaha',
         googleUrl: 'https://maps.app.goo.gl/SimAGh63NoPTQygz6',
-        appleUrl: 'https://maps.apple.com/?address=Doktor%20R%C3%BC%C5%9Ft%C3%BC%20Burlu%20Cd.%2010,%2016150%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=16847266177975834823&ll=40.198232,29.041377&lsp=9902&q=Alt%C4%B1n%20Ceylan%20Timsaha'},
+        appleUrl: 'https://maps.apple.com/?address=Doktor%20R%C3%BC%C5%9Ft%C3%BC%20Burlu%20Cd.%2010,%2016150%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=16847266177975834823&ll=40.198232,29.041377&lsp=9902&q=Alt%C4%B1n%20Ceylan%20Timsaha'
+    },
     {
         name: 'Park Akademi',
         googleUrl: 'https://maps.app.goo.gl/p29dyuG2KaPyoXhCA',
