@@ -4,7 +4,6 @@ import FacilitiesIndividualStats from "../FacilitiesIndividualStats/facilities-i
 import WeatherIndividualStats from "../WeatherIndividualStats/weather-individual-stats";
 import RakipbulPlayerStats from "../RakipbulPlayerStats/rakipbul-player-stats";
 import classes from "./individual-stats-grid.module.css";
-import {Divider} from "@mui/material";
 import RivalsIndividualStats from "../RivalsIndividualStats/rivals-individual-stats";
 import teamStatsClasses from "../TeamStatsGrid/team-stats-grid.module.css"
 import UltimateTeam from "../UltimateTeam/ultimate-team";
