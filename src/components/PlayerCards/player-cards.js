@@ -308,7 +308,9 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                 ?.map(a => a[0])?.filter(b => oyesfcMembers?.includes(b))?.length
             return Object.values(data)?.map(x => x?.day)?.includes(x[0]) && Object.values(x[1]?.rates)?.length >= oyesfcMemberLength
         })
-        const matchCount = superFilteredData.length;
+        const matchCount = superFilteredData.filter(superMatch => {
+            return Object.keys(Object.values(allData)?.find(match => match?.day === superMatch[0])?.oyesfc?.squad)?.includes(playerName)
+        })?.length
         let totalRating = 0;
         let eachMatchRatings = [];
         let eachMatchRatingsTotal = 0;
@@ -344,10 +346,10 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
         let count = 0;
 
         data?.forEach(matchData => {
+            averageRatings = {};
             if (!matchData || !matchData[1]?.rates) return;
             const matchRatings = matchData[1]?.rates;
             Object.keys(matchRatings)?.forEach(key => {
-                averageRatings = {};
                 const ratings = matchRatings[key];
                 Object.keys(ratings)?.forEach(player => {
                     const rating = ratings[player];

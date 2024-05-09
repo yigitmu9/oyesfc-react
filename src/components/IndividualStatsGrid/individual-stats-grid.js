@@ -45,9 +45,7 @@ const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) =
             <RakipbulPlayerStats/>
             <div className={teamStatsClasses.divStyle}>
                 <div className={teamStatsClasses.spanDivStyle}>
-                    <span className={teamStatsClasses.spanStyle}>*Does not work with filters.</span>
-                    <Divider sx={{bgcolor: "rgb(80,80,80)", margin: "7px 0 7px"}} variant="middle"/>
-                    <span className={teamStatsClasses.spanStyle}>**These statistics are only valid for 10 specific
+                    <span className={teamStatsClasses.spanStyle}>*These statistics are only valid for 10 specific
                             Rakipbul matches for which position data is available.
                             Does not work with filters.</span>
                 </div>

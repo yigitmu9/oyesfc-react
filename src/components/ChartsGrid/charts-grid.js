@@ -262,7 +262,7 @@ const ChartsGrid = ({matchData, databaseData}) => {
                     </div>
                 </div>
                 <div className={classes.goalsPerGameDiv}>
-                    <h3 className={classes.titleStyle}>Regular Matches Compared to the Rakipbul Performance Increase Percentage*</h3>
+                    <h3 className={classes.titleStyle}>Regular Matches Compared to the Rakipbul Performance Increase Percentage</h3>
                     <div className={classes.radarChartStyle}>
                         <Radar
                             data={performanceRateDatasets}

@@ -174,10 +174,11 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                             {
                                 squadRatings ?
                                     <span
-                                        className={squadRatings?.find(rating => rating?.name === x[0])?.rating >= 7 ? classes.goodRating :
-                                            squadRatings?.find(rating => rating?.name === x[0])?.rating < 5 ? classes.badRating : classes.midRating}>
-                                                    {squadRatings?.find(rating => rating?.name === x[0])?.rating.toFixed(1)}
-                                            </span>
+                                        style={{background: squadRatings?.find(rating => rating?.name === x[0])?.rating >= 7 ? 'darkgreen' :
+                                            squadRatings?.find(rating => rating?.name === x[0])?.rating < 5 ? 'darkred' : 'darkgoldenrod'}}
+                                        className={classes.midRating}>
+                                        {squadRatings?.find(rating => rating?.name === x[0])?.rating.toFixed(1)}
+                                    </span>
                                     :
                                     <PersonIcon fontSize={isMobile ? 'medium' : 'large'}
                                                 className={classes.generalInfoIcon}>

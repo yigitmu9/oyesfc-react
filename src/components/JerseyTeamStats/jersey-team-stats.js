@@ -5,7 +5,6 @@ import CardContent from "@mui/material/CardContent";
 import {PolarArea} from "react-chartjs-2";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
-import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
 import {Jerseys} from "../../constants/constants";
 import numberOfPlayersTeamStatsClasses from '../NumberOfPlayersTeamStats/number-of-players-team-stats.module.css';
 

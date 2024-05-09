@@ -104,7 +104,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
         });
         Object.keys(topScorerPlayers).forEach(player => {
             if (topScorerPlayers[player] >= 9) {
-                if (Object.values(TeamMembers).map(x => x.name).includes(player)) {
+                if (Object.values(TeamMembers).map(x => x.name).includes(player) && Object.keys(matchDetailsData?.oyesfc?.squad)?.includes(player)) {
                     const no6 = `${player} scored ${topScorerPlayers[player]} goals in the last 3 matches.`
                     infosForMatch.push(no6)
                 }
@@ -168,14 +168,14 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
             let topScorer = '';
             let maxGoals = 0;
             Object.keys(playerGoals).forEach(player => {
-                if (playerGoals[player] > maxGoals) {
+                if (playerGoals[player] > maxGoals && Object.keys(matchDetailsData?.oyesfc?.squad)?.includes(player)) {
                     topScorer = player;
                     maxGoals = playerGoals[player];
                 }
             });
             if (lastThreeGamesWithRival?.length > 0 && maxGoals > 0) {
                 if (Object.values(TeamMembers).map(x => x.name).includes(topScorer)) {
-                    const no7 = `${topScorer} is the player who scored the most goals against ${matchDetailsData?.rival?.name} with ${maxGoals} goals.`
+                    const no7 = `${topScorer} is the player who scored the most goals against ${matchDetailsData?.rival?.name} in the match squad with ${maxGoals} goals.`
                     infosForMatch.push(no7)
                 }
             }
