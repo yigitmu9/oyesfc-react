@@ -6,6 +6,8 @@ import {Facilities, FootballRoles, Jerseys, TeamMembers, WeatherSky} from "../..
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoadingPage from "../../pages/loading-page";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
+import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
+import {styled} from "@mui/system";
 
 const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, selectedMatchData}) => {
 
@@ -68,6 +70,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         oyesfc: initialOYesFCFormData,
         place: selectedMatchData ? selectedMatchData?.place : '',
         rakipbul: selectedMatchData ? selectedMatchData?.rakipbul : false,
+        showRatings: selectedMatchData ? selectedMatchData?.showRatings : 'auto',
         rival: initialRivalFormData,
         time: selectedMatchData ? selectedMatchData?.time : '',
         weather: initialWeatherFormData
@@ -89,6 +92,15 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         setFormData((prevData) => ({
             ...prevData,
             [name]: inputValue,
+        }));
+    };
+
+    const handleShowRatingsChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
         }));
     };
 
@@ -213,6 +225,56 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         return `${yearStr}-${monthStr}-${dayStr}T${startTime}`;
     }
 
+    const BpIcon = styled('span')(({ theme }) => ({
+        borderRadius: '50%',
+        width: 20,
+        height: 20,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0 0 0 1px rgb(16 22 26 / 40%)'
+                : 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
+        backgroundColor: theme.palette.mode === 'dark' ? '#394b59' : '#f5f8fa',
+        backgroundImage:
+            theme.palette.mode === 'dark'
+                ? 'linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))'
+                : 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
+        '.Mui-focusVisible &': {
+            outline: '2px auto rgba(19,124,189,.6)',
+            outlineOffset: 2,
+        },
+        'input:disabled ~ &': {
+            boxShadow: 'none',
+            background:
+                theme.palette.mode === 'dark' ? 'rgba(57,75,89,.5)' : 'rgba(206,217,224,.5)',
+            color: 'gray'
+        },
+    }));
+
+    const BpCheckedIcon = styled(BpIcon)({
+        backgroundColor: 'darkred',
+        color: 'red',
+        backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
+        '&::before': {
+            display: 'block',
+            width: 20,
+            height: 20,
+            backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
+            content: '""',
+        },
+    });
+
+    function BpRadio(props) {
+        return (
+            <Radio
+                disableRipple
+                color="default"
+                checkedIcon={<BpCheckedIcon />}
+                icon={<BpIcon />}
+                {...props}
+            />
+        );
+    }
+
     if (loading) {
         return (
             <div className={classes.overlay}>
@@ -244,6 +306,24 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
                                 <span className={classes.checkmark}></span>
                             </label>
                             <br/>
+                            {
+
+                                <>
+                                    <label className={classes.matchTypeTitle}>
+                                        Show Player Ratings:
+                                    </label>
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="showRatings" value={formData.showRatings}
+                                    >
+                                        <FormControlLabel value="enable" control={<BpRadio />} label="Enable" onChange={handleShowRatingsChange}/>
+                                        <FormControlLabel value="auto" control={<BpRadio />} label="Auto" onChange={handleShowRatingsChange}/>
+                                        <FormControlLabel value="disable" control={<BpRadio />} label="Disable" onChange={handleShowRatingsChange}/>
+                                    </RadioGroup>
+                                    <br/>
+                                </>
+                            }
                             <label style={{background: "#1f1f1f"}}>
                                 Select a Rival:
                                 <select className={classes.select}

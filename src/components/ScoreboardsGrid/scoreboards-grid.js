@@ -139,7 +139,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                         <MatchDetails matchDetailsData={matchDetailsData}
                                       onClose={() => setPopupOpen(false)}
                                       fixture={fixtureType} data={previousMatchesData} reloadData={handleReload}
-                                      credentials={credentials} allData={sortedAllData}/>}
+                                      credentials={credentials} allData={sortedAllData} playerDetails={playerDetails}/>}
                 </div>
                 :
                 <div style={{minHeight: windowHeight, textAlign: 'center', alignItems: 'center', display: 'flex', justifyContent: 'center'}}>

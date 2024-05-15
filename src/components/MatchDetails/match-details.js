@@ -22,6 +22,7 @@ import PreviewTab from "../PreviewTab/preview-tab";
 import SquadTab from "../SquadTab/squad-tab";
 import JerseyTab from "../JerseyTab/jersey-tab";
 import LinksTab from "../LinksTab/links-tab";
+import PlayerDetails from "../PlayerDetails/player-details";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -56,16 +57,20 @@ function a11yProps(index) {
     };
 }
 
-export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadData, credentials, allData}) => {
+export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadData, credentials, allData, playerDetails}) => {
 
-    const checkButton = () => {
+    const hourDifference = () => {
         const [day, month, year] = matchDetailsData.day.split('-');
         const time = matchDetailsData.time.split('-');
         const endTime = time[1] === '00:00' ? '23:59' : time[1]
         const [hour, minute] = endTime.split(':');
         const inputDateTime = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
         const now = new Date();
-        const differenceInHours = (now - inputDateTime) / (1000 * 60 * 60);
+        return (now - inputDateTime) / (1000 * 60 * 60)
+    };
+
+    const checkButton = () => {
+        const differenceInHours = hourDifference()
         if (differenceInHours >= 48 || !Object.keys(matchDetailsData?.oyesfc?.squad)?.includes(credentials?.userName)) {
             return 'Not Available'
         }
@@ -84,7 +89,9 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     const matchIndex = Object.values(allData).findIndex(x => x === matchDetailsData)
     const [oYesFCStarFormData, setOYesFCStarFormData] = useState(initialOYesFCStarFormData);
     const [messageData, setMessageData] = useState(null);
+    const [player, setPlayer] = useState(null);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
+    const [isPlayerPopupOpen, setPlayerPopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     const [starsErrorMessage, setStarsErrorMessage] = useState(null);
     const [notesErrorMessage, setNotesErrorMessage] = useState(null);
@@ -94,6 +101,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     const [noteFormData, setNoteFormData] = useState({});
     const [squadRatings, setSquadRatings] = useState(null);
     const [bestOfMatch, setBestOfMatch] = useState(null);
+    const [ratedPeople, setRatedPeople] = useState(null);
 
     const handleTabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
@@ -152,6 +160,11 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         setAddMatchPopupOpen(data)
     }
 
+    const openPlayerDetailsModal = (player) => {
+        setPlayer(player)
+        setPlayerPopupOpen(true)
+    }
+
     const submitStars = async () => {
         if (Object.keys(oYesFCStarFormData).length === (Object.entries(matchDetailsData.oyesfc.squad).length - 1)) {
             if (starsErrorMessage) setStarsErrorMessage(null)
@@ -171,6 +184,8 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         try {
             const response = await loadWebsite(`rates/${matchDetailsData?.day}`);
             setRatesData(response)
+            const ratedOrNot = await whoRatedWhoNotRated(response)
+            setRatedPeople(ratedOrNot)
             if (response?.rates) {
                 if (Object.entries(response?.rates).some(x => x[0] === credentials?.id)) {
                     const form = Object.entries(response?.rates).find(x => x[0] === credentials?.id)[1]
@@ -178,7 +193,8 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                     setStarsSubmitButton('Submitted')
                 }
                 const oyesfcMemberLengthOfThisMatch = Object.keys(matchDetailsData?.oyesfc?.squad)?.filter(a => oyesfcMembers?.includes(a))?.length
-                if (Object.entries(response?.rates)?.length >= oyesfcMemberLengthOfThisMatch) {
+                if ((Object.entries(response?.rates)?.length >= oyesfcMemberLengthOfThisMatch || matchDetailsData?.showRatings === 'enable' || (Object.entries(response?.rates)?.length >= 4 && hourDifference() >= 48))
+                    && matchDetailsData?.showRatings !== 'disable') {
                     calculatePlayerRatings(response?.rates);
                 }
             }
@@ -262,6 +278,23 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         }
     };
 
+    const whoRatedWhoNotRated = async (response) => {
+        if (!response) return
+        let responseForRatedPlayers;
+        try {
+            responseForRatedPlayers = await loadWebsite('firebaseUID');
+        } catch (error) {
+            console.log(error)
+        }
+        const keys = Object.keys(response?.rates)
+        let ratedPlayers = [];
+        keys?.forEach(key => {
+            const userName = Object.entries(responseForRatedPlayers?.users)?.find(x => x[1] === key)[0];
+            ratedPlayers.push(userName)
+        })
+       return ratedPlayers
+    }
+
     const closeButton = (
         <div className={classes.buttonBorderStyle}>
             <button className={classes.mapsButtons} onClick={handleClose}>Close</button>
@@ -288,7 +321,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
 
     return (
         <div className={classes.overlay}>
-            {!isAddMatchPopupOpen && !isMessagePopupOpen && <div className={classes.popupContainer} ref={popupRef}>
+            {!isAddMatchPopupOpen && !isMessagePopupOpen && !isPlayerPopupOpen && <div className={playerDetails ? classes.fullContainer : classes.popupContainer} ref={popupRef}>
             <section className={classes.scoreboard} style={{background: buttonBgColor}}>
                     <div className={classes.scoreboardInsideDiv}>
                         <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
@@ -413,7 +446,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                     {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={1}>
-                    <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings}/>
+                    <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings} openPlayerModal={openPlayerDetailsModal} redirectToTab={redirectToTab}/>
                     {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={2}>
@@ -471,7 +504,17 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                                 Rate {x[0]}.
                                             </span>
                                         }
-
+                                        {
+                                            Object.values(TeamMembers).map(x => x.name).includes(x[0]) &&
+                                                (ratedPeople?.includes(x[0]) ?
+                                                <span className={classes.starDetailSpan}>
+                                                    {x[0]?.split(' ')[0] + ' added rating to this match.'}
+                                                </span>
+                                                :
+                                                <span className={classes.starDetailSpan}>
+                                                    {x[0]?.split(' ')[0] + ' did not add rating to this match.'}
+                                                </span>)
+                                        }
                                     </section>
                                 ))
                             }
@@ -479,16 +522,19 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 starsErrorMessage &&
                                 <section className={classes.starSection}>
                                     <span className={classes.starsErrorSpan}>
-                                        <ErrorOutlineIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.errorIcon}>
+                                        <ErrorOutlineIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                          className={classes.errorIcon}>
                                         </ErrorOutlineIcon>
                                         {starsErrorMessage}
                                     </span>
                                 </section>
                             }
                             <div className={classes.submitButtonDiv}>
-                                <button className={classes.mapsButtons} disabled={starsSubmitButton === 'Submitted' || starsSubmitButton === 'Not Available'}
+                                <button className={classes.mapsButtons}
+                                        disabled={starsSubmitButton === 'Submitted' || starsSubmitButton === 'Not Available'}
                                         onClick={submitStars}>{starsSubmitButton}</button>
-                                {isMobile && <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
+                                {isMobile &&
+                                    <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
                             </div>
                         </CustomTabPanel>
                         <CustomTabPanel value={tabValue} index={6}>
@@ -544,6 +590,10 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                                        messageData={(messageData) => handleMessageClick(messageData)}
                                                        databaseData={data} selectedMatchData={matchDetailsData}/>}
             {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} reloadData={handleReload}/>}
+            {isPlayerPopupOpen &&
+                <PlayerDetails data={data}
+                               onClose={() => setPlayerPopupOpen(false)} player={player}
+                               credentials={credentials} allData={allData} reloadData={handleReload}/>}
         </div>
     );
 };

@@ -301,12 +301,24 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
             console.log(error)
         }
     }
+    const hourDifference = (matchDay, time) => {
+        const [day, month, year] = matchDay.split('-');
+        const matchTime = time.split('-');
+        const endTime = matchTime[1] === '00:00' ? '23:59' : matchTime[1]
+        const [hour, minute] = endTime.split(':');
+        const inputDateTime = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
+        const now = new Date();
+        return (now - inputDateTime) / (1000 * 60 * 60)
+    };
 
     const calculatePlayerRatings = (response) => {
         const superFilteredData = Object.entries(response)?.filter(x => {
             const oyesfcMemberLength = Object.entries(Object.values(allData)?.find(match => match?.day === x[0])?.oyesfc?.squad)
                 ?.map(a => a[0])?.filter(b => oyesfcMembers?.includes(b))?.length
-            return Object.values(data)?.map(x => x?.day)?.includes(x[0]) && Object.values(x[1]?.rates)?.length >= oyesfcMemberLength
+            const showRatings = Object.values(allData)?.find(match => match?.day === x[0])?.showRatings
+            const differenceInHours = hourDifference(Object.values(allData)?.find(match => match?.day === x[0])?.day, Object.values(allData)?.find(match => match?.day === x[0])?.time)
+            return Object.values(data)?.map(x => x?.day)?.includes(x[0]) && (Object.values(x[1]?.rates)?.length >= oyesfcMemberLength || showRatings === 'enable' ||
+                (differenceInHours >= 48 && Object.values(x[1]?.rates)?.length >= 4)) && showRatings !== 'disable'
         })
         const matchCount = superFilteredData.filter(superMatch => {
             return Object.keys(Object.values(allData)?.find(match => match?.day === superMatch[0])?.oyesfc?.squad)?.includes(playerName)

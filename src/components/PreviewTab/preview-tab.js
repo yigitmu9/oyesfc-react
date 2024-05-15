@@ -25,6 +25,10 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
         redirectToTab(2)
     }
 
+    const redirectToSquadTab = () => {
+        redirectToTab(1)
+    }
+
     function createMatchInfos() {
         let infosForMatch = [];
         const lastThreeGames = Object.values(allData)?.filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3));
@@ -156,6 +160,11 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
             })
         }
 
+        if (Object.values(allData).filter((x, y) => x && y >= matchIndex)?.length % 25 === 0) {
+            const no5 = `O Yes FC is playing their ${Object.values(allData).filter((x, y) => x && y >= matchIndex)?.length}th match.`
+            infosForMatch.push(no5)
+        }
+
         if (infosForMatch?.length > 0) {
             let playerGoals = {};
             Object.values(allData).filter((x, y) => x && y > matchIndex).filter(x => x?.rival?.name === matchDetailsData?.rival?.name).forEach(match => {
@@ -187,7 +196,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
         <div className={classes.generalTabDiv}>
             {
                 bestOfMatch &&
-                <section className={classes.momSection}>
+                <section className={classes.momSectionCursor} onClick={redirectToSquadTab}>
                     <>
                         <StarIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.starIcon}>
                         </StarIcon>

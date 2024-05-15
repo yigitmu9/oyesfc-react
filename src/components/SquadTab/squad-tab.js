@@ -7,7 +7,7 @@ import SoccerLineUp from "react-soccer-lineup";
 import {FootballRoles, Jerseys, TeamMembers} from "../../constants/constants";
 import squadTabClasses from './squad-tab.module.css'
 
-const SquadTab = ({matchDetailsData, squadRatings}) => {
+const SquadTab = ({matchDetailsData, squadRatings, openPlayerModal}) => {
 
     const isMobile = window.innerWidth <= 768;
     let oyesfcSquad;
@@ -156,6 +156,11 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
         oyesfcSquad.squad.fw = null
     }
 
+    const showPlayerDetails = (player) => {
+        if (Object.values(TeamMembers).some(member => member?.name === player)) {
+            openPlayerModal(player)
+        }
+    }
 
     return (
         <>
@@ -184,7 +189,7 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                                                 className={classes.generalInfoIcon}>
                                     </PersonIcon>
                             }
-                            <span className={classes.generalInfoSpan}>
+                            <span className={Object.values(TeamMembers).some(member => member?.name === x[0]) ? classes.generalInfoSpanCursor : classes.generalInfoSpan} onClick={() => showPlayerDetails(x[0])}>
                                 {x[0]}
                             </span>
                             {x[1]?.card &&
