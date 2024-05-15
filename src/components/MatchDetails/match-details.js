@@ -289,7 +289,8 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         const keys = Object.keys(response?.rates)
         let ratedPlayers = [];
         keys?.forEach(key => {
-            const userName = Object.entries(responseForRatedPlayers?.users)?.find(x => x[1] === key)[0];
+            const userName = Object.entries(responseForRatedPlayers?.users)?.find(x => x[1] === key) ?
+                Object.entries(responseForRatedPlayers?.users)?.find(x => x[1] === key)[0] : null;
             ratedPlayers.push(userName)
         })
        return ratedPlayers
