@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classes from "./add-match.module.css";
-import {dataBase} from "../../firebase";
+import {dataBase, loadWebsite} from "../../firebase";
 import {ref, set} from "firebase/database";
 import {Facilities, FootballRoles, Jerseys, TeamMembers, WeatherSky} from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
@@ -162,11 +162,13 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         try {
             setLoading(true)
             await set(ref(dataBase, `matches/${formData.day}`), formData);
+            const calendarData = formData
             setFormData(initialFormData);
             setNewSquadMember('');
             document.body.style.overflow = 'visible';
             setLoading(false)
             onClose()
+            if (!selectedMatchData) await createCalendar(calendarData)
             const messageResponse = {
                 isValid: true,
                 message: selectedMatchData ? 'Match successfully updated.' : 'Match successfully added.'
@@ -224,6 +226,59 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
 
         return `${yearStr}-${monthStr}-${dayStr}T${startTime}`;
     }
+
+    const createCalendar = async (calendarData) => {
+        console.log(calendarData)
+        debugger
+        let playerMails;
+        try {
+            playerMails = await loadWebsite('firebaseUID');
+        } catch (error) {
+            console.log(error)
+        }
+        let attendees = '';
+        if (playerMails) {
+            const mails = Object.entries(playerMails?.mail).filter(a => Object.keys(calendarData?.oyesfc?.squad)?.includes(a[0]))
+            for (let i = 0; i < mails.length; i++) {
+                if (mails[i][0] === TeamMembers.yigit.name) {
+                    attendees += `ORGANIZER;CN="${mails[i][0]}";EMAIL="${mails[i][1]}":mailto:${mails[i][1]}\n`;
+                    attendees += `ATTENDEE;CN="${mails[i][0]}";CUTYPE=INDIVIDUAL;EMAIL="${mails[i][1]}";PARTSTAT=ACCEPTED:mailto:${mails[i][1]}\n`;
+                } else {
+                    attendees += `ATTENDEE;CN="${mails[i][0]}";CUTYPE=INDIVIDUAL;EMAIL="${mails[i][1]}":mailto:${mails[i][1]}\n`;
+                }
+            }
+        }
+        const [day, month, year] = calendarData?.day?.split('-');
+        const [startTime, endTime] = calendarData?.time?.split('-');
+        const [startHour, startMinute] = startTime?.split(':');
+        const [endHour, endMinute] = endTime === '00:00' ? [23, 59] : endTime?.split(':');
+
+        const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d\d\d/g, "")}
+DTSTART:${new Date(Number(year), Number(month) - 1, Number(day), Number(startHour), Number(startMinute)).toISOString().replace(/-|:|\.\d\d\d/g, "")}
+DTEND:${new Date(Number(year), Number(month) - 1, Number(day), Number(endHour), Number(endMinute)).toISOString().replace(/-|:|\.\d\d\d/g, "")}
+SUMMARY:Halısaha
+URL;VALUE=URI:https://yigitmu9.github.io/oyesfc-react/
+DESCRIPTION:Rakip: ${calendarData?.rival?.name}
+LOCATION:${Facilities.find(x => x.name === calendarData?.place).calendarLocation}
+X-APPLE-STRUCTURED-LOCATION;${Facilities?.find(x => x?.name === calendarData?.place)?.xAppleLocation}
+X-APPLE-CREATOR-IDENTITY:com.apple.mobilecal
+X-APPLE-CREATOR-TEAM-IDENTITY:0000000000
+${attendees}END:VEVENT
+END:VCALENDAR`;
+
+        const blob = new Blob([icsContent], {type: 'text/calendar'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'event.ics';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
 
     const BpIcon = styled('span')(({ theme }) => ({
         borderRadius: '50%',
