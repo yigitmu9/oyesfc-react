@@ -4,7 +4,7 @@ import TeamView from "../TeamView/team-view";
 import Result from "../Result/result";
 import FootballLogo from '../../images/football.png';
 import GameStatus from "../GameStatus/game-status";
-import {TeamMembers, WeatherSky} from "../../constants/constants";
+import {TeamMembers} from "../../constants/constants";
 import Box from "@mui/material/Box";
 import {Divider, Tab, Tabs} from "@mui/material";
 import PropTypes from "prop-types";
