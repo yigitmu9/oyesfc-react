@@ -6,8 +6,9 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import EditIcon from "@mui/icons-material/Edit";
 import {Facilities} from "../../constants/constants";
+import CloudIcon from "@mui/icons-material/Cloud";
 
-const LinksTab = ({matchDetailsData, weatherIcons, editMatch, credentials, fixture}) => {
+const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
 
     const isMobile = window.innerWidth <= 768;
     const formattedDateForCalendar = formatDate(matchDetailsData.day);
@@ -110,7 +111,8 @@ const LinksTab = ({matchDetailsData, weatherIcons, editMatch, credentials, fixtu
                 </section>
                 <section className={classes.generalTabSection}>
                     <div className={classes.urlInfoDiv}>
-                        {weatherIcons}
+                        <CloudIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
+                        </CloudIcon>
                         {
                             matchDetailsData?.weather ?
                                 <span className={classes.generalInfoSpan}>

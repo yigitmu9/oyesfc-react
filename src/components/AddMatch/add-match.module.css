@@ -264,3 +264,9 @@ label {
 .addPlayerButtonDiv {
     width: 60px;
 }
+
+.weatherButtonDiv {
+    display: flex;
+    width: 300px;
+    margin-top: 10px;
+}

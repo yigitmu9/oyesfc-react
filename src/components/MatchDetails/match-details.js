@@ -83,7 +83,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     const isMobile = window.innerWidth <= 768;
     const buttonBgColor = '#323232'
     const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
-    const matchDetails = Object.entries(matchDetailsData.oyesfc.squad).filter(x => x[1].goal > 0)
+    const matchDetails = Object.entries(matchDetailsData?.oyesfc?.squad)?.filter(x => x[1].goal > 0)
     const popupRef = useRef(null);
     const [tabValue, setTabValue] = React.useState(0);
     const matchIndex = Object.values(allData).findIndex(x => x === matchDetailsData)
@@ -443,7 +443,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                 </Box>
                 <CustomTabPanel value={tabValue} index={0}>
                     <PreviewTab matchDetailsData={matchDetailsData} allData={allData} matchIndex={matchIndex}
-                                bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherIcons={weatherIcons}/>
+                                bestOfMatch={bestOfMatch} redirectToTab={redirectToTab}/>
                     {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={1}>
@@ -459,7 +459,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                     {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={4}>
-                    <LinksTab matchDetailsData={matchDetailsData} weatherIcons={weatherIcons} editMatch={editMatch} credentials={credentials} fixture={fixture}/>
+                    <LinksTab matchDetailsData={matchDetailsData} editMatch={editMatch} credentials={credentials} fixture={fixture}/>
                     {isMobile && closeButton}
                 </CustomTabPanel>
                 {

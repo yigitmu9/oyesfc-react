@@ -2,12 +2,13 @@ import React, {useEffect, useRef, useState} from 'react';
 import classes from "./add-match.module.css";
 import {dataBase, loadWebsite} from "../../firebase";
 import {ref, set} from "firebase/database";
-import {Facilities, FootballRoles, Jerseys, TeamMembers, WeatherSky} from "../../constants/constants";
+import {Facilities, FootballRoles, Jerseys, TeamMembers} from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoadingPage from "../../pages/loading-page";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
 import {styled} from "@mui/system";
+import {getWeather} from "../../services/service";
 
 const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, selectedMatchData}) => {
 
@@ -63,6 +64,14 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
     const initialWeatherFormData = {
         sky: selectedMatchData ? selectedMatchData?.weather?.sky : '',
         temperature: selectedMatchData ? selectedMatchData?.weather?.temperature : 0,
+        weather: selectedMatchData?.weather?.weather ? selectedMatchData?.weather?.weather : '',
+        feels_like: selectedMatchData?.weather?.feels_like ? selectedMatchData?.weather?.feels_like : 0,
+        grnd_level: selectedMatchData?.weather?.grnd_level ? selectedMatchData?.weather?.grnd_level : 0,
+        sea_level: selectedMatchData?.weather?.sea_level ? selectedMatchData?.weather?.sea_level : 0,
+        humidity: selectedMatchData?.weather?.humidity ? selectedMatchData?.weather?.humidity : 0,
+        description: selectedMatchData?.weather?.description ? selectedMatchData?.weather?.description : '',
+        windSpeed: selectedMatchData?.weather?.windSpeed ? selectedMatchData?.weather?.windSpeed : 0,
+        clouds: selectedMatchData?.weather?.clouds ? selectedMatchData?.weather?.clouds : 0,
     };
 
     const initialFormData = {
@@ -108,15 +117,6 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         const {name, value, type} = event.target;
         const inputValue = type === "number" ? parseInt(value) : value;
         setOYesFCFormData((prevData) => ({
-            ...prevData,
-            [name]: inputValue,
-        }));
-    };
-
-    const handleWeatherInputChange = (event) => {
-        const {name, value, type} = event.target;
-        const inputValue = type === "number" ? parseInt(value) : value;
-        setWeatherFormData((prevData) => ({
             ...prevData,
             [name]: inputValue,
         }));
@@ -228,8 +228,6 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
     }
 
     const createCalendar = async (calendarData) => {
-        console.log(calendarData)
-        debugger
         let playerMails;
         try {
             playerMails = await loadWebsite('firebaseUID');
@@ -279,6 +277,84 @@ END:VCALENDAR`;
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     };
+
+    const getGeoCoordinates = () => {
+        const xLocation = Facilities.find(x => x.name === formData?.place).xAppleLocation
+        const xLocationWithoutSpaces = xLocation.replace(/\s+/g, '');
+        const match = xLocationWithoutSpaces.match(/geo:[\d.,]+/);
+        return match ? match[0]?.split(':')[1] : 'Geo coordinates not found';
+    };
+
+    function capitalizeWords(str) {
+        return str
+            ?.split(' ')
+            ?.map(word => word?.charAt(0)?.toUpperCase() + word.slice(1))
+            ?.join(' ');
+    }
+
+    const handleGetOpenWeather = async (type) => {
+        if (formData?.day && formData?.place) {
+            const endDate = new Date(formData?.day);
+            const startDate = new Date();
+            const timeDifference = endDate.getTime() - startDate.getTime();
+            const dayDifference = timeDifference / (1000 * 3600 * 24);
+            if (dayDifference <= 5) {
+                const coordinates = getGeoCoordinates();
+                const [latitude, longitude] = coordinates.split(',');
+                const date = new Date(formData.day.split('T')[0])
+                const hour = parseInt(formData.day.split('T')[1].split(':')[0], 10);
+                const roundedHour = hour >= 23 || hour <= 1 ? '00' : Math.round(hour / 3) * 3;
+                if (hour >= 23) date.setDate(date.getDate() + 1);
+                const finalDate = date.toISOString().split('T')[0];
+                const weatherDate = finalDate + ' ' + roundedHour + ':00:00'
+                const weatherResponse = await getWeather(type, latitude, longitude);
+                const specificForecast = type === 'forecast' ? weatherResponse?.list?.find(forecast =>
+                    forecast.dt_txt === weatherDate) : weatherResponse;
+                let sunriseTimestamp;
+                let sunsetTimestamp;
+                let partOfDay;
+                if (type === 'forecast') {
+                    sunriseTimestamp = weatherResponse?.city?.sunrise
+                    sunsetTimestamp = weatherResponse?.city?.sunset
+                } else {
+                    sunriseTimestamp = weatherResponse?.sys?.sunrise
+                    sunsetTimestamp = weatherResponse?.sys?.sunset
+                }
+                const specificDate = new Date(formData.day);
+                const sunriseDate = new Date(sunriseTimestamp * 1000);
+                if (type === 'forecast') {
+                    sunriseDate.setFullYear(specificDate.getFullYear());
+                    sunriseDate.setMonth(specificDate.getMonth());
+                    sunriseDate.setDate(specificDate.getDate());
+                }
+                const sunsetDate = new Date(sunsetTimestamp * 1000);
+                if (type === 'forecast') {
+                    sunsetDate.setFullYear(specificDate.getFullYear());
+                    sunsetDate.setMonth(specificDate.getMonth());
+                    sunsetDate.setDate(specificDate.getDate());
+                }
+                if (specificDate >= sunriseDate && specificDate <= sunsetDate) {
+                    partOfDay = 'Daytime'
+                } else {
+                    partOfDay = 'Night'
+                }
+                setWeatherFormData((prevData) => ({
+                    ...prevData,
+                    temperature: Number(specificForecast?.main?.temp.toFixed(0)),
+                    sky: partOfDay,
+                    weather: specificForecast?.weather[0]?.main,
+                    feels_like: Number(specificForecast?.main?.feels_like.toFixed(0)),
+                    grnd_level: specificForecast?.main?.grnd_level,
+                    sea_level: specificForecast?.main?.sea_level,
+                    humidity: specificForecast?.main?.humidity,
+                    description: capitalizeWords(specificForecast?.weather[0]?.description),
+                    windSpeed: specificForecast?.wind?.speed,
+                    clouds: specificForecast?.clouds?.all,
+                }));
+            }
+            }
+
+    }
 
     const BpIcon = styled('span')(({ theme }) => ({
         borderRadius: '50%',
@@ -372,9 +448,12 @@ END:VCALENDAR`;
                                         aria-labelledby="demo-row-radio-buttons-group-label"
                                         name="showRatings" value={formData.showRatings}
                                     >
-                                        <FormControlLabel value="enable" control={<BpRadio />} label="Enable" onChange={handleShowRatingsChange}/>
-                                        <FormControlLabel value="auto" control={<BpRadio />} label="Auto" onChange={handleShowRatingsChange}/>
-                                        <FormControlLabel value="disable" control={<BpRadio />} label="Disable" onChange={handleShowRatingsChange}/>
+                                        <FormControlLabel value="enable" control={<BpRadio/>} label="Enable"
+                                                          onChange={handleShowRatingsChange}/>
+                                        <FormControlLabel value="auto" control={<BpRadio/>} label="Auto"
+                                                          onChange={handleShowRatingsChange}/>
+                                        <FormControlLabel value="disable" control={<BpRadio/>} label="Disable"
+                                                          onChange={handleShowRatingsChange}/>
                                     </RadioGroup>
                                     <br/>
                                 </>
@@ -445,31 +524,59 @@ END:VCALENDAR`;
                             </label>
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
-                                Weather:
-                                <select className={classes.select}
-                                        onChange={handleWeatherInputChange}
-                                        required={true}
-                                        name="sky"
-                                        value={weatherFormData.sky}>
-                                    <option>Select Weather</option>
-                                    {WeatherSky.map((x, y) => (
-                                        <option key={y} value={x}>{x}</option>
-                                    ))}
-                                </select>
+                                Get Weather from Api:
+                                <div className={classes.weatherButtonDiv}>
+                                    <div className={matchDetailsClasses.mapsButtons} onClick={() => handleGetOpenWeather('weather')}>
+                                        Current
+                                    </div>
+                                    <div className={matchDetailsClasses.mapsButtons} onClick={() => handleGetOpenWeather('forecast')}>
+                                        Selected Date
+                                    </div>
+                                </div>
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
-                                Temperature:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="number"
-                                    name="temperature"
-                                    value={weatherFormData.temperature}
-                                    onChange={handleWeatherInputChange}
-                                />
-                            </label>
-                            <br/>
+                            <>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Weather: {weatherFormData?.weather}
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Temperature: {weatherFormData?.temperature}&#176;
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Feels Like: {weatherFormData?.feels_like}&#176;
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Ground Level Pressure: {weatherFormData?.grnd_level} hPa
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Sea Level Pressure: {weatherFormData?.sea_level} hPa
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Humidity: {weatherFormData?.humidity} %
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Description: {weatherFormData?.description}
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Wind Speed: {weatherFormData?.windSpeed} km/h
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Clouds: {weatherFormData?.clouds} %
+                                </label>
+                                <br/>
+                                <label style={{background: "#1f1f1f"}}>
+                                    Sky: {weatherFormData?.sky}
+                                </label>
+                                <br/>
+                            </>
                             <label style={{background: "#1f1f1f"}}>
                                 O Yes FC Jersey:
                                 <select className={classes.select}
