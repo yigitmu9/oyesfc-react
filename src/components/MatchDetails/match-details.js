@@ -302,24 +302,6 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         </div>
     )
 
-    const weatherIcons = (
-        matchDetailsData?.weather?.sky === WeatherSky[1] ?
-            <WbSunnyIcon fontSize={isMobile ? 'medium' : 'large'}
-                         className={classes.generalInfoIcon}>
-            </WbSunnyIcon>
-            : matchDetailsData?.weather?.sky === WeatherSky[2] ?
-                <ThunderstormIcon fontSize={isMobile ? 'medium' : 'large'}
-                                  className={classes.generalInfoIcon}>
-                </ThunderstormIcon>
-                : matchDetailsData?.weather?.sky === WeatherSky[3] ?
-                    <AcUnitIcon fontSize={isMobile ? 'medium' : 'large'}
-                                className={classes.generalInfoIcon}>
-                    </AcUnitIcon>
-                    : <NightlightRoundIcon fontSize={isMobile ? 'medium' : 'large'}
-                                           className={classes.generalInfoIcon}>
-                    </NightlightRoundIcon>
-    )
-
     return (
         <div className={classes.overlay}>
             {!isAddMatchPopupOpen && !isMessagePopupOpen && !isPlayerPopupOpen && <div className={playerDetails ? classes.fullContainer : classes.popupContainer} ref={popupRef}>
