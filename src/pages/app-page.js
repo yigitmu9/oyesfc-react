@@ -76,7 +76,7 @@ const AppPage = () => {
 
     return (
         <Router>
-            <Navbar databaseData={data} reloadData={handleReload} setAdvancedFilters={setAdvancedFilters} sendCredentials={setUpCredentials} />
+            <Navbar databaseData={data} reloadData={handleReload} setAdvancedFilters={setAdvancedFilters} sendCredentials={setUpCredentials} filteredData={filteredData}/>
             <Routes key={key}>
                 <Route path='oyesfc-react/' element={<MainPage/>}/>
                 <Route path='oyesfc-react/matches' element={<MatchesPage databaseData={filteredData} reloadData={handleReload} credentials={credentials} allData={data}/>}/>

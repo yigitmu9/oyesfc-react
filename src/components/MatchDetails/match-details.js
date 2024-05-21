@@ -4,7 +4,7 @@ import TeamView from "../TeamView/team-view";
 import Result from "../Result/result";
 import FootballLogo from '../../images/football.png';
 import GameStatus from "../GameStatus/game-status";
-import {TeamMembers} from "../../constants/constants";
+import {Facilities, matchType, openWeatherType, TeamMembers, WeatherSky} from "../../constants/constants";
 import Box from "@mui/material/Box";
 import {Divider, Tab, Tabs} from "@mui/material";
 import PropTypes from "prop-types";
@@ -19,6 +19,7 @@ import SquadTab from "../SquadTab/squad-tab";
 import JerseyTab from "../JerseyTab/jersey-tab";
 import LinksTab from "../LinksTab/links-tab";
 import PlayerDetails from "../PlayerDetails/player-details";
+import {getWeather} from "../../services/service";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -92,12 +93,13 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     const [starsErrorMessage, setStarsErrorMessage] = useState(null);
     const [notesErrorMessage, setNotesErrorMessage] = useState(null);
     const [starsSubmitButton, setStarsSubmitButton] = useState(checkButton());
-    const [notesSubmitButton, setNotesSubmitButton] = useState('Submit');
+    const [notesTitle, setNotesTitle] = useState('Add your note:');
     const [matchNotes, setMatchNotes] = useState(null);
     const [noteFormData, setNoteFormData] = useState({});
     const [squadRatings, setSquadRatings] = useState(null);
     const [bestOfMatch, setBestOfMatch] = useState(null);
     const [ratedPeople, setRatedPeople] = useState(null);
+    const [weatherData, setWeatherData] = useState(null);
 
     const handleTabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
@@ -121,6 +123,9 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         }
         if (!matchNotes) {
             fetchNotesData().then(r => r)
+        }
+        if (!weatherData && fixture !== matchType.previous) {
+            getOpenWeather().then(r => r)
         }
         document.addEventListener('mousedown', handleOutsideClick);
         return () => {
@@ -207,7 +212,11 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                 const notesArray = Object.entries(response?.notes)
                 setMatchNotes(notesArray)
                 if (Object.entries(response?.notes).some(x => x[0] === credentials?.userName)) {
-                    setNotesSubmitButton('Submitted')
+                    const noteData = {
+                        note: Object.entries(response?.notes).find(x => x[0] === credentials?.userName)[1]?.note
+                    }
+                    setNoteFormData(noteData);
+                    setNotesTitle('Edit your note:')
                 }
             }
         } catch (error) {
@@ -221,6 +230,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
             ...prevData,
             note: value,
         }));
+
     };
 
     const calculatePlayerRatings = (ratingResponse) => {
@@ -250,21 +260,20 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         setBestOfMatch(bestPlayer)
     }
 
-
     const submitNote = async () => {
         if (noteFormData['note']?.length > 0) {
             if (notesErrorMessage) setNotesErrorMessage(null)
             try {
                 await set(ref(dataBase, `notes/${matchDetailsData?.day}/notes/${credentials?.userName}`), noteFormData);
-                setNotesSubmitButton('Submitted')
                 const newNote = [
                     credentials?.userName,
                     noteFormData
                 ]
                 setMatchNotes((prevData) => ([
-                    ...prevData,
+                    ...prevData?.filter(x => x[0] !== credentials?.userName),
                     newNote
                 ]));
+                if (notesTitle === 'Add your note:') setNotesTitle('Edit your note:')
             } catch (error) {
                 console.log(error)
                 setStarsErrorMessage(error?.message)
@@ -292,6 +301,86 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
        return ratedPlayers
     }
 
+    const getGeoCoordinates = () => {
+        const xLocation = Facilities.find(x => x.name === matchDetailsData?.place).xAppleLocation
+        const xLocationWithoutSpaces = xLocation.replace(/\s+/g, '');
+        const match = xLocationWithoutSpaces.match(/geo:[\d.,]+/);
+        return match ? match[0]?.split(':')[1] : 'Geo coordinates not found';
+    };
+
+    function capitalizeWords(str) {
+        return str
+            ?.split(' ')
+            ?.map(word => word?.charAt(0)?.toUpperCase() + word.slice(1))
+            ?.join(' ');
+    }
+
+    const getOpenWeather = async () => {
+        if (matchDetailsData?.day && matchDetailsData?.place) {
+            const [matchDay, matchMonth, matchYear] = matchDetailsData?.day?.split('-')
+            const endDate = new Date(Number(matchYear), Number(matchMonth) - 1, Number(matchDay))
+            const startDate = new Date();
+            const timeDifference = endDate.getTime() - startDate.getTime();
+            const dayDifference = timeDifference / (1000 * 3600 * 24);
+            if (dayDifference <= 5) {
+                const coordinates = getGeoCoordinates();
+                const [latitude, longitude] = coordinates.split(',');
+                const date = new Date(Number(matchYear), Number(matchMonth) - 1, Number(matchDay), 5, 0)
+                const hour = Number(matchDetailsData?.time?.split('-')[0]?.split(':')[0])
+                const roundedHour = hour >= 23 || hour <= 1 ? '00' : Math.round(hour / 3) * 3;
+                if (hour >= 23) date.setDate(date.getDate() + 1);
+                const finalDate = date.toISOString().split('T')[0];
+                const weatherDate = finalDate + ' ' + roundedHour + ':00:00'
+                const type = fixture === matchType.upcoming ? openWeatherType.forecast : openWeatherType.weather
+                const weatherResponse = await getWeather(type, latitude, longitude);
+                const specificForecast = type === openWeatherType.forecast ? weatherResponse?.list?.find(forecast =>
+                    forecast.dt_txt === weatherDate) : weatherResponse;
+                let sunriseTimestamp;
+                let sunsetTimestamp;
+                let partOfDay;
+                if (type === openWeatherType.forecast) {
+                    sunriseTimestamp = weatherResponse?.city?.sunrise
+                    sunsetTimestamp = weatherResponse?.city?.sunset
+                } else {
+                    sunriseTimestamp = weatherResponse?.sys?.sunrise
+                    sunsetTimestamp = weatherResponse?.sys?.sunset
+                }
+                const specificDate = new Date(Number(matchYear), Number(matchMonth) - 1, Number(matchDay), hour, 0)
+                const sunriseTime = new Date(sunriseTimestamp * 1000);
+                if (type === openWeatherType.forecast) {
+                    sunriseTime.setFullYear(specificDate.getFullYear());
+                    sunriseTime.setMonth(specificDate.getMonth());
+                    sunriseTime.setDate(specificDate.getDate());
+                }
+                const sunsetTime = new Date(sunsetTimestamp * 1000);
+                if (type === openWeatherType.forecast) {
+                    sunsetTime.setFullYear(specificDate.getFullYear());
+                    sunsetTime.setMonth(specificDate.getMonth());
+                    sunsetTime.setDate(specificDate.getDate());
+                }
+                if (specificDate >= sunriseTime && specificDate <= sunsetTime) {
+                    partOfDay = WeatherSky[1]
+                } else {
+                    partOfDay = WeatherSky[0]
+                }
+                const dataForWeather = {
+                    temperature: Number(specificForecast?.main?.temp.toFixed(0)),
+                    sky: partOfDay,
+                    weather: specificForecast?.weather[0]?.main,
+                    feels_like: Number(specificForecast?.main?.feels_like.toFixed(0)),
+                    grnd_level: specificForecast?.main?.grnd_level,
+                    sea_level: specificForecast?.main?.sea_level,
+                    humidity: specificForecast?.main?.humidity,
+                    description: capitalizeWords(specificForecast?.weather[0]?.description),
+                    windSpeed: specificForecast?.wind?.speed,
+                    clouds: specificForecast?.clouds?.all,
+                }
+                setWeatherData(dataForWeather)
+            }
+        }
+
+    }
+
     const closeButton = (
         <div className={classes.buttonBorderStyle}>
             <button className={classes.mapsButtons} onClick={handleClose}>Close</button>
@@ -312,7 +401,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                     isDetails={true}
                                     fixture={fixture}
                                     time={matchDetailsData?.time}/>
-                            {fixture === 'live' ?
+                            {fixture === matchType.live ?
                                 <GameStatus status={matchDetailsData?.day?.replace(/-/g, '/')}
                                             bgColor={buttonBgColor}
                                             fixture={fixture} isDetails={true}/>
@@ -398,7 +487,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             }
                         }} label="links" {...a11yProps(4)} />
                         {
-                            credentials?.signedIn && fixture === 'previous' &&
+                            credentials?.signedIn && fixture === matchType.previous &&
                             <Tab sx={{
                                 '&.MuiTab-root': {
                                     color: 'gray'
@@ -408,7 +497,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                             }} label="rating" {...a11yProps(5)} />
                         }
                         {
-                            credentials?.signedIn && fixture === 'previous' &&
+                            credentials?.signedIn && fixture === matchType.previous &&
                             <Tab sx={{
                                 '&.MuiTab-root': {
                                     color: 'gray'
@@ -421,7 +510,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                 </Box>
                 <CustomTabPanel value={tabValue} index={0}>
                     <PreviewTab matchDetailsData={matchDetailsData} allData={allData} matchIndex={matchIndex}
-                                bestOfMatch={bestOfMatch} redirectToTab={redirectToTab}/>
+                                bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherData={weatherData}/>
                     {isMobile && closeButton}
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={1}>
@@ -441,7 +530,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                     {isMobile && closeButton}
                 </CustomTabPanel>
                 {
-                    credentials?.signedIn && fixture === 'previous' &&
+                    credentials?.signedIn && fixture === matchType.previous &&
                     <>
                         <CustomTabPanel value={tabValue} index={5}>
                             {
@@ -527,36 +616,35 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                                 ))
                             }
                             {
-                                (notesSubmitButton !== 'Submitted' && notesSubmitButton !== 'Not Available') &&
+
                                 <section className={classes.notesSection}>
-                                    <label className={classes.labelStyle}>
-                                        Add your note:
-                                        <input
-                                            className={classes.inputDesign}
-                                            required={true}
-                                            type="text"
-                                            name="note"
-                                            value={noteFormData[credentials?.userName]}
-                                            onChange={handleNoteInputChange}
-                                            maxLength={250}
-                                        />
-                                    </label>
+                                    <span className={classes.noteWriterSpan}>{notesTitle}</span>
+                                    <Divider sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
+                                    <textarea
+                                        className={classes.noteInputDesign}
+                                        required={true}
+                                        name="note"
+                                        value={noteFormData['note']}
+                                        onChange={handleNoteInputChange}
+                                        maxLength={250}
+                                    />
+
                                 </section>
                             }
                             {
                                 notesErrorMessage &&
                                 <section className={classes.starSection}>
                                     <span className={classes.starsErrorSpan}>
-                                        <ErrorOutlineIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.errorIcon}>
+                                        <ErrorOutlineIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                          className={classes.errorIcon}>
                                         </ErrorOutlineIcon>
                                         {notesErrorMessage}
                                     </span>
                                 </section>
                             }
                             <div className={classes.submitButtonDiv}>
-                                <button className={classes.mapsButtons} disabled={notesSubmitButton === 'Submitted' || notesSubmitButton === 'Not Available'}
-                                        onClick={submitNote}>
-                                    {notesSubmitButton}
+                                <button className={classes.mapsButtons} onClick={submitNote}>
+                                    Submit
                                 </button>
                                 {isMobile && <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
                             </div>

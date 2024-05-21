@@ -11,7 +11,7 @@ import {Divider} from "@mui/material";
 import LabelIcon from "@mui/icons-material/Label";
 import CloudIcon from '@mui/icons-material/Cloud';
 
-const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirectToTab}) => {
+const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirectToTab, weatherData}) => {
 
     const isMobile = window.innerWidth <= 768;
     const lastFiveGames = Object.values(allData).filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3 || y === matchIndex + 4 || y === matchIndex + 5));
@@ -129,7 +129,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
         const filteredNames = Object.entries(allTimePlayerGoals).filter(value => {
             const remainder = value[1] < 50 ? 50 - value[1] : 50 - (value[1] % 50);
             return remainder >= 1 && remainder <= 3 && (value[1] + remainder) % 50 === 0;
-        }).map(([name, value]) => ({ name, remainder: value < 50 ? 50 - value : 50 - (value % 50), goal: value }));
+        }).map(([name, value]) => ({name, remainder: value < 50 ? 50 - value : 50 - (value % 50), goal: value}));
 
         if (filteredNames?.length > 0) {
             filteredNames?.forEach((person) => {
@@ -151,7 +151,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
 
         const filteredNamesOfMatches = Object.entries(allTimeMatchesCount).filter(value => {
             return value[1] % 25 === 0;
-        }).map(([name, value]) => ({ name, match: value }));
+        }).map(([name, value]) => ({name, match: value}));
 
         if (filteredNamesOfMatches?.length > 0) {
             filteredNamesOfMatches?.forEach((person) => {
@@ -305,106 +305,108 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch ,redirec
                     }
                 </section>
             }
-            <section className={classes.generalTabSection}>
-                <div className={classes.generalInfoDiv}>
-                    <CloudIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
-                    </CloudIcon>
-                    <span className={classes.generalInfoSpan}>
+            {((matchDetailsData?.weather?.sky && matchDetailsData?.weather?.sky !== '') || (weatherData?.sky)) &&
+                <section className={classes.generalTabSection}>
+                    <div className={classes.generalInfoDiv}>
+                        <CloudIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
+                        </CloudIcon>
+                        <span className={classes.generalInfoSpan}>
                             Weather
                         </span>
-                </div>
-                <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
-                <div className={classes.generalInfoDiv}>
+                    </div>
+                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                    <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Weather:
                         </span>
-                    <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '' ? matchDetailsData?.weather?.weather : matchDetailsData?.weather?.sky}
+                        <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.weather : (matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '' ? matchDetailsData?.weather?.weather : matchDetailsData?.weather?.sky)}
                         </span>
-                </div>
-                {
-                    matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '' &&
-                    <>
-                        <div className={classes.generalInfoDiv}>
+                    </div>
+                    {
+                        ((matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '') || (weatherData?.weather)) &&
+                        <>
+                            <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Description:
                         </span>
-                            <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.description}
+                                <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.description : matchDetailsData?.weather?.description}
                         </span>
-                        </div>
-                        <div className={classes.generalInfoDiv}>
+                            </div>
+                            <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Part of the Day:
                         </span>
-                            <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.sky}
+                                <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.sky : matchDetailsData?.weather?.sky}
                         </span>
-                        </div>
-                    </>
-                }
-                <div className={classes.generalInfoDiv}>
+                            </div>
+                        </>
+                    }
+                    <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Temperature:
                         </span>
-                    <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.temperature}&#176;
+                        <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.temperature : matchDetailsData?.weather?.temperature}&#176;
                         </span>
-                </div>
-                {
-                    matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '' &&
-                    <>
-                        <div className={classes.generalInfoDiv}>
+                    </div>
+                    {
+                        ((matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '') || (weatherData?.weather)) &&
+                        <>
+                            <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Feels Like:
                         </span>
-                            <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.feels_like}&#176;
+                                <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.feels_like : matchDetailsData?.weather?.feels_like}&#176;
                         </span>
-                        </div>
-                        <div className={classes.generalInfoDiv}>
+                            </div>
+                            <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Humidity:
                         </span>
-                            <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.humidity}%
+                                <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.humidity : matchDetailsData?.weather?.humidity}%
                         </span>
-                        </div>
-                        <div className={classes.generalInfoDiv}>
+                            </div>
+                            <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Wind Speed:
                         </span>
-                            <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.windSpeed} km/h
+                                <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.windSpeed : matchDetailsData?.weather?.windSpeed} km/h
                         </span>
-                        </div>
-                        <div className={classes.generalInfoDiv}>
+                            </div>
+                            <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Clouds:
                         </span>
-                            <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.clouds}%
+                                <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.clouds : matchDetailsData?.weather?.clouds}%
                         </span>
-                        </div>
-                        <div className={classes.generalInfoDiv}>
+                            </div>
+                            <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Sea Level Pressure:
                         </span>
-                            <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.sea_level} hPa
+                                <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.sea_level : matchDetailsData?.weather?.sea_level} hPa
                         </span>
-                        </div>
-                        <div className={classes.generalInfoDiv}>
+                            </div>
+                            <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Ground Level Pressure:
                         </span>
-                            <span className={classes.generalInfoSpan}>
-                            {matchDetailsData?.weather?.grnd_level} hPa
+                                <span className={classes.generalInfoSpan}>
+                            {weatherData ? weatherData?.grnd_level : matchDetailsData?.weather?.grnd_level} hPa
                         </span>
-                        </div>
-                    </>
-                }
-            </section>
+                            </div>
+                        </>
+                    }
+                </section>
+            }
         </div>
     );
 };

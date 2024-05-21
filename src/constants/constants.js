@@ -383,6 +383,23 @@ export const Facilities = [
         calendarLocation: 'Yeni Karaman Spor Tesisleri\\n1. İhsaniye Cd. 7\\, 16160 Osmangaz\n' +
             ' i Bursa\\, Türkiye'
     },
+    {
+        name: 'Fethiye',
+        googleUrl: 'https://maps.app.goo.gl/ZsAF3EHF4nznyPKE9',
+        appleUrl: 'https://maps.apple.com/?address=Top%20Sahas%C4%B1%20Cd.%2015/1,%2016210%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=16763455133313078428&ll=40.235316,28.973685&lsp=9902&q=Fethiye%20Spor%20Kompleksi',
+        xAppleLocation: `VALUE=URI;X-APPLE-MAPKIT-HANDLE=CAESzQIIrk0Q
+ nKnM6oi08NHoARoSCd4crtUeHkRAERObj2tD+TxAIn4KCFTDvHJraXllEgJUUhoFQnVyc2Eq
+ CE5pbMO8ZmVyMghOaWzDvGZlcjoFMTYyMTBCB0ZldGhpeWVSD1RvcCBTYWhhc8SxIENkLloE
+ MTUvMWIUVG9wIFNhaGFzxLEgQ2QuIDE1LzGKAQdGZXRoaXlligELRmV0aGl5ZSBNaC4qFkZl
+ dGhpeWUgU3BvciBLb21wbGVrc2kyFFRvcCBTYWhhc8SxIENkLiAxNS8xMhQxNjIxMCBOaWzD
+ vGZlciBCdXJzYTIIVMO8cmtpeWU4L1ABWlcKJQicqczqiLTw0egBEhIJ3hyu1R4eREARE5uP
+ a0P5PEAYrk2QAwGiHy0InKnM6oi08NHoARogChZGZXRoaXllIFNwb3IgS29tcGxla3NpEAAq
+ AnRyQAA=;X-APPLE-RADIUS=142.8846332015152;X-APPLE-REFERENCEFRAME=1;X-TIT
+ LE="Fethiye Spor Kompleksi\\nTop Sahası Cd. 15/1, 16210 Nilüfer Bursa, Tü
+ rkiye":geo:40.235316,28.973685`,
+        calendarLocation: 'Fethiye Spor Kompleksi\\nTop Sahası Cd. 15/1\\, 16210 Nilüfer Bur\n' +
+            ' sa\\, Türkiye'
+    },
 ]
 
 export const Jerseys = [
@@ -403,3 +420,14 @@ export const WeatherSky = [
 export const FootballRoles = [
     'gk', 'df', 'cm', 'fw',
 ]
+
+export const matchType = {
+    previous: 'previous',
+    upcoming: 'upcoming',
+    live: 'live',
+};
+
+export const openWeatherType = {
+    forecast: 'forecast',
+    weather: 'weather',
+};

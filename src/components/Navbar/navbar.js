@@ -20,12 +20,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import {TeamMembers} from "../../constants/constants";
 import CardMedia from "@mui/material/CardMedia";
 import AdvancedFilters from "../AdvancedFilters/advanced-filters";
+import CalendarComponent from "../Calendar/calendar";
 
-function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials}) {
+function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, filteredData}) {
     const [desktopMenu, setDesktopMenu] = React.useState(null);
     const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
     const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
+    const [isCalendarPopupOpen, setCalendarPopupOpen] = useState(false);
     const [messageData, setMessageData] = useState(null);
     const [credentials, setCredentials] = useState(null);
     const [advancedFiltersModal, setAdvancedFiltersModal] = useState(false);
@@ -73,6 +75,12 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
 
     const navigateMainPage = () => {
         navigate(mainPath);
+    };
+
+    const openCalendarPopup = () => {
+        setDesktopMenu(null)
+        document.body.style.overflow = 'hidden';
+        setCalendarPopupOpen(true);
     };
 
     const handleXClick = (messageData) => {
@@ -162,18 +170,19 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
                 <span className={classes.drawerRoutesSpan} onClick={navigateTeamStats}>
                     Team Stats
                 </span>
-                <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
                 <span className={classes.drawerRoutesSpan} onClick={openFiltersModal}>
                     Filters
                 </span>
+                <span className={classes.drawerRoutesSpan} onClick={openCalendarPopup}>
+                    Calendar
+                </span>
                 {
                     credentials?.isCaptain &&
-                        <>
-                            <Divider sx={{bgcolor: 'black', marginTop: '20px', marginBottom: '20px'}}/>
-                            <span className={classes.drawerRoutesSpan} onClick={openAddMatchPopup}>
-                                Add Match
-                            </span>
-                        </>
+                    <>
+                        <span className={classes.drawerRoutesSpan} onClick={openAddMatchPopup}>
+                            Add Match
+                        </span>
+                    </>
                 }
                 {
                     credentials?.signedIn ?
@@ -183,7 +192,11 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
                                     <div>
                                         <CardMedia
                                             component="img"
-                                            sx={{height: isMobile ? 35 : 45, width: isMobile ? 35 : 45, borderRadius: '100%'}}
+                                            sx={{
+                                                height: isMobile ? 35 : 45,
+                                                width: isMobile ? 35 : 45,
+                                                borderRadius: '100%'
+                                            }}
                                             image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
                                         />
                                     </div>
@@ -202,7 +215,8 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
                         <>
                             <div className={classes.mobileUserDiv}>
                                 <section className={classes.mobileUserSection} onClick={openSignInPopup}>
-                                    <AccountCircleIcon sx={{height: 35, width: 35, color: 'darkred'}}></AccountCircleIcon>
+                                    <AccountCircleIcon
+                                        sx={{height: 35, width: 35, color: 'darkred'}}></AccountCircleIcon>
                                     <span className={classes.mobileUserNameSpan}>
                                     Sign In
                                 </span>
@@ -307,16 +321,22 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
                                 >
                                     Filters
                                 </span>
+                                <span
+                                    className={classes.mobileMenuItems}
+                                    onClick={openCalendarPopup}
+                                >
+                                    Calendar
+                                </span>
                                 {
                                     credentials?.isCaptain &&
-                                        <>
+                                    <>
                                             <span
                                                 className={classes.mobileMenuItems}
                                                 onClick={openAddMatchPopup}
                                             >
                                                 Add Match
                                             </span>
-                                        </>
+                                    </>
                                 }
                             </div>
                         </Menu>
@@ -358,6 +378,8 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials})
                                                databaseData={databaseData}/>}
             {advancedFiltersModal && <AdvancedFilters databaseData={databaseData} onClose={() => setAdvancedFiltersModal(false)}
                                                       setFilters={setFilters}/>}
+            {isCalendarPopupOpen && <CalendarComponent databaseData={databaseData} onClose={() => setCalendarPopupOpen(false)}
+                                                       credentials={credentials} reloadData={handleReload} allData={databaseData} filteredData={filteredData}/>}
         </AppBar>
     );
 }

@@ -2,7 +2,15 @@ import React, {useEffect, useRef, useState} from 'react';
 import classes from "./add-match.module.css";
 import {dataBase, loadWebsite} from "../../firebase";
 import {ref, set} from "firebase/database";
-import {Facilities, FootballRoles, Jerseys, TeamMembers} from "../../constants/constants";
+import {
+    Facilities,
+    FootballRoles,
+    Jerseys,
+    openWeatherType,
+    TeamMembers,
+    TeamNames,
+    WeatherSky
+} from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoadingPage from "../../pages/loading-page";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
@@ -257,9 +265,8 @@ BEGIN:VEVENT
 DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d\d\d/g, "")}
 DTSTART:${new Date(Number(year), Number(month) - 1, Number(day), Number(startHour), Number(startMinute)).toISOString().replace(/-|:|\.\d\d\d/g, "")}
 DTEND:${new Date(Number(year), Number(month) - 1, Number(day), Number(endHour), Number(endMinute)).toISOString().replace(/-|:|\.\d\d\d/g, "")}
-SUMMARY:Halısaha
+SUMMARY:${TeamNames.oYesFc + ' - ' + calendarData?.rival?.name}
 URL;VALUE=URI:https://yigitmu9.github.io/oyesfc-react/
-DESCRIPTION:Rakip: ${calendarData?.rival?.name}
 LOCATION:${Facilities.find(x => x.name === calendarData?.place).calendarLocation}
 X-APPLE-STRUCTURED-LOCATION;${Facilities?.find(x => x?.name === calendarData?.place)?.xAppleLocation}
 X-APPLE-CREATOR-IDENTITY:com.apple.mobilecal
@@ -308,12 +315,12 @@ END:VCALENDAR`;
                 const finalDate = date.toISOString().split('T')[0];
                 const weatherDate = finalDate + ' ' + roundedHour + ':00:00'
                 const weatherResponse = await getWeather(type, latitude, longitude);
-                const specificForecast = type === 'forecast' ? weatherResponse?.list?.find(forecast =>
+                const specificForecast = type === openWeatherType.forecast ? weatherResponse?.list?.find(forecast =>
                     forecast.dt_txt === weatherDate) : weatherResponse;
                 let sunriseTimestamp;
                 let sunsetTimestamp;
                 let partOfDay;
-                if (type === 'forecast') {
+                if (type === openWeatherType.forecast) {
                     sunriseTimestamp = weatherResponse?.city?.sunrise
                     sunsetTimestamp = weatherResponse?.city?.sunset
                 } else {
@@ -322,21 +329,21 @@ END:VCALENDAR`;
                 }
                 const specificDate = new Date(formData.day);
                 const sunriseDate = new Date(sunriseTimestamp * 1000);
-                if (type === 'forecast') {
+                if (type === openWeatherType.forecast) {
                     sunriseDate.setFullYear(specificDate.getFullYear());
                     sunriseDate.setMonth(specificDate.getMonth());
                     sunriseDate.setDate(specificDate.getDate());
                 }
                 const sunsetDate = new Date(sunsetTimestamp * 1000);
-                if (type === 'forecast') {
+                if (type === openWeatherType.forecast) {
                     sunsetDate.setFullYear(specificDate.getFullYear());
                     sunsetDate.setMonth(specificDate.getMonth());
                     sunsetDate.setDate(specificDate.getDate());
                 }
                 if (specificDate >= sunriseDate && specificDate <= sunsetDate) {
-                    partOfDay = 'Daytime'
+                    partOfDay = WeatherSky[1]
                 } else {
-                    partOfDay = 'Night'
+                    partOfDay = WeatherSky[0]
                 }
                 setWeatherFormData((prevData) => ({
                     ...prevData,
@@ -526,10 +533,10 @@ END:VCALENDAR`;
                             <label style={{background: "#1f1f1f"}}>
                                 Get Weather from Api:
                                 <div className={classes.weatherButtonDiv}>
-                                    <div className={matchDetailsClasses.mapsButtons} onClick={() => handleGetOpenWeather('weather')}>
+                                    <div className={matchDetailsClasses.mapsButtons} onClick={() => handleGetOpenWeather(openWeatherType.weather)}>
                                         Current
                                     </div>
-                                    <div className={matchDetailsClasses.mapsButtons} onClick={() => handleGetOpenWeather('forecast')}>
+                                    <div className={matchDetailsClasses.mapsButtons} onClick={() => handleGetOpenWeather(openWeatherType.forecast)}>
                                         Selected Date
                                     </div>
                                 </div>

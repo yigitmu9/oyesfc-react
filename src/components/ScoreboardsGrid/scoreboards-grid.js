@@ -2,6 +2,7 @@ import classes from "./scoreboards-grid.module.css";
 import Scoreboard from "../Scoreboard/scoreboard";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails/match-details";
+import {matchType} from "../../constants/constants";
 
 const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData, credentials, allData, playerDetails}) => {
 
@@ -98,9 +99,9 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                     <Scoreboard
                                         key={y}
                                         value={x}
-                                        openPopup={() => openPopup(x, 'live')}
+                                        openPopup={() => openPopup(x, matchType.live)}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={'live'} playerDetails={playerDetails}/>))}
+                                        fixture={matchType.live} playerDetails={playerDetails}/>))}
                             </div>
                         </>
                         :
@@ -113,24 +114,24 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                     <Scoreboard
                                         key={y}
                                         value={x}
-                                        openPopup={() => openPopup(x, 'upcoming')}
+                                        openPopup={() => openPopup(x, matchType.upcoming)}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={'upcoming'} playerDetails={playerDetails}/>))}
+                                        fixture={matchType.upcoming} playerDetails={playerDetails}/>))}
                             </div>
                         </>
                         :
                         null}
                     {previousMatchesData.length > 0 ?
                         <>
-                        {!playerDetails && <h1 className={classes.matchTitle}>Previous Matches</h1>}
+                            {!playerDetails && <h1 className={classes.matchTitle}>Previous Matches</h1>}
                             <div className={classes.grid}>
                                 {previousMatchesData?.map((x, y) => (
                                     <Scoreboard
                                         key={y}
                                         value={x}
-                                        openPopup={() => openPopup(x, 'previous')}
+                                        openPopup={() => openPopup(x, matchType.previous)}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={'previous'} playerDetails={playerDetails}/>))}
+                                        fixture={matchType.previous} playerDetails={playerDetails}/>))}
                             </div>
                         </>
                         :

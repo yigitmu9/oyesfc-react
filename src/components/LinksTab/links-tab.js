@@ -5,14 +5,13 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import EditIcon from "@mui/icons-material/Edit";
-import {Facilities} from "../../constants/constants";
+import {Facilities, matchType, TeamNames} from "../../constants/constants";
 import CloudIcon from "@mui/icons-material/Cloud";
 
 const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
 
     const isMobile = window.innerWidth <= 768;
     const formattedDateForCalendar = formatDate(matchDetailsData.day);
-    const rivalForCalendar = 'Rakip: ' + matchDetailsData.rival.name;
     const startTimeForCalendar = getStartTime(matchDetailsData.time);
     const endTimeForCalendar = getEndTime(matchDetailsData.time) === '00:00' ? '23:59' : getEndTime(matchDetailsData.time);
 
@@ -88,8 +87,7 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
                     <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                     <div className={classes.generalInfoDiv}>
                         <AddToCalendarButton
-                            name="Halısaha"
-                            description={rivalForCalendar}
+                            name={TeamNames.oYesFc + ' - ' + matchDetailsData?.rival?.name}
                             startDate={formattedDateForCalendar}
                             startTime={startTimeForCalendar}
                             endTime={endTimeForCalendar}
@@ -128,7 +126,7 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
                     <div className={classes.generalInfoDiv}>
                         <div className={classes.mapsButtonsWrapper}>
                             {
-                                fixture === 'previous' ?
+                                fixture === matchType.previous ?
                                     <button className={classes.mapsButtons}
                                             onClick={redirectToTimeAndDateWeather}>
                                         Timeanddate Weather

@@ -52,3 +52,151 @@
     margin: -12px;
   }
 }
+
+.rbc-calendar {
+  background-color: #2e2e2e !important;
+  color: lightgray !important;
+}
+
+.rbc-toolbar {
+  background-color: rgb(36, 36, 36) !important;
+  font-size: 18px !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 10px !important;
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+  }
+}
+
+.rbc-toolbar-label {
+  font-size: 18px !important;
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+    margin: 10px !important;
+  }
+}
+
+.rbc-toolbar button {
+  color: lightgray !important;
+  background-color: #444 !important;
+  border: 1px solid #555 !important;
+}
+
+.rbc-toolbar button:hover {
+  background-color: #555 !important;
+}
+
+.rbc-toolbar .rbc-active {
+  background-color: #666 !important;
+  border-color: #777 !important;
+}
+
+.rbc-month-view,
+.rbc-time-view,
+.rbc-agenda-view {
+  background-color: #2e2e2e !important;
+}
+
+.rbc-header {
+  background-color: #1c1c1c !important;
+  color: lightgray !important;
+  border: 1px solid #444 !important;
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+  }
+}
+
+.rbc-header + .rbc-header {
+  border-left: 1px solid #444 !important;
+}
+
+.rbc-date-cell {
+  color: lightgray !important;
+}
+
+.rbc-date-cell.rbc-now {
+  background-color: #3e3e3e !important;
+}
+
+.rbc-date-cell.rbc-off-range {
+  color: #777 !important;
+}
+
+.rbc-event {
+  background-color: darkred !important;
+  color: lightgray !important;
+  border: 1px solid darkred !important;;
+}
+
+.rbc-event-content {
+  background-color: darkred !important;
+  color: lightgray !important;
+  font-size: 10px !important;
+}
+
+.rbc-selected {
+  background-color: darkred !important;
+  border-color: #555 !important;
+}
+
+.rbc-today {
+  background-color: #2e2e2e !important;;
+}
+
+.rbc-show-more {
+  background-color: #444 !important;
+  color: lightgray !important;
+}
+
+.rbc-agenda-table {
+  background-color: #2e2e2e !important;
+  color: lightgray !important;
+  border: 1px solid #444 !important;
+}
+
+.rbc-agenda-table th,
+.rbc-agenda-table td {
+  border: 1px solid #444 !important;
+}
+
+.rbc-agenda-content {
+  background-color: #2e2e2e !important;
+  color: lightgray !important;
+}
+
+.rbc-time-column {
+  background-color: #2e2e2e !important;
+}
+
+.rbc-time-header {
+  background-color: #1c1c1c !important;
+  color: lightgray !important;
+}
+
+.rbc-time-header-cell {
+  border: 1px solid #444 !important;
+}
+
+.rbc-time-slot {
+  border-top: 1px solid #444 !important;
+}
+
+.rbc-time-content {
+  border-top: 1px solid #444 !important;
+}
+
+.rbc-off-range-bg {
+  background-color: #121212 !important;
+}
+
+.rbc-btn-group {
+  color: lightgray !important;
+}
+
+.rbc-current-time-indicator {
+  background-color: darkred !important;
+}
+
+.rbc-date-cell.rbc-now {
+  background-color: gray !important;
+}
