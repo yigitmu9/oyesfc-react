@@ -227,6 +227,6 @@
 .rbc-button-link {
   font-size: 18px !important;
   @media (max-width: 767px) {
-    font-size: 14px !important;
+    font-size: 10px !important;
   }
 }
