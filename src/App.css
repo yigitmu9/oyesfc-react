@@ -95,10 +95,6 @@
 .rbc-header {
   background-color: #1c1c1c !important;
   color: lightgray !important;
-  font-size: 18px !important;
-  @media (max-width: 767px) {
-    font-size: 14px !important;
-  }
 }
 
 .rbc-date-cell {
@@ -218,15 +214,8 @@
 
 .rbc-agenda-empty {
   font-size: 18px !important;
+  text-align: center !important;
   @media (max-width: 767px) {
     font-size: 14px !important;
-    text-align: center !important;
-  }
-}
-
-.rbc-button-link {
-  font-size: 18px !important;
-  @media (max-width: 767px) {
-    font-size: 10px !important;
   }
 }
