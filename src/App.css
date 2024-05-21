@@ -95,6 +95,7 @@
 .rbc-header {
   background-color: #1c1c1c !important;
   color: lightgray !important;
+  font-size: 18px !important;
   @media (max-width: 767px) {
     font-size: 14px !important;
   }
@@ -168,6 +169,10 @@
 
 .rbc-time-slot {
   border-top: 1px solid #444 !important;
+  font-size: 18px !important;
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+  }
 }
 
 .rbc-time-content {
@@ -191,18 +196,36 @@
 }
 
 .rbc-agenda-event-cell {
+  font-size: 18px !important;
   @media (max-width: 767px) {
     font-size: 14px !important;
   }
 }
 
 .rbc-agenda-time-cell {
+  font-size: 18px !important;
   @media (max-width: 767px) {
     font-size: 14px !important;
   }
 }
 
 .rbc-agenda-date-cell {
+  font-size: 18px !important;
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+  }
+}
+
+.rbc-agenda-empty {
+  font-size: 18px !important;
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+    text-align: center !important;
+  }
+}
+
+.rbc-button-link {
+  font-size: 18px !important;
   @media (max-width: 767px) {
     font-size: 14px !important;
   }
