@@ -200,3 +200,21 @@
 .rbc-date-cell.rbc-now {
   background-color: gray !important;
 }
+
+.rbc-agenda-event-cell {
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+  }
+}
+
+.rbc-agenda-time-cell {
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+  }
+}
+
+.rbc-agenda-date-cell {
+  @media (max-width: 767px) {
+    font-size: 14px !important;
+  }
+}
