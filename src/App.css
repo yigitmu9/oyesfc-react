@@ -54,7 +54,7 @@
 }
 
 .rbc-calendar {
-  background-color: #2e2e2e !important;
+  background-color: rgb(36, 36, 36) !important;
   color: lightgray !important;
 }
 
@@ -86,28 +86,18 @@
   background-color: #555 !important;
 }
 
-.rbc-toolbar .rbc-active {
-  background-color: #666 !important;
-  border-color: #777 !important;
-}
-
 .rbc-month-view,
 .rbc-time-view,
 .rbc-agenda-view {
-  background-color: #2e2e2e !important;
+  background-color: rgb(36, 36, 36) !important;
 }
 
 .rbc-header {
   background-color: #1c1c1c !important;
   color: lightgray !important;
-  border: 1px solid #444 !important;
   @media (max-width: 767px) {
     font-size: 14px !important;
   }
-}
-
-.rbc-header + .rbc-header {
-  border-left: 1px solid #444 !important;
 }
 
 .rbc-date-cell {
@@ -136,11 +126,10 @@
 
 .rbc-selected {
   background-color: darkred !important;
-  border-color: #555 !important;
 }
 
 .rbc-today {
-  background-color: #2e2e2e !important;;
+  background-color: rgb(36, 36, 36) !important;;
 }
 
 .rbc-show-more {
@@ -149,23 +138,23 @@
 }
 
 .rbc-agenda-table {
-  background-color: #2e2e2e !important;
+  background-color: rgb(36, 36, 36) !important;
   color: lightgray !important;
-  border: 1px solid #444 !important;
+  border: 1px solid lightgray !important;
 }
 
 .rbc-agenda-table th,
 .rbc-agenda-table td {
-  border: 1px solid #444 !important;
+  border: 1px solid lightgray !important;
 }
 
 .rbc-agenda-content {
-  background-color: #2e2e2e !important;
+  background-color: rgb(36, 36, 36) !important;
   color: lightgray !important;
 }
 
 .rbc-time-column {
-  background-color: #2e2e2e !important;
+  background-color: rgb(36, 36, 36) !important;
 }
 
 .rbc-time-header {
