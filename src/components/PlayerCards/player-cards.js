@@ -3,8 +3,8 @@ import {useEffect, useState} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import {Divider, List, ListItem, Tab, Tabs} from "@mui/material";
-import {TeamMembers} from "../../constants/constants";
+import {Alert, Divider, List, ListItem, Snackbar, Tab, Tabs} from "@mui/material";
+import {SnackbarTypes, TeamMembers} from "../../constants/constants";
 import classes from "../PlayerCards/player-cards.module.css"
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import Box from "@mui/material/Box";
@@ -73,6 +73,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     const [ratesData, setRatesData] = useState(null);
     const [playerRatingMvp, setPlayerRatingMvp] = useState({rating: '-', mvp: 0});
     const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
+    const [snackbarData, setSnackbarData] = useState(null);
     let playerTotalGoal = 0;
     let playerYellowCard = 0;
     let playerRedCard = 0;
@@ -298,7 +299,13 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                 setRatesData(response)
             }
         } catch (error) {
-            console.log(error)
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            setSnackbarData(errorResponse)
         }
     }
     const hourDifference = (matchDay, time) => {
@@ -389,6 +396,12 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
         return Object.keys(averageRatings)?.filter(player => averageRatings[player] === maxAverage);
     };
 
+    const closeSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarData(null);
+    };
 
     return (
         <Card sx={styles.card}>
@@ -625,6 +638,16 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                 </div>
                 {isMobile && closeButton}
             </CustomTabs>
+            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
+                <Alert
+                    onClose={closeSnackbar}
+                    severity={snackbarData?.status}
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    {snackbarData?.message}
+                </Alert>
+            </Snackbar>
         </Card>
     );
 }

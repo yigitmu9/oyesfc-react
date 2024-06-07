@@ -1,16 +1,17 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from "./rakipbul-team-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Doughnut} from "react-chartjs-2";
-import {TeamNames} from "../../constants/constants";
+import {SnackbarTypes, TeamNames} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
-import {Divider, List, ListItem} from "@mui/material";
+import {Alert, Divider, List, ListItem, Snackbar} from "@mui/material";
 import {loadWebsite} from "../../firebase";
 
 const RakipbulTeamStats = () => {
 
     const [rakipbulData, setRakipbulData] = React.useState(null);
+    const [snackbarData, setSnackbarData] = useState(null);
     let goalsScored = 0
     let ourPositions = 0
     let goalsConceded = 0
@@ -25,9 +26,23 @@ const RakipbulTeamStats = () => {
             const response = await loadWebsite(`rakipbul`);
             setRakipbulData(response)
         } catch (error) {
-            console.log(error)
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            setSnackbarData(errorResponse)
+
         }
     }
+
+    const closeSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarData(null);
+    };
 
     if (rakipbulData) {
         Object.values(rakipbulData)?.forEach(item => {
@@ -163,6 +178,16 @@ const RakipbulTeamStats = () => {
                 </div>
             </CardContent>
         </Card>
+        <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
+            <Alert
+                onClose={closeSnackbar}
+                severity={snackbarData?.status}
+                variant="filled"
+                sx={{width: '100%'}}
+            >
+                {snackbarData?.message}
+            </Alert>
+        </Snackbar>
     </div>
     );
 };

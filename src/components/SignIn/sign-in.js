@@ -6,7 +6,8 @@ import {signInWithEmailAndPassword, signOut} from "firebase/auth"
 import {auth} from "../../firebase"
 import {Loading} from "../../pages/loading-page";
 import CardMedia from "@mui/material/CardMedia";
-import {TeamMembers} from "../../constants/constants";
+import {SnackbarMessages, TeamMembers} from "../../constants/constants";
+import {Alert} from "@mui/material";
 
 const SignIn = ({onClose, credentials, checkAuth}) => {
 
@@ -42,8 +43,11 @@ const SignIn = ({onClose, credentials, checkAuth}) => {
                 if (errorMessage) setErrorMessage(null)
             })
             .catch((error) => {
-                console.log(error)
-                setErrorMessage('Invalid email or password!')
+                if (error?.message === SnackbarMessages.invalid_credentials) {
+                    setErrorMessage(SnackbarMessages.invalid_email_password)
+                } else {
+                    setErrorMessage(error?.message)
+                }
             })
         setLoading(false);
     };
@@ -64,9 +68,7 @@ const SignIn = ({onClose, credentials, checkAuth}) => {
                 }
             })
             .catch((error) => {
-                console.log(error)
-                console.log(error)
-                setErrorMessage('An error occurred!')
+                setErrorMessage(error?.message)
             })
         setLoading(false)
     }
@@ -117,7 +119,9 @@ const SignIn = ({onClose, credentials, checkAuth}) => {
                                     onChange={(event) => setPassword(event.target.value)}
                                 />
                             </label>
-                            {errorMessage && <span className={classes.errorMessage}>{errorMessage}</span>}
+                            {errorMessage &&
+                                <Alert sx={{borderRadius: '25px', bgcolor: 'transparent', color: 'red', padding: 0}}
+                                       variant="standard" severity="error">{errorMessage}</Alert>}
                         </div>
                         <div className={classes.buttonDivStyle}>
                             <button className={matchDetailsClasses.mapsButtons} type="submit">Log In
@@ -153,14 +157,16 @@ const SignIn = ({onClose, credentials, checkAuth}) => {
                     <h1 className={classes.titleStyle}>Welcome</h1>
                     <h1 className={classes.usernameStyle}>{credentials?.userName}</h1>
                     <h1 className={classes.emailStyle}>{credentials?.email}</h1>
-                    {errorMessage && <h5 className={classes.errorMessageLogOut}>{errorMessage}</h5>}
+                    {errorMessage && <Alert sx={{borderRadius: '25px'}}
+                                            variant="filled" severity="error">{errorMessage}</Alert>}
                     <div className={classes.buttonDivStyle}>
                         <button className={matchDetailsClasses.mapsButtons} onClick={logOut}>Log
                             Out
                         </button>
                         {
                             isMobile &&
-                            <button className={matchDetailsClasses.mapsButtons} style={{marginLeft: "1rem"}} onClick={handleClose}>Close</button>
+                            <button className={matchDetailsClasses.mapsButtons} style={{marginLeft: "1rem"}}
+                                    onClick={handleClose}>Close</button>
                         }
                     </div>
                 </div>

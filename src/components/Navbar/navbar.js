@@ -11,13 +11,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import SignIn from "../SignIn/sign-in";
-import Message from "../Message/message";
 import AddMatchComponent from "../AddMatch/add-match";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth, loadWebsite} from "../../firebase";
-import {Divider, Drawer} from "@mui/material";
+import {Alert, Divider, Drawer, Snackbar} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import {TeamMembers} from "../../constants/constants";
+import {SnackbarTypes, TeamMembers} from "../../constants/constants";
 import CardMedia from "@mui/material/CardMedia";
 import AdvancedFilters from "../AdvancedFilters/advanced-filters";
 import CalendarComponent from "../Calendar/calendar";
@@ -25,10 +24,9 @@ import CalendarComponent from "../Calendar/calendar";
 function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, filteredData}) {
     const [desktopMenu, setDesktopMenu] = React.useState(null);
     const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
-    const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     const [isCalendarPopupOpen, setCalendarPopupOpen] = useState(false);
-    const [messageData, setMessageData] = useState(null);
+    const [snackbarData, setSnackbarData] = useState(null);
     const [credentials, setCredentials] = useState(null);
     const [advancedFiltersModal, setAdvancedFiltersModal] = useState(false);
     const navigate = useNavigate()
@@ -83,8 +81,9 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
         setCalendarPopupOpen(true);
     };
 
-    const handleXClick = (messageData) => {
-        setMessageData(messageData);
+    const handleXClick = (snackbarData) => {
+        setSnackbarData(snackbarData);
+        if (snackbarData?.status === SnackbarTypes.success) handleReload(true)
     };
 
     const openSignInPopup = () => {
@@ -107,6 +106,13 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
         if (data) checkAuthState().then(r => r);
     }
 
+    const closeSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarData(null);
+    };
+
     const checkAuthState = async () => {
         await onAuthStateChanged(auth, async user => {
             if (user && !credentials?.signedIn) {
@@ -124,7 +130,13 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                     setCredentials(credentialsData)
                     sendCredentials(credentialsData)
                 } catch (error) {
-                    console.log(error)
+                    const errorResponse = {
+                        open: true,
+                        status: SnackbarTypes.error,
+                        message: error?.message,
+                        duration: 18000
+                    }
+                    setSnackbarData(errorResponse)
                 }
             } else if (!user && credentials?.signedIn) {
                 setCredentials(null)
@@ -218,7 +230,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                                     <AccountCircleIcon
                                         sx={{height: 35, width: 35, color: 'darkred'}}></AccountCircleIcon>
                                     <span className={classes.mobileUserNameSpan}>
-                                    Sign In
+                                    Log In
                                 </span>
                                 </section>
 
@@ -313,7 +325,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                                     className={classes.mobileMenuItems}
                                     onClick={openSignInPopup}
                                 >
-                                    {credentials?.signedIn ? 'Profile' : 'Sign In'}
+                                    {credentials?.signedIn ? 'Profile' : 'Log In'}
                                 </span>
                                 <span
                                     className={classes.mobileMenuItems}
@@ -367,19 +379,25 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                     </Drawer>
                 </nav>
             </Container>
-            {isSignInPopupOpen && <SignIn openMessage={() => setMessagePopupOpen(true)}
-                                          onClose={() => setSignInPopupOpen(false)}
+            {isSignInPopupOpen && <SignIn onClose={() => setSignInPopupOpen(false)}
                                           credentials={credentials} checkAuth={checkAuth}/>}
-            {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)}
-                                            reloadData={handleReload}/>}
-            {isAddMatchPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
-                                               onClose={() => setAddMatchPopupOpen(false)}
-                                               messageData={(messageData) => handleXClick(messageData)}
+            {isAddMatchPopupOpen && <AddMatchComponent onClose={() => setAddMatchPopupOpen(false)}
+                                               snackbarData={(snackbarData) => handleXClick(snackbarData)}
                                                databaseData={databaseData}/>}
             {advancedFiltersModal && <AdvancedFilters databaseData={databaseData} onClose={() => setAdvancedFiltersModal(false)}
                                                       setFilters={setFilters}/>}
             {isCalendarPopupOpen && <CalendarComponent databaseData={databaseData} onClose={() => setCalendarPopupOpen(false)}
                                                        credentials={credentials} reloadData={handleReload} allData={databaseData} filteredData={filteredData}/>}
+            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
+                <Alert
+                    onClose={closeSnackbar}
+                    severity={snackbarData?.status}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {snackbarData?.message}
+                </Alert>
+            </Snackbar>
         </AppBar>
     );
 }

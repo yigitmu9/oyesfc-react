@@ -7,6 +7,7 @@ import {AddToCalendarButton} from "add-to-calendar-button-react";
 import EditIcon from "@mui/icons-material/Edit";
 import {Facilities, matchType, TeamNames} from "../../constants/constants";
 import CloudIcon from "@mui/icons-material/Cloud";
+import PhoneIcon from '@mui/icons-material/Phone';
 
 const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
 
@@ -52,6 +53,11 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
         editMatch(true)
     };
 
+    const redirectToCall = () => {
+        const phone = Facilities.find(x => x.name === matchDetailsData?.place)?.phoneNumber?.replace(/[\s()]/g, '');
+        window.location.href = 'tel://' + phone;
+    };
+
     return (
         <>
             <div className={classes.generalTabDiv}>
@@ -71,6 +77,25 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
                             </button>
                             <button className={classes.mapsButtons} onClick={redirectToGoogleMaps}>Google
                                 Maps
+                            </button>
+                            <button className={classes.mapsButtons} onClick={redirectToGoogleMaps}>Call
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                <section className={classes.generalTabSection}>
+                    <div className={classes.urlInfoDiv}>
+                        <PhoneIcon fontSize={isMobile ? 'medium' : 'large'}
+                                        className={classes.generalInfoIcon}>
+                        </PhoneIcon>
+                        <span className={classes.generalInfoSpan}>
+                            {Facilities.find(x => x.name === matchDetailsData?.place)?.phoneNumber}
+                        </span>
+                    </div>
+                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                    <div className={classes.generalInfoDiv}>
+                        <div className={classes.mapsButtonsWrapper}>
+                            <button className={classes.mapsButtons} onClick={redirectToCall}>Call {matchDetailsData.place} Facility
                             </button>
                         </div>
                     </div>

@@ -36,7 +36,6 @@ const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allD
     const localizer = momentLocalizer(moment)
 
     const handleSelectEvent = (event) => {
-        console.log(`Event selected: ${event?.matchId}`);
         const selectedMatch = Object.values(filteredData)?.find(x => x?.day === event?.matchId)
         setMatchDetailsData(selectedMatch)
         if (today >= event?.end) setFixtureType(matchType.previous)

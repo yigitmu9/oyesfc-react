@@ -4,14 +4,19 @@ import TeamView from "../TeamView/team-view";
 import Result from "../Result/result";
 import FootballLogo from '../../images/football.png';
 import GameStatus from "../GameStatus/game-status";
-import {Facilities, matchType, openWeatherType, TeamMembers, WeatherSky} from "../../constants/constants";
+import {
+    Facilities,
+    matchType,
+    openWeatherType,
+    SnackbarTypes,
+    TeamMembers,
+    WeatherSky
+} from "../../constants/constants";
 import Box from "@mui/material/Box";
-import {Divider, Tab, Tabs} from "@mui/material";
+import {Alert, Divider, Snackbar, Tab, Tabs} from "@mui/material";
 import PropTypes from "prop-types";
 import RivalComparison from "../RivalComparison/rival-comparison";
 import AddMatchComponent from "../AddMatch/add-match";
-import Message from "../Message/message";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import PreviewTab from "../PreviewTab/preview-tab";
@@ -54,7 +59,16 @@ function a11yProps(index) {
     };
 }
 
-export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadData, credentials, allData, playerDetails}) => {
+export const MatchDetails = ({
+                                 onClose,
+                                 matchDetailsData,
+                                 fixture,
+                                 data,
+                                 reloadData,
+                                 credentials,
+                                 allData,
+                                 playerDetails
+                             }) => {
 
     const hourDifference = () => {
         const [day, month, year] = matchDetailsData.day.split('-');
@@ -85,9 +99,8 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     const [tabValue, setTabValue] = React.useState(0);
     const matchIndex = Object.values(allData).findIndex(x => x === matchDetailsData)
     const [oYesFCStarFormData, setOYesFCStarFormData] = useState(initialOYesFCStarFormData);
-    const [messageData, setMessageData] = useState(null);
+    const [snackbarData, setSnackbarData] = useState(null);
     const [player, setPlayer] = useState(null);
-    const [isMessagePopupOpen, setMessagePopupOpen] = useState(false);
     const [isPlayerPopupOpen, setPlayerPopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     const [starsErrorMessage, setStarsErrorMessage] = useState(null);
@@ -134,7 +147,6 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
     });
 
 
-
     const redirectToTab = (tabIndex) => {
         setTabValue(tabIndex)
     }
@@ -148,8 +160,9 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         }
     };
 
-    const handleMessageClick = (messageData) => {
-        setMessageData(messageData);
+    const handleMessageClick = (snackbarData) => {
+        setSnackbarData(snackbarData);
+        if (snackbarData?.status === SnackbarTypes.success) handleReload(true)
     };
 
     const handleReload = (data) => {
@@ -173,7 +186,6 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                 await set(ref(dataBase, `rates/${matchDetailsData?.day}/rates/${credentials?.id}`), oYesFCStarFormData);
                 setStarsSubmitButton('Submitted')
             } catch (error) {
-                console.log(error)
                 setStarsErrorMessage(error?.message)
             }
         } else {
@@ -201,7 +213,13 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
             }
 
         } catch (error) {
-            console.log(error)
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            setSnackbarData(errorResponse)
         }
     }
 
@@ -220,7 +238,13 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                 }
             }
         } catch (error) {
-            console.log(error)
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            setSnackbarData(errorResponse)
         }
     }
 
@@ -275,7 +299,6 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                 ]));
                 if (notesTitle === 'Add your note:') setNotesTitle('Edit your note:')
             } catch (error) {
-                console.log(error)
                 setStarsErrorMessage(error?.message)
             }
         } else {
@@ -289,7 +312,13 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
         try {
             responseForRatedPlayers = await loadWebsite('firebaseUID');
         } catch (error) {
-            console.log(error)
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            setSnackbarData(errorResponse)
         }
         const keys = Object.keys(response?.rates)
         let ratedPlayers = [];
@@ -298,7 +327,7 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
                 Object.entries(responseForRatedPlayers?.users)?.find(x => x[1] === key)[0] : null;
             ratedPlayers.push(userName)
         })
-       return ratedPlayers
+        return ratedPlayers
     }
 
     const getGeoCoordinates = () => {
@@ -381,6 +410,13 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
 
     }
 
+    const closeSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarData(null);
+    };
+
     const closeButton = (
         <div className={classes.buttonBorderStyle}>
             <button className={classes.mapsButtons} onClick={handleClose}>Close</button>
@@ -389,278 +425,278 @@ export const MatchDetails = ({onClose, matchDetailsData, fixture, data, reloadDa
 
     return (
         <div className={classes.overlay}>
-            {!isAddMatchPopupOpen && !isMessagePopupOpen && !isPlayerPopupOpen && <div className={playerDetails ? classes.fullContainer : classes.popupContainer} ref={popupRef}>
-            <section className={classes.scoreboard} style={{background: buttonBgColor}}>
-                    <div className={classes.scoreboardInsideDiv}>
-                        <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
-                                  bgColor={buttonBgColor} isDetails={true}/>
-                        <main className={classes.score} style={{background: buttonBgColor}}>
-                            <Result homeTeamScore={matchDetailsData?.oyesfc?.goal}
-                                    awayTeamScore={matchDetailsData?.rival?.goal}
-                                    bgColor={buttonBgColor}
-                                    isDetails={true}
-                                    fixture={fixture}
-                                    time={matchDetailsData?.time}/>
-                            {fixture === matchType.live ?
-                                <GameStatus status={matchDetailsData?.day?.replace(/-/g, '/')}
-                                            bgColor={buttonBgColor}
-                                            fixture={fixture} isDetails={true}/>
-                                :
-                                null
-                            }
-                        </main>
-                        <TeamView teamData={matchDetailsData?.rival} rakipbul={matchDetailsData?.rakipbul}
-                                  bgColor={buttonBgColor} isDetails={true}/>
-                    </div>
-                    {matchDetailsData.oyesfc.goal !== 0 ?
-                        <div className={classes.playerGoalsDiv}>
-                            {matchDetails.map((item, index) => (
-                                <div key={index} style={{
-                                    background: buttonBgColor,
-                                }}
-                                     className={classes.goalScorerGrid}>
+            {!isAddMatchPopupOpen && !isPlayerPopupOpen &&
+                <div className={playerDetails ? classes.fullContainer : classes.popupContainer} ref={popupRef}>
+                    <section className={classes.scoreboard} style={{background: buttonBgColor}}>
+                        <div className={classes.scoreboardInsideDiv}>
+                            <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
+                                      bgColor={buttonBgColor} isDetails={true}/>
+                            <main className={classes.score} style={{background: buttonBgColor}}>
+                                <Result homeTeamScore={matchDetailsData?.oyesfc?.goal}
+                                        awayTeamScore={matchDetailsData?.rival?.goal}
+                                        bgColor={buttonBgColor}
+                                        isDetails={true}
+                                        fixture={fixture}
+                                        time={matchDetailsData?.time}/>
+                                {fixture === matchType.live ?
+                                    <GameStatus status={matchDetailsData?.day?.replace(/-/g, '/')}
+                                                bgColor={buttonBgColor}
+                                                fixture={fixture} isDetails={true}/>
+                                    :
+                                    null
+                                }
+                            </main>
+                            <TeamView teamData={matchDetailsData?.rival} rakipbul={matchDetailsData?.rakipbul}
+                                      bgColor={buttonBgColor} isDetails={true}/>
+                        </div>
+                        {matchDetailsData.oyesfc.goal !== 0 ?
+                            <div className={classes.playerGoalsDiv}>
+                                {matchDetails.map((item, index) => (
+                                    <div key={index} style={{
+                                        background: buttonBgColor,
+                                    }}
+                                         className={classes.goalScorerGrid}>
                             <span style={{
                                 background: buttonBgColor,
                             }}
                                   className={classes.goalScorerName}>{item[0].replace(/[0-9]/g, '')}</span>
-                                    {Array.from({length: item[1].goal}).map((_, imgIndex) => (
-                                        <img
-                                            key={imgIndex}
-                                            className={classes.goalImage}
-                                            style={{background: buttonBgColor}}
-                                            src={FootballLogo}
-                                            alt={`Goal ${imgIndex + 1}`}
-                                        />
-                                    ))}
-                                </div>
-                            ))}
-                        </div>
-                        :
-                        null
-                    }
-                </section>
-                <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: '#323232'}}>
-                    <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
-                          scrollButtons variant="scrollable"
-                          sx={{
-                              '& .MuiTabs-indicator': {
-                                  backgroundColor: 'lightgray',
-                              },
-                              '& .MuiTabScrollButton-root': {
-                                  color: 'gray'
-                              }
-                          }}>
-                        <Tab sx={{
-                            '&.MuiTab-root': {
-                                color: 'gray'
-                            }, '&.Mui-selected': {
-                                color: 'lightgray'
-                            }
-                        }} label="preview" {...a11yProps(0)} />
-                        <Tab sx={{
-                            '&.MuiTab-root': {
-                                color: 'gray'
-                            }, '&.Mui-selected': {
-                                color: 'lightgray'
-                            }
-                        }} label="squad" {...a11yProps(1)} />
-                        <Tab sx={{
-                            '&.MuiTab-root': {
-                                color: 'gray'
-                            }, '&.Mui-selected': {
-                                color: 'lightgray'
-                            }
-                        }} label="Jersey" {...a11yProps(2)} />
-                        <Tab sx={{
-                            '&.MuiTab-root': {
-                                color: 'gray',
-                                size: 14
-                            }, '&.Mui-selected': {
-                                color: 'lightgray'
-                            }
-                        }} label="comparison" {...a11yProps(3)} />
-                        <Tab sx={{
-                            '&.MuiTab-root': {
-                                color: 'gray'
-                            }, '&.Mui-selected': {
-                                color: 'lightgray'
-                            }
-                        }} label="links" {...a11yProps(4)} />
-                        {
-                            credentials?.signedIn && fixture === matchType.previous &&
+                                        {Array.from({length: item[1].goal}).map((_, imgIndex) => (
+                                            <img
+                                                key={imgIndex}
+                                                className={classes.goalImage}
+                                                style={{background: buttonBgColor}}
+                                                src={FootballLogo}
+                                                alt={`Goal ${imgIndex + 1}`}
+                                            />
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
+                            :
+                            null
+                        }
+                    </section>
+                    <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: '#323232'}}>
+                        <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
+                              scrollButtons variant="scrollable"
+                              sx={{
+                                  '& .MuiTabs-indicator': {
+                                      backgroundColor: 'lightgray',
+                                  },
+                                  '& .MuiTabScrollButton-root': {
+                                      color: 'gray'
+                                  }
+                              }}>
                             <Tab sx={{
                                 '&.MuiTab-root': {
                                     color: 'gray'
                                 }, '&.Mui-selected': {
                                     color: 'lightgray'
                                 }
-                            }} label="rating" {...a11yProps(5)} />
-                        }
-                        {
-                            credentials?.signedIn && fixture === matchType.previous &&
+                            }} label="preview" {...a11yProps(0)} />
                             <Tab sx={{
                                 '&.MuiTab-root': {
                                     color: 'gray'
                                 }, '&.Mui-selected': {
                                     color: 'lightgray'
                                 }
-                            }} label="notes" {...a11yProps(6)} />
-                        }
-                    </Tabs>
-                </Box>
-                <CustomTabPanel value={tabValue} index={0}>
-                    <PreviewTab matchDetailsData={matchDetailsData} allData={allData} matchIndex={matchIndex}
-                                bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherData={weatherData}/>
-                    {isMobile && closeButton}
-                </CustomTabPanel>
-                <CustomTabPanel value={tabValue} index={1}>
-                    <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings} openPlayerModal={openPlayerDetailsModal} redirectToTab={redirectToTab}/>
-                    {isMobile && closeButton}
-                </CustomTabPanel>
-                <CustomTabPanel value={tabValue} index={2}>
-                    <JerseyTab matchDetailsData={matchDetailsData}/>
-                    {isMobile && closeButton}
-                </CustomTabPanel>
-                <CustomTabPanel value={tabValue} index={3}>
-                    <RivalComparison data={allData} selectedRival={matchDetailsData?.rival.name}/>
-                    {isMobile && closeButton}
-                </CustomTabPanel>
-                <CustomTabPanel value={tabValue} index={4}>
-                    <LinksTab matchDetailsData={matchDetailsData} editMatch={editMatch} credentials={credentials} fixture={fixture}/>
-                    {isMobile && closeButton}
-                </CustomTabPanel>
-                {
-                    credentials?.signedIn && fixture === matchType.previous &&
-                    <>
-                        <CustomTabPanel value={tabValue} index={5}>
+                            }} label="squad" {...a11yProps(1)} />
+                            <Tab sx={{
+                                '&.MuiTab-root': {
+                                    color: 'gray'
+                                }, '&.Mui-selected': {
+                                    color: 'lightgray'
+                                }
+                            }} label="Jersey" {...a11yProps(2)} />
+                            <Tab sx={{
+                                '&.MuiTab-root': {
+                                    color: 'gray',
+                                    size: 14
+                                }, '&.Mui-selected': {
+                                    color: 'lightgray'
+                                }
+                            }} label="comparison" {...a11yProps(3)} />
+                            <Tab sx={{
+                                '&.MuiTab-root': {
+                                    color: 'gray'
+                                }, '&.Mui-selected': {
+                                    color: 'lightgray'
+                                }
+                            }} label="links" {...a11yProps(4)} />
                             {
-                                Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== credentials?.userName)?.map((x, y) => (
-                                    <section key={y} className={classes.starSection}>
-                                        <span className={classes.starSpan}>{x[0]}</span>
-                                        <div className={classes.starDiv}>
-                                            {[...Array(10)].map((star, index) => {
-                                                const currentRating = index + 1;
-                                                return (
+                                credentials?.signedIn && fixture === matchType.previous &&
+                                <Tab sx={{
+                                    '&.MuiTab-root': {
+                                        color: 'gray'
+                                    }, '&.Mui-selected': {
+                                        color: 'lightgray'
+                                    }
+                                }} label="rating" {...a11yProps(5)} />
+                            }
+                            {
+                                credentials?.signedIn && fixture === matchType.previous &&
+                                <Tab sx={{
+                                    '&.MuiTab-root': {
+                                        color: 'gray'
+                                    }, '&.Mui-selected': {
+                                        color: 'lightgray'
+                                    }
+                                }} label="notes" {...a11yProps(6)} />
+                            }
+                        </Tabs>
+                    </Box>
+                    <CustomTabPanel value={tabValue} index={0}>
+                        <PreviewTab matchDetailsData={matchDetailsData} allData={allData} matchIndex={matchIndex}
+                                    bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherData={weatherData}/>
+                        {isMobile && closeButton}
+                    </CustomTabPanel>
+                    <CustomTabPanel value={tabValue} index={1}>
+                        <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings}
+                                  openPlayerModal={openPlayerDetailsModal} redirectToTab={redirectToTab}/>
+                        {isMobile && closeButton}
+                    </CustomTabPanel>
+                    <CustomTabPanel value={tabValue} index={2}>
+                        <JerseyTab matchDetailsData={matchDetailsData}/>
+                        {isMobile && closeButton}
+                    </CustomTabPanel>
+                    <CustomTabPanel value={tabValue} index={3}>
+                        <RivalComparison data={allData} selectedRival={matchDetailsData?.rival.name}/>
+                        {isMobile && closeButton}
+                    </CustomTabPanel>
+                    <CustomTabPanel value={tabValue} index={4}>
+                        <LinksTab matchDetailsData={matchDetailsData} editMatch={editMatch} credentials={credentials}
+                                  fixture={fixture}/>
+                        {isMobile && closeButton}
+                    </CustomTabPanel>
+                    {
+                        credentials?.signedIn && fixture === matchType.previous &&
+                        <>
+                            <CustomTabPanel value={tabValue} index={5}>
+                                {
+                                    Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== credentials?.userName)?.map((x, y) => (
+                                        <section key={y} className={classes.starSection}>
+                                            <span className={classes.starSpan}>{x[0]}</span>
+                                            <div className={classes.starDiv}>
+                                                {[...Array(10)].map((star, index) => {
+                                                    const currentRating = index + 1;
+                                                    return (
 
-                                                    <label key={index} className={classes.starLabel}>
-                                                        <input
-                                                            key={star}
-                                                            type="radio"
-                                                            name="rating"
-                                                            value={oYesFCStarFormData[x[0]]}
-                                                            onChange={() =>
-                                                                handleStarChange(x[0], currentRating)}
-                                                        />
-                                                        <span
-                                                            className={classes.star}
-                                                            style={{
-                                                                color:
-                                                                    currentRating <= (oYesFCStarFormData[x[0]]) ? "#ffc107" : "#e4e5e9",
-                                                            }}>
+                                                        <label key={index} className={classes.starLabel}>
+                                                            <input
+                                                                key={star}
+                                                                type="radio"
+                                                                name="rating"
+                                                                value={oYesFCStarFormData[x[0]]}
+                                                                onChange={() =>
+                                                                    handleStarChange(x[0], currentRating)}
+                                                            />
+                                                            <span
+                                                                className={classes.star}
+                                                                style={{
+                                                                    color:
+                                                                        currentRating <= (oYesFCStarFormData[x[0]]) ? "#ffc107" : "#e4e5e9",
+                                                                }}>
                                                         &#9733;
                                                     </span>
-                                                    </label>
-                                                );
-                                            })}
-                                        </div>
-                                        {
-                                            oYesFCStarFormData[x[0]] ?
-                                                <span className={classes.starDetailSpan}>
+                                                        </label>
+                                                    );
+                                                })}
+                                            </div>
+                                            {
+                                                oYesFCStarFormData[x[0]] ?
+                                                    <span className={classes.starDetailSpan}>
                                                 Your rating to {x[0] + ' is ' + oYesFCStarFormData[x[0]] + '.'}</span>
-                                                :
-                                                <span className={classes.starDetailSpan}>
+                                                    :
+                                                    <span className={classes.starDetailSpan}>
                                                 Rate {x[0]}.
                                             </span>
-                                        }
-                                        {
-                                            Object.values(TeamMembers).map(x => x.name).includes(x[0]) &&
+                                            }
+                                            {
+                                                Object.values(TeamMembers).map(x => x.name).includes(x[0]) &&
                                                 (ratedPeople?.includes(x[0]) ?
-                                                <span className={classes.starDetailSpan}>
+                                                    <span className={classes.starDetailSpan}>
                                                     {x[0]?.split(' ')[0] + ' added rating to this match.'}
                                                 </span>
-                                                :
-                                                <span className={classes.starDetailSpan}>
+                                                    :
+                                                    <span className={classes.starDetailSpan}>
                                                     {x[0]?.split(' ')[0] + ' did not add rating to this match.'}
                                                 </span>)
-                                        }
-                                    </section>
-                                ))
-                            }
-                            {
-                                starsErrorMessage &&
-                                <section className={classes.starSection}>
-                                    <span className={classes.starsErrorSpan}>
-                                        <ErrorOutlineIcon fontSize={isMobile ? 'medium' : 'large'}
-                                                          className={classes.errorIcon}>
-                                        </ErrorOutlineIcon>
-                                        {starsErrorMessage}
-                                    </span>
-                                </section>
-                            }
-                            <div className={classes.submitButtonDiv}>
-                                <button className={classes.mapsButtons}
-                                        disabled={starsSubmitButton === 'Submitted' || starsSubmitButton === 'Not Available'}
-                                        onClick={submitStars}>{starsSubmitButton}</button>
-                                {isMobile &&
-                                    <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
-                            </div>
-                        </CustomTabPanel>
-                        <CustomTabPanel value={tabValue} index={6}>
-                            {
-                                matchNotes && matchNotes?.map((x, y) => (
-                                    <section key={y} className={classes.notesSection}>
-                                        <span className={classes.noteWriterSpan}>{x[0]}</span>
+                                            }
+                                        </section>
+                                    ))
+                                }
+                                {
+                                    starsErrorMessage &&
+                                    <Alert sx={{borderRadius: '25px', margin: '20px'}}
+                                           variant="filled" severity="error">{starsErrorMessage}</Alert>
+                                }
+                                <div className={classes.submitButtonDiv}>
+                                    <button className={classes.mapsButtons}
+                                            disabled={starsSubmitButton === 'Submitted' || starsSubmitButton === 'Not Available'}
+                                            onClick={submitStars}>{starsSubmitButton}</button>
+                                    {isMobile &&
+                                        <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
+                                </div>
+                            </CustomTabPanel>
+                            <CustomTabPanel value={tabValue} index={6}>
+                                {
+                                    matchNotes && matchNotes?.map((x, y) => (
+                                        <section key={y} className={classes.notesSection}>
+                                            <span className={classes.noteWriterSpan}>{x[0]}</span>
+                                            <Divider sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
+                                            <span className={classes.starSpan}>{x[1]?.note}</span>
+                                        </section>
+                                    ))
+                                }
+                                {
+
+                                    <section className={classes.notesSection}>
+                                        <span className={classes.noteWriterSpan}>{notesTitle}</span>
                                         <Divider sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
-                                        <span className={classes.starSpan}>{x[1]?.note}</span>
+                                        <textarea
+                                            className={classes.noteInputDesign}
+                                            required={true}
+                                            name="note"
+                                            value={noteFormData['note']}
+                                            onChange={handleNoteInputChange}
+                                            maxLength={250}
+                                        />
+
                                     </section>
-                                ))
-                            }
-                            {
-
-                                <section className={classes.notesSection}>
-                                    <span className={classes.noteWriterSpan}>{notesTitle}</span>
-                                    <Divider sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
-                                    <textarea
-                                        className={classes.noteInputDesign}
-                                        required={true}
-                                        name="note"
-                                        value={noteFormData['note']}
-                                        onChange={handleNoteInputChange}
-                                        maxLength={250}
-                                    />
-
-                                </section>
-                            }
-                            {
-                                notesErrorMessage &&
-                                <section className={classes.starSection}>
-                                    <span className={classes.starsErrorSpan}>
-                                        <ErrorOutlineIcon fontSize={isMobile ? 'medium' : 'large'}
-                                                          className={classes.errorIcon}>
-                                        </ErrorOutlineIcon>
-                                        {notesErrorMessage}
-                                    </span>
-                                </section>
-                            }
-                            <div className={classes.submitButtonDiv}>
-                                <button className={classes.mapsButtons} onClick={submitNote}>
-                                    Submit
-                                </button>
-                                {isMobile && <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
-                            </div>
-                        </CustomTabPanel>
-                    </>
-                }
-            </div>}
-            {isAddMatchPopupOpen && <AddMatchComponent openMessage={() => setMessagePopupOpen(true)}
-                                                       onClose={() => setAddMatchPopupOpen(false)}
-                                                       messageData={(messageData) => handleMessageClick(messageData)}
+                                }
+                                {
+                                    notesErrorMessage &&
+                                    <Alert sx={{borderRadius: '25px', margin: '20px'}}
+                                           variant="filled" severity="error">{notesErrorMessage}</Alert>
+                                }
+                                <div className={classes.submitButtonDiv}>
+                                    <button className={classes.mapsButtons} onClick={submitNote}>
+                                        Submit
+                                    </button>
+                                    {isMobile &&
+                                        <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
+                                </div>
+                            </CustomTabPanel>
+                        </>
+                    }
+                </div>}
+            {isAddMatchPopupOpen && <AddMatchComponent onClose={() => setAddMatchPopupOpen(false)}
+                                                       snackbarData={(snackbarData) => handleMessageClick(snackbarData)}
                                                        databaseData={data} selectedMatchData={matchDetailsData}/>}
-            {isMessagePopupOpen && <Message messageData={messageData} onClose={() => setMessagePopupOpen(false)} reloadData={handleReload}/>}
-            {isPlayerPopupOpen &&
-                <PlayerDetails data={data}
-                               onClose={() => setPlayerPopupOpen(false)} player={player}
-                               credentials={credentials} allData={allData} reloadData={handleReload}/>}
+            {isPlayerPopupOpen && <PlayerDetails data={data}
+                                                 onClose={() => setPlayerPopupOpen(false)} player={player}
+                                                 credentials={credentials} allData={allData}
+                                                 reloadData={handleReload}/>}
+            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
+                <Alert
+                    onClose={closeSnackbar}
+                    severity={snackbarData?.status}
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    {snackbarData?.message}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

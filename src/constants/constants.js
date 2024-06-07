@@ -24,7 +24,8 @@ export const Facilities = [
         xAppleLocation: `VALUE=URI;X-APPLE-RADIUS=70.67126169878655;X
  -APPLE-REFERENCEFRAME=1;X-TITLE=340. Sk.\\\\n16235 Bursa\\\\nNilüfer Türkiye
  :geo:40.221585,28.908668`,
-        calendarLocation: '340. Sk.\\n16235 Bursa\\nNilüfer Türkiye'
+        calendarLocation: '340. Sk.\\n16235 Bursa\\nNilüfer Türkiye',
+        phoneNumber: '0 (224) 413 21 22',
     },
     {
         name: 'Sandalcı',
@@ -37,7 +38,8 @@ export const Facilities = [
  TZADAaIfKwixl/nw/5zWsp8BGh4KFFNhbmRhbGPEsSBIYWzEsSBTYWhhEAAqAnRyQAA=;X-A
  PPLE-RADIUS=141.1748852422124;X-APPLE-REFERENCEFRAME=1;X-TITLE="Sandalcı
   Halı Saha\\nNilüfer Bursa, Türkiye":geo:40.213231,28.928199`,
-        calendarLocation: 'Sandalcı Halı Saha\\nNilüfer Bursa\\, Türkiye'
+        calendarLocation: 'Sandalcı Halı Saha\\nNilüfer Bursa\\, Türkiye',
+        phoneNumber: '0 (224) 443 06 43',
     },
     {
         name: 'Hüdavendigar',
@@ -55,7 +57,8 @@ export const Facilities = [
  ndigar Parkı İçi Yolu, 16060 Osmangazi Bursa, Türkiye":geo:40.200231,29.
  002541`,
         calendarLocation: 'Korkut Halı Saha\\nHüdavendigar Parkı İçi Yolu\\, 16060 Osmangazi\n' +
-            '  Bursa\\, Türkiye'
+            '  Bursa\\, Türkiye',
+        phoneNumber: '0 (535) 014 16 61',
     },
     {
         name: 'Galatasaray Özlüce',
@@ -72,7 +75,8 @@ export const Facilities = [
  tSGzcvdhSiQAwE=;X-APPLE-RADIUS=70.58732581279331;X-APPLE-REFERENCEFRAME=
  1;X-TITLE=Levent Sk. 6\\\\n16250 Bursa\\\\nNilüfer Türkiye:geo:40.248882,28.
  907300`,
-        calendarLocation: 'Levent Sk. 6\\n16250 Bursa\\nNilüfer Türkiye'
+        calendarLocation: 'Levent Sk. 6\\n16250 Bursa\\nNilüfer Türkiye',
+        phoneNumber: '0 (532) 787 56 36',
     },
     {
         name: 'Vitamin',
@@ -87,7 +91,8 @@ export const Facilities = [
  y4DY26+Ug+sBGhwKElZpdGFtaW4gSGFsxLEgU2FoYRAAKgJ0ckAA;X-APPLE-RADIUS=141.
  1748851649402;X-APPLE-REFERENCEFRAME=1;X-TITLE="Vitamin Halı Saha\\n46. S
  k. 1–29, 16270 Nilüfer Bursa, Türkiye":geo:40.208569,28.938554`,
-        calendarLocation: 'Vitamin Halı Saha\\n46. Sk. 1–29\\, 16270 Nilüfer Bursa\\, Türkiye'
+        calendarLocation: 'Vitamin Halı Saha\\n46. Sk. 1–29\\, 16270 Nilüfer Bursa\\, Türkiye',
+        phoneNumber: '0 (532) 060 48 48',
     },
     {
         name: 'Galatasaray',
@@ -96,7 +101,8 @@ export const Facilities = [
         xAppleLocation: `VALUE=URI;X-APPLE-RADIUS=70.67103202640418;X
  -APPLE-REFERENCEFRAME=1;X-TITLE=Kazım Karabekir/180. Cd. 10\\\\n16265 Burs
  a\\\\nNilüfer Türkiye:geo:40.193414,28.992476`,
-        calendarLocation: 'Kazım Karabekir/180. Cd. 10\\n16265 Bursa\\nNilüfer Türkiye'
+        calendarLocation: 'Kazım Karabekir/180. Cd. 10\\n16265 Bursa\\nNilüfer Türkiye',
+        phoneNumber: '0 (224) 452 82 82',
     },
     {
         name: 'Dikkaldırım',
@@ -114,7 +120,8 @@ export const Facilities = [
  ırım Spor Tesisleri\\n3. Nilüfer Cd. 3, 16060 Osmangazi Bursa, Türkiye":g
  eo:40.195992,28.998150`,
         calendarLocation: 'Hüdavendigar Dikkaldırım Spor Tesisleri\\n3. Nilüfer Cd. 3\\, 160\n' +
-            ' 60 Osmangazi Bursa\\, Türkiye'
+            ' 60 Osmangazi Bursa\\, Türkiye',
+        phoneNumber: '0 (543) 733 16 16',
     },
     {
         name: 'Jimer',
@@ -131,7 +138,8 @@ export const Facilities = [
   Saha\\nMihraplı Cd. 10A, 16265 Nilüfer Bursa, Türkiye":geo:40.206087,28.
  994256`,
         calendarLocation: 'Wembley Halı Saha\\nMihraplı Cd. 10A\\, 16265 Nilüfer Bursa\\, Tür\n' +
-            ' kiye'
+            ' kiye',
+        phoneNumber: '0 (224) 451 30 19',
     },
     {
         name: 'Şükrü Şankaya',
@@ -145,7 +153,8 @@ export const Facilities = [
  ACoCdHJAAA==;X-APPLE-RADIUS=141.1748853250835;X-APPLE-REFERENCEFRAME=1;X
  -TITLE="Şükrü Şankaya Halısaha\\nNilüfer Bursa, Türkiye":geo:40.218131,28
  .889067`,
-        calendarLocation: 'Şükrü Şankaya Halısaha\\nNilüfer Bursa\\, Türkiye'
+        calendarLocation: 'Şükrü Şankaya Halısaha\\nNilüfer Bursa\\, Türkiye',
+        phoneNumber: '0 (533) 349 35 76',
     },
     {
         name: 'Karafatma',
@@ -162,7 +171,8 @@ export const Facilities = [
  SAS Beşevler Spor Tesisi\\nBilginler Cd. 81, 16265 Nilüfer Bursa, Türkiye
  ":geo:40.206893,28.972391`,
         calendarLocation: 'ESAS Beşevler Spor Tesisi\\nBilginler Cd. 81\\, 16265 Nilüfer Bur\n' +
-            ' sa\\, Türkiye'
+            ' sa\\, Türkiye',
+        phoneNumber: '0 (530) 237 15 92',
     },
     {
         name: 'Özlüce Timsaha',
@@ -177,7 +187,8 @@ export const Facilities = [
  aW1zYWhhIMOWemzDvGNlEAAqAnRyQAA=;X-APPLE-RADIUS=141.1748852639307;X-APPL
  E-REFERENCEFRAME=1;X-TITLE="Timsaha Özlüce\\nEmek Sk. 13, 16235 Nilüfer B
  ursa, Türkiye":geo:40.214641,28.917137`,
-        calendarLocation: 'Timsaha Özlüce\\nEmek Sk. 13\\, 16235 Nilüfer Bursa\\, Türkiye'
+        calendarLocation: 'Timsaha Özlüce\\nEmek Sk. 13\\, 16235 Nilüfer Bursa\\, Türkiye',
+        phoneNumber: '0 (224) 413 44 88',
     },
     {
         name: 'Fenerbahçe',
@@ -194,7 +205,8 @@ export const Facilities = [
  LE="Bursa Fenerbahçe Futbol Okulu\\nOdunluk Cd. 4, 16265 Nilüfer Bursa, T
  ürkiye":geo:40.203698,28.996648`,
         calendarLocation: 'Bursa Fenerbahçe Futbol Okulu\\nOdunluk Cd. 4\\, 16265 Nilüfer Bu\n' +
-            ' rsa\\, Türkiye'
+            ' rsa\\, Türkiye',
+        phoneNumber: '0 (224) 451 95 95',
     },
     {
         name: 'Trabzonspor',
@@ -211,7 +223,8 @@ export const Facilities = [
   Halısaha\\n3. Nilüfer Cd. 3, 16060 Osmangazi Bursa, Türkiye":geo:40.1954
  13,28.997244`,
         calendarLocation: 'Mihraplı Halısaha\\n3. Nilüfer Cd. 3\\, 16060 Osmangazi Bursa\\, T\n' +
-            ' ürkiye'
+            ' ürkiye',
+        phoneNumber: '0 (530) 325 05 59',
     },
     {
         name: 'Asya',
@@ -229,7 +242,8 @@ export const Facilities = [
  NCEFRAME=1;X-TITLE="Oyun Engel Tanımaz Parkı\\nOyun Engel Tanımaz Parkı İ
  çi Yolu, 16200 Nilüfer Bursa, Türkiye":geo:40.216971,28.988647`,
         calendarLocation: 'Oyun Engel Tanımaz Parkı\\nOyun Engel Tanımaz Parkı İçi Yolu\\, 1\n' +
-            ' 6200 Nilüfer Bursa\\, Türkiye'
+            ' 6200 Nilüfer Bursa\\, Türkiye',
+        phoneNumber: '0 (532) 111 27 92',
     },
     {
         name: 'Olimpik',
@@ -246,7 +260,8 @@ export const Facilities = [
  pik Marmara Halı Saha\\nMudanya Cd. 158, 16940 Mudanya Bursa, Türkiye":ge
  o:40.308404,28.937733`,
         calendarLocation: 'Olimpik Marmara Halı Saha\\nMudanya Cd. 158\\, 16940 Mudanya Burs\n' +
-            ' a\\, Türkiye'
+            ' a\\, Türkiye',
+        phoneNumber: '0 (224) 244 86 97',
     },
     {
         name: 'Soğukkuyu',
@@ -264,7 +279,8 @@ export const Facilities = [
  or Tesisi\\nSoğukkuyu Cd. 11, 16160 Osmangazi Bursa, Türkiye":geo:40.2139
  74,29.009026`,
         calendarLocation: 'Soğukkuyu Kamil Saker Spor Tesisi\\nSoğukkuyu Cd. 11\\, 16160 Osm\n' +
-            ' angazi Bursa\\, Türkiye'
+            ' angazi Bursa\\, Türkiye',
+        phoneNumber: '0 (224) 240 17 07',
     },
     {
         name: 'Çamlıca',
@@ -281,7 +297,8 @@ export const Facilities = [
  -TITLE="Çamlıca Halı Saha Tesisleri\\nZafer Cd. 67/1, 16260 Nilüfer Bursa
  , Türkiye":geo:40.191603,28.979154`,
         calendarLocation: 'Çamlıca Halı Saha Tesisleri\\nZafer Cd. 67/1\\, 16260 Nilüfer Bur\n' +
-            ' sa\\, Türkiye'
+            ' sa\\, Türkiye',
+        phoneNumber: '0 (546) 496 06 16',
     },
     {
         name: 'Mudanya Timsaha',
@@ -296,7 +313,8 @@ export const Facilities = [
  /5yuARoRCgdUaW1zYWhhEAAqAnRyQAA=;X-APPLE-RADIUS=141.1748865399541;X-APPL
  E-REFERENCEFRAME=1;X-TITLE="Timsaha\\nMudanya Cd. 56, 16940 Mudanya Bursa
  , Türkiye":geo:40.291506,28.937752`,
-        calendarLocation: 'Timsaha\\nMudanya Cd. 56\\, 16940 Mudanya Bursa\\, Türkiye'
+        calendarLocation: 'Timsaha\\nMudanya Cd. 56\\, 16940 Mudanya Bursa\\, Türkiye',
+        phoneNumber: '0 (224) 244 99 44',
     },
     {
         name: 'Kültürpark Timsaha',
@@ -306,7 +324,8 @@ export const Facilities = [
  -APPLE-REFERENCEFRAME=0;X-TITLE="Altın Ceylan Timsaha\\nDoktor Rüştü Burl
  u Cd. 10, 16150 Osmangazi Bursa, Türkiye":geo:40.198045,29.041083`,
         calendarLocation: 'Altın Ceylan Timsaha\\nDoktor Rüştü Burlu Cd. 10\\, 16150 Osmanga\n' +
-            ' zi Bursa\\, Türkiye'
+            ' zi Bursa\\, Türkiye',
+        phoneNumber: '0 (544) 534 16 16',
     },
     {
         name: 'Park Akademi',
@@ -315,7 +334,8 @@ export const Facilities = [
         xAppleLocation: `VALUE=URI;X-APPLE-RADIUS=70.67110259352592;X
  -APPLE-REFERENCEFRAME=1;X-TITLE=Hüdavendigar Parkı İçi Yolu\\\\n16265 Burs
  a\\\\nNilüfer Türkiye:geo:40.202070,28.998182`,
-        calendarLocation: 'Hüdavendigar Parkı İçi Yolu\\n16265 Bursa\\nNilüfer Türkiye'
+        calendarLocation: 'Hüdavendigar Parkı İçi Yolu\\n16265 Bursa\\nNilüfer Türkiye',
+        phoneNumber: '0 (534) 529 34 16',
     },
     {
         name: 'Çalı',
@@ -331,7 +351,8 @@ export const Facilities = [
  846706665;X-APPLE-REFERENCEFRAME=1;X-TITLE="Egemen Spor Tesisleri\\nKanal
   Cd. 9, 16275 Nilüfer Bursa, Türkiye":geo:40.178750,28.921795`,
         calendarLocation: 'Egemen Spor Tesisleri\\nKanal Cd. 9\\, 16275 Nilüfer Bursa\\, Türk\n' +
-            ' iye'
+            ' iye',
+        phoneNumber: '0 (541) 281 30 19',
     },
     {
         name: 'Görükle',
@@ -347,7 +368,8 @@ export const Facilities = [
  IUS=141.1748853320861;X-APPLE-REFERENCEFRAME=1;X-TITLE="Görükle Oruç Are
  na\\nTercan Sk. 2A, 16240 Nilüfer Bursa, Türkiye":geo:40.218530,28.845183`,
         calendarLocation: 'Görükle Oruç Arena\\nTercan Sk. 2A\\, 16240 Nilüfer Bursa\\, Türki\n' +
-            ' ye'
+            ' ye',
+        phoneNumber: '0 (532) 135 12 92',
     },
     {
         name: 'Hürriyet',
@@ -364,7 +386,8 @@ export const Facilities = [
  1;X-TITLE="Hurriyet Spor Tesisleri\\n1. Adalet Cd. 44, 16160 Osmangazi Bu
  rsa, Türkiye":geo:40.226198,29.003050`,
         calendarLocation: 'Hurriyet Spor Tesisleri\\n1. Adalet Cd. 44\\, 16160 Osmangazi Bur\n' +
-            ' sa\\, Türkiye'
+            ' sa\\, Türkiye',
+        phoneNumber: '0 (537) 831 03 01',
     },
     {
         name: 'Ziraat',
@@ -381,7 +404,8 @@ export const Facilities = [
  APPLE-REFERENCEFRAME=1;X-TITLE="Yeni Karaman Spor Tesisleri\\n1. İhsaniye
   Cd. 7, 16160 Osmangazi Bursa, Türkiye":geo:40.227952,28.990638`,
         calendarLocation: 'Yeni Karaman Spor Tesisleri\\n1. İhsaniye Cd. 7\\, 16160 Osmangaz\n' +
-            ' i Bursa\\, Türkiye'
+            ' i Bursa\\, Türkiye',
+        phoneNumber: '0 (224) 240 22 78',
     },
     {
         name: 'Fethiye',
@@ -398,7 +422,8 @@ export const Facilities = [
  LE="Fethiye Spor Kompleksi\\nTop Sahası Cd. 15/1, 16210 Nilüfer Bursa, Tü
  rkiye":geo:40.235316,28.973685`,
         calendarLocation: 'Fethiye Spor Kompleksi\\nTop Sahası Cd. 15/1\\, 16210 Nilüfer Bur\n' +
-            ' sa\\, Türkiye'
+            ' sa\\, Türkiye',
+        phoneNumber: '0 (538) 213 16 16',
     },
 ]
 
@@ -431,3 +456,19 @@ export const openWeatherType = {
     forecast: 'forecast',
     weather: 'weather',
 };
+
+export const SnackbarTypes = {
+    success: 'success',
+    info: 'info',
+    warning: 'warning',
+    error: 'error'
+}
+
+export const SnackbarMessages = {
+    permission_denied: 'PERMISSION_DENIED: Permission denied',
+    successfully_updated: 'Match successfully updated.',
+    successfully_added: 'Match successfully added.',
+    error_occurred: 'An error occurred!',
+    invalid_credentials: 'Firebase: Error (auth/invalid-login-credentials).',
+    invalid_email_password: 'Invalid email or password!'
+}

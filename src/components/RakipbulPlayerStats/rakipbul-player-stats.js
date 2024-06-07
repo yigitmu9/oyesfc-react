@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from "./rakipbul-player-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Bar} from "react-chartjs-2";
 import {
-    FormControl,
+    Alert,
+    FormControl, Snackbar,
     Table,
     TableBody,
     TableCell,
@@ -12,7 +13,7 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
-import {TeamMembers} from "../../constants/constants";
+import {SnackbarTypes, TeamMembers} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
 import facilitiesStatsClasses from "../FacilitiesStats/facilities-stats.module.css";
@@ -22,6 +23,7 @@ const RakipbulPlayerStats = () => {
 
     const [match, setMatch] = React.useState('Total of All Matches');
     const [rakipbulData, setRakipbulData] = React.useState(null);
+    const [snackbarData, setSnackbarData] = useState(null);
     let rakipbulRivals = [];
 
     useEffect(() => {
@@ -33,7 +35,13 @@ const RakipbulPlayerStats = () => {
             const response = await loadWebsite(`rakipbul`);
             setRakipbulData(response)
         } catch (error) {
-            console.log(error)
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            setSnackbarData(errorResponse)
         }
     }
 
@@ -74,6 +82,13 @@ const RakipbulPlayerStats = () => {
             goalPositionData.push(goalPositionRate)
         });
     }
+
+    const closeSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarData(null);
+    };
 
     const chartDatasets = {
         labels: Object.values(TeamMembers).map(x => x.name),
@@ -180,6 +195,16 @@ const RakipbulPlayerStats = () => {
                     </div>
                 </CardContent>
             </Card>
+            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
+                <Alert
+                    onClose={closeSnackbar}
+                    severity={snackbarData?.status}
+                    variant="filled"
+                    sx={{width: '100%'}}
+                >
+                    {snackbarData?.message}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

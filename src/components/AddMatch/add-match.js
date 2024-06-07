@@ -6,7 +6,7 @@ import {
     Facilities,
     FootballRoles,
     Jerseys,
-    openWeatherType,
+    openWeatherType, SnackbarMessages, SnackbarTypes,
     TeamMembers,
     TeamNames,
     WeatherSky
@@ -14,15 +14,17 @@ import {
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoadingPage from "../../pages/loading-page";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
-import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
+import {Alert, FormControlLabel, Radio, RadioGroup} from "@mui/material";
 import {styled} from "@mui/system";
 import {getWeather} from "../../services/service";
 
-const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, selectedMatchData}) => {
+const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchData}) => {
 
     document.body.style.overflow = 'hidden';
     const isMobile = window.innerWidth <= 768;
     const [loading, setLoading] = useState(false);
+    const [warnings, setWarnings] = useState(null);
+    const [weatherButtonStatus, setWeatherButtonStatus] = useState(null);
     const allFacilities = Facilities.map(x => x.name)
 
     let facilities = [];
@@ -56,6 +58,13 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
+    });
+
+    useEffect(() => {
+        if (selectedMatchData) {
+            const formattedDateTime = formatDateTime(selectedMatchData?.day, selectedMatchData?.time)
+            checkWeatherButtons(formattedDateTime)
+        }
     });
 
     const initialOYesFCFormData = {
@@ -106,6 +115,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         if (type === "checkbox" && isRakipbul !== checked) {
             setIsRakipbul(checked);
         }
+        if (name === 'day') checkWeatherButtons(inputValue)
         setFormData((prevData) => ({
             ...prevData,
             [name]: inputValue,
@@ -157,6 +167,7 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
                 ...prevData,
                 [newSquadMember]: {
                     goal: 0,
+                    role: (Object.values(TeamMembers).find(x => x?.name === newSquadMember)?.role || '')
                 },
             }));
             setNewSquadMember('');
@@ -165,10 +176,12 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const unconvertedDay = formData?.day
         finalizeData();
         setDayTime();
         try {
             setLoading(true)
+            checkPayload(formData, unconvertedDay)
             await set(ref(dataBase, `matches/${formData.day}`), formData);
             const calendarData = formData
             setFormData(initialFormData);
@@ -178,23 +191,21 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
             onClose()
             if (!selectedMatchData) await createCalendar(calendarData)
             const messageResponse = {
-                isValid: true,
-                message: selectedMatchData ? 'Match successfully updated.' : 'Match successfully added.'
+                open: true,
+                status: SnackbarTypes.success,
+                message: selectedMatchData ? SnackbarMessages.successfully_updated : SnackbarMessages.successfully_added,
+                duration: 6000
             }
-            messageData(messageResponse)
-            openMessage(true)
+            snackbarData(messageResponse)
         } catch (error) {
-            console.log(error)
-            document.body.style.overflow = 'visible';
-            onClose()
+            setLoading(false)
             const messageResponse = {
-                isValid: false,
-                message: error?.message === 'PERMISSION_DENIED: Permission denied' ?
-                    'This user does not have permission to add match!' :
-                    'An error occurred!'
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
             }
-            messageData(messageResponse)
-            openMessage(true)
+            snackbarData(messageResponse)
         }
     };
 
@@ -240,7 +251,13 @@ const AddMatchComponent = ({onClose, openMessage, messageData, databaseData, sel
         try {
             playerMails = await loadWebsite('firebaseUID');
         } catch (error) {
-            console.log(error)
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            snackbarData(errorResponse)
         }
         let attendees = '';
         if (playerMails) {
@@ -266,6 +283,7 @@ DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d\d\d/g, "")}
 DTSTART:${new Date(Number(year), Number(month) - 1, Number(day), Number(startHour), Number(startMinute)).toISOString().replace(/-|:|\.\d\d\d/g, "")}
 DTEND:${new Date(Number(year), Number(month) - 1, Number(day), Number(endHour), Number(endMinute)).toISOString().replace(/-|:|\.\d\d\d/g, "")}
 SUMMARY:${TeamNames.oYesFc + ' - ' + calendarData?.rival?.name}
+DESCRIPTION:${'Call ' + calendarData?.place + ' Facility: '+ Facilities.find(x => x.name === calendarData?.place)?.phoneNumber}
 URL;VALUE=URI:https://yigitmu9.github.io/oyesfc-react/
 LOCATION:${Facilities.find(x => x.name === calendarData?.place).calendarLocation}
 X-APPLE-STRUCTURED-LOCATION;${Facilities?.find(x => x?.name === calendarData?.place)?.xAppleLocation}
@@ -362,6 +380,80 @@ END:VCALENDAR`;
             }
 
     }
+
+    const checkWeatherButtons = (dateTimeValue) => {
+        const endDate = new Date(dateTimeValue)
+        const startDate = new Date();
+        const timeDifference = endDate.getTime() - startDate.getTime();
+        const hourDifference = timeDifference / (1000 * 3600);
+        let buttonState;
+        if (hourDifference > 120) {
+            buttonState = {
+                button: null,
+                warning: 'Match date is more than 5 days away, try again later.'
+            }
+        } else if (hourDifference <= 120 && hourDifference > 1) {
+            buttonState = {
+                button: 'forecast',
+                warning: 'The match date is within 5 days, the weather forecast for the selected time can be viewed.'
+            }
+        } else if (hourDifference <= 1 && hourDifference >= -1) {
+            buttonState = {
+                button: 'current',
+                warning: 'Match time is near, current weather conditions can be checked.'
+            }
+        } else {
+            buttonState = {
+                button: null,
+                warning: 'At least 1 hour past match time, weather forecast cannot be checked.'
+            }
+        }
+        setWeatherButtonStatus(buttonState)
+    };
+
+    const checkPayload = (payload, unconvertedDay) => {
+        let errorMessages = [];
+        if (!payload?.oyesfc?.jersey || payload?.oyesfc?.jersey === '' || payload?.oyesfc?.jersey === 'Select Jersey')  {
+            const message = 'Select JERSEY!'
+            errorMessages.push(message)
+        }
+        if (!payload?.rival?.name || payload?.rival?.name === '' || payload?.rival?.name === 'Select Rival')  {
+            const message = 'Select RIVAL!'
+            errorMessages.push(message)
+        }
+        if (!payload?.place || payload?.place === '' || payload?.place === 'Select Facility')  {
+            const message = 'Select FACILITY!'
+            errorMessages.push(message)
+        }
+        if (Object.keys(payload?.oyesfc?.squad)?.length > 0)  {
+            Object.entries(payload?.oyesfc?.squad)?.forEach(x => {
+                if (!(x[1]?.goal >= 0)) {
+                    const message = `${x[0]} missing GOAL value!`
+                    errorMessages.push(message)
+                }
+                if (!x[1]?.role || x[1]?.role === 'Select Role'|| x[1]?.role === '') {
+                    const message = `${x[0]} missing ROLE value!`
+                    errorMessages.push(message)
+                }
+            })
+            let totalGoal = 0;
+            Object.values(payload?.oyesfc?.squad)?.forEach(x => {
+                totalGoal += x?.goal
+            })
+            if (payload?.oyesfc?.goal !== totalGoal) {
+                const message = `The total number of goals of the players is not equal with the team goal!`
+                errorMessages.push(message)
+            }
+        } else {
+            const message = 'There is no one in the SQUAD!'
+            errorMessages.push(message)
+        }
+        if (errorMessages?.length > 0) {
+            formData.day = unconvertedDay
+            setWarnings(errorMessages)
+            throw new Error('There are missing data in this form, please check the warnings!');
+        }
+    };
 
     const BpIcon = styled('span')(({ theme }) => ({
         borderRadius: '50%',
@@ -532,23 +624,39 @@ END:VCALENDAR`;
                             <br/>
                             <label style={{background: "#1f1f1f"}}>
                                 Get Weather from Api:
-                                <div className={classes.weatherButtonDiv}>
-                                    <div className={matchDetailsClasses.mapsButtons} onClick={() => handleGetOpenWeather(openWeatherType.weather)}>
-                                        Current
+                                {
+                                    weatherButtonStatus?.button &&
+                                    <div className={classes.weatherButtonDiv}>
+                                        {
+                                            weatherButtonStatus?.button === 'current' &&
+                                            <div className={matchDetailsClasses.mapsButtons}
+                                                 onClick={() => handleGetOpenWeather(openWeatherType.weather)}>
+                                                Current
+                                            </div>
+                                        }
+                                        {
+                                            weatherButtonStatus?.button === 'forecast' &&
+                                            <div className={matchDetailsClasses.mapsButtons}
+                                                 onClick={() => handleGetOpenWeather(openWeatherType.forecast)}>
+                                                Selected Date
+                                            </div>
+                                        }
                                     </div>
-                                    <div className={matchDetailsClasses.mapsButtons} onClick={() => handleGetOpenWeather(openWeatherType.forecast)}>
-                                        Selected Date
-                                    </div>
-                                </div>
+                                }
                             </label>
                             <br/>
+                            {
+                                weatherButtonStatus?.warning &&
+                                <Alert sx={{bgcolor: 'transparent', color: 'lightgray', padding: 0, marginBottom: '20px'}}
+                                       variant="standard" severity="info">{weatherButtonStatus?.warning}</Alert>
+                            }
                             <>
                                 <label style={{background: "#1f1f1f"}}>
                                     Weather: {weatherFormData?.weather}
                                 </label>
                                 <br/>
                                 <label style={{background: "#1f1f1f"}}>
-                                    Temperature: {weatherFormData?.temperature}&#176;
+                                Temperature: {weatherFormData?.temperature}&#176;
                                 </label>
                                 <br/>
                                 <label style={{background: "#1f1f1f"}}>
@@ -685,6 +793,14 @@ END:VCALENDAR`;
                             <br/>
                         </div>
                     </div>
+                    {
+                        warnings &&
+                        warnings?.map((x, y) => (
+                            <Alert key={y} sx={{bgcolor: 'transparent', color: '#ed6c02', padding: 0, marginBottom: '20px'}}
+                                   variant="standard" severity="warning">{x}</Alert>
+                        ))
+
+                    }
                     <div className={classes.matchSubmitButtonDiv}>
                         <button className={matchDetailsClasses.mapsButtons} style={{marginRight: "1rem"}} type="submit">Submit
                         </button>
