@@ -6,7 +6,9 @@ import {
     Facilities,
     FootballRoles,
     Jerseys,
-    openWeatherType, SnackbarMessages, SnackbarTypes,
+    openWeatherType,
+    SnackbarMessages,
+    SnackbarTypes,
     TeamMembers,
     TeamNames,
     WeatherSky
@@ -174,6 +176,18 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
         }
     };
 
+    const sendWhatsAppNotificationToSquadMembers = (data) => {
+        const dateStr = data?.day;
+        const [day, month, year] = dateStr.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        const dayName = new Intl.DateTimeFormat('tr-TR', { weekday: 'long' }).format(date);
+        const monthName = new Intl.DateTimeFormat('tr-TR', { month: 'long' }).format(date);
+        const formattedDate = `${day}%20${monthName}%20${dayName}`;
+        const encodedNames = Object.keys(data?.oyesfc?.squad)?.map(name => name.replace(/ /g, '%20'));
+        const resultString = encodedNames.join('-');
+        window.location.href = `shortcuts://run-shortcut?name=O%20Yes%20FC%20WhatsApp%20Notification&input=text&text=${resultString}/${formattedDate}-${data?.time?.split('-')[0]}-${data?.rival?.name}-${data?.place?.replace(/ /g, '%20')}`;
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const unconvertedDay = formData?.day
@@ -197,6 +211,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
                 duration: 6000
             }
             snackbarData(messageResponse)
+            if (!selectedMatchData) sendWhatsAppNotificationToSquadMembers(calendarData)
         } catch (error) {
             setLoading(false)
             const messageResponse = {
