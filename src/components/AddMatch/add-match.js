@@ -203,7 +203,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
             document.body.style.overflow = 'visible';
             setLoading(false)
             onClose()
-            if (!selectedMatchData) await createCalendar(calendarData)
+            //if (!selectedMatchData) await createCalendar(calendarData)
             const messageResponse = {
                 open: true,
                 status: SnackbarTypes.success,
