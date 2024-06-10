@@ -19,6 +19,7 @@ import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import {Alert, FormControlLabel, Radio, RadioGroup} from "@mui/material";
 import {styled} from "@mui/system";
 import {getWeather} from "../../services/service";
+import * as emailjs from "@emailjs/browser";
 
 const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchData}) => {
 
@@ -177,15 +178,18 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
     };
 
     const sendWhatsAppNotificationToSquadMembers = (data) => {
-        const dateStr = data?.day;
-        const [day, month, year] = dateStr.split('-').map(Number);
-        const date = new Date(year, month - 1, day);
-        const dayName = new Intl.DateTimeFormat('tr-TR', { weekday: 'long' }).format(date);
-        const monthName = new Intl.DateTimeFormat('tr-TR', { month: 'long' }).format(date);
-        const formattedDate = `${day}%20${monthName}%20${dayName}`;
+        const formattedDate = convertMatchDayToString(data?.day)
         const encodedNames = Object.keys(data?.oyesfc?.squad)?.map(name => name.replace(/ /g, '%20'));
         const resultString = encodedNames.join('-');
         window.location.href = `shortcuts://run-shortcut?name=O%20Yes%20FC%20WhatsApp%20Notification&input=text&text=${resultString}/${formattedDate}-${data?.time?.split('-')[0]}-${data?.rival?.name}-${data?.place?.replace(/ /g, '%20')}`;
+    }
+
+    const convertMatchDayToString = (matchDate) => {
+        const [day, month, year] = matchDate.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        const dayName = new Intl.DateTimeFormat('tr-TR', { weekday: 'long' }).format(date);
+        const monthName = new Intl.DateTimeFormat('tr-TR', { month: 'long' }).format(date);
+        return `${day}%20${monthName}%20${dayName}`;
     }
 
     const handleSubmit = async (event) => {
@@ -203,7 +207,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
             document.body.style.overflow = 'visible';
             setLoading(false)
             onClose()
-            //if (!selectedMatchData) await createCalendar(calendarData)
+            if (!selectedMatchData) await createCalendar(calendarData)
             const messageResponse = {
                 open: true,
                 status: SnackbarTypes.success,
@@ -211,7 +215,9 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
                 duration: 6000
             }
             snackbarData(messageResponse)
-            if (!selectedMatchData) sendWhatsAppNotificationToSquadMembers(calendarData)
+            if (!selectedMatchData) {
+                setTimeout(() => sendWhatsAppNotificationToSquadMembers(calendarData), 5000)
+            }
         } catch (error) {
             setLoading(false)
             const messageResponse = {
@@ -276,6 +282,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
         }
         let attendees = '';
         if (playerMails) {
+            sendEmails(playerMails, calendarData)
             const mails = Object.entries(playerMails?.mail).filter(a => Object.keys(calendarData?.oyesfc?.squad)?.includes(a[0]))
             for (let i = 0; i < mails.length; i++) {
                 if (mails[i][0] === TeamMembers.yigit.name) {
@@ -316,6 +323,50 @@ END:VCALENDAR`;
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    };
+
+    const sendEmails = (playerMails, calendarData) => {
+        const formattedDate = convertMatchDayToString(calendarData?.day)
+        const emailList = Object.entries(playerMails?.mail).filter(a => Object.keys(calendarData?.oyesfc?.squad)?.includes(a[0]))
+        let players = ''
+        const squadList = Object.keys(calendarData?.oyesfc?.squad)
+        for (let i = 0; i < squadList.length; i++) {
+            players += `${squadList[i]}\n`;
+        }
+        const messageContent = `Gün: ${formattedDate?.replace(/%20/g, ' ')}
+
+Saat: ${calendarData?.time}
+
+Rakip: ${calendarData?.rival?.name}
+
+Konum: ${calendarData?.place}
+
+Kadro:
+${players}
+Apple Maps: ${Facilities?.find(x => x?.name === calendarData?.place)?.appleUrl}
+
+Google Maps: ${Facilities?.find(x => x?.name === calendarData?.place)?.googleUrl}
+
+Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
+        emailjs.init({
+            publicKey: playerMails?.emailJS?.publicKey,
+        });
+        emailList.forEach((item) => {
+            emailjs.send(playerMails?.emailJS?.serviceID, playerMails?.emailJS?.templateID, {
+                to_email: item[1],
+                message: messageContent,
+                to_name: item[0]
+            }).catch((error) => {
+                console.log(error);
+                const errorResponse = {
+                    open: true,
+                    status: SnackbarTypes.error,
+                    message: error,
+                    duration: 18000
+                }
+                snackbarData(errorResponse)
+            });
+        });
     };
 
     const getGeoCoordinates = () => {
