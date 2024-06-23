@@ -40,6 +40,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
     const [calendarButtonLoading, setCalendarButtonLoading] = useState(false);
     const [emailJsButtonLoading, setEmailJsButtonLoading] = useState(false);
     const [siriShortcutButtonLoading, setSiriShortcutButtonLoading] = useState(false);
+    const [weatherButtonLoading, setWeatherButtonLoading] = useState(false);
     const [warnings, setWarnings] = useState(null);
     const [finalErrors, setFinalErrors] = useState([]);
     const [finalSuccesses, setFinalSuccesses] = useState([]);
@@ -488,6 +489,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
     }
 
     const handleGetOpenWeather = async (type) => {
+        setWeatherButtonLoading(true)
         if (formData?.day && formData?.place) {
             const endDate = new Date(formData?.day);
             const startDate = new Date();
@@ -548,7 +550,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                 }));
             }
         }
-
+        setWeatherButtonLoading(false)
     }
 
     const checkWeatherButtons = (dateTimeValue) => {
@@ -918,14 +920,24 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                             weatherButtonStatus?.button === 'current' &&
                                             <div className={matchDetailsClasses.mapsButtons}
                                                  onClick={() => handleGetOpenWeather(openWeatherType.weather)}>
-                                                Current
+                                                {
+                                                    weatherButtonLoading ?
+                                                        <PulseLoader color="red" speedMultiplier={0.7}/>
+                                                        :
+                                                        <span>Current</span>
+                                                }
                                             </div>
                                         }
                                         {
                                             weatherButtonStatus?.button === 'forecast' &&
                                             <div className={matchDetailsClasses.mapsButtons}
                                                  onClick={() => handleGetOpenWeather(openWeatherType.forecast)}>
-                                                Selected Date
+                                                {
+                                                    weatherButtonLoading ?
+                                                        <PulseLoader color="red" speedMultiplier={0.7}/>
+                                                        :
+                                                        <span>Selected Date</span>
+                                                }
                                             </div>
                                         }
                                     </div>
