@@ -232,6 +232,17 @@ label {
     }
 }
 
+.completeProcessTitle {
+    background-color: #1f1f1f;
+    font-size: 50px;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 10px 20px;
+    @media (max-width: 768px) {
+        font-size: 40px;
+    }
+}
+
 .addPlayerDiv {
     background: #1f1f1f;
     display: flex;
@@ -261,6 +272,16 @@ label {
     justify-content: center;
 }
 
+.matchSubmitModalDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
 .addPlayerButtonDiv {
     width: 60px;
 }
@@ -269,4 +290,8 @@ label {
     display: flex;
     width: 300px;
     margin-top: 10px;
+}
+
+.completeProcessDiv {
+    padding: 20px;
 }

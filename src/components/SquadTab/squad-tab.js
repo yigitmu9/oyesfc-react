@@ -83,14 +83,14 @@ const SquadTab = ({matchDetailsData, squadRatings, openPlayerModal}) => {
             let player;
             if (x[1]?.role !== FootballRoles[0]) {
                 player = {
-                    name: Object.values(TeamMembers)?.some(item => item?.name === x[0]) ? x[0]?.split(' ')[0] : x[0],
+                    name: (Object.values(TeamMembers)?.some(item => item?.name === x[0]) || !x[0]?.includes('Arkadaşı')) ? x[0]?.split(' ')[0] : x[0],
                     number: Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number ?
                         Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number :
                         Math.floor(Math.random() * (98 - 19 + 1)) + 19
                 }
             } else {
                 player = {
-                    name: Object.values(TeamMembers)?.some(item => item?.name === x[0]) ? x[0]?.split(' ')[0] : x[0],
+                    name: (Object.values(TeamMembers)?.some(item => item?.name === x[0]) || !x[0]?.includes('Arkadaşı')) ? x[0]?.split(' ')[0] : x[0],
                     number: Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number ?
                         Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number :
                         Math.floor(Math.random() * (98 - 19 + 1)) + 19,
@@ -114,14 +114,16 @@ const SquadTab = ({matchDetailsData, squadRatings, openPlayerModal}) => {
             let player;
             if (Object.values(TeamMembers)?.find(member => member?.name === x[0])?.role !== FootballRoles[0]) {
                 player = {
-                    name: Object.values(TeamMembers)?.some(item => item?.name === x[0]) ? x[0]?.split(' ')[0] : x[0],
+                    name: (Object.values(TeamMembers)?.some(item => item?.name === x[0]) || !x[0]?.includes('Arkadaşı'))
+                        ? x[0]?.split(' ')[0] : x[0],
                     number: Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number ?
                         Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number :
                         Math.floor(Math.random() * (98 - 19 + 1)) + 19
                 }
             } else {
                 player = {
-                    name: Object.values(TeamMembers)?.some(item => item?.name === x[0]) ? x[0]?.split(' ')[0] : x[0],
+                    name: (Object.values(TeamMembers)?.some(item => item?.name === x[0]) || !x[0]?.includes('Arkadaşı'))
+                        ? x[0]?.split(' ')[0] : x[0],
                     number: Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number ?
                         Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number :
                         Math.floor(Math.random() * (98 - 19 + 1)) + 19,

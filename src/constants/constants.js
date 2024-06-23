@@ -472,3 +472,22 @@ export const SnackbarMessages = {
     invalid_credentials: 'Firebase: Error (auth/invalid-login-credentials).',
     invalid_email_password: 'Invalid email or password!'
 }
+
+export const AddMatchMessages = {
+    calendar_create_successful: 'Calendar event created successfully!',
+    calendar_create_failed: 'Failed to create calendar event!',
+    email_sent_to_failed: 'Email could not be sent to ',
+    email_sent_to_successful: 'Email successfully sent to ',
+    email_sent_failed: 'Failed to send emails!',
+    email_sent_successful: 'Email was sent successfully to all players!',
+    siri_shortcut_run_successful: 'Siri shortcut run successfully!',
+    siri_shortcut_run_failed: 'Failed to run siri shortcut!',
+}
+
+export const TurkishJerseys = {
+    'iOS Jersey': 'iOS Forması',
+    'Chelsea Jersey': 'Chelsea Forması',
+    'Wavy Jersey': 'Dalgalı Forma',
+    'Red Jersey': 'Kırmızı Forma',
+    '10th Year Jersey': '10 Yıl Forması',
+}

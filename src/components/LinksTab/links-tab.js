@@ -78,8 +78,6 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
                             <button className={classes.mapsButtons} onClick={redirectToGoogleMaps}>Google
                                 Maps
                             </button>
-                            <button className={classes.mapsButtons} onClick={redirectToGoogleMaps}>Call
-                            </button>
                         </div>
                     </div>
                 </section>

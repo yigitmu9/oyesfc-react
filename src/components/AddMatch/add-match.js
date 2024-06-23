@@ -3,6 +3,7 @@ import classes from "./add-match.module.css";
 import {dataBase, loadWebsite} from "../../firebase";
 import {ref, set} from "firebase/database";
 import {
+    AddMatchMessages,
     Facilities,
     FootballRoles,
     Jerseys,
@@ -10,24 +11,40 @@ import {
     SnackbarMessages,
     SnackbarTypes,
     TeamMembers,
-    TeamNames,
+    TeamNames, TurkishJerseys,
     WeatherSky
 } from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoadingPage from "../../pages/loading-page";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
-import {Alert, FormControlLabel, Radio, RadioGroup} from "@mui/material";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Alert,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+} from "@mui/material";
 import {styled} from "@mui/system";
 import {getWeather} from "../../services/service";
 import * as emailjs from "@emailjs/browser";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {PulseLoader} from "react-spinners";
 
 const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchData}) => {
 
     document.body.style.overflow = 'hidden';
     const isMobile = window.innerWidth <= 768;
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(selectedMatchData ? null : '');
+    const [calendarButtonLoading, setCalendarButtonLoading] = useState(false);
+    const [emailJsButtonLoading, setEmailJsButtonLoading] = useState(false);
+    const [siriShortcutButtonLoading, setSiriShortcutButtonLoading] = useState(false);
     const [warnings, setWarnings] = useState(null);
+    const [finalErrors, setFinalErrors] = useState([]);
+    const [finalSuccesses, setFinalSuccesses] = useState([]);
     const [weatherButtonStatus, setWeatherButtonStatus] = useState(null);
+    const [submittedMatchData, setSubmittedMatchData] = useState(null);
     const allFacilities = Facilities.map(x => x.name)
 
     let facilities = [];
@@ -35,7 +52,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
         if (!facilities.includes(x.place)) {
             facilities.push(x.place)
         }
-    } )
+    })
 
     const [isRakipbul, setIsRakipbul] = useState(false);
     let rivalNames = [];
@@ -43,7 +60,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
         if (!rivalNames.includes(x.rival.name) && x.rakipbul === isRakipbul) {
             rivalNames.push(x.rival.name)
         }
-    } )
+    })
 
     const popupRef = useRef(null);
 
@@ -64,7 +81,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
     });
 
     useEffect(() => {
-        if (selectedMatchData) {
+        if (selectedMatchData && !weatherButtonStatus) {
             const formattedDateTime = formatDateTime(selectedMatchData?.day, selectedMatchData?.time)
             checkWeatherButtons(formattedDateTime)
         }
@@ -143,14 +160,15 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
         }));
     };
 
-    const handleSquadInputChange = (member, event, goal, role) => {
+    const handleSquadInputChange = (member, event, goal, role, description) => {
         const {name, value, type} = event.target;
         const inputValue = type === "number" ? parseInt(value) : value;
         setOYesFCSquadFormData((prevData) => ({
             ...prevData,
             [member]: {
                 'goal': name.includes('goal') ? inputValue : goal,
-                'role': name.includes('role') ? inputValue : role
+                'role': name.includes('role') ? inputValue : role,
+                'description': name.includes('description') ? inputValue : description
             },
         }));
     };
@@ -177,18 +195,42 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
         }
     };
 
-    const sendWhatsAppNotificationToSquadMembers = (data) => {
-        const formattedDate = convertMatchDayToString(data?.day)
-        const encodedNames = Object.keys(data?.oyesfc?.squad)?.map(name => name.replace(/ /g, '%20'));
-        const resultString = encodedNames.join('-');
-        window.location.href = `shortcuts://run-shortcut?name=O%20Yes%20FC%20WhatsApp%20Notification&input=text&text=${resultString}/${formattedDate}-${data?.time?.split('-')[0]}-${data?.rival?.name}-${data?.place?.replace(/ /g, '%20')}`;
+    const sendWhatsAppNotificationToSquadMembers = () => {
+        try {
+            setSiriShortcutButtonLoading(true)
+            const data = submittedMatchData
+            const formattedDate = convertMatchDayToString(data?.day)
+            const encodedNames = Object.keys(data?.oyesfc?.squad)?.map(name => name.replace(/ /g, '%20'));
+            const resultString = encodedNames.join('-');
+            window.location.href = `shortcuts://run-shortcut?name=O%20Yes%20FC%20WhatsApp%20Notification&input=text&text=${resultString}/${formattedDate}-${data?.time?.split('-')[0]}-${data?.rival?.name}-${data?.place?.replace(/ /g, '%20')}-${TurkishJerseys[data?.oyesfc?.jersey]?.replace(/ /g, '%20')}`;
+            const message = AddMatchMessages.siri_shortcut_run_successful
+            setFinalSuccesses((prevData) => ([
+                ...prevData,
+                message
+            ]));
+            setSiriShortcutButtonLoading(false)
+        } catch (error) {
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            snackbarData(errorResponse)
+            const message = AddMatchMessages.siri_shortcut_run_failed
+            setFinalErrors((prevData) => ([
+                ...prevData,
+                message
+            ]));
+            setSiriShortcutButtonLoading(false)
+        }
     }
 
     const convertMatchDayToString = (matchDate) => {
         const [day, month, year] = matchDate.split('-').map(Number);
         const date = new Date(year, month - 1, day);
-        const dayName = new Intl.DateTimeFormat('tr-TR', { weekday: 'long' }).format(date);
-        const monthName = new Intl.DateTimeFormat('tr-TR', { month: 'long' }).format(date);
+        const dayName = new Intl.DateTimeFormat('tr-TR', {weekday: 'long'}).format(date);
+        const monthName = new Intl.DateTimeFormat('tr-TR', {month: 'long'}).format(date);
         return `${day}%20${monthName}%20${dayName}`;
     }
 
@@ -198,16 +240,29 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
         finalizeData();
         setDayTime();
         try {
-            setLoading(true)
             checkPayload(formData, unconvertedDay)
-            await set(ref(dataBase, `matches/${formData.day}`), formData);
-            const calendarData = formData
+            setSubmittedMatchData(formData)
+            if (warnings) setWarnings(null)
+        } catch (error) {
+            const messageResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            snackbarData(messageResponse)
+        }
+    };
+
+    const completeAddMatch = async () => {
+        try {
+            setLoading(true)
+            await set(ref(dataBase, `matches/${submittedMatchData.day}`), submittedMatchData);
             setFormData(initialFormData);
             setNewSquadMember('');
             document.body.style.overflow = 'visible';
             setLoading(false)
             onClose()
-            if (!selectedMatchData) await createCalendar(calendarData)
             const messageResponse = {
                 open: true,
                 status: SnackbarTypes.success,
@@ -215,9 +270,6 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
                 duration: 6000
             }
             snackbarData(messageResponse)
-            if (!selectedMatchData) {
-                setTimeout(() => sendWhatsAppNotificationToSquadMembers(calendarData), 5000)
-            }
         } catch (error) {
             setLoading(false)
             const messageResponse = {
@@ -228,7 +280,7 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
             }
             snackbarData(messageResponse)
         }
-    };
+    }
 
     const setDayTime = () => {
         const [datePart, timePart] = formData.day.split('T');
@@ -254,6 +306,13 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
     }
 
     const finalizeData = () => {
+        for (const key in oYesFCSquadFormData) {
+            if (oYesFCSquadFormData.hasOwnProperty(key)) {
+                if (!oYesFCSquadFormData[key].hasOwnProperty('description') || !oYesFCSquadFormData[key]['description']) {
+                    oYesFCSquadFormData[key]['description'] = "No description";
+                }
+            }
+        }
         oYesFCFormData.squad = oYesFCSquadFormData;
         formData.oyesfc = oYesFCFormData;
         formData.rival = rivalFormData;
@@ -267,45 +326,37 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
         return `${yearStr}-${monthStr}-${dayStr}T${startTime}`;
     }
 
-    const createCalendar = async (calendarData) => {
+    const createCalendar = async () => {
+        setCalendarButtonLoading(true)
         let playerMails;
+        const calendarData = submittedMatchData
         try {
             playerMails = await loadWebsite('firebaseUID');
-        } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            snackbarData(errorResponse)
-        }
-        let attendees = '';
-        if (playerMails) {
-            sendEmails(playerMails, calendarData)
-            const mails = Object.entries(playerMails?.mail).filter(a => Object.keys(calendarData?.oyesfc?.squad)?.includes(a[0]))
-            for (let i = 0; i < mails.length; i++) {
-                if (mails[i][0] === TeamMembers.yigit.name) {
-                    attendees += `ORGANIZER;CN="${mails[i][0]}";EMAIL="${mails[i][1]}":mailto:${mails[i][1]}\n`;
-                    attendees += `ATTENDEE;CN="${mails[i][0]}";CUTYPE=INDIVIDUAL;EMAIL="${mails[i][1]}";PARTSTAT=ACCEPTED:mailto:${mails[i][1]}\n`;
-                } else {
-                    attendees += `ATTENDEE;CN="${mails[i][0]}";CUTYPE=INDIVIDUAL;EMAIL="${mails[i][1]}":mailto:${mails[i][1]}\n`;
+            let attendees = '';
+            if (playerMails) {
+                const mails = Object.entries(playerMails?.mail).filter(a => Object.keys(calendarData?.oyesfc?.squad)?.includes(a[0]))
+                for (let i = 0; i < mails.length; i++) {
+                    if (mails[i][0] === TeamMembers.yigit.name) {
+                        attendees += `ORGANIZER;CN="${mails[i][0]}";EMAIL="${mails[i][1]}":mailto:${mails[i][1]}\n`;
+                        attendees += `ATTENDEE;CN="${mails[i][0]}";CUTYPE=INDIVIDUAL;EMAIL="${mails[i][1]}";PARTSTAT=ACCEPTED:mailto:${mails[i][1]}\n`;
+                    } else {
+                        attendees += `ATTENDEE;CN="${mails[i][0]}";CUTYPE=INDIVIDUAL;EMAIL="${mails[i][1]}":mailto:${mails[i][1]}\n`;
+                    }
                 }
             }
-        }
-        const [day, month, year] = calendarData?.day?.split('-');
-        const [startTime, endTime] = calendarData?.time?.split('-');
-        const [startHour, startMinute] = startTime?.split(':');
-        const [endHour, endMinute] = endTime === '00:00' ? [23, 59] : endTime?.split(':');
+            const [day, month, year] = calendarData?.day?.split('-');
+            const [startTime, endTime] = calendarData?.time?.split('-');
+            const [startHour, startMinute] = startTime?.split(':');
+            const [endHour, endMinute] = endTime === '00:00' ? [23, 59] : endTime?.split(':');
 
-        const icsContent = `BEGIN:VCALENDAR
+            const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
 DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d\d\d/g, "")}
 DTSTART:${new Date(Number(year), Number(month) - 1, Number(day), Number(startHour), Number(startMinute)).toISOString().replace(/-|:|\.\d\d\d/g, "")}
 DTEND:${new Date(Number(year), Number(month) - 1, Number(day), Number(endHour), Number(endMinute)).toISOString().replace(/-|:|\.\d\d\d/g, "")}
 SUMMARY:${TeamNames.oYesFc + ' - ' + calendarData?.rival?.name}
-DESCRIPTION:${'Call ' + calendarData?.place + ' Facility: '+ Facilities.find(x => x.name === calendarData?.place)?.phoneNumber}
+DESCRIPTION:${'Call ' + calendarData?.place + ' Facility: ' + Facilities.find(x => x.name === calendarData?.place)?.phoneNumber}
 URL;VALUE=URI:https://yigitmu9.github.io/oyesfc-react/
 LOCATION:${Facilities.find(x => x.name === calendarData?.place).calendarLocation}
 X-APPLE-STRUCTURED-LOCATION;${Facilities?.find(x => x?.name === calendarData?.place)?.xAppleLocation}
@@ -314,32 +365,60 @@ X-APPLE-CREATOR-TEAM-IDENTITY:0000000000
 ${attendees}END:VEVENT
 END:VCALENDAR`;
 
-        const blob = new Blob([icsContent], {type: 'text/calendar'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'event.ics';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+            const blob = new Blob([icsContent], {type: 'text/calendar'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'event.ics';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            const message = AddMatchMessages.calendar_create_successful
+            setFinalSuccesses((prevData) => ([
+                ...prevData,
+                message
+            ]));
+            setCalendarButtonLoading(false)
+        } catch (error) {
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            snackbarData(errorResponse)
+            const message = AddMatchMessages.calendar_create_failed
+            setFinalErrors((prevData) => [
+                ...prevData,
+                message
+            ]);
+            setCalendarButtonLoading(false)
+        }
     };
 
-    const sendEmails = (playerMails, calendarData) => {
-        const formattedDate = convertMatchDayToString(calendarData?.day)
-        const emailList = Object.entries(playerMails?.mail).filter(a => Object.keys(calendarData?.oyesfc?.squad)?.includes(a[0]))
-        let players = ''
-        const squadList = Object.keys(calendarData?.oyesfc?.squad)
-        for (let i = 0; i < squadList.length; i++) {
-            players += `${squadList[i]}\n`;
-        }
-        const messageContent = `Gün: ${formattedDate?.replace(/%20/g, ' ')}
+    const sendEmails = async () => {
+        setEmailJsButtonLoading(true)
+        let playerMails;
+        const calendarData = submittedMatchData
+        try {
+            playerMails = await loadWebsite('firebaseUID');
+            const formattedDate = convertMatchDayToString(calendarData?.day)
+            const emailList = Object.entries(playerMails?.mail).filter(a => Object.keys(calendarData?.oyesfc?.squad)?.includes(a[0]))
+            let players = ''
+            const squadList = Object.keys(calendarData?.oyesfc?.squad)
+            for (let i = 0; i < squadList.length; i++) {
+                players += `${squadList[i]}\n`;
+            }
+            const messageContent = `Gün: ${formattedDate?.replace(/%20/g, ' ')}
 
 Saat: ${calendarData?.time}
 
 Rakip: ${calendarData?.rival?.name}
 
 Konum: ${calendarData?.place}
+
+Forma: ${TurkishJerseys[calendarData?.oyesfc?.jersey]}
 
 Kadro:
 ${players}
@@ -348,25 +427,50 @@ Apple Maps: ${Facilities?.find(x => x?.name === calendarData?.place)?.appleUrl}
 Google Maps: ${Facilities?.find(x => x?.name === calendarData?.place)?.googleUrl}
 
 Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
-        emailjs.init({
-            publicKey: playerMails?.emailJS?.publicKey,
-        });
-        emailList.forEach((item) => {
-            emailjs.send(playerMails?.emailJS?.serviceID, playerMails?.emailJS?.templateID, {
-                to_email: item[1],
-                message: messageContent,
-                to_name: item[0]
-            }).catch((error) => {
-                console.log(error);
-                const errorResponse = {
-                    open: true,
-                    status: SnackbarTypes.error,
-                    message: error,
-                    duration: 18000
-                }
-                snackbarData(errorResponse)
+            emailjs.init({
+                publicKey: playerMails?.emailJS?.publicKey,
             });
-        });
+            for (const item of emailList) {
+                await emailjs.send(playerMails?.emailJS?.serviceID, playerMails?.emailJS?.templateID, {
+                    to_email: item[1],
+                    message: messageContent,
+                    to_name: item[0]
+                }).catch(() => {
+                    const message = `Email could not be sent to ${item[1]}!`
+                    setFinalErrors((prevData) => ([
+                        ...prevData,
+                        message
+                    ]));
+                }).then(() => {
+                    const message = `Email successfully sent to ${item[1]}!`
+                    setFinalSuccesses((prevData) => ([
+                        ...prevData,
+                        message
+                    ]));
+                });
+            }
+            const message = AddMatchMessages.email_sent_successful
+            setFinalSuccesses((prevData) => ([
+                ...prevData,
+                message
+            ]));
+            setEmailJsButtonLoading(false)
+        } catch (error) {
+            const errorResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 18000
+            }
+            snackbarData(errorResponse)
+            const message = AddMatchMessages.email_sent_failed
+            setFinalErrors((prevData) => ([
+                ...prevData,
+                message
+            ]));
+            setEmailJsButtonLoading(false)
+        }
+
     };
 
     const getGeoCoordinates = () => {
@@ -443,12 +547,13 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                     clouds: specificForecast?.clouds?.all,
                 }));
             }
-            }
+        }
 
     }
 
     const checkWeatherButtons = (dateTimeValue) => {
-        const endDate = new Date(dateTimeValue)
+        let endDate = new Date(dateTimeValue)
+        endDate.setHours(endDate.getHours() + 1);
         const startDate = new Date();
         const timeDifference = endDate.getTime() - startDate.getTime();
         const hourDifference = timeDifference / (1000 * 3600);
@@ -458,12 +563,12 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                 button: null,
                 warning: 'Match date is more than 5 days away, try again later.'
             }
-        } else if (hourDifference <= 120 && hourDifference > 1) {
+        } else if (hourDifference <= 120 && hourDifference > 2) {
             buttonState = {
                 button: 'forecast',
                 warning: 'The match date is within 5 days, the weather forecast for the selected time can be viewed.'
             }
-        } else if (hourDifference <= 1 && hourDifference >= -1) {
+        } else if (hourDifference <= 2 && hourDifference >= -1) {
             buttonState = {
                 button: 'current',
                 warning: 'Match time is near, current weather conditions can be checked.'
@@ -479,26 +584,30 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
 
     const checkPayload = (payload, unconvertedDay) => {
         let errorMessages = [];
-        if (!payload?.oyesfc?.jersey || payload?.oyesfc?.jersey === '' || payload?.oyesfc?.jersey === 'Select Jersey')  {
+        if (!payload?.oyesfc?.jersey || payload?.oyesfc?.jersey === '' || payload?.oyesfc?.jersey === 'Select Jersey') {
             const message = 'Select JERSEY!'
             errorMessages.push(message)
         }
-        if (!payload?.rival?.name || payload?.rival?.name === '' || payload?.rival?.name === 'Select Rival')  {
+        if (!payload?.rival?.name || payload?.rival?.name === '' || payload?.rival?.name === 'Select Rival') {
             const message = 'Select RIVAL!'
             errorMessages.push(message)
         }
-        if (!payload?.place || payload?.place === '' || payload?.place === 'Select Facility')  {
+        if (!payload?.place || payload?.place === '' || payload?.place === 'Select Facility') {
             const message = 'Select FACILITY!'
             errorMessages.push(message)
         }
-        if (Object.keys(payload?.oyesfc?.squad)?.length > 0)  {
+        if (Object.keys(payload?.oyesfc?.squad)?.length > 0) {
             Object.entries(payload?.oyesfc?.squad)?.forEach(x => {
                 if (!(x[1]?.goal >= 0)) {
                     const message = `${x[0]} missing GOAL value!`
                     errorMessages.push(message)
                 }
-                if (!x[1]?.role || x[1]?.role === 'Select Role'|| x[1]?.role === '') {
+                if (!x[1]?.role || x[1]?.role === 'Select Role' || x[1]?.role === '') {
                     const message = `${x[0]} missing ROLE value!`
+                    errorMessages.push(message)
+                }
+                if (!Object.values(TeamMembers).map(x => x.name).includes(x[0]) && !x[1]?.description) {
+                    const message = `${x[0]} missing DESCRIPTION value!`
                     errorMessages.push(message)
                 }
             })
@@ -520,8 +629,16 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
             throw new Error('There are missing data in this form, please check the warnings!');
         }
     };
+    const clearSubmittedMatchData = () => {
+        const [day, month, year] = submittedMatchData?.day?.split('-')
+        const time = submittedMatchData?.time?.split('-')[0]
+        formData.day = year + '-' + month + '-' + day + 'T' + time
+        if (finalSuccesses?.length > 0) setFinalSuccesses([])
+        if (finalErrors?.length > 0) setFinalErrors([])
+        setSubmittedMatchData(null)
+    }
 
-    const BpIcon = styled('span')(({ theme }) => ({
+    const BpIcon = styled('span')(({theme}) => ({
         borderRadius: '50%',
         width: 20,
         height: 20,
@@ -564,8 +681,8 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
             <Radio
                 disableRipple
                 color="default"
-                checkedIcon={<BpCheckedIcon />}
-                icon={<BpIcon />}
+                checkedIcon={<BpCheckedIcon/>}
+                icon={<BpIcon/>}
                 {...props}
             />
         );
@@ -581,10 +698,114 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
         )
     }
 
+    if (submittedMatchData) {
+        return (
+            <div className={classes.overlay}>
+                <div className={classes.generalStyle} ref={popupRef}>
+                    <div className={classes.completeProcessDiv}>
+                        <h1 className={classes.completeProcessTitle}>Complete</h1>
+                        <div className={classes.matchSubmitModalDiv}>
+                            <Accordion sx={{bgcolor: '#2e2e2e', color: 'lightgray', border: '1px solid #4d4d4d', width: '100%'}}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                                    aria-controls="panel1-content"
+                                    id="panel1-header"
+                                >
+                                    Match Payload
+                                </AccordionSummary>
+                                <AccordionDetails sx={{textAlign: 'left'}}>
+                                    {<pre>{JSON.stringify(submittedMatchData, null, 2)}</pre>}
+                                </AccordionDetails>
+                            </Accordion>
+                        </div>
+                        {
+                            finalErrors?.length > 0 &&
+                            finalErrors?.map((x, y) => (
+                                <Alert key={y}
+                                    sx={{  padding: '2px 13px', margin: '10px 20px', borderRadius: '25px'}}
+                                    variant="filled" severity="error">{x}</Alert>
+                            ))
+
+                        }
+                        {
+                            finalSuccesses?.length > 0 &&
+                            finalSuccesses?.map((x, y) => (
+                                <Alert key={y}
+                                       sx={{  padding: '2px 13px', margin: '10px 20px', borderRadius: '25px'}}
+                                       variant="filled" severity="success">{x}</Alert>
+                            ))
+
+                        }
+                        <div className={classes.matchSubmitModalDiv}>
+                            <button className={matchDetailsClasses.mapsButtons} style={{margin: "1rem", width: '100%'}}
+                                    disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
+                                    onClick={clearSubmittedMatchData}>
+                                Back
+                            </button>
+                            <button className={matchDetailsClasses.mapsButtons} style={{margin: "1rem", width: '100%'}}
+                                    disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
+                                    onClick={handleClose}>
+                                Cancel
+                            </button>
+                            {
+                                !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.calendar_create_successful) &&
+                                <button className={matchDetailsClasses.mapsButtons}
+                                        style={{margin: "1rem", width: '100%'}}
+                                        disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
+                                        onClick={createCalendar}>
+                                    {
+                                        calendarButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            :
+                                            <span>Create Calendar Event</span>
+                                    }
+                                </button>
+                            }
+                            {
+                                !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.email_sent_successful) &&
+                                <button className={matchDetailsClasses.mapsButtons}
+                                        style={{margin: "1rem", width: '100%'}}
+                                        disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
+                                        onClick={sendEmails}>
+                                    {
+                                        emailJsButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            :
+                                            <span>Send Emails</span>
+                                    }
+                                </button>
+                            }
+
+                            {
+                                !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.siri_shortcut_run_successful) &&
+                                <button className={matchDetailsClasses.mapsButtons}
+                                        style={{margin: "1rem", width: '100%'}}
+                                        disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
+                                        onClick={sendWhatsAppNotificationToSquadMembers}>
+                                    {
+                                        siriShortcutButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            :
+                                            <span>Run Siri Shortcut</span>
+                                    }
+                                </button>
+                            }
+                            <button className={matchDetailsClasses.mapsButtons} style={{margin: "1rem", width: '100%'}}
+                                    disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
+                                    onClick={completeAddMatch}>
+                                Submit & Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className={classes.overlay}>
             <div className={classes.generalStyle} ref={popupRef}>
-                <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
+            <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
                     <div className={classes.formAlign}>
                         <div className={classes.infoAlign}>
                             <h1 className={classes.generalTitle}>{selectedMatchData ? 'Edit Match' : 'Add Match'}</h1>
@@ -713,8 +934,9 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                             <br/>
                             {
                                 weatherButtonStatus?.warning &&
-                                <Alert sx={{bgcolor: 'transparent', color: 'lightgray', padding: 0, marginBottom: '20px'}}
-                                       variant="standard" severity="info">{weatherButtonStatus?.warning}</Alert>
+                                <Alert
+                                    sx={{bgcolor: 'transparent', color: 'lightgray', padding: 0, marginBottom: '20px'}}
+                                    variant="standard" severity="info">{weatherButtonStatus?.warning}</Alert>
                             }
                             <>
                                 <label style={{background: "#1f1f1f"}}>
@@ -722,7 +944,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 </label>
                                 <br/>
                                 <label style={{background: "#1f1f1f"}}>
-                                Temperature: {weatherFormData?.temperature}&#176;
+                                    Temperature: {weatherFormData?.temperature}&#176;
                                 </label>
                                 <br/>
                                 <label style={{background: "#1f1f1f"}}>
@@ -808,7 +1030,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                             name={`oyesfc.squad.${member}.goal`}
                                             value={oYesFCSquadFormData[member].goal}
                                             onChange={(e) =>
-                                                handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role)}
+                                                handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.description)}
                                         />
                                     </label>
                                     <br/>
@@ -816,10 +1038,10 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                         {member} Role:
                                         <select className={classes.select}
                                                 onChange={(e) =>
-                                                    handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role)}
+                                                    handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.description)}
                                                 required={true}
                                                 name={`oyesfc.squad.${member}.role`}
-                                                value={oYesFCSquadFormData[member].role ? oYesFCSquadFormData[member].role : (Object.values(TeamMembers).find(x => x?.name === member)?.role || oYesFCSquadFormData[member].role) }>
+                                                value={oYesFCSquadFormData[member].role ? oYesFCSquadFormData[member].role : (Object.values(TeamMembers).find(x => x?.name === member)?.role || oYesFCSquadFormData[member].role)}>
                                             <option>Select Role</option>
                                             {FootballRoles.map((x, y) => (
                                                 <option key={y} value={x}>{x}</option>
@@ -827,6 +1049,22 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                         </select>
                                     </label>
                                     <br/>
+                                    {!Object.values(TeamMembers).some(x => x?.name === member) &&
+                                        <>
+                                            <label style={{background: "#1f1f1f"}}>
+                                                {member} Description:
+                                                <input
+                                                    className={classes.inputDesign}
+                                                    type="text"
+                                                    name={`oyesfc.squad.${member}.description`}
+                                                    value={oYesFCSquadFormData[member].description}
+                                                    onChange={(e) =>
+                                                        handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.description)}
+                                                />
+                                            </label>
+                                            <br/>
+                                        </>
+                                    }
                                 </div>
                             ))}
                             <label style={{background: "#1f1f1f"}}>
@@ -862,15 +1100,18 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                     {
                         warnings &&
                         warnings?.map((x, y) => (
-                            <Alert key={y} sx={{bgcolor: 'transparent', color: '#ed6c02', padding: 0, marginBottom: '20px'}}
+                            <Alert key={y}
+                                   sx={{bgcolor: 'transparent', color: '#ed6c02', padding: 0, marginBottom: '20px'}}
                                    variant="standard" severity="warning">{x}</Alert>
                         ))
 
                     }
                     <div className={classes.matchSubmitButtonDiv}>
-                        <button className={matchDetailsClasses.mapsButtons} style={{marginRight: "1rem"}} type="submit">Submit
+                        <button className={matchDetailsClasses.mapsButtons} style={{marginRight: "1rem"}}
+                                type="submit">Submit
                         </button>
-                        {isMobile && <button className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Close</button>}
+                        {isMobile &&
+                            <button className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Close</button>}
                     </div>
                 </form>
             </div>

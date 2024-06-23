@@ -612,15 +612,22 @@ export const MatchDetails = ({
                                             </span>
                                             }
                                             {
-                                                Object.values(TeamMembers).map(x => x.name).includes(x[0]) &&
-                                                (ratedPeople?.includes(x[0]) ?
-                                                    <span className={classes.starDetailSpan}>
-                                                    {x[0]?.split(' ')[0] + ' added rating to this match.'}
-                                                </span>
+                                                Object.values(TeamMembers).map(x => x.name).includes(x[0]) ?
+                                                    (ratedPeople?.includes(x[0]) ?
+                                                        <span className={classes.starDetailSpan}>
+                                                            {x[0]?.split(' ')[0] + ' added rating to this match.'}
+                                                        </span>
+                                                        :
+                                                        <span className={classes.starDetailSpan}>
+                                                            {x[0]?.split(' ')[0] + ' did not add rating to this match.'}
+                                                        </span>)
                                                     :
-                                                    <span className={classes.starDetailSpan}>
-                                                    {x[0]?.split(' ')[0] + ' did not add rating to this match.'}
-                                                </span>)
+                                                    Object.values(matchDetailsData?.oyesfc?.squad)?.find(x => x?.name === x[0])?.description ?
+                                                        <span className={classes.starDetailSpan}>
+                                                            {x[0]?.split(' ')[0] + ': ' + Object.values(matchDetailsData?.oyesfc?.squad)?.find(x => x?.name === x[0])?.description}
+                                                        </span>
+                                                        :
+                                                        null
                                             }
                                         </section>
                                     ))
