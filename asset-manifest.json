@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/oyesfc-react/static/css/main.ac6521e7.css",
-    "main.js": "/oyesfc-react/static/js/main.68e5ce42.js",
+    "main.css": "/oyesfc-react/static/css/main.86ef2e65.css",
+    "main.js": "/oyesfc-react/static/js/main.053400f1.js",
     "static/js/787.6b6304da.chunk.js": "/oyesfc-react/static/js/787.6b6304da.chunk.js",
     "static/media/blue2.jpeg": "/oyesfc-react/static/media/blue2.0f2b3def40a8d09df572.jpeg",
     "static/media/gold2.jpeg": "/oyesfc-react/static/media/gold2.c5a4f74bdf561d038f35.jpeg",
@@ -53,15 +53,16 @@
     "static/media/4evler.png": "/oyesfc-react/static/media/4evler.6cd0088a848a76031581.png",
     "static/media/Vikings.png": "/oyesfc-react/static/media/Vikings.94a37ee4c4ab8bfd35bf.png",
     "static/media/Kurtsan.png": "/oyesfc-react/static/media/Kurtsan.e84e55b826a089074b04.png",
+    "static/media/adidas.PNG": "/oyesfc-react/static/media/adidas.09f1f69ed2660a3dcaf6.PNG",
     "static/media/football.png": "/oyesfc-react/static/media/football.cb2c116cabd7616ef325.png",
     "static/media/Olympos.png": "/oyesfc-react/static/media/Olympos.561cd7e7555c194cb599.png",
     "index.html": "/oyesfc-react/index.html",
-    "main.ac6521e7.css.map": "/oyesfc-react/static/css/main.ac6521e7.css.map",
-    "main.68e5ce42.js.map": "/oyesfc-react/static/js/main.68e5ce42.js.map",
+    "main.86ef2e65.css.map": "/oyesfc-react/static/css/main.86ef2e65.css.map",
+    "main.053400f1.js.map": "/oyesfc-react/static/js/main.053400f1.js.map",
     "787.6b6304da.chunk.js.map": "/oyesfc-react/static/js/787.6b6304da.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ac6521e7.css",
-    "static/js/main.68e5ce42.js"
+    "static/css/main.86ef2e65.css",
+    "static/js/main.053400f1.js"
   ]
 }
