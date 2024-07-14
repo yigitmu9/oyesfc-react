@@ -6,7 +6,7 @@ import {TeamMembers} from "../../constants/constants";
 import {BootBrandsList} from "../../constants/constants";
 import classes from "../NumberOfPlayersIndividualStats/number-of-players-individual-stats.module.css";
 import bootBrandsClasses from "./boot-brands.module.css"
-import {Button, ButtonGroup, Divider} from "@mui/material";
+import {Button, ButtonGroup} from "@mui/material";
 
 const BootBrands = ({data}) => {
     let adidasPlayer = 0;
@@ -102,7 +102,7 @@ const BootBrands = ({data}) => {
                         <div className={bootBrandsClasses.columnStyle}>
                             {
                                 sortedNikeCollections.map((a, b) => (
-                                    <div className={bootBrandsClasses.collectionSplitter}>
+                                    <div key={b} className={bootBrandsClasses.collectionSplitter}>
                                         <img className={bootBrandsClasses.nikeCollectionImageStyle}
                                              src={NikeLogo}
                                              alt={'1'}/>
@@ -116,7 +116,7 @@ const BootBrands = ({data}) => {
                         <div className={bootBrandsClasses.columnStyle}>
                             {
                                 sortedAdidasCollections.map((a, b) => (
-                                    <div className={bootBrandsClasses.collectionSplitter}>
+                                    <div key={b} className={bootBrandsClasses.collectionSplitter}>
                                         <img className={bootBrandsClasses.adidasCollectionImageStyle}
                                              src={AdidasLogo}
                                              alt={'1'}/>
