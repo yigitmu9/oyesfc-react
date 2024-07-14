@@ -3,17 +3,150 @@ export const TeamNames = {
 }
 
 export const TeamMembers = {
-    can: {name: 'Can Şahin', number: 1, role: 'gk', birthYear: 1998, birthMonth: 12, birthDay: 23, ratings: [3, 4.5, 2, 7, 8, 3]},
-    atakan: {name: 'Atakan Rakipsiz', number: 2, role: 'df', birthYear: 1998, birthMonth: 10, birthDay: 11, ratings: [5, 5, 8.5, 7, 6, 6]},
-    berk: {name: 'Berk Doğan', number: 5, role: 'df', birthYear: 1998, birthMonth: 10, birthDay: 2, ratings: [7, 6, 7, 8, 8, 7.5]},
-    berent: {name: 'Berent Özsan', number: 99, role: 'fw', birthYear: 1999, birthMonth: 5, birthDay: 26, ratings: [8.5, 7.5, 7.5, 6, 7, 7]},
-    gokhan: {name: 'Gökhan Cömert', number: 4, role: 'fw', birthYear: 1999, birthMonth: 10, birthDay: 20, ratings: [7, 7, 6, 6, 5, 6]},
-    mehmet: {name: 'Mehmet Çelik', number: 8, role: 'df', birthYear: 1999, birthMonth: 10, birthDay: 22, ratings: [4, 4, 6, 7, 7, 5.5]},
-    mert: {name: 'Mert Mutlu', number: 16, role: 'fw', birthYear: 2005, birthMonth: 2, birthDay: 3, ratings: [8.5, 8, 7, 6, 5, 7]},
-    oguzhan: {name: 'Oğuzhan Cesur', number: 18, role: 'df', birthYear: 1999, birthMonth: 2, birthDay: 19, ratings: [2, 3, 6, 5, 8, 5.5]},
-    ogulcan: {name: 'Oğulcan Sakallıoğlu', number: 10, role: 'fw', birthYear: 1998, birthMonth: 5, birthDay: 19, ratings: [8, 8, 7, 5.5, 6, 6.5]},
-    utku: {name: 'Utku Öztürk', number: 3, role: 'df', birthYear: 1999, birthMonth: 3, birthDay: 6, ratings: [6, 6, 6, 6.5, 8, 6]},
-    yigit: {name: 'Yiğit Mutlu', number: 7, role: 'fw', birthYear: 1999, birthMonth: 6, birthDay: 16, ratings: [8, 8.5, 6.5, 5.5, 6, 6.5]}
+    can:
+        {
+            name: 'Can Şahin',
+            number: 1,
+            role: 'gk',
+            birthYear: 1998,
+            birthMonth: 12,
+            birthDay: 23,
+            ratings: [3, 4.5, 2, 7, 8, 3],
+            bootBrand: 'Nike',
+            bootCollection: 'Mercurial',
+            bootModel: 'Vapor 12',
+
+        },
+    atakan:
+        {
+            name: 'Atakan Rakipsiz',
+            number: 2,
+            role: 'df',
+            birthYear: 1998,
+            birthMonth: 10,
+            birthDay: 11,
+            ratings: [5, 5, 8.5, 7, 6, 6],
+            bootBrand: 'Nike',
+            bootCollection: 'Tiempo',
+            bootModel: 'Legend 8',
+        },
+    berk:
+        {
+            name: 'Berk Doğan',
+            number: 5,
+            role: 'df',
+            birthYear: 1998,
+            birthMonth: 10,
+            birthDay: 2,
+            ratings: [7, 6, 7, 8, 8, 7.5],
+            bootBrand: 'Nike',
+            bootCollection: 'Mercurial',
+            bootModel: 'Vapor 11',
+        },
+    berent:
+        {
+            name: 'Berent Özsan',
+            number: 99,
+            role: 'fw',
+            birthYear: 1999,
+            birthMonth: 5,
+            birthDay: 26,
+            ratings: [8.5, 7.5, 7.5, 6, 7, 7],
+            bootBrand: 'Adidas',
+            bootCollection: 'Deportivo',
+            bootModel: '1',
+        },
+    gokhan:
+        {
+            name: 'Gökhan Cömert',
+            number: 4,
+            role: 'fw',
+            birthYear: 1999,
+            birthMonth: 10,
+            birthDay: 20,
+            ratings: [7, 7, 6, 6, 5, 6],
+            bootBrand: '',
+            bootCollection: '',
+            bootModel: '',
+        },
+    mehmet:
+        {
+            name: 'Mehmet Çelik',
+            number: 8,
+            role: 'df',
+            birthYear: 1999,
+            birthMonth: 10,
+            birthDay: 22,
+            ratings: [4, 4, 6, 7, 7, 5.5],
+            bootBrand: '',
+            bootCollection: '',
+            bootModel: '',
+        },
+    mert:
+        {
+            name: 'Mert Mutlu',
+            number: 16,
+            role: 'fw',
+            birthYear: 2005,
+            birthMonth: 2,
+            birthDay: 3,
+            ratings: [8.5, 8, 7, 6, 5, 7],
+            bootBrand: 'Adidas',
+            bootCollection: 'Predator',
+            bootModel: '20.4',
+        },
+    oguzhan:
+        {
+            name: 'Oğuzhan Cesur',
+            number: 18,
+            role: 'df',
+            birthYear: 1999,
+            birthMonth: 2,
+            birthDay: 19,
+            ratings: [2, 3, 6, 5, 8, 5.5],
+            bootBrand: '',
+            bootCollection: '',
+            bootModel: '',
+        },
+    ogulcan:
+        {
+            name: 'Oğulcan Sakallıoğlu',
+            number: 10,
+            role: 'fw',
+            birthYear: 1998,
+            birthMonth: 5,
+            birthDay: 19,
+            ratings: [8, 8, 7, 5.5, 6, 6.5],
+            bootBrand: 'Nike',
+            bootCollection: 'Phantom',
+            bootModel: 'Gx',
+        },
+    utku:
+        {
+            name: 'Utku Öztürk',
+            number: 3,
+            role: 'df',
+            birthYear: 1999,
+            birthMonth: 3,
+            birthDay: 6,
+            ratings: [6, 6, 6, 6.5, 8, 6],
+            bootBrand: 'Adidas',
+            bootCollection: 'Copa',
+            bootModel: '20.3',
+        },
+    yigit:
+        {
+            name: 'Yiğit Mutlu',
+            number: 7,
+            role: 'fw',
+            birthYear: 1999,
+            birthMonth: 6,
+            birthDay: 16,
+            ratings: [8, 8.5, 6.5, 5.5, 6, 6.5],
+            bootBrand: 'Nike',
+            bootCollection: 'Phantom',
+            bootModel: 'Vision',
+        }
 }
 
 export const Facilities = [
@@ -490,4 +623,11 @@ export const TurkishJerseys = {
     'Wavy Jersey': 'Dalgalı Forma',
     'Red Jersey': 'Kırmızı Forma',
     '10th Year Jersey': '10 Yıl Forması',
+}
+
+export const BootBrandsList = {
+    nike: 'Nike',
+    adidas: 'Adidas',
+    puma: 'Puma',
+    lotto: 'Lotto'
 }

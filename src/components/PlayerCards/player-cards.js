@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import {Alert, Divider, List, ListItem, Snackbar, Tab, Tabs} from "@mui/material";
-import {SnackbarTypes, TeamMembers} from "../../constants/constants";
+import {BootBrandsList, SnackbarTypes, TeamMembers} from "../../constants/constants";
 import classes from "../PlayerCards/player-cards.module.css"
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import Box from "@mui/material/Box";
@@ -24,6 +24,10 @@ import ScoreboardsGrid from "../ScoreboardsGrid/scoreboards-grid";
 import {loadWebsite} from "../../firebase";
 import CakeIcon from '@mui/icons-material/Cake';
 import PlayerRadarChart from "../PlayerRadarChart/player-radar-chart";
+import bootBrandsClasses from "../BootBrands/boot-brands.module.css";
+import NikeLogo from "../../images/nike.png";
+import AdidasLogo from "../../images/adidas.PNG";
+import TollIcon from '@mui/icons-material/Toll';
 
 function CustomTabs(props) {
     const {children, value, index, ...other} = props;
@@ -77,6 +81,9 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     let playerTotalGoal = 0;
     let playerYellowCard = 0;
     let playerRedCard = 0;
+    const playerBootBrand = Object.values(TeamMembers).find(x => x.name === playerName).bootBrand;
+    const playerBootCollection = Object.values(TeamMembers).find(x => x.name === playerName).bootCollection;
+    const playerBootModel = Object.values(TeamMembers).find(x => x.name === playerName).bootModel;
 
     Object.values(data).forEach(item => {
         if (item?.oyesfc?.squad[playerName] && playerName !== TeamMembers.can.name) {
@@ -537,6 +544,24 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                     </div>
                 </section>
                 <PlayerRadarChart playerName={playerName}/>
+                {playerBootBrand && <section className={matchDetailsClasses.squadSection}>
+                    <div className={matchDetailsClasses.generalInfoDiv}>
+                        <TollIcon fontSize={isMobile ? 'medium' : 'large'}
+                                  className={matchDetailsClasses.generalInfoIcon}>
+                        </TollIcon>
+                        <span className={matchDetailsClasses.generalInfoSpan}>
+                            Football Boot
+                        </span>
+                    </div>
+                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                    <div className={classes.bootStyle}>
+                        <img className={playerBootBrand === BootBrandsList.nike ?
+                            bootBrandsClasses.nikeCollectionImageStyle : bootBrandsClasses.adidasCollectionImageStyle}
+                             src={playerBootBrand === BootBrandsList.nike ? NikeLogo : AdidasLogo}
+                             alt={'1'}/>
+                        <h1 className={classes.collectionNameStyle}>{playerBootCollection + ' ' + playerBootModel}</h1>
+                    </div>
+                </section>}
                 {isMobile && closeButton}
             </CustomTabs>
             <CustomTabs value={tabValue} index={1}>
