@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScaleLoader} from "react-spinners";
+import {PuffLoader} from "react-spinners";
 import OYesFCLogo from '../images/oyesfc.PNG'
 
 const LoadingPage = () => {
@@ -23,11 +23,17 @@ export default LoadingPage;
 
 export function Loading() {
     return (
-        <>
-            <img style={{width: "200px", height: "200px", background: "transparent", marginBottom: "20px"}}
+        <div style={{display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+            position: 'relative'}}>
+            <img style={{width: "200px", height: "200px", background: "transparent", borderRadius: '50%'}}
                  src={OYesFCLogo}
                  alt={'1'}/>
-            <ScaleLoader color="red" speedMultiplier={0.7}/>
-        </>
+            <div style={{position: 'absolute'}}>
+                <PuffLoader color="red" speedMultiplier={0.7} size={350}/>
+            </div>
+        </div>
     )
 }

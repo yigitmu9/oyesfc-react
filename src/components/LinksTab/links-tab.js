@@ -61,6 +61,26 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
     return (
         <>
             <div className={classes.generalTabDiv}>
+                {
+                    credentials?.isCaptain &&
+                    <section className={classes.generalTabSection}>
+                        <div className={classes.urlInfoDiv}>
+                            <EditIcon fontSize={isMobile ? 'medium' : 'large'}
+                                      className={classes.generalInfoIcon}>
+                            </EditIcon>
+                            <span className={classes.generalInfoSpan}>
+                                            Edit Match
+                                        </span>
+                        </div>
+                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                        <div className={classes.generalInfoDiv}>
+                            <div className={classes.mapsButtonsWrapper}>
+                                <button className={classes.mapsButtons} onClick={redirectToEditMatch}>Edit
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                }
                 <section className={classes.generalTabSection}>
                     <div className={classes.urlInfoDiv}>
                         <LocationOnIcon fontSize={isMobile ? 'medium' : 'large'}
@@ -84,7 +104,7 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
                 <section className={classes.generalTabSection}>
                     <div className={classes.urlInfoDiv}>
                         <PhoneIcon fontSize={isMobile ? 'medium' : 'large'}
-                                        className={classes.generalInfoIcon}>
+                                   className={classes.generalInfoIcon}>
                         </PhoneIcon>
                         <span className={classes.generalInfoSpan}>
                             {Facilities.find(x => x.name === matchDetailsData?.place)?.phoneNumber}
@@ -93,7 +113,8 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
                     <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                     <div className={classes.generalInfoDiv}>
                         <div className={classes.mapsButtonsWrapper}>
-                            <button className={classes.mapsButtons} onClick={redirectToCall}>Call {matchDetailsData.place} Facility
+                            <button className={classes.mapsButtons}
+                                    onClick={redirectToCall}>Call {matchDetailsData.place} Facility
                             </button>
                         </div>
                     </div>
@@ -162,26 +183,6 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
                         </div>
                     </div>
                 </section>
-                {
-                    credentials?.isCaptain &&
-                    <section className={classes.generalTabSection}>
-                        <div className={classes.urlInfoDiv}>
-                            <EditIcon fontSize={isMobile ? 'medium' : 'large'}
-                                      className={classes.generalInfoIcon}>
-                            </EditIcon>
-                            <span className={classes.generalInfoSpan}>
-                                            Edit Match
-                                        </span>
-                        </div>
-                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
-                        <div className={classes.generalInfoDiv}>
-                            <div className={classes.mapsButtonsWrapper}>
-                                <button className={classes.mapsButtons} onClick={redirectToEditMatch}>Edit
-                                </button>
-                            </div>
-                        </div>
-                    </section>
-                }
             </div>
         </>
     );

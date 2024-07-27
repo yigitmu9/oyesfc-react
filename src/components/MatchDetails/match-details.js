@@ -25,6 +25,8 @@ import JerseyTab from "../JerseyTab/jersey-tab";
 import LinksTab from "../LinksTab/links-tab";
 import PlayerDetails from "../PlayerDetails/player-details";
 import {getWeather} from "../../services/service";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -152,10 +154,24 @@ export const MatchDetails = ({
     }
 
     const handleStarChange = (player, rating) => {
-        if (starsSubmitButton !== 'Submitted') {
+        if (starsSubmitButton === 'Submit') {
             setOYesFCStarFormData((prevData) => ({
                 ...prevData,
                 [player]: parseInt(rating)
+            }));
+        }
+    };
+
+    const handleStarDetailChange = (player, operation) => {
+        const playerRating = oYesFCStarFormData[player]
+        if (playerRating &&
+            ((playerRating !== 1 && operation === 'minus') || (playerRating !== 10 && operation === 'plus')) &&
+            starsSubmitButton === 'Submit') {
+            const newRating = operation === 'plus' ? parseFloat((playerRating + 0.1).toFixed(1)) :
+                parseFloat((playerRating - 0.1).toFixed(1));
+            setOYesFCStarFormData((prevData) => ({
+                ...prevData,
+                [player]: newRating
             }));
         }
     };
@@ -197,8 +213,10 @@ export const MatchDetails = ({
         try {
             const response = await loadWebsite(`rates/${matchDetailsData?.day}`);
             setRatesData(response)
-            const ratedOrNot = await whoRatedWhoNotRated(response)
-            setRatedPeople(ratedOrNot)
+            if (credentials?.signedIn) {
+                const ratedOrNot = await whoRatedWhoNotRated(response)
+                setRatedPeople(ratedOrNot)
+            }
             if (response?.rates) {
                 if (Object.entries(response?.rates).some(x => x[0] === credentials?.id)) {
                     const form = Object.entries(response?.rates).find(x => x[0] === credentials?.id)[1]
@@ -576,6 +594,24 @@ export const MatchDetails = ({
                                     Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== credentials?.userName)?.map((x, y) => (
                                         <section key={y} className={classes.starSection}>
                                             <span className={classes.starSpan}>{x[0]}</span>
+                                            {
+                                                Object.values(TeamMembers).map(x => x.name).includes(x[0]) ?
+                                                    (ratedPeople?.includes(x[0]) ?
+                                                        <span className={classes.starDetailSpan}>
+                                                            {x[0]?.split(' ')[0] + ' added rating to this match.'}
+                                                        </span>
+                                                        :
+                                                        <span className={classes.starDetailSpan}>
+                                                            {x[0]?.split(' ')[0] + ' did not add rating to this match.'}
+                                                        </span>)
+                                                    :
+                                                    Object.values(matchDetailsData?.oyesfc?.squad)?.find(x => x?.name === x[0])?.description ?
+                                                        <span className={classes.starDetailSpan}>
+                                                            {Object.entries(matchDetailsData?.oyesfc?.squad)?.find(z => z[0] === x[0])[1]?.description}
+                                                        </span>
+                                                        :
+                                                        null
+                                            }
                                             <div className={classes.starDiv}>
                                                 {[...Array(10)].map((star, index) => {
                                                     const currentRating = index + 1;
@@ -602,33 +638,17 @@ export const MatchDetails = ({
                                                     );
                                                 })}
                                             </div>
-                                            {
-                                                oYesFCStarFormData[x[0]] ?
-                                                    <span className={classes.starDetailSpan}>
-                                                Your rating to {x[0] + ' is ' + oYesFCStarFormData[x[0]] + '.'}</span>
-                                                    :
-                                                    <span className={classes.starDetailSpan}>
-                                                Rate {x[0]}.
-                                            </span>
-                                            }
-                                            {
-                                                Object.values(TeamMembers).map(x => x.name).includes(x[0]) ?
-                                                    (ratedPeople?.includes(x[0]) ?
-                                                        <span className={classes.starDetailSpan}>
-                                                            {x[0]?.split(' ')[0] + ' added rating to this match.'}
-                                                        </span>
-                                                        :
-                                                        <span className={classes.starDetailSpan}>
-                                                            {x[0]?.split(' ')[0] + ' did not add rating to this match.'}
-                                                        </span>)
-                                                    :
-                                                    Object.values(matchDetailsData?.oyesfc?.squad)?.find(x => x?.name === x[0])?.description ?
-                                                        <span className={classes.starDetailSpan}>
-                                                            {x[0]?.split(' ')[0] + ': ' + Object.values(matchDetailsData?.oyesfc?.squad)?.find(x => x?.name === x[0])?.description}
-                                                        </span>
-                                                        :
-                                                        null
-                                            }
+                                            <div className={classes.ratingStarDetailsDiv}>
+                                                <ArrowBackIosNewIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                               className={classes.ratingStarIconDiv} onClick={() => handleStarDetailChange(x[0], 'minus')}>
+                                                </ArrowBackIosNewIcon>
+                                                <h1 className={classes.ratingStarSpanDiv}>
+                                                    {oYesFCStarFormData[x[0]] ? oYesFCStarFormData[x[0]]?.toFixed(1) : 'Rate'}
+                                                </h1>
+                                                <ArrowForwardIosIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                                className={classes.ratingStarIconDiv} onClick={() => handleStarDetailChange(x[0], 'plus')}>
+                                                </ArrowForwardIosIcon>
+                                            </div>
                                         </section>
                                     ))
                                 }

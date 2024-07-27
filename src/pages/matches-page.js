@@ -12,7 +12,7 @@ const MatchesPage = ({databaseData, reloadData, credentials, allData}) => {
         <div>
             <main>
                 <ScoreboardsGrid databaseData={databaseData} reloadData={handleReload} credentials={credentials} allData={allData} />
-                <Footer></Footer>
+                <Footer credentials={credentials}></Footer>
             </main>
         </div>
     );

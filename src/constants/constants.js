@@ -11,7 +11,7 @@ export const TeamMembers = {
             birthYear: 1998,
             birthMonth: 12,
             birthDay: 23,
-            ratings: [3, 4.5, 2, 7, 8, 3],
+            ratings: [3, 5, 4, 8, 8, 4],
             bootBrand: 'Nike',
             bootCollection: 'Mercurial',
             bootModel: 'Vapor 12',
@@ -175,7 +175,7 @@ export const Facilities = [
         phoneNumber: '0 (224) 443 06 43',
     },
     {
-        name: 'Hüdavendigar',
+        name: 'Hüdavendigar Korkut',
         googleUrl: 'https://maps.app.goo.gl/NKnayquMn8Ydxxog6',
         appleUrl: 'https://maps.apple.com/?address=H%C3%BCdavendigar%20Park%C4%B1%20%C4%B0%C3%A7i%20Yolu,%2016060%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=10891461022698403700&ll=40.200231,29.002541&lsp=9902&q=Korkut%20Hal%C4%B1%20Saha',
         xAppleLocation: `VALUE=URI;X-APPLE-MAPKIT-HANDLE=CAES7wIIrk0Q
@@ -191,7 +191,7 @@ export const Facilities = [
  002541`,
         calendarLocation: 'Korkut Halı Saha\\nHüdavendigar Parkı İçi Yolu\\, 16060 Osmangazi\n' +
             '  Bursa\\, Türkiye',
-        phoneNumber: '0 (535) 014 16 61',
+        phoneNumber: '0 (536) 662 82 16',
     },
     {
         name: 'Galatasaray Özlüce',
@@ -557,6 +557,20 @@ export const Facilities = [
         calendarLocation: 'Fethiye Spor Kompleksi\\nTop Sahası Cd. 15/1\\, 16210 Nilüfer Bur\n' +
             ' sa\\, Türkiye',
         phoneNumber: '0 (538) 213 16 16',
+    },
+    {
+        name: 'Hüdavendigar Sadık',
+        googleUrl: 'https://maps.app.goo.gl/bnZTB4bpzCjm5SnV6',
+        appleUrl: 'https://maps.apple.com/?address=H%C3%BCdavendigar%20Park%C4%B1%20%C4%B0%C3%A7i%20Yolu,%2016060%20Osmangazi%20Bursa,%20T%C3%BCrkiye&ll=40.203159,29.003152&q=H%C3%BCdavendigar%20Sad%C4%B1k',
+        xAppleLocation: `VALUE=URI;X-APPLE-MAPKIT-HANDLE=CAESiQEIrk0a
+ EgmscTYdARpEQBHA6siRzgA9QCoUSMO8ZGF2ZW5kaWdhciBTYWTEsWsyQEjDvGRhdmVuZGln
+ YXIgUGFya8SxIMSww6dpIFlvbHUsIDE2MDYwIE9zbWFuZ2F6aSBCdXJzYSwgVMO8cmtpeWVQ
+ AVoWChQSEgmscTYdARpEQBHA6siRzgA9QA==;X-APPLE-RADIUS=70.6711125506628;X-A
+ PPLE-REFERENCEFRAME=1;X-TITLE=Hüdavendigar Parkı İçi Yolu\\\\n16060 Bursa\\
+ \\nOsmangazi Türkiye:geo:40.203159,29.003152`,
+        calendarLocation: 'Hüdavendigar Parkı İçi Yolu\\n16060 Bursa\\nOsmangazi Türkiye' +
+            ' sa\\, Türkiye',
+        phoneNumber: '0 (535) 014 16 61',
     },
 ]
 

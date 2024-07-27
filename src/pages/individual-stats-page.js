@@ -12,7 +12,7 @@ const IndividualStatsPage = ({databaseData, credentials, allData, reloadData}) =
         <div>
             <main>
                 <IndividualStatsGrid databaseData={databaseData} credentials={credentials} allData={allData} reloadData={handleReload}/>
-                <Footer></Footer>
+                <Footer credentials={credentials}></Footer>
             </main>
         </div>
     );

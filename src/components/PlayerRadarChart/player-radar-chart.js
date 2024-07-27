@@ -10,8 +10,9 @@ import {Divider} from "@mui/material";
 const PlayerRadarChart = ({playerName}) => {
 
     const isMobile = window.innerWidth <= 768;
+    const keepOrDefLabel = playerName === TeamMembers.can.name ? 'KEEP' : 'DEF'
     const performanceRateDatasets = {
-        labels: ['ATT', 'TEC', 'STA', 'DEF', 'POW', 'SPD'],
+        labels: ['ATT', 'TEC', 'STA', keepOrDefLabel, 'POW', 'SPD'],
         datasets: [
             {
                 label: playerName,

@@ -8,7 +8,7 @@ const TeamStatsPage = ({databaseData, credentials}) => {
         <div>
             <main>
                 <TeamStatsGrid databaseData={databaseData} credentials={credentials}/>
-                <Footer></Footer>
+                <Footer credentials={credentials}></Footer>
             </main>
         </div>
     );
