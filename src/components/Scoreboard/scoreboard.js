@@ -4,7 +4,7 @@ import Result from "../Result/result";
 import GameStatus from "../GameStatus/game-status";
 import {useState} from "react";
 
-const Scoreboard = ({value, openPopup, matchDetailsData, fixture, playerDetails}) => {
+const Scoreboard = ({value, openPopup, matchDetailsData, fixture, playerDetails, selectedEra}) => {
 
     const [buttonBgColor, setButtonBgColor] = useState(playerDetails ? '#323232' : '#242424');
 
@@ -24,7 +24,7 @@ const Scoreboard = ({value, openPopup, matchDetailsData, fixture, playerDetails}
     return (
         <section className={playerDetails ? classes.scoreboardPlayerDetails : classes.scoreboard} onClick={handleXClick} onMouseEnter={handleButtonHover}
                  onMouseLeave={handleButtonLeave} style={{background: buttonBgColor}}>
-            <TeamView teamData={value?.oyesfc} rakipbul={value?.rakipbul} bgColor={buttonBgColor}/>
+            <TeamView teamData={value?.oyesfc} rakipbul={value?.rakipbul} bgColor={buttonBgColor} selectedEra={selectedEra}/>
             <main className={classes.score} style={{background: buttonBgColor}}>
                 <Result homeTeamScore={value?.oyesfc?.goal} awayTeamScore={value?.rival?.goal} bgColor={buttonBgColor} fixture={fixture} time={value?.time}/>
                 <GameStatus status={value?.day?.replace(/-/g, '/')} bgColor={buttonBgColor} fixture={fixture}/>

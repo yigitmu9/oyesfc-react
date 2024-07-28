@@ -8,6 +8,9 @@ import RedditIcon from '@mui/icons-material/Reddit';
 
 const Footer = ({credentials}) => {
 
+    const date = new Date();
+    const year = date.getFullYear();
+
     const redirectToEmail = () => {
         window.location.href = "mailto:oyesfc@gmail.com";
     };
@@ -34,7 +37,7 @@ const Footer = ({credentials}) => {
         <footer className={classes.grid}>
             <div className={classes.content}>
                 <div className={classes.infoGrid}>
-                    <span className={classes.spanStyle}>{'© 2023 O Yes FC™ | v' + packageJson.version}</span>
+                    <span className={classes.spanStyle}>{'© ' + year + ' O Yes FC™ | v' + packageJson.version}</span>
                 </div>
 
                 <div className={classes.iconsGrid}>

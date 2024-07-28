@@ -617,7 +617,8 @@ export const SnackbarMessages = {
     successfully_added: 'Match successfully added.',
     error_occurred: 'An error occurred!',
     invalid_credentials: 'Firebase: Error (auth/invalid-login-credentials).',
-    invalid_email_password: 'Invalid email or password!'
+    invalid_email_password: 'Invalid email or password!',
+    video_successfully_added: 'Video successfully added.',
 }
 
 export const AddMatchMessages = {
@@ -644,4 +645,29 @@ export const BootBrandsList = {
     adidas: 'Adidas',
     puma: 'Puma',
     lotto: 'Lotto'
+}
+
+export const HighlightConstants = {
+    type: {
+        goal: 'Goal',
+        highlight: 'Highlight',
+        missedChance: 'Missed Chance',
+        yellowCard: 'Yellow Card',
+        redCard: 'Red Card',
+        save: 'Save',
+        concededGoal: 'Conceded Goal',
+        pressConference: 'Press Conference',
+        defendedPosition: 'Defended Position',
+    },
+    source: {
+        youtube: 'Youtube',
+        drive: 'Drive',
+    }
+}
+
+export const OYesFcEras = {
+    goldenAge: 'Golden Age',
+    redAndBlack: 'Red & Black',
+    rising: 'Rising',
+    origins: 'Origin'
 }

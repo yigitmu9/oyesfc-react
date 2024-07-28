@@ -8,7 +8,7 @@ import {matchType, TeamNames} from "../../constants/constants";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import {MatchDetails} from "../MatchDetails/match-details";
 
-const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allData, filteredData}) => {
+const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allData, filteredData, selectedEra}) => {
 
     const today = new Date();
     const isMobile = window.innerWidth <= 768;
@@ -130,7 +130,8 @@ const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allD
                 <MatchDetails matchDetailsData={matchDetailsData}
                               onClose={() => setPopupOpen(false)}
                               fixture={fixtureType} data={previousMatchesData} reloadData={handleReload}
-                              credentials={credentials} allData={sortedAllData} playerDetails={null}/>}
+                              credentials={credentials} allData={sortedAllData} playerDetails={null}
+                              selectedEra={selectedEra}/>}
         </>
     );
 };

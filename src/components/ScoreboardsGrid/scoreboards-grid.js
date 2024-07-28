@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails/match-details";
 import {matchType} from "../../constants/constants";
 
-const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData, credentials, allData, playerDetails}) => {
+const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData, credentials, allData, playerDetails, selectedEra}) => {
 
     const today = new Date();
     const matchDetailsFilteredData = Object.values(databaseData);
@@ -101,7 +101,8 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                         value={x}
                                         openPopup={() => openPopup(x, matchType.live)}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={matchType.live} playerDetails={playerDetails}/>))}
+                                        fixture={matchType.live} playerDetails={playerDetails}
+                                        selectedEra={selectedEra}/>))}
                             </div>
                         </>
                         :
@@ -116,7 +117,8 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                         value={x}
                                         openPopup={() => openPopup(x, matchType.upcoming)}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={matchType.upcoming} playerDetails={playerDetails}/>))}
+                                        fixture={matchType.upcoming} playerDetails={playerDetails}
+                                        selectedEra={selectedEra}/>))}
                             </div>
                         </>
                         :
@@ -131,7 +133,8 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                                         value={x}
                                         openPopup={() => openPopup(x, matchType.previous)}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={matchType.previous} playerDetails={playerDetails}/>))}
+                                        fixture={matchType.previous} playerDetails={playerDetails}
+                                        selectedEra={selectedEra}/>))}
                             </div>
                         </>
                         :
@@ -140,7 +143,8 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                         <MatchDetails matchDetailsData={matchDetailsData}
                                       onClose={() => setPopupOpen(false)}
                                       fixture={fixtureType} data={previousMatchesData} reloadData={handleReload}
-                                      credentials={credentials} allData={sortedAllData} playerDetails={playerDetails}/>}
+                                      credentials={credentials} allData={sortedAllData} playerDetails={playerDetails}
+                                      selectedEra={selectedEra}/>}
                 </div>
                 :
                 <div style={{minHeight: windowHeight, textAlign: 'center', alignItems: 'center', display: 'flex', justifyContent: 'center'}}>

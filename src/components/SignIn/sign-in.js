@@ -9,7 +9,7 @@ import CardMedia from "@mui/material/CardMedia";
 import {SnackbarMessages, TeamMembers} from "../../constants/constants";
 import {Alert} from "@mui/material";
 
-const SignIn = ({onClose, credentials, checkAuth}) => {
+const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
 
     const popupRef = useRef(null);
     const isMobile = window.innerWidth <= 768;
@@ -78,7 +78,7 @@ const SignIn = ({onClose, credentials, checkAuth}) => {
             <div className={classes.overlay}>
                 <div className={classes.generalStyle} ref={popupRef}>
                     <div className={classes.loadingDiv}>
-                        {Loading()}
+                        {Loading(selectedEra)}
                     </div>
                 </div>
             </div>

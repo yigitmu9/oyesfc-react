@@ -111,19 +111,14 @@
 .tableStyle {
     display: block;
     background-color: #242424;
-    width: 60%;
-    margin-right: 30px;
     height: 270px;
     text-align: center;
     justify-content: center;
     overflow: auto;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
     @media screen and (max-width: 768px) {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 20px;
-        overflow: auto;
-    }
-    @media screen and (min-width: 769px) and (max-width: 1700px) {
         width: 100%;
         margin-right: 0;
         margin-bottom: 20px;

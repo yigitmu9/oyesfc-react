@@ -62,13 +62,10 @@
 }
 
 .cardContentInsideStyle {
-    display: flex;
+    display: block;
     background-color: #242424;
 
     @media screen and (max-width: 768px) {
-        display: block;
-    }
-    @media screen and (min-width: 769px) and (max-width: 1700px) {
         display: block;
     }
 }

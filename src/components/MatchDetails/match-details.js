@@ -7,7 +7,7 @@ import GameStatus from "../GameStatus/game-status";
 import {
     Facilities,
     matchType,
-    openWeatherType,
+    openWeatherType, OYesFcEras,
     SnackbarTypes,
     TeamMembers,
     WeatherSky
@@ -27,6 +27,11 @@ import PlayerDetails from "../PlayerDetails/player-details";
 import {getWeather} from "../../services/service";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import HighlightsTab from "../HighlightsTab/highlights-tab";
+import PhoenixLogo from "../../images/phoenix.png";
+import OYesFCLogo from "../../images/oyesfc.PNG";
+import FirstLogo from "../../images/firstLogo.png";
+import GhostLogo from "../../images/ghost.png";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -69,7 +74,8 @@ export const MatchDetails = ({
                                  reloadData,
                                  credentials,
                                  allData,
-                                 playerDetails
+                                 playerDetails,
+                                 selectedEra
                              }) => {
 
     const hourDifference = () => {
@@ -448,7 +454,7 @@ export const MatchDetails = ({
                     <section className={classes.scoreboard} style={{background: buttonBgColor}}>
                         <div className={classes.scoreboardInsideDiv}>
                             <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
-                                      bgColor={buttonBgColor} isDetails={true}/>
+                                      bgColor={buttonBgColor} isDetails={true} selectedEra={selectedEra}/>
                             <main className={classes.score} style={{background: buttonBgColor}}>
                                 <Result homeTeamScore={matchDetailsData?.oyesfc?.goal}
                                         awayTeamScore={matchDetailsData?.rival?.goal}
@@ -541,6 +547,13 @@ export const MatchDetails = ({
                                     color: 'lightgray'
                                 }
                             }} label="links" {...a11yProps(4)} />
+                            <Tab sx={{
+                                '&.MuiTab-root': {
+                                    color: 'gray'
+                                }, '&.Mui-selected': {
+                                    color: 'lightgray'
+                                }
+                            }} label="highlights" {...a11yProps(5)} />
                             {
                                 credentials?.signedIn && fixture === matchType.previous &&
                                 <Tab sx={{
@@ -549,7 +562,7 @@ export const MatchDetails = ({
                                     }, '&.Mui-selected': {
                                         color: 'lightgray'
                                     }
-                                }} label="rating" {...a11yProps(5)} />
+                                }} label="rating" {...a11yProps(6)} />
                             }
                             {
                                 credentials?.signedIn && fixture === matchType.previous &&
@@ -559,7 +572,7 @@ export const MatchDetails = ({
                                     }, '&.Mui-selected': {
                                         color: 'lightgray'
                                     }
-                                }} label="notes" {...a11yProps(6)} />
+                                }} label="notes" {...a11yProps(7)} />
                             }
                         </Tabs>
                     </Box>
@@ -586,10 +599,15 @@ export const MatchDetails = ({
                                   fixture={fixture}/>
                         {isMobile && closeButton}
                     </CustomTabPanel>
+                    <CustomTabPanel value={tabValue} index={5}>
+                        <HighlightsTab matchDetailsData={matchDetailsData} credentials={credentials}
+                                       snackbarData={(snackbarData) => handleMessageClick(snackbarData)}/>
+                        {isMobile && closeButton}
+                    </CustomTabPanel>
                     {
                         credentials?.signedIn && fixture === matchType.previous &&
                         <>
-                            <CustomTabPanel value={tabValue} index={5}>
+                            <CustomTabPanel value={tabValue} index={6}>
                                 {
                                     Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== credentials?.userName)?.map((x, y) => (
                                         <section key={y} className={classes.starSection}>
@@ -665,7 +683,7 @@ export const MatchDetails = ({
                                         <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
                                 </div>
                             </CustomTabPanel>
-                            <CustomTabPanel value={tabValue} index={6}>
+                            <CustomTabPanel value={tabValue} index={7}>
                                 {
                                     matchNotes && matchNotes?.map((x, y) => (
                                         <section key={y} className={classes.notesSection}>
