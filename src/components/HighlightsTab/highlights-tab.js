@@ -5,31 +5,17 @@ import {
     AccordionDetails,
     AccordionSummary,
     Alert,
-    Divider,
-    FormControlLabel,
-    RadioGroup, Snackbar
+    Snackbar
 } from "@mui/material";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import {AddToCalendarButton} from "add-to-calendar-button-react";
-import EditIcon from "@mui/icons-material/Edit";
 import {
-    Facilities,
-    FootballRoles, HighlightConstants,
-    Jerseys,
-    matchType,
-    openWeatherType, SnackbarMessages, SnackbarTypes,
-    TeamMembers,
+    HighlightConstants, SnackbarMessages, SnackbarTypes,
     TeamNames
 } from "../../constants/constants";
-import CloudIcon from "@mui/icons-material/Cloud";
-import PhoneIcon from '@mui/icons-material/Phone';
 import highlightsClasses from './highlights-tab.module.css';
 import addMatchClasses from '../AddMatch/add-match.module.css';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import {PulseLoader} from "react-spinners";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import BrowserNotSupportedIcon from '@mui/icons-material/BrowserNotSupported';

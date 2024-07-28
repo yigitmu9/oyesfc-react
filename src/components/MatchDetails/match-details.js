@@ -7,7 +7,7 @@ import GameStatus from "../GameStatus/game-status";
 import {
     Facilities,
     matchType,
-    openWeatherType, OYesFcEras,
+    openWeatherType,
     SnackbarTypes,
     TeamMembers,
     WeatherSky
@@ -28,10 +28,6 @@ import {getWeather} from "../../services/service";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HighlightsTab from "../HighlightsTab/highlights-tab";
-import PhoenixLogo from "../../images/phoenix.png";
-import OYesFCLogo from "../../images/oyesfc.PNG";
-import FirstLogo from "../../images/firstLogo.png";
-import GhostLogo from "../../images/ghost.png";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
