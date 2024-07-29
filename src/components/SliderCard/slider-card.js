@@ -25,12 +25,14 @@ const SliderCard = ({selectedEra, sendEra}) => {
     const getEraNumber = cards?.find(x => x?.title === selectedEra)?.number
     const [currentCard, setCurrentCard] = useState(getEraNumber !== undefined ? getEraNumber : 1);
     const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 240) + 'px' : (window.innerHeight - 370) + 'px';
+    const isMobile = window.innerWidth <= 768;
 
     const styles = {
         card: {
             position: 'relative',
             backgroundColor: 'transparent',
             borderRadius: '25px',
+            height: '70vh'
         },
         media: {
             height: 0,
@@ -121,14 +123,14 @@ const SliderCard = ({selectedEra, sendEra}) => {
                     <Card sx={styles.card} className={classes.cardStyle}>
                         <CardMedia
                             component="img"
-                            sx={{height: 700, width: '100%'}}
+                            sx={{height: '100%', width: '100%'}}
                             image={require(`../../images/${cards[currentCard].logo}`)}
                         />
                         <CardContent sx={styles.content}>
                             <span className={classes.content}>{cards[currentCard].content}</span>
                         </CardContent>
                     </Card>
-                    <div className={classes.erasGrid} style={{}}>
+                    <div className={classes.erasGrid}>
                         {cards.map((x, index) =>
                             <Card key={index} sx={smallStyles.card} className={classes.smallCardStyle}
                                   onClick={() => clickCard(index)}>

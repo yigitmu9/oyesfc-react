@@ -190,72 +190,34 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
             <Divider sx={{bgcolor: 'black', marginLeft: '20px', marginRight: '20px'}}/>
             <div className={classes.drawerRoutesDiv}>
                 <span className={classes.drawerRoutesSpan} onClick={navigateMainPage}>
-                    Main Page
+                    MAIN PAGE
                 </span>
                 <span className={classes.drawerRoutesSpan} onClick={navigateMatches}>
-                    Matches
+                    MATCHES
                 </span>
                 <span className={classes.drawerRoutesSpan} onClick={navigateIndividualStats}>
-                    Individual Stats
+                    INDIVIDUAL STATS
                 </span>
                 <span className={classes.drawerRoutesSpan} onClick={navigateTeamStats}>
-                    Team Stats
+                    TEAM STATS
                 </span>
                 <span className={classes.drawerRoutesSpan} onClick={openFiltersModal}>
-                    Filters
+                    FILTERS
                 </span>
                 <span className={classes.drawerRoutesSpan} onClick={openCalendarPopup}>
-                    Calendar
+                    CALENDAR
                 </span>
                 {
                     credentials?.isCaptain &&
                     <>
                         <span className={classes.drawerRoutesSpan} onClick={openAddMatchPopup}>
-                            Add Match
+                            ADD MATCH
                         </span>
                     </>
                 }
-                {
-                    credentials?.signedIn ?
-                        <>
-                            <div className={classes.mobileUserDiv}>
-                                <section className={classes.mobileUserSection} onClick={openSignInPopup}>
-                                    <div>
-                                        <CardMedia
-                                            component="img"
-                                            sx={{
-                                                height: isMobile ? 55 : 45,
-                                                width: isMobile ? 55 : 45,
-                                                borderRadius: '100%'
-                                            }}
-                                            image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
-                                        />
-                                    </div>
-                                    <div className={classes.mobileUserDetailsDiv}>
-                                        <span className={classes.mobileUserNameSpan}>
-                                            {credentials?.userName}
-                                        </span>
-                                        <span className={classes.mobileEmailSpan}>
-                                            {credentials?.email}
-                                        </span>
-                                    </div>
-                                </section>
-                            </div>
-                        </>
-                        :
-                        <>
-                            <div className={classes.mobileUserDiv}>
-                                <section className={classes.mobileUserSection} onClick={openSignInPopup}>
-                                    <AccountCircleIcon
-                                        sx={{height: 35, width: 35, color: 'darkred'}}></AccountCircleIcon>
-                                    <span className={classes.mobileUserNameSpan}>
-                                    Log In
-                                </span>
-                                </section>
-
-                            </div>
-                        </>
-                }
+                <span className={classes.drawerRoutesSpan} onClick={openSignInPopup}>
+                    {credentials?.signedIn ? 'PROFILE' : 'LOG IN'}
+                </span>
             </div>
         </Box>
     );
@@ -276,21 +238,21 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                             style={{color: location.pathname === matchesPath ? 'white' : 'black'}}
                             onClick={navigateMatches}
                         >
-                            Matches
+                            MATCHES
                         </span>
                         <span
                             className={classes.desktopMenuItems}
                             style={{color: location.pathname === individualPath ? 'white' : 'black'}}
                             onClick={navigateIndividualStats}
                         >
-                            Individual Stats
+                            INDIVIDUAL STATS
                         </span>
                         <span
                             className={classes.desktopMenuItems}
                             style={{color: location.pathname === teamPath ? 'white' : 'black'}}
                             onClick={navigateTeamStats}
                         >
-                            Team Stats
+                            TEAM STATS
                         </span>
                     </Box>
                     <Box sx={{
@@ -345,19 +307,19 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                                     className={classes.mobileMenuItems}
                                     onClick={openSignInPopup}
                                 >
-                                    {credentials?.signedIn ? 'Profile' : 'Log In'}
+                                    {credentials?.signedIn ? 'PROFILE' : 'LOG IN'}
                                 </span>
                                 <span
                                     className={classes.mobileMenuItems}
                                     onClick={openFiltersModal}
                                 >
-                                    Filters
+                                    FILTERS
                                 </span>
                                 <span
                                     className={classes.mobileMenuItems}
                                     onClick={openCalendarPopup}
                                 >
-                                    Calendar
+                                    CALENDAR
                                 </span>
                                 {
                                     credentials?.isCaptain &&
@@ -366,7 +328,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                                                 className={classes.mobileMenuItems}
                                                 onClick={openAddMatchPopup}
                                             >
-                                                Add Match
+                                                ADD MATCH
                                             </span>
                                     </>
                                 }
