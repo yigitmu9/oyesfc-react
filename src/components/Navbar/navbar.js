@@ -38,7 +38,6 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
     const individualPath = '/oyesfc-react/individual-stats';
     const teamPath = '/oyesfc-react/team-stats';
     const mainPath = '/oyesfc-react/';
-    const isMobile = window.innerWidth <= 768;
 
     const getTeamLogo = () => {
         if (selectedEra === OYesFcEras.goldenAge) return 'goldenrod'

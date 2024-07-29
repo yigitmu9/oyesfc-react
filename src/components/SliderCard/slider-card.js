@@ -25,7 +25,6 @@ const SliderCard = ({selectedEra, sendEra}) => {
     const getEraNumber = cards?.find(x => x?.title === selectedEra)?.number
     const [currentCard, setCurrentCard] = useState(getEraNumber !== undefined ? getEraNumber : 1);
     const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 240) + 'px' : (window.innerHeight - 370) + 'px';
-    const isMobile = window.innerWidth <= 768;
 
     const styles = {
         card: {
