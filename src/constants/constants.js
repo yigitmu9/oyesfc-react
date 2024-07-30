@@ -650,7 +650,7 @@ export const BootBrandsList = {
 export const HighlightConstants = {
     type: {
         goal: 'Goal',
-        highlight: 'Highlight',
+        highlights: 'Highlights',
         missedChance: 'Missed Chance',
         yellowCard: 'Yellow Card',
         redCard: 'Red Card',
@@ -658,10 +658,11 @@ export const HighlightConstants = {
         concededGoal: 'Conceded Goal',
         pressConference: 'Press Conference',
         defendedPosition: 'Defended Position',
+        matchVideo: 'Match Video'
     },
     source: {
-        youtube: 'Youtube',
         drive: 'Drive',
+        youtube: 'Youtube',
     }
 }
 
