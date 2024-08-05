@@ -1,0 +1,10 @@
+.chart {
+    background-color: rgb(36, 36, 36);
+}
+
+.chartStyle {
+    display: block;
+    background-color: transparent;
+    margin-bottom: 20px;
+    width: 100%;
+}

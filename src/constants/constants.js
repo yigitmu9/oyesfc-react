@@ -671,3 +671,12 @@ export const OYesFcEras = {
     rising: 'Rising',
     origins: 'Origin'
 }
+
+export const ChartTypes = {
+    bar: 'bar',
+    customLine: 'customLine',
+    pie: 'pie',
+    radar: 'radar',
+    doughnut: 'doughnut',
+    polarArea: 'polarArea'
+}

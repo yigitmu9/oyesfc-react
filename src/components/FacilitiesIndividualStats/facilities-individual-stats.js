@@ -2,7 +2,6 @@ import React from 'react';
 import classes from "./facilities-individual-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {Bar} from "react-chartjs-2";
 import {
     FormControl,
     Table,
@@ -12,11 +11,12 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
-import {TeamMembers} from "../../constants/constants";
-import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
+import {ChartTypes, TeamMembers} from "../../constants/constants";
+import ChartComponent from "../../shared/ChartComponent/chart-component";
 
 const FacilitiesIndividualStats = ({data}) => {
 
+    const players = Object.values(TeamMembers).map(x => x.name)
     let facilities = [];
     Object.values(data)?.forEach((x) => {
         if (!facilities.includes(x.place)) {
@@ -60,47 +60,6 @@ const FacilitiesIndividualStats = ({data}) => {
         playerGoalPerGameData.push(goalsPerGame)
     });
 
-    const chartDatasets = {
-        labels: Object.values(TeamMembers).map(x => x.name),
-        datasets: [
-            {
-                label: 'Goals per Game',
-                backgroundColor: 'darkred',
-                borderColor: 'darkred',
-                borderWidth: 2,
-                data: playerGoalPerGameData,
-            }
-        ]
-    }
-
-    const options = {
-        indexAxis: 'y',
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                labels: {
-                    color: 'lightgray',
-                },
-            },
-        },
-        scales: {
-            x: {
-                beginAtZero: true,
-                ticks: {
-                    color: 'lightgray',
-                },
-            },
-            y: {
-                ticks: {
-                    color: 'lightgray',
-                },
-            },
-        },
-    };
-
-    Chart.register(CategoryScale);
-    linear.register(CategoryScale);
-
     return (
         <div className={classes.grid}>
             <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center" }}>
@@ -116,20 +75,19 @@ const FacilitiesIndividualStats = ({data}) => {
                                     ))}
                                 </select>
                             </label>
-
                         </FormControl>
                     </div>
                 </div>
                 <CardContent style={{backgroundColor: "#242424"}}>
                     <div className={classes.cardContentInsideStyle}>
-                        <div className={classes.chartStyle}>
-                            <Bar
-                                data={chartDatasets}
-                                width={"100%"}
-                                className={classes.chart}
-                                options={options}
-                            />
-                        </div>
+                        <ChartComponent
+                            type={ChartTypes.bar}
+                            color={'darkred'}
+                            data={playerGoalPerGameData}
+                            customStyle={{height: '500px'}}
+                            graphLabels={players}
+                            layout={'y'}
+                            title={'Goals per Game'}/>
                         <div className={classes.tableStyle}>
                             <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
                                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
