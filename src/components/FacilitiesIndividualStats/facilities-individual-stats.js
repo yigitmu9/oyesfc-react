@@ -2,20 +2,14 @@ import React from 'react';
 import classes from "./facilities-individual-stats.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {
-    FormControl,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material";
+import {FormControl} from "@mui/material";
 import {ChartTypes, TeamMembers} from "../../constants/constants";
 import ChartComponent from "../../shared/ChartComponent/chart-component";
+import TableComponent from "../../shared/TableComponent/table-component";
 
 const FacilitiesIndividualStats = ({data}) => {
 
+    const tableColumnNames = ['Players', 'Matches', 'Goals', 'Rate of Attendance', 'Goals per Game']
     const players = Object.values(TeamMembers).map(x => x.name)
     let facilities = [];
     Object.values(data)?.forEach((x) => {
@@ -31,12 +25,10 @@ const FacilitiesIndividualStats = ({data}) => {
 
     const facilityData = Object.values(data).filter(x => x.place === facility)
 
-    const rows = Object.values(TeamMembers).map(x => x.name);
     let playerTotalGoalFacilities = 0;
-    let playerGoalDataFacilities = [];
-    let playerAttendanceDataFacilities = [];
     let playerGoalPerGameData = [];
-    let playerMatchData = [];
+
+    let fullData = [];
 
     const numberOfMatches = Object.values(facilityData).length;
 
@@ -54,10 +46,9 @@ const FacilitiesIndividualStats = ({data}) => {
         const attendanceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
         const goalsPerGame = (playerTotalGoalFacilities / playerTotalMatch)?.toFixed(2)
 
-        playerGoalDataFacilities.push(playerTotalGoalFacilities)
-        playerAttendanceDataFacilities.push(attendanceRate)
-        playerMatchData.push(playerTotalMatch)
+        const playerData = [member.name, playerTotalMatch, playerTotalGoalFacilities, attendanceRate, goalsPerGame]
         playerGoalPerGameData.push(goalsPerGame)
+        fullData.push(playerData)
     });
 
     return (
@@ -88,38 +79,10 @@ const FacilitiesIndividualStats = ({data}) => {
                             graphLabels={players}
                             layout={'y'}
                             title={'Goals per Game'}/>
-                        <div className={classes.tableStyle}>
-                            <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                    <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                        <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Players</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals per Game</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rows.map((row, number) => (
-                                            <TableRow
-                                                key={row}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
-                                            >
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
-                                                    {row}
-                                                </TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalDataFacilities[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceDataFacilities[number]}%</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameData[number]}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </div>
+                        <TableComponent
+                            columns={tableColumnNames}
+                            rows={fullData}
+                        />
                     </div>
                 </CardContent>
             </Card>
