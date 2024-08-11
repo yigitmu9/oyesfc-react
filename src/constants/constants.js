@@ -598,6 +598,7 @@ export const Jerseys = [
     'Wavy Jersey',
     'Red Jersey',
     '10th Year Jersey',
+    'Bursaspor Jersey'
 ]
 
 export const WeatherSky = [
@@ -656,6 +657,7 @@ export const TurkishJerseys = {
     'Wavy Jersey': 'Dalgalı Forma',
     'Red Jersey': 'Kırmızı Forma',
     '10th Year Jersey': '10 Yıl Forması',
+    'Bursaspor Jersey': 'Bursaspor Forması'
 }
 
 export const BootBrandsList = {

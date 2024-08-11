@@ -41,6 +41,11 @@ const SquadTab = ({matchDetailsData, squadRatings, openPlayerModal}) => {
         playerNumberColor = 'gold';
         gkColor = 'darkred';
         gkNumberColor = 'black';
+    }  else if (matchDetailsData.oyesfc?.jersey === Jerseys[5]) {
+        playerColor = 'lightgray';
+        playerNumberColor = 'green';
+        gkColor = 'dodgerblue';
+        gkNumberColor = 'white';
     } else {
         const inputDateParts = matchDetailsData.day.split('-');
         const inputDateObject = new Date(Number(inputDateParts[2]), Number(inputDateParts[1]) - 1, Number(inputDateParts[0]));
