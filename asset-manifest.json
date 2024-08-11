@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/oyesfc-react/static/css/main.bb462a6e.css",
-    "main.js": "/oyesfc-react/static/js/main.8b78650c.js",
+    "main.js": "/oyesfc-react/static/js/main.18b3d101.js",
     "static/js/787.6b6304da.chunk.js": "/oyesfc-react/static/js/787.6b6304da.chunk.js",
     "static/media/blue2.jpeg": "/oyesfc-react/static/media/blue2.0f2b3def40a8d09df572.jpeg",
     "static/media/gold2.jpeg": "/oyesfc-react/static/media/gold2.c5a4f74bdf561d038f35.jpeg",
@@ -49,6 +49,7 @@
     "static/media/Elfi.png": "/oyesfc-react/static/media/Elfi.398280192682b8ff786e.png",
     "static/media/rakipbul.png": "/oyesfc-react/static/media/rakipbul.0d3349e9505024fc8ef0.png",
     "static/media/Keyifçiler.png": "/oyesfc-react/static/media/Keyifçiler.b845d3bbecb343844e1d.png",
+    "static/media/kit6.PNG": "/oyesfc-react/static/media/kit6.21af748933f4aacef7a1.PNG",
     "static/media/mert.jpeg": "/oyesfc-react/static/media/mert.36d67eb2a190b5449d2a.jpeg",
     "static/media/4evler.png": "/oyesfc-react/static/media/4evler.6cd0088a848a76031581.png",
     "static/media/Vikings.png": "/oyesfc-react/static/media/Vikings.94a37ee4c4ab8bfd35bf.png",
@@ -58,11 +59,11 @@
     "static/media/Olympos.png": "/oyesfc-react/static/media/Olympos.561cd7e7555c194cb599.png",
     "index.html": "/oyesfc-react/index.html",
     "main.bb462a6e.css.map": "/oyesfc-react/static/css/main.bb462a6e.css.map",
-    "main.8b78650c.js.map": "/oyesfc-react/static/js/main.8b78650c.js.map",
+    "main.18b3d101.js.map": "/oyesfc-react/static/js/main.18b3d101.js.map",
     "787.6b6304da.chunk.js.map": "/oyesfc-react/static/js/787.6b6304da.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.bb462a6e.css",
-    "static/js/main.8b78650c.js"
+    "static/js/main.18b3d101.js"
   ]
 }
