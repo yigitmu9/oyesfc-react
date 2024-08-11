@@ -572,6 +572,24 @@ export const Facilities = [
             ' sa\\, Türkiye',
         phoneNumber: '0 (535) 014 16 61',
     },
+    {
+        name: 'Özcan',
+        googleUrl: 'https://maps.app.goo.gl/BUuHcaDsB6MvKzEn6',
+        appleUrl: 'https://maps.apple.com/?address=252.%20Sk.%205/3,%2016230%20Nil%C3%BCfer%20Bursa,%20T%C3%BCrkiye&auid=13801656171856753653&ll=40.215586,28.942353&lsp=9902&q=%C3%B6zcan%20spor%20tesisleri',
+        xAppleLocation: `VALUE=URI;X-APPLE-MAPKIT-HANDLE=CAESuwIIrk0Q
+ 9efl3J+l1cS/ARoSCfT+P06YG0RAEUVLeQg+8TxAInMKCFTDvHJraXllEgJUUhoFQnVyc2Eq
+ CE5pbMO8ZmVyMghOaWzDvGZlcjoFMTYyMzBCCUVydHXEn3J1bFIIMjUyLiBTay5aAzUvM2IM
+ MjUyLiBTay4gNS8zigEJRXJ0dcSfcnVsigEMMjMgTmlzYW4gTWguKhXDtnpjYW4gc3BvciB0
+ ZXNpc2xlcmkyDDI1Mi4gU2suIDUvMzIUMTYyMzAgTmlsw7xmZXIgQnVyc2EyCFTDvHJraXll
+ OC9QAVpZCigI9efl3J+l1cS/ARISCfT+P06YG0RAEUVLeQg+8TxAGK5NkAMBmAMBoh8sCPXn
+ 5dyfpdXEvwEaHwoVw7Z6Y2FuIHNwb3IgdGVzaXNsZXJpEAAqAnRyQAA=;X-APPLE-RADIUS=
+ 141.1748852807602;X-APPLE-REFERENCEFRAME=1;X-TITLE="özcan spor tesisleri
+ \\n252. Sk. 5/3, 16230 Nilüfer Bursa, Türkiye":geo:40.215586,28.942353`,
+        calendarLocation: 'özcan spor tesisleri\\n252. Sk. 5/3\\, 16230 Nilüfer Bursa\\, Türk\n' +
+            ' iye' +
+            ' sa\\, Türkiye',
+        phoneNumber: '0 (505) 524 58 80',
+    },
 ]
 
 export const Jerseys = [
