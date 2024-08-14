@@ -7,7 +7,7 @@ import SoccerLineUp from "react-soccer-lineup";
 import {FootballRoles, Jerseys, TeamMembers} from "../../constants/constants";
 import squadTabClasses from './squad-tab.module.css'
 
-const SquadTab = ({matchDetailsData, squadRatings, openPlayerModal}) => {
+const SquadTab = ({matchDetailsData, squadRatings, openPlayerModal, credentials}) => {
 
     const isMobile = window.innerWidth <= 768;
     let oyesfcSquad;
@@ -184,7 +184,7 @@ const SquadTab = ({matchDetailsData, squadRatings, openPlayerModal}) => {
                     Object.entries(matchDetailsData?.oyesfc?.squad).map((x, y) => (
                         <div key={y} className={classes.generalInfoDiv}>
                             {
-                                squadRatings ?
+                                squadRatings && credentials?.signedIn ?
                                     <span
                                         style={{background: squadRatings?.find(rating => rating?.name === x[0])?.rating >= 7 ? 'darkgreen' :
                                             squadRatings?.find(rating => rating?.name === x[0])?.rating < 5 ? 'darkred' : 'darkgoldenrod'}}

@@ -579,7 +579,7 @@ export const MatchDetails = ({
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
                         <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings}
-                                  openPlayerModal={openPlayerDetailsModal} redirectToTab={redirectToTab}/>
+                                  openPlayerModal={openPlayerDetailsModal} redirectToTab={redirectToTab} credentials={credentials}/>
                         {isMobile && closeButton}
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={2}>

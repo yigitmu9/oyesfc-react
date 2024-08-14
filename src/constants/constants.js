@@ -678,7 +678,8 @@ export const HighlightConstants = {
         concededGoal: 'Conceded Goal',
         pressConference: 'Press Conference',
         defendedPosition: 'Defended Position',
-        matchVideo: 'Match Video'
+        matchVideo: 'Match Video',
+        photo: 'Photo'
     },
     source: {
         drive: 'Drive',
