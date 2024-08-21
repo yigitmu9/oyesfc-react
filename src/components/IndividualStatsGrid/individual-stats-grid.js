@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import ChartsGrid from "../ChartsGrid/charts-grid.js";
 import WeatherIndividualStats from "../WeatherIndividualStats/weather-individual-stats";
 import RakipbulPlayerStats from "../RakipbulPlayerStats/rakipbul-player-stats";

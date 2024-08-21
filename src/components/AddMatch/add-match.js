@@ -38,7 +38,6 @@ import MainTitle from "../../shared/MainTitle/main-title";
 const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchData}) => {
 
     document.body.style.overflow = 'hidden';
-    const isMobile = window.innerWidth <= 768;
     const [loading, setLoading] = useState(selectedMatchData ? null : '');
     const [calendarButtonLoading, setCalendarButtonLoading] = useState(false);
     const [emailJsButtonLoading, setEmailJsButtonLoading] = useState(false);

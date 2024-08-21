@@ -15,7 +15,6 @@ import MainTitle from "../../shared/MainTitle/main-title";
 const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
 
     const popupRef = useRef(null);
-    const isMobile = window.innerWidth <= 768;
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [signedIn, setSignedIn] = useState(credentials?.signedIn)

@@ -9,7 +9,6 @@ import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import {MatchDetails} from "../MatchDetails/match-details";
 import Box from "@mui/material/Box";
 import BackButton from "../../shared/BackButton/back-button";
-import MainTitle from "../../shared/MainTitle/main-title";
 
 const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allData, filteredData, selectedEra}) => {
 

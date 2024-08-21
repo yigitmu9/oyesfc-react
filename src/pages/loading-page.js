@@ -1,5 +1,5 @@
 import React from 'react';
-import {BarLoader, PuffLoader} from "react-spinners";
+import {BarLoader} from "react-spinners";
 import OYesFCLogo from '../images/oyesfc.PNG'
 import {OYesFcEras} from "../constants/constants";
 import PhoenixLogo from "../images/phoenix.png";
