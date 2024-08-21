@@ -507,7 +507,7 @@ export const Facilities = [
     {
         name: 'Hürriyet',
         googleUrl: 'https://maps.app.goo.gl/hEukhHZesCDGgm2d9',
-        appleUrl: 'https://maps.apple.com/?address=Necati%20Sezen%20Sk.%205,%2059030%20S%C3%BCleymanpa%C5%9Fa%20Tekirda%C4%9F,%20T%C3%BCrkiye&auid=12615159708468219331&ll=40.991107,27.564005&lsp=9902&q=H%C3%BCrriyet%20Hal%C4%B1%20Saha%20%26%20Cafe',
+        appleUrl: 'Apple Maps: https://maps.apple.com/?address=1.%20Adalet%20Cd.%2044,%2016160%20Osmangazi%20Bursa,%20T%C3%BCrkiye&auid=10798724149764047757&ll=40.226438,29.003355&lsp=9902&q=Hurriyet%20Spor%20Tesisleri&t=m',
         xAppleLocation: `VALUE=URI;X-APPLE-MAPKIT-HANDLE=CAES0gIIrk0Q
  jYf58ObMse6VARoSCUJ2gw30HERAEQs/3eXHAD1AIoMBCghUw7xya2l5ZRICVFIaBUJ1cnNh
  KglPc21hbmdhemkyCU9zbWFuZ2F6aToFMTYxNjBCDUJhxJ9sYXJiYcWfxLFSDTEuIEFkYWxl

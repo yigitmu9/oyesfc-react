@@ -36,13 +36,10 @@
 }
 
 .drawerRoutesSpan {
-    color: black;
-    margin: 10px;
-    padding: 5px;
+    color: lightgray;
     font-size: 18px;
-    font-weight: bold;
     @media screen and (max-width: 768px) {
-        font-size: 16px;
+        font-size: 17px;
     }
 }
 
@@ -54,9 +51,10 @@
 }
 
 .closeIconDiv {
-    justify-content: right;
+    justify-content: left;
     width: 100%;
     display: flex;
+    margin: 30px 10px -20px;
 }
 
 .mobileUserDiv {
@@ -88,11 +86,19 @@
 
 .mobileEmailSpan {
     color: gray;
-    margin-left: 5px;
-    font-weight: bolder;
     font-size: 16px;
+    margin-top: 5px;
     @media screen and (max-width: 768px) {
-        font-size: 16px;
+        font-size: 15px;
+    }
+}
+
+.miniTitle {
+    color: gray;
+    font-size: 16px;
+    margin-bottom: 5px;
+    @media screen and (max-width: 768px) {
+        font-size: 15px;
     }
 }
 
@@ -104,4 +110,14 @@
     width: 100%;
     align-items: center;
     align-content: center;
+}
+
+.morePageBox {
+    background-color: #1C1C1E;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    width: 100%;
+    padding: 20px;
+    height: auto;
 }

@@ -31,7 +31,7 @@ const PlayerRadarChart = ({playerName}) => {
             r: {
                 beginAtZero: true,
                 max: 10,
-                backgroundColor: '#424242',
+                backgroundColor: '#252525',
                 angleLines: {
                     color: 'transparent'
                 },

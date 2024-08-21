@@ -28,6 +28,7 @@ import bootBrandsClasses from "../BootBrands/boot-brands.module.css";
 import NikeLogo from "../../images/nike.png";
 import AdidasLogo from "../../images/adidas.PNG";
 import TollIcon from '@mui/icons-material/Toll';
+import BackButton from "../../shared/BackButton/back-button";
 
 function CustomTabs(props) {
     const {children, value, index, ...other} = props;
@@ -62,7 +63,7 @@ function a11yProps(index) {
     };
 }
 
-const PlayerCards = ({playerName, data, close , credentials, allData , reloadData}) => {
+const PlayerCards = ({playerName, data, close , credentials, allData , reloadData, selectedEra}) => {
 
     const isMobile = window.innerWidth <= 768;
     const [tabValue, setTabValue] = React.useState(0);
@@ -125,8 +126,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     const styles = {
         card: {
             position: 'relative',
-            backgroundColor: '#424242',
-            borderRadius: '25px',
+            backgroundColor: {xs: 'black', md: '#252525'},
             width: '100%',
             height: '100%',
             overflow: 'auto',
@@ -140,7 +140,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
             bottom: '49.5%',
             left: 0,
             right: 0,
-            backgroundColor: '#323232',
+            backgroundColor: '#1C1C1E',
             color: 'white',
             padding: '10px',
             width: '100%',
@@ -151,12 +151,6 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     const handleClose = () => {
         close(true);
     };
-
-    const closeButton = (
-        <div className={matchDetailsClasses.buttonBorderStyle}>
-            <button className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Close</button>
-        </div>
-    )
 
     const positionStyle = {
         color: 'black',
@@ -410,8 +404,15 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
         setSnackbarData(null);
     };
 
+    const handleBack = (data) => {
+        if (data) handleClose()
+    }
+
     return (
         <Card sx={styles.card}>
+            <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: 'black'}}>
+                <BackButton handleBackButton={handleBack} bgColor={'#1C1C1E'}/>
+            </Box>
             <CardMedia
                 component="img"
                 sx={styles.media}
@@ -420,7 +421,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
             <CardContent sx={styles.content}>
                 <h1>{playerName}</h1>
             </CardContent>
-            <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: '#323232', justifyContent: 'center', display: 'flex'}}>
+            <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: '#1C1C1E', justifyContent: 'center', display: 'flex'}}>
                 <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
                       scrollButtons variant="scrollable"
                       sx={{
@@ -556,13 +557,13 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                     <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                     <div className={classes.bootStyle}>
                         <img className={playerBootBrand === BootBrandsList.nike ?
-                            bootBrandsClasses.nikeCollectionImageStyle : bootBrandsClasses.adidasCollectionImageStyle}
+                            bootBrandsClasses.nikeImageStyle : bootBrandsClasses.adidasImageStyle}
                              src={playerBootBrand === BootBrandsList.nike ? NikeLogo : AdidasLogo}
                              alt={'1'}/>
                         <h1 className={classes.collectionNameStyle}>{playerBootCollection + ' ' + playerBootModel}</h1>
                     </div>
                 </section>}
-                {isMobile && closeButton}
+                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
             </CustomTabs>
             <CustomTabs value={tabValue} index={1}>
                 <section className={matchDetailsClasses.squadSection}>
@@ -655,13 +656,16 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                         </div>
                     </div>
                 </section>
-                {isMobile && closeButton}
+                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
             </CustomTabs>
             <CustomTabs value={tabValue} index={2}>
                 <div className={classes.matchesDiv}>
-                    <ScoreboardsGrid databaseData={filteredWithPlayerData} reloadData={handleReload} credentials={credentials} allData={allData} playerDetails={true}/>
+                    <ScoreboardsGrid databaseData={filteredWithPlayerData} reloadData={handleReload}
+                                     credentials={credentials}
+                                     allData={allData} playerDetails={true}
+                                     selectedEra={selectedEra}/>
                 </div>
-                {isMobile && closeButton}
+                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
             </CustomTabs>
             <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
                 <Alert

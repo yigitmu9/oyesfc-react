@@ -7,11 +7,14 @@ import 'moment/locale/en-gb';
 import {matchType, TeamNames} from "../../constants/constants";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import {MatchDetails} from "../MatchDetails/match-details";
+import Box from "@mui/material/Box";
+import BackButton from "../../shared/BackButton/back-button";
+import MainTitle from "../../shared/MainTitle/main-title";
 
 const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allData, filteredData, selectedEra}) => {
 
     const today = new Date();
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= 1100;
     const popupRef = useRef(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [matchDetailsData, setMatchDetailsData] = useState(null);
@@ -107,16 +110,23 @@ const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allD
         return eventDateTime <= today;
     });
 
+    const handleBack = (data) => {
+        if (data) handleClose()
+    }
+
     return (
         <>
             { !isPopupOpen && <div className={classes.overlay}>
                 <div className={classes.grid} ref={popupRef}>
+                    <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: 'black'}}>
+                        <BackButton handleBackButton={handleBack}/>
+                    </Box>
                     <Calendar
                         localizer={localizer}
                         events={calendarEvents}
                         startAccessor="start"
                         endAccessor="end"
-                        style={{height: isMobile ? '90%' : '100%', width: '100%'}}
+                        style={{height: isMobile ? '80%' : '100%', width: '100%'}}
                         onSelectEvent={handleSelectEvent}
                     />
                     {

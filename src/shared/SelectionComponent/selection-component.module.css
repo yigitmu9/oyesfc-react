@@ -1,0 +1,34 @@
+.selectionStyle {
+    background-color: transparent;
+    color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.colorStyle {
+    background-color: transparent;
+    color: lightgray;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+
+.select {
+    background-color: #404040;
+    color: lightgray;
+    border-color: #404040;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    font-size: 16px;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+        width: 170px;
+        height: 40px;
+    }
+}

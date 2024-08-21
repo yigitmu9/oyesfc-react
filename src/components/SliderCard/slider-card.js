@@ -3,6 +3,7 @@ import classes from "./slider-card.module.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import MainTitle from "../../shared/MainTitle/main-title";
 
 const SliderCard = ({selectedEra, sendEra}) => {
     const cards = [
@@ -23,14 +24,14 @@ const SliderCard = ({selectedEra, sendEra}) => {
     ];
 
     const getEraNumber = cards?.find(x => x?.title === selectedEra)?.number
-    const [currentCard, setCurrentCard] = useState(getEraNumber !== undefined ? getEraNumber : 1);
+    const [currentCard, setCurrentCard] = useState(getEraNumber !== undefined ? getEraNumber : 0);
     const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 240) + 'px' : (window.innerHeight - 370) + 'px';
 
     const styles = {
         card: {
             position: 'relative',
             backgroundColor: 'transparent',
-            borderRadius: '25px',
+            borderRadius: '16px',
             height: '70vh'
         },
         media: {
@@ -42,7 +43,7 @@ const SliderCard = ({selectedEra, sendEra}) => {
             bottom: 0,
             left: 0,
             right: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             color: 'white',
             padding: '10px',
         },
@@ -56,7 +57,7 @@ const SliderCard = ({selectedEra, sendEra}) => {
             '&:hover': {
                 transform: 'scale(1.05)',
             },
-            borderRadius: '25px',
+            borderRadius: '16px',
         },
         media: {
             height: 0,
@@ -117,7 +118,7 @@ const SliderCard = ({selectedEra, sendEra}) => {
     return (
         <>
             <div className={classes.grid} style={{minHeight: windowHeight}}>
-                <h1 className={classes.topTitle}>{cards[currentCard].title}</h1>
+                <MainTitle title={cards[currentCard].title} size={'large'}/>
                 <div className={classes.insideGrid}>
                     <Card sx={styles.card} className={classes.cardStyle}>
                         <CardMedia

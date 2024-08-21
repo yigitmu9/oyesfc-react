@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora&display=swap');
 
 * {
-  font-family: 'Sora', sans-serif;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -54,17 +53,21 @@
 }
 
 .rbc-calendar {
-  background-color: rgb(36, 36, 36) !important;
+  background-color: #252525 !important;
   color: lightgray !important;
+  @media (max-width: 768px) {
+    background-color: black !important;
+  }
 }
 
 .rbc-toolbar {
-  background-color: rgb(36, 36, 36) !important;
+  background-color: #252525 !important;
   font-size: 18px !important;
   margin-bottom: 0 !important;
   padding-bottom: 10px !important;
   @media (max-width: 767px) {
     font-size: 14px !important;
+    background-color: black !important;
   }
 }
 
@@ -89,7 +92,7 @@
 .rbc-month-view,
 .rbc-time-view,
 .rbc-agenda-view {
-  background-color: rgb(36, 36, 36) !important;
+  background-color: #252525 !important;
 }
 
 .rbc-header {
@@ -126,7 +129,7 @@
 }
 
 .rbc-today {
-  background-color: rgb(36, 36, 36) !important;;
+  background-color: #252525 !important;;
 }
 
 .rbc-show-more {
@@ -135,7 +138,7 @@
 }
 
 .rbc-agenda-table {
-  background-color: rgb(36, 36, 36) !important;
+  background-color: #252525 !important;
   color: lightgray !important;
   border: 1px solid lightgray !important;
 }
@@ -146,12 +149,12 @@
 }
 
 .rbc-agenda-content {
-  background-color: rgb(36, 36, 36) !important;
+  background-color: #252525 !important;
   color: lightgray !important;
 }
 
 .rbc-time-column {
-  background-color: rgb(36, 36, 36) !important;
+  background-color: #252525 !important;
 }
 
 .rbc-time-header {

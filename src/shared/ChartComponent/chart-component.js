@@ -5,7 +5,7 @@ import {ChartTypes} from "../../constants/constants";
 import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
 import PropTypes from "prop-types";
 
-const ChartComponent = ({type, data, color, layout, title, customStyle, graphLabels}) => {
+const ChartComponent = ({type, data, color, layout, title, customStyle, graphLabels, maxValueBarGraph}) => {
 
     const datasets = {
         labels: graphLabels,
@@ -33,11 +33,13 @@ const ChartComponent = ({type, data, color, layout, title, customStyle, graphLab
         scales: {
             x: {
                 beginAtZero: true,
+                suggestedMax: layout === 'y' ? maxValueBarGraph : null,
                 ticks: {
                     color: 'lightgray',
                 },
             },
             y: {
+                suggestedMax: layout === 'x' ? maxValueBarGraph : null,
                 ticks: {
                     color: 'lightgray',
                 },

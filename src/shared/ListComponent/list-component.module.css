@@ -1,0 +1,17 @@
+.tableDiv {
+    display: flex;
+    width: 100%;
+    height: auto;
+    background-color: transparent;
+    text-align: center;
+    justify-content: center;
+}
+
+.listItemSpanStyle {
+    background-color: transparent;
+    color: lightgray;
+    font-size: 18px;
+    @media screen and (max-width: 1000px) {
+        font-size: 17px;
+    }
+}

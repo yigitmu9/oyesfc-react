@@ -1,19 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ChartsGrid from "../ChartsGrid/charts-grid.js";
-import FacilitiesIndividualStats from "../FacilitiesIndividualStats/facilities-individual-stats";
 import WeatherIndividualStats from "../WeatherIndividualStats/weather-individual-stats";
 import RakipbulPlayerStats from "../RakipbulPlayerStats/rakipbul-player-stats";
 import classes from "./individual-stats-grid.module.css";
-import RivalsIndividualStats from "../RivalsIndividualStats/rivals-individual-stats";
-import teamStatsClasses from "../TeamStatsGrid/team-stats-grid.module.css"
 import UltimateTeam from "../UltimateTeam/ultimate-team";
 import PlayerDetails from "../PlayerDetails/player-details";
-import JerseysIndividualStats from "../JerseysIndividualStats/jerseys-individual-stats";
-import WeatherSkyIndividualStats from "../WeatherSkyIndividualStats/weather-sky-individual-stats";
-import NumberOfPlayersIndividualStats from "../NumberOfPlayersIndividualStats/number-of-players-individual-stats";
 import BootBrands from "../BootBrands/boot-brands";
+import MixedStats from "../MixedStats/mixed-stats";
+import MainTitle from "../../shared/MainTitle/main-title";
 
-const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) => {
+const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData, selectedEra}) => {
 
     const filteredData = Object.values(databaseData);
     const [isPopupOpen, setPopupOpen] = useState(false);
@@ -31,30 +27,18 @@ const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData}) =
 
     return (
         <div className={classes.grid}>
-            <h1 className={classes.firstTitle}>Lineup</h1>
+            <MainTitle title={'Individual'}/>
             <UltimateTeam onClickCard={openPlayerDetails}/>
-            <h1 className={classes.secondTitle}>Individual Statistics</h1>
-            <ChartsGrid matchData={filteredData} databaseData={databaseData}/>
-            <FacilitiesIndividualStats data={filteredData}/>
-            <RivalsIndividualStats data={filteredData}/>
-            <JerseysIndividualStats data={filteredData}/>
-            <NumberOfPlayersIndividualStats data={filteredData}/>
+            <ChartsGrid data={filteredData}/>
+            <MixedStats data={filteredData}/>
             <BootBrands data={filteredData}/>
             <WeatherIndividualStats data={filteredData}/>
-            <WeatherSkyIndividualStats data={filteredData} selectedSky={['Daytime', 'Night']}/>
-            <WeatherSkyIndividualStats data={filteredData} selectedSky={['Rain', 'Snow']}/>
             <RakipbulPlayerStats/>
-            <div className={teamStatsClasses.divStyle}>
-                <div className={teamStatsClasses.spanDivStyle}>
-                    <span className={teamStatsClasses.spanStyle}>*These statistics are only valid for 10 specific
-                            Rakipbul matches for which position data is available.
-                            Does not work with filters.</span>
-                </div>
-            </div>
             {isPopupOpen &&
                 <PlayerDetails data={filteredData}
                                onClose={() => setPopupOpen(false)} player={player}
-                               credentials={credentials} allData={allData} reloadData={handleReload}/>}
+                               credentials={credentials} allData={allData} reloadData={handleReload}
+                               selectedEra={selectedEra}/>}
         </div>
     );
 };

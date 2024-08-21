@@ -13,7 +13,7 @@ const TeamView = ({teamData, rakipbul, bgColor, isDetails, selectedEra}) => {
         if (selectedEra === OYesFcEras.redAndBlack) return OYesFCLogo
         if (selectedEra === OYesFcEras.rising) return FirstLogo
         if (selectedEra === OYesFcEras.origins) return GhostLogo
-        return OYesFCLogo
+        return PhoenixLogo
     }
 
     return (

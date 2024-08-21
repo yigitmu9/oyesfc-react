@@ -31,6 +31,9 @@ import {getWeather} from "../../services/service";
 import * as emailjs from "@emailjs/browser";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {PulseLoader} from "react-spinners";
+import Box from "@mui/material/Box";
+import BackButton from "../../shared/BackButton/back-button";
+import MainTitle from "../../shared/MainTitle/main-title";
 
 const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchData}) => {
 
@@ -678,6 +681,10 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
         },
     });
 
+    const handleBack = (data) => {
+        if (data) handleClose()
+    }
+
     function BpRadio(props) {
         return (
             <Radio
@@ -704,10 +711,20 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
         return (
             <div className={classes.overlay}>
                 <div className={classes.generalStyle} ref={popupRef}>
+                    <Box sx={{display: {xs: 'flex', md: 'none'}}}>
+                        <BackButton handleBackButton={handleBack}/>
+                    </Box>
                     <div className={classes.completeProcessDiv}>
-                        <h1 className={classes.completeProcessTitle}>Complete</h1>
+                        <div className={classes.generalTitle}>
+                            <MainTitle title={'Complete'}/>
+                        </div>
                         <div className={classes.matchSubmitModalDiv}>
-                            <Accordion sx={{bgcolor: '#2e2e2e', color: 'lightgray', border: '1px solid #4d4d4d', width: '100%'}}>
+                            <Accordion sx={{
+                                bgcolor: '#2e2e2e',
+                                color: 'lightgray',
+                                border: '1px solid #4d4d4d',
+                                width: '100%'
+                            }}>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
                                     aria-controls="panel1-content"
@@ -724,8 +741,8 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                             finalErrors?.length > 0 &&
                             finalErrors?.map((x, y) => (
                                 <Alert key={y}
-                                    sx={{  padding: '2px 13px', margin: '10px 20px', borderRadius: '25px'}}
-                                    variant="filled" severity="error">{x}</Alert>
+                                       sx={{padding: '2px 13px', margin: '10px 20px', borderRadius: '25px'}}
+                                       variant="filled" severity="error">{x}</Alert>
                             ))
 
                         }
@@ -733,7 +750,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                             finalSuccesses?.length > 0 &&
                             finalSuccesses?.map((x, y) => (
                                 <Alert key={y}
-                                       sx={{  padding: '2px 13px', margin: '10px 20px', borderRadius: '25px'}}
+                                       sx={{padding: '2px 13px', margin: '10px 20px', borderRadius: '25px'}}
                                        variant="filled" severity="success">{x}</Alert>
                             ))
 
@@ -807,14 +824,19 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
     return (
         <div className={classes.overlay}>
             <div className={classes.generalStyle} ref={popupRef}>
-            <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
+                <Box sx={{display: {xs: 'flex', md: 'none'}}}>
+                    <BackButton handleBackButton={handleBack}/>
+                </Box>
+            <form onSubmit={handleSubmit}>
                     <div className={classes.formAlign}>
                         <div className={classes.infoAlign}>
-                            <h1 className={classes.generalTitle}>{selectedMatchData ? 'Edit Match' : 'Add Match'}</h1>
+                            <div className={classes.generalTitle}>
+                                <MainTitle title={selectedMatchData ? 'Edit Match' : 'Add Match'}/>
+                            </div>
                             <label className={classes.matchTypeTitle}>
                                 Select Match Type:
                             </label>
-                            <label style={{background: "#1f1f1f"}} className={classes.customCheckbox}>
+                            <label className={classes.customCheckbox}>
                                 Rakipbul
                                 <input
                                     type="checkbox"
@@ -846,7 +868,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                     <br/>
                                 </>
                             }
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 Select a Rival:
                                 <select className={classes.select}
                                         onChange={handleRivalInputChange}
@@ -860,7 +882,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 </select>
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 Rival Name:
                                 <input
                                     className={classes.inputDesign}
@@ -872,7 +894,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 />
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f", width: "100%", minWidth: "100%"}}>
+                            <label style={{width: "100%", minWidth: "100%"}}>
                                 Day & Time:
                                 <input
                                     style={{width: "100%", minWidth: "100%"}}
@@ -885,7 +907,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 />
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 Select a Facility:
                                 <select className={classes.select}
                                         onChange={handleGeneralInputChange}
@@ -899,7 +921,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 </select>
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 Place:
                                 <input
                                     className={classes.inputDesign}
@@ -911,7 +933,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 />
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 Get Weather from Api:
                                 {
                                     weatherButtonStatus?.button &&
@@ -951,48 +973,48 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                     variant="standard" severity="info">{weatherButtonStatus?.warning}</Alert>
                             }
                             <>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Weather: {weatherFormData?.weather}
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Temperature: {weatherFormData?.temperature}&#176;
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Feels Like: {weatherFormData?.feels_like}&#176;
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Ground Level Pressure: {weatherFormData?.grnd_level} hPa
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Sea Level Pressure: {weatherFormData?.sea_level} hPa
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Humidity: {weatherFormData?.humidity} %
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Description: {weatherFormData?.description}
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Wind Speed: {weatherFormData?.windSpeed} km/h
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Clouds: {weatherFormData?.clouds} %
                                 </label>
                                 <br/>
-                                <label style={{background: "#1f1f1f"}}>
+                                <label>
                                     Sky: {weatherFormData?.sky}
                                 </label>
                                 <br/>
                             </>
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 O Yes FC Jersey:
                                 <select className={classes.select}
                                         onChange={handleOYesFCInputChange}
@@ -1006,7 +1028,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 </select>
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 O Yes FC Goal:
                                 <input
                                     className={classes.inputDesign}
@@ -1018,7 +1040,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 />
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 Rival Goal:
                                 <input
                                     className={classes.inputDesign}
@@ -1033,8 +1055,8 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                         </div>
                         <div className={classes.playersAlign}>
                             {Object.keys(oYesFCSquadFormData).map((member) => (
-                                <div key={member} style={{background: "#1f1f1f"}}>
-                                    <label style={{background: "#1f1f1f"}}>
+                                <div key={member}>
+                                    <label>
                                         {member} Goal:
                                         <input
                                             className={classes.inputDesign}
@@ -1046,7 +1068,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                         />
                                     </label>
                                     <br/>
-                                    <label style={{background: "#1f1f1f"}}>
+                                    <label>
                                         {member} Role:
                                         <select className={classes.select}
                                                 onChange={(e) =>
@@ -1063,7 +1085,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                     <br/>
                                     {!Object.values(TeamMembers).some(x => x?.name === member) &&
                                         <>
-                                            <label style={{background: "#1f1f1f"}}>
+                                            <label>
                                                 {member} Description:
                                                 <input
                                                     className={classes.inputDesign}
@@ -1079,7 +1101,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                     }
                                 </div>
                             ))}
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 Select Player:
                                 <select className={classes.select}
                                         onChange={(e) =>
@@ -1092,7 +1114,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 </select>
                             </label>
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
+                            <label>
                                 Add Squad Member:
                                 <input
                                     className={classes.inputDesign}
@@ -1122,9 +1144,8 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                         <button className={matchDetailsClasses.mapsButtons} style={{marginRight: "1rem"}}
                                 type="submit">Submit
                         </button>
-                        {isMobile &&
-                            <button className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Close</button>}
                     </div>
+                <Box sx={{display: {xs: 'block', md: 'none'}, height: '110px'}}></Box>
                 </form>
             </div>
         </div>

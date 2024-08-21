@@ -9,8 +9,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     overflow: auto;
-    max-height: 95%;
-    background-color: #404040;
+    max-height: 80%;
+    background-color: #252525;
     padding: 0;
     border-radius: 25px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -18,13 +18,20 @@
     height: auto;
     z-index: 11;
     @media (max-width: 767px) {
-        width: 97%;
-        max-width: 97%;
-        max-height: 97%;
+        width: 100%;
+        border-radius: 0;
+        height: 100%;
+        background-color: black;
+        max-width: 100%;
+        max-height: 100%;
     }
     @media (min-width: 768px) and (max-width: 1100px) {
-        width: 80%;
-        max-width: 80%;
+        width: 100%;
+        border-radius: 0;
+        height: 100%;
+        background-color: black;
+        max-width: 100%;
+        max-height: 100%;
     }
     @media (min-width: 1101px) and (max-width: 1700px) {
         width: 500px;
@@ -33,10 +40,9 @@
 }
 
 form {
-    background-color: rgb(50, 50, 50);
+    background-color: transparent;
     padding: 20px;
     border-radius: 25px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 label {
@@ -110,8 +116,13 @@ input {
 }
 
 .inputDesign {
-    border-radius: 25px;
+    border-radius: 12px;
     margin-top: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 50px;
+    font-size: 15px;
+    background-color: #1C1C1E;
 }
 
 .overlay {
@@ -124,11 +135,12 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 9999999;
 }
 
 .formAlign {
     display: flex;
-    background: #1f1f1f;
+    background: transparent;
     @media (max-width: 768px) {
         display: block;
     }
@@ -136,16 +148,17 @@ input {
 
 .infoAlign {
     display: block;
-    background: #1f1f1f;
+    background:transparent;
     width: 100%;
     @media (max-width: 768px) {
         width: 100%;
+        margin-top: 80px;
     }
 }
 
 .playersAlign {
     display: block;
-    background: #1f1f1f;
+    background:transparent;
     margin-left: 5rem;
     width: 50%;
     @media (max-width: 768px) {
@@ -157,7 +170,7 @@ input {
 .buttonDivStyle {
     display: flex;
     flex-direction: row;
-    background: #1f1f1f;
+    background:transparent;
     text-align: center;
     justify-content: center;
     align-items: center;
@@ -197,7 +210,7 @@ input {
 .iconDivStyle {
     display: flex;
     flex-direction: column;
-    background-color: #1f1f1f;
+    background-color: transparent;
     text-align: center;
     justify-content: center;
     align-items: center;
@@ -211,7 +224,7 @@ input {
 }
 
 .iconStyle {
-    background-color: #1f1f1f;
+    background-color: transparent;
     color: lightgray;
     font-size: 200px;
     width: 200px;
@@ -227,7 +240,7 @@ input {
 }
 
 .titleStyle {
-    background-color: #1f1f1f;
+    background-color:transparent;
     color: lightgray;
     text-align: center;
     margin: 20px;
@@ -239,25 +252,25 @@ input {
 }
 
 .signedInStyle {
-    background-color: #1f1f1f;
-    padding: 20px;
-    border-radius: 25px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background-color: transparent;
+    padding: 0;
+    @media screen and (max-width: 768px) {
+    }
 }
 
 .errorMessage {
-    background-color: #1f1f1f;
+    background-color:transparent;
     color: red;
 }
 
 .errorMessageLogOut {
-    background-color: #1f1f1f;
+    background-color:transparent;
     color: red;
     text-align: center;
 }
 
 .addMatchDiv {
-    background: #1f1f1f;
+    background:transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -268,7 +281,7 @@ input {
 }
 
 .addIconStyle {
-    background: #1f1f1f;
+    background:transparent;
     font-size: 40px;
     color: darkred;
     @media screen and (max-width: 768px) {
@@ -277,7 +290,7 @@ input {
 }
 
 .addMatchSpan {
-    background: #1f1f1f;
+    background:transparent;
     font-size: 22px;
     color: darkred;
 
@@ -287,7 +300,7 @@ input {
 }
 
 .addMatchButtonDiv {
-    background: #1f1f1f;
+    background:transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -298,7 +311,7 @@ input {
 }
 
 .emailStyle {
-    background-color: #1f1f1f;
+    background-color:transparent;
     color: gray;
     text-align: center;
     margin-bottom: 30px;
@@ -306,7 +319,7 @@ input {
 }
 
 .usernameStyle {
-    background-color: #1f1f1f;
+    background-color:transparent;
     color: lightgray;
     text-align: center;
     margin-bottom: 10px;
@@ -323,5 +336,41 @@ input {
     align-items: center;
     height: 460px;
     color: lightgray;
-    background: #1f1f1f;
+    background:transparent;
+}
+
+.mobileEmailSpan {
+    color: gray;
+    font-size: 16px;
+    margin-top: 5px;
+    @media screen and (max-width: 768px) {
+        font-size: 15px;
+    }
+}
+
+.miniTitle {
+    color: gray;
+    font-size: 16px;
+    margin-bottom: 5px;
+    @media screen and (max-width: 768px) {
+        font-size: 15px;
+    }
+}
+
+.drawerRoutesSpan {
+    color: lightgray;
+    font-size: 18px;
+    @media screen and (max-width: 768px) {
+        font-size: 17px;
+    }
+}
+
+.morePageBox {
+    background-color: #1C1C1E;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    width: 100%;
+    padding: 20px;
+    height: auto;
 }

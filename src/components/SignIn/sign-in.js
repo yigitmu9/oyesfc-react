@@ -8,6 +8,9 @@ import {Loading} from "../../pages/loading-page";
 import CardMedia from "@mui/material/CardMedia";
 import {SnackbarMessages, TeamMembers} from "../../constants/constants";
 import {Alert} from "@mui/material";
+import Box from "@mui/material/Box";
+import BackButton from "../../shared/BackButton/back-button";
+import MainTitle from "../../shared/MainTitle/main-title";
 
 const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
 
@@ -57,6 +60,10 @@ const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
         onClose();
     }
 
+    const handleBack = (data) => {
+        if (data) handleClose()
+    }
+
     const logOut = async () => {
         setLoading(true)
         await signOut(auth)
@@ -88,37 +95,36 @@ const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
     if (!signedIn) {
         return (
             <div className={classes.overlay}>
+                <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: 'black'}}>
+                    <BackButton handleBackButton={handleBack}/>
+                </Box>
                 <div className={classes.generalStyle} ref={popupRef}>
-                    <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
+                    <form onSubmit={handleSubmit}>
                         <div className={classes.infoAlign}>
-                            <div className={classes.iconDivStyle}>
-                                <AccountCircleIcon sx={{width: "200px", height: "200px"}}
-                                                   className={classes.iconStyle}></AccountCircleIcon>
+                            <MainTitle title={'Account'}/>
+                            <div style={{padding: '0 20px', marginTop: '20px'}}>
+                                <span className={classes.miniTitle}>Email</span>
                             </div>
-                            <h1 className={classes.titleStyle}>Log In</h1>
-                            <label style={{background: "#1f1f1f"}}>
-                                Email:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="email"
-                                    name="email"
-                                    value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
-                                />
-                            </label>
+                            <input
+                                className={classes.inputDesign}
+                                required={true}
+                                type="email"
+                                name="email"
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                            />
                             <br/>
-                            <label style={{background: "#1f1f1f"}}>
-                                Password:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="password"
-                                    name="password"
-                                    value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
-                                />
-                            </label>
+                            <div style={{padding: '0 20px', marginTop: '20px'}}>
+                                <span className={classes.miniTitle}>Password</span>
+                            </div>
+                            <input
+                                className={classes.inputDesign}
+                                required={true}
+                                type="password"
+                                name="password"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+                            />
                             {errorMessage &&
                                 <Alert sx={{borderRadius: '25px', bgcolor: 'transparent', color: 'red', padding: 0}}
                                        variant="standard" severity="error">{errorMessage}</Alert>}
@@ -126,10 +132,6 @@ const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
                         <div className={classes.buttonDivStyle}>
                             <button className={matchDetailsClasses.mapsButtons} type="submit">Log In
                             </button>
-                            {
-                                isMobile &&
-                                <button className={matchDetailsClasses.mapsButtons} style={{marginLeft: "1rem"}} onClick={handleClose}>Cancel</button>
-                            }
                         </div>
                     </form>
                 </div>
@@ -139,6 +141,9 @@ const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
 
     return (
         <div className={classes.overlay}>
+            <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: 'black'}}>
+                <BackButton handleBackButton={handleBack}/>
+            </Box>
             <div className={classes.generalStyle} ref={popupRef}>
                 <div className={classes.signedInStyle}>
                     <div className={classes.iconDivStyle}>
@@ -146,7 +151,7 @@ const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
                             credentials?.signedIn ?
                                 <CardMedia
                                     component="img"
-                                    sx={{height: 200, width: 200, borderRadius: '100%'}}
+                                    sx={{height: {xs: '400px', md: '300px'}, width: '100%', marginTop: {xs: '50px', md: 0}}}
                                     image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
                                 />
                                 :
@@ -154,20 +159,25 @@ const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
                                                    className={classes.iconStyle}></AccountCircleIcon>
                         }
                     </div>
-                    <h1 className={classes.titleStyle}>Welcome</h1>
-                    <h1 className={classes.usernameStyle}>{credentials?.userName}</h1>
-                    <h1 className={classes.emailStyle}>{credentials?.email}</h1>
+                    <div style={{padding: '20px'}}>
+                        <MainTitle title={'Account'}/>
+                        <div style={{height: '5px'}}></div>
+                        <div className={classes.morePageBox}>
+                            <span
+                                className={classes.drawerRoutesSpan}>{credentials?.signedIn ? credentials?.userName : 'Log In'}</span>
+                            <span className={classes.mobileEmailSpan}>{credentials?.email}</span>
+                        </div>
+                        <div style={{height: '5px'}}></div>
+                        <div style={{padding: '0 20px'}}>
+                            <span className={classes.miniTitle}>{'Welcome ' + credentials?.userName + '.'}</span>
+                        </div>
+                    </div>
                     {errorMessage && <Alert sx={{borderRadius: '25px'}}
                                             variant="filled" severity="error">{errorMessage}</Alert>}
                     <div className={classes.buttonDivStyle}>
                         <button className={matchDetailsClasses.mapsButtons} onClick={logOut}>Log
                             Out
                         </button>
-                        {
-                            isMobile &&
-                            <button className={matchDetailsClasses.mapsButtons} style={{marginLeft: "1rem"}}
-                                    onClick={handleClose}>Close</button>
-                        }
                     </div>
                 </div>
             </div>

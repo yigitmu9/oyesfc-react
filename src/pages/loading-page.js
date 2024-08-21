@@ -32,7 +32,7 @@ export function Loading(selectedEra) {
         if (selectedEra === OYesFcEras.redAndBlack) return OYesFCLogo
         if (selectedEra === OYesFcEras.rising) return FirstLogo
         if (selectedEra === OYesFcEras.origins) return GhostLogo
-        return OYesFCLogo
+        return PhoenixLogo
     }
 
     const getColor = () => {
@@ -40,10 +40,10 @@ export function Loading(selectedEra) {
         if (selectedEra === OYesFcEras.redAndBlack) return 'firebrick'
         if (selectedEra === OYesFcEras.rising) return 'dodgerblue'
         if (selectedEra === OYesFcEras.origins) return 'gray'
-        return 'firebrick'
+        return 'goldenrod'
     }
 
-    if (selectedEra === OYesFcEras.goldenAge) return (
+    return (
         <div
             style={{
                 display: 'flex',
@@ -56,29 +56,7 @@ export function Loading(selectedEra) {
         >
             <img style={{width: "200px", height: "200px", background: "transparent", marginBottom: "20px"}}
                  src={getTeamLogo()} alt={'1'}/>
-            <BarLoader color="goldenrod" speedMultiplier={0.7}/>
-        </div>
-    )
-
-    return (
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-            position: 'relative'
-        }}>
-            <img style={{
-                width: "200px",
-                height: "200px",
-                background: "transparent",
-                borderRadius: '50%'
-            }}
-                 src={getTeamLogo()}
-                 alt={'1'}/>
-            <div style={{position: 'absolute'}}>
-                <PuffLoader color={getColor()} speedMultiplier={0.7} size={350}/>
-            </div>
+            <BarLoader color={getColor()} speedMultiplier={0.7}/>
         </div>
     )
 }

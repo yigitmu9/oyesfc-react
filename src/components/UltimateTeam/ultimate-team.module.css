@@ -1,6 +1,4 @@
 .ultimateDiv {
-    margin-left: 14%;
-    margin-right: 14%;
     justify-content: center;
     align-items: center;
     align-content: center;
@@ -10,18 +8,14 @@
     height: 1200px;
     display: flex;
     flex-direction: column;
+    margin-bottom: 50px;
     @media (max-width: 767px) {
         height: 550px;
-        margin-left: 3%;
-        margin-right: 3%;
-
     }
     @media (min-width: 767px) and (max-width: 2500px) {
         height: 800px;
     }
     @media screen and (min-width: 769px) and (max-width: 1100px) {
-        margin-left: 7%;
-        margin-right: 7%;
     }
 }
 
@@ -127,5 +121,8 @@
 }
 
 .cardStyle:hover {
-    transform: scale(1.2);
+    @media (min-width: 768px) {
+        transform: scale(1.1);
+    }
+
 }

@@ -243,15 +243,15 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
 
     return (
         <div className={matchDetailsClasses.overlay}>
-            <div className={classes.popupContainer} style={{display: "block", background: "#1f1f1f"}} ref={popupRef}>
+            <div className={classes.popupContainer} style={{display: "block"}} ref={popupRef}>
                 <div style={{display: "block", height: '100%'}}>
-                    <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
+                    <form onSubmit={handleSubmit}>
                         <div className={classes.formAlign}>
                             <div className={classes.filterPartStyle}>
                                 <h2 className={classes.title}>Match Type</h2>
                                 {matchCategories.map((x, y) => (
-                                    <div key={y} style={{background: "#1f1f1f"}}>
-                                        <label style={{background: "#1f1f1f"}}
+                                    <div key={y}>
+                                        <label
                                                className={classes.customCheckbox}>
                                             {x}
                                             <input
@@ -266,12 +266,12 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     </div>
                                 ))}
                             </div>
-                            <div style={{background: "#1f1f1f"}}>
+                            <div>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Players</h2>
                                     {Object.values(TeamMembers).map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {x.name}
                                                 <input
@@ -289,8 +289,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Facilities</h2>
                                     {facilities.sort().map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {x}
                                                 <input
@@ -311,8 +311,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {years.sort((a, b) => {
                                         return b - a;
                                     }).map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {x}
                                                 <input
@@ -333,8 +333,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {months.sort((a, b) => {
                                         return a - b;
                                     }).map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {monthNames[Number(x) - 1]}
                                                 <input
@@ -352,8 +352,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Rivals</h2>
                                     {rivalNames.sort().map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {x}
                                                 <input
@@ -371,8 +371,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Match Squad</h2>
                                     {squadTypes.map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {x}
                                                 <input
@@ -390,8 +390,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Jersey</h2>
                                     {Jerseys.map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {x}
                                                 <input
@@ -409,8 +409,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Sky</h2>
                                     {WeatherSky.map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {x}
                                                 <input
@@ -427,8 +427,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                 </div>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Temperature</h2>
-                                    <div style={{background: "#1f1f1f"}}>
-                                        <label style={{background: "#1f1f1f"}}
+                                    <div>
+                                        <label
                                                className={classes.customCheckbox}>
                                             Cold Weather{' (<16'}&#176;{')'}
                                             <input
@@ -441,8 +441,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                         </label>
                                         <br/>
                                     </div>
-                                    <div style={{background: "#1f1f1f"}}>
-                                        <label style={{background: "#1f1f1f"}}
+                                    <div>
+                                        <label
                                                className={classes.customCheckbox}>
                                             Hot Weather{' (>15'}&#176;{')'}
                                             <input
@@ -459,8 +459,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Number of Players</h2>
                                     {playerLengthArray?.map((x, y) => (
-                                        <div key={y} style={{background: "#1f1f1f"}}>
-                                            <label style={{background: "#1f1f1f"}}
+                                        <div key={y}>
+                                            <label
                                                    className={classes.customCheckbox}>
                                                 {x + 'v' + x}
                                                 <input

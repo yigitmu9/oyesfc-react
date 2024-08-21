@@ -1,174 +1,65 @@
-import React from 'react';
-import classes from "./weather-individual-stats.module.css";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material";
-import {TeamMembers} from "../../constants/constants";
-import SevereColdIcon from '@mui/icons-material/SevereCold';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import weatherTeamClasses from "../WeatherTeamStats/weather-team-stats.module.css"
+import React, {useState} from 'react';
+import {calculateIndividualStats, OYesFCPlayersArray, calculateRateInfo} from "../../utils/utils";
+import CardGrid from "../../shared/CardGrid/card-grid";
+import TubeGraph from "../../shared/TubeGraph/tube-graph";
+import SelectionComponent from "../../shared/SelectionComponent/selection-component";
 
 const WeatherIndividualStats = ({data}) => {
 
     const hotWeather = Object.values(data).filter(item => item?.weather?.temperature > 15);
     const coldWeather = Object.values(data).filter(item => item?.weather?.temperature < 16);
-    const rows = Object.values(TeamMembers).map(x => x.name);
-    let playerTotalGoal = 0;
-    let playerGoalData = [];
-    let playerAttendanceData = [];
-    let playerGoalPerGameData = [];
-    let playerMatchData = [];
 
-    const numberOfMatches = Object.values(hotWeather).length;
+    const emptyData = [
+        [0, 'Matches', 0, 0, 100],
+        [0, 'Goals', 0, 0, 100],
+        [0, 'Rate of Attendance', 0, 0, 100],
+        [0, 'Goals per Game', 0, 0, 100],
+    ]
+    const [value, setValue] = useState(emptyData)
+    const calculatedColdWeatherData = calculateIndividualStats(coldWeather)
+    const calculatedHotWeatherData = calculateIndividualStats(hotWeather)
 
-    Object.values(TeamMembers).forEach(member => {
-        playerTotalGoal = 0;
-        Object.values(hotWeather).forEach(item => {
-            if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
-                playerTotalGoal += item.oyesfc.squad[member.name].goal;
-            }
-        });
+    const readyData = (player) => {
+        const playerColdData = calculatedColdWeatherData?.find(x => x?.includes(player))
+        const playerHotData = calculatedHotWeatherData?.find(x => x?.includes(player))
 
-        const playerTotalMatch = Object.values(hotWeather).filter(item =>
-            Object.keys(item.oyesfc.squad).includes(member.name)).length;
+        return [
+            [playerHotData[1], 'Matches', playerColdData[1],
+                calculateRateInfo(playerHotData[1], playerColdData[1]),
+                100 - Number(calculateRateInfo(playerHotData[1], playerColdData[1]))],
+            [Number(playerHotData[2]), 'Goals', playerColdData[2],
+                calculateRateInfo(playerHotData[2], playerColdData[2]),
+                100 - Number(calculateRateInfo(playerHotData[2], playerColdData[2]))],
+            [playerHotData[3], 'Rate of Attendance', playerColdData[3],
+                calculateRateInfo(playerHotData[3], playerColdData[3]),
+                100 - Number(calculateRateInfo(playerHotData[3], playerColdData[3]))],
+            [playerHotData[4], 'Goals per Game', playerColdData[4],
+                calculateRateInfo(playerHotData[4], playerColdData[4]),
+                100 - Number(calculateRateInfo(playerHotData[4], playerColdData[4]))],
+        ]
+    }
 
-        const attendanceRate = ((playerTotalMatch / numberOfMatches) * 100)?.toFixed(0);
-        const goalsPerGame = (playerTotalGoal / playerTotalMatch)?.toFixed(2)
+    const handleSelect = (data) => {
+        const graphData = readyData(data)
+        setValue(graphData)
+    }
 
-        playerGoalData.push(playerTotalGoal)
-        playerAttendanceData.push(attendanceRate)
-        playerMatchData.push(playerTotalMatch)
-        playerGoalPerGameData.push(goalsPerGame)
-    });
+    const selectionContent = (
+        <SelectionComponent defaultSelectedValue={false}
+                            onSelectionChange={handleSelect}
+                            options={OYesFCPlayersArray}/>
+    )
 
-    let playerTotalGoalCold = 0;
-    let playerGoalDataCold = [];
-    let playerAttendanceDataCold = [];
-    let playerGoalPerGameDataCold = [];
-    let playerMatchDataCold = [];
-
-    const numberOfMatchesCold = Object.values(coldWeather).length;
-
-    Object.values(TeamMembers).forEach(member => {
-        playerTotalGoalCold = 0;
-        Object.values(coldWeather).forEach(item => {
-            if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
-                playerTotalGoalCold += item.oyesfc.squad[member.name].goal;
-            }
-        });
-
-        const playerTotalMatchCold = Object.values(coldWeather).filter(item =>
-            Object.keys(item.oyesfc.squad).includes(member.name)).length;
-
-        const attendanceRateCold = ((playerTotalMatchCold / numberOfMatchesCold) * 100)?.toFixed(0);
-        const goalsPerGameCold = (playerTotalGoalCold / playerTotalMatchCold)?.toFixed(2)
-
-        playerGoalDataCold.push(playerTotalGoalCold)
-        playerAttendanceDataCold.push(attendanceRateCold)
-        playerMatchDataCold.push(playerTotalMatchCold)
-        playerGoalPerGameDataCold.push(goalsPerGameCold)
-    });
+    const graphContent = (
+        <TubeGraph data={value}
+                   leftColor={'red'}
+                   leftName={'Hot Weather'}
+                   rightName={'Cold Weather'}
+                   rightColor={'blue'}/>
+    )
 
     return (
-        <div className={classes.grid}>
-            <div className={classes.cardGrid}>
-                <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                    <h1 className={classes.titleStyle}>Cold Weather{' (<16'}&#176;{')'}</h1>
-                    <CardContent style={{backgroundColor: "#242424"}}>
-                        <div className={classes.cardAlign}>
-                            <div className={classes.iconDivStyle}>
-                                <SevereColdIcon sx={{width: "200px", height: "200px"}}
-                                            className={weatherTeamClasses.iconStyle}></SevereColdIcon>
-                            </div>
-                            <div className={classes.tableStyle}>
-                                <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                    <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                        <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Players</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals per Game</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {rows.map((row, number) => (
-                                                <TableRow
-                                                    key={row}
-                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                    style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
-                                                >
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
-                                                        {row}
-                                                    </TableCell>
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchDataCold[number]}</TableCell>
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalDataCold[number]}</TableCell>
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceDataCold[number]}%</TableCell>
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameDataCold[number]}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-            <div className={classes.cardGrid}>
-                <Card sx={{ borderRadius: "25px", width: "100%", height: "100%", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                    <h1 className={classes.titleStyle}>Hot Weather{' (>15'}&#176;{')'}</h1>
-                    <CardContent style={{backgroundColor: "#242424"}}>
-                        <div className={classes.cardAlign}>
-                            <div className={classes.iconDivStyle}>
-                                <LocalFireDepartmentIcon sx={{width: "200px", height: "200px"}}
-                                    className={weatherTeamClasses.iconStyle}></LocalFireDepartmentIcon>
-                            </div>
-                            <div className={classes.tableStyle}>
-                                <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                    <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                        <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Players</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Matches</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Rate of Attendance</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals per Game</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {rows.map((row, number) => (
-                                                <TableRow
-                                                    key={row}
-                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                    style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
-                                                >
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
-                                                        {row}
-                                                    </TableCell>
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerMatchData[number]}</TableCell>
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalData[number]}</TableCell>
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerAttendanceData[number]}%</TableCell>
-                                                    <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalPerGameData[number]}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
+        <CardGrid title={'Temperature Stats'} firstPart={selectionContent} content={graphContent}/>
     );
 };
 

@@ -6,14 +6,14 @@ import {useState} from "react";
 
 const Scoreboard = ({value, openPopup, matchDetailsData, fixture, playerDetails, selectedEra}) => {
 
-    const [buttonBgColor, setButtonBgColor] = useState(playerDetails ? '#323232' : '#242424');
+    const [buttonBgColor, setButtonBgColor] = useState('#1C1C1E');
 
     const handleButtonHover = () => {
         if (!playerDetails) setButtonBgColor('#323232');
     };
 
     const handleButtonLeave = () => {
-        if (!playerDetails) setButtonBgColor('#242424');
+        if (!playerDetails) setButtonBgColor('#1C1C1E');
     };
 
     const handleXClick = () => {

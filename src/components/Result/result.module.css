@@ -1,15 +1,15 @@
 .result {
   color: lightgray;
-  font-size: 1.4rem;
+  font-size: 30px;
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    font-size: 22px;
   }
 }
 
 .resultDetails {
   color: lightgray;
-  font-size: 3rem;
+  font-size: 60px;
   @media (max-width: 768px) {
-    font-size: 2.1rem;
+    font-size: 34px;
   }
 }

@@ -22,7 +22,7 @@
     align-items: center;
     width: 100%;
     height: auto;
-    background-color: #1a1a1a;
+    background-color: #1C1C1E;
     @media screen and (max-width: 768px) {
         padding: 30px 3% 30px;
         justify-content: center;
@@ -33,13 +33,13 @@
 .iconsGrid {
     display: flex;
     justify-content: center;
-    background-color: #1a1a1a;
+    background-color: transparent;
 }
 
 .infoGrid {
     color: gray;
     text-align: center;
-    background-color: #1a1a1a;
+    background-color: transparent;
     @media screen and (max-width: 768px) {
         margin-top: 20px;
     }
@@ -47,7 +47,7 @@
 
 .iconStyle {
     color: gray;
-    background-color: #1a1a1a;
+    background-color: transparent;
     padding: 0 10px 0;
     font-size: 50px;
     cursor: pointer;
@@ -56,5 +56,5 @@
 .spanStyle {
     color: gray;
     text-align: center;
-    background-color: #1a1a1a;
+    background-color: transparent;
 }

@@ -1,12 +1,12 @@
 import React from 'react';
-import Card from "@mui/material/Card";
 import NikeLogo from "../../images/nike.png";
 import AdidasLogo from "../../images/adidas.PNG";
 import {TeamMembers} from "../../constants/constants";
 import {BootBrandsList} from "../../constants/constants";
-import classes from "../NumberOfPlayersIndividualStats/number-of-players-individual-stats.module.css";
-import bootBrandsClasses from "./boot-brands.module.css"
-import {Button, ButtonGroup} from "@mui/material";
+import classes from "./boot-brands.module.css"
+import MainTitle from "../../shared/MainTitle/main-title";
+import CardGrid from "../../shared/CardGrid/card-grid";
+import ListComponent from "../../shared/ListComponent/list-component";
 
 const BootBrands = ({data}) => {
     let adidasPlayer = 0;
@@ -16,8 +16,6 @@ const BootBrands = ({data}) => {
     let adidasCollections = [];
     let nikeCollections = [];
     let playerTotalGoalFacilities = 0;
-    const isMobile = window.innerWidth <= 768;
-    const [page, setPage] = React.useState('brands');
 
     Object.values(TeamMembers).forEach(x => {
         playerTotalGoalFacilities = 0;
@@ -48,89 +46,53 @@ const BootBrands = ({data}) => {
         }
     })
 
-    const sortedAdidasCollections = adidasCollections.sort((a, b) => {
-        const aValue = Object.values(a)[0];
-        const bValue = Object.values(b)[0];
-        return bValue - aValue;
-    });
+    const dataForNike = [
+        ['Nike Players', nikePlayer],
+        ['Total Nike Goals', nikeGoal],
+        [Object.entries(nikeCollections[0])[0][0] + ' Goals', Object.entries(nikeCollections[0])[0][1]],
+        [Object.entries(nikeCollections[1])[0][0] + ' Goals', Object.entries(nikeCollections[1])[0][1]],
+        [Object.entries(nikeCollections[2])[0][0] + ' Goals', Object.entries(nikeCollections[2])[0][1]]
+    ]
 
-    const sortedNikeCollections = nikeCollections.sort((a, b) => {
-        const aValue = Object.values(a)[0];
-        const bValue = Object.values(b)[0];
-        return bValue - aValue;
-    });
+    const dataForAdidas = [
+        ['Adidas Players', adidasPlayer],
+        ['Total Adidas Goals', adidasGoal],
+        [Object.entries(adidasCollections[0])[0][0] + ' Goals', Object.entries(adidasCollections[0])[0][1]],
+        [Object.entries(adidasCollections[1])[0][0] + ' Goals', Object.entries(adidasCollections[1])[0][1]],
+        [Object.entries(adidasCollections[2])[0][0] + ' Goals', Object.entries(adidasCollections[2])[0][1]]
+    ]
 
-    const setSelectedPage = (selectedPage) => {
-        if (selectedPage !== page) {
-            setPage(selectedPage)
-        }
-    }
+    const nikeCard = (
+        <>
+            <MainTitle title={'Nike'} size={'mid'}/>
+            <div className={classes.collectionSplitter}>
+                <img className={classes.nikeImageStyle}
+                     src={NikeLogo}
+                     alt={'1'}/>
+                <ListComponent data={dataForNike}/>
+            </div>
+        </>
+    )
+
+    const adidasCard = (
+        <>
+            <MainTitle title={'Adidas'} size={'mid'}/>
+            <div className={classes.collectionSplitter}>
+                <img className={classes.adidasImageStyle}
+                     src={AdidasLogo}
+                     alt={'1'}/>
+                <ListComponent data={dataForAdidas}/>
+            </div>
+        </>
+    )
 
     return (
-        <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center" }}>
-                <div className={classes.titleStyle}>
-                    <ButtonGroup orientation="vertical" sx={{color: 'lightgray'}} variant="text" aria-label="Basic button group">
-                        <Button sx={{fontSize: isMobile ? 23 : 30, color: 'lightgray'}} onClick={() => setSelectedPage('brands')}>Brands</Button>
-                        <Button sx={{fontSize: isMobile ? 23 : 30, color: 'lightgray'}} onClick={() => setSelectedPage('collections')}>Collections</Button>
-                    </ButtonGroup>
-                </div>
-                {page === 'brands' && <div className={classes.selectionGrid}>
-                    <div className={bootBrandsClasses.rowStyle}>
-                        <div className={bootBrandsClasses.columnStyle}>
-                            <img className={bootBrandsClasses.nikeImageStyle}
-                                 src={NikeLogo}
-                                 alt={'1'}/>
-                            <h1 className={bootBrandsClasses.numbersStyle}>{nikePlayer}</h1>
-                            <h1 className={bootBrandsClasses.wordsStyle}>Players</h1>
-                            <h1 className={bootBrandsClasses.numbersStyle}>{nikeGoal}</h1>
-                            <h1 className={bootBrandsClasses.wordsStyle}>Goals</h1>
-                        </div>
-                        <div className={bootBrandsClasses.columnStyle}>
-                            <img className={bootBrandsClasses.adidasImageStyle}
-                                 src={AdidasLogo}
-                                 alt={'1'}/>
-                            <h1 className={bootBrandsClasses.numbersStyle}>{adidasPlayer}</h1>
-                            <h1 className={bootBrandsClasses.wordsStyle}>Players</h1>
-                            <h1 className={bootBrandsClasses.numbersStyle}>{adidasGoal}</h1>
-                            <h1 className={bootBrandsClasses.wordsStyle}>Goals</h1>
-                        </div>
-                    </div>
-                </div>}
-                {page === 'collections' && <div className={classes.selectionGrid}>
-                    <div className={bootBrandsClasses.rowStyle}>
-                        <div className={bootBrandsClasses.columnStyle}>
-                            {
-                                sortedNikeCollections.map((a, b) => (
-                                    <div key={b} className={bootBrandsClasses.collectionSplitter}>
-                                        <img className={bootBrandsClasses.nikeCollectionImageStyle}
-                                             src={NikeLogo}
-                                             alt={'1'}/>
-                                        <h1 className={bootBrandsClasses.collectionNameStyle}>{Object.keys(a)}</h1>
-                                        <h1 className={bootBrandsClasses.collectionNumbersStyle}>{Object.values(a)}</h1>
-                                        <h1 className={bootBrandsClasses.collectionWordsStyle}>Goals</h1>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        <div className={bootBrandsClasses.columnStyle}>
-                            {
-                                sortedAdidasCollections.map((a, b) => (
-                                    <div key={b} className={bootBrandsClasses.collectionSplitter}>
-                                        <img className={bootBrandsClasses.adidasCollectionImageStyle}
-                                             src={AdidasLogo}
-                                             alt={'1'}/>
-                                        <h1 className={bootBrandsClasses.collectionNameStyle}>{Object.keys(a)}</h1>
-                                        <h1 className={bootBrandsClasses.collectionNumbersStyle}>{Object.values(a)}</h1>
-                                        <h1 className={bootBrandsClasses.collectionWordsStyle}>Goals</h1>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
-                </div>}
-            </Card>
-        </div>
+        <>
+            <CardGrid smallCards={true}
+                      firstPart={nikeCard}
+                      content={adidasCard}
+                      customStyle={{justifyContent: 'center', display: 'block', textAlign: 'center', height: 'auto'}}/>
+        </>
     );
 };
 

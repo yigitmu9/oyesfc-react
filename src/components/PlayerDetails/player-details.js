@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import PlayerCards from "../PlayerCards/player-cards";
 
-const PlayerDetails = ({data, onClose, player, credentials, allData, reloadData}) => {
+const PlayerDetails = ({data, onClose, player, credentials, allData, reloadData, selectedEra}) => {
 
     const popupRef = useRef(null);
     document.body.style.overflow = 'hidden';
@@ -36,7 +36,7 @@ const PlayerDetails = ({data, onClose, player, credentials, allData, reloadData}
                 <PlayerCards
                     playerName={player}
                     data={data} close={handleClose}
-                    credentials={credentials} allData={allData} reloadData={handleReload}/>
+                    credentials={credentials} allData={allData} reloadData={handleReload} selectedEra={selectedEra}/>
             </div>
         </div>
     );

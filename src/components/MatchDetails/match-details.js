@@ -23,11 +23,11 @@ import PreviewTab from "../PreviewTab/preview-tab";
 import SquadTab from "../SquadTab/squad-tab";
 import JerseyTab from "../JerseyTab/jersey-tab";
 import LinksTab from "../LinksTab/links-tab";
-import PlayerDetails from "../PlayerDetails/player-details";
 import {getWeather} from "../../services/service";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HighlightsTab from "../HighlightsTab/highlights-tab";
+import BackButton from "../../shared/BackButton/back-button";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -96,7 +96,7 @@ export const MatchDetails = ({
     const initialOYesFCStarFormData = {};
     const [ratesData, setRatesData] = useState(null);
     const isMobile = window.innerWidth <= 768;
-    const buttonBgColor = '#323232'
+    const buttonBgColor = '#1C1C1E'
     const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
     const matchDetails = Object.entries(matchDetailsData?.oyesfc?.squad)?.filter(x => x[1].goal > 0)
     const popupRef = useRef(null);
@@ -104,8 +104,6 @@ export const MatchDetails = ({
     const matchIndex = Object.values(allData).findIndex(x => x === matchDetailsData)
     const [oYesFCStarFormData, setOYesFCStarFormData] = useState(initialOYesFCStarFormData);
     const [snackbarData, setSnackbarData] = useState(null);
-    const [player, setPlayer] = useState(null);
-    const [isPlayerPopupOpen, setPlayerPopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     const [starsErrorMessage, setStarsErrorMessage] = useState(null);
     const [notesErrorMessage, setNotesErrorMessage] = useState(null);
@@ -192,11 +190,6 @@ export const MatchDetails = ({
         setAddMatchPopupOpen(data)
     }
 
-    const openPlayerDetailsModal = (player) => {
-        setPlayer(player)
-        setPlayerPopupOpen(true)
-    }
-
     const submitStars = async () => {
         if (Object.keys(oYesFCStarFormData).length === (Object.entries(matchDetailsData.oyesfc.squad).length - 1)) {
             if (starsErrorMessage) setStarsErrorMessage(null)
@@ -276,6 +269,10 @@ export const MatchDetails = ({
         }));
 
     };
+
+    const handleBack = (data) => {
+        if (data) handleClose()
+    }
 
     const calculatePlayerRatings = (ratingResponse) => {
         let ratingsArray = [];
@@ -437,16 +434,14 @@ export const MatchDetails = ({
         setSnackbarData(null);
     };
 
-    const closeButton = (
-        <div className={classes.buttonBorderStyle}>
-            <button className={classes.mapsButtons} onClick={handleClose}>Close</button>
-        </div>
-    )
-
     return (
         <div className={classes.overlay}>
-            {!isAddMatchPopupOpen && !isPlayerPopupOpen &&
+            <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: buttonBgColor}}>
+                <BackButton handleBackButton={handleBack} bgColor={buttonBgColor}/>
+            </Box>
+            {!isAddMatchPopupOpen &&
                 <div className={playerDetails ? classes.fullContainer : classes.popupContainer} ref={popupRef}>
+
                     <section className={classes.scoreboard} style={{background: buttonBgColor}}>
                         <div className={classes.scoreboardInsideDiv}>
                             <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
@@ -496,7 +491,7 @@ export const MatchDetails = ({
                             null
                         }
                     </section>
-                    <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: '#323232'}}>
+                    <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: buttonBgColor}}>
                         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
                               scrollButtons variant="scrollable"
                               sx={{
@@ -575,30 +570,33 @@ export const MatchDetails = ({
                     <CustomTabPanel value={tabValue} index={0}>
                         <PreviewTab matchDetailsData={matchDetailsData} allData={allData} matchIndex={matchIndex}
                                     bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherData={weatherData}/>
-                        {isMobile && closeButton}
+                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
                         <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings}
-                                  openPlayerModal={openPlayerDetailsModal} redirectToTab={redirectToTab} credentials={credentials}/>
-                        {isMobile && closeButton}
+                                  redirectToTab={redirectToTab} credentials={credentials}/>
+                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={2}>
                         <JerseyTab matchDetailsData={matchDetailsData}/>
-                        {isMobile && closeButton}
+                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={3}>
-                        <RivalComparison data={allData} selectedRival={matchDetailsData?.rival.name}/>
-                        {isMobile && closeButton}
+                        <section className={classes.defaultSection}>
+                            <RivalComparison data={allData} selectedRival={matchDetailsData?.rival.name}/>
+                        </section>
+                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={4}>
                         <LinksTab matchDetailsData={matchDetailsData} editMatch={editMatch} credentials={credentials}
                                   fixture={fixture}/>
-                        {isMobile && closeButton}
+                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={5}>
                         <HighlightsTab matchDetailsData={matchDetailsData} credentials={credentials}
                                        snackbarData={(snackbarData) => handleMessageClick(snackbarData)}/>
-                        {isMobile && closeButton}
+                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
+
                     </CustomTabPanel>
                     {
                         credentials?.signedIn && fixture === matchType.previous &&
@@ -675,9 +673,8 @@ export const MatchDetails = ({
                                     <button className={classes.mapsButtons}
                                             disabled={starsSubmitButton === 'Submitted' || starsSubmitButton === 'Not Available'}
                                             onClick={submitStars}>{starsSubmitButton}</button>
-                                    {isMobile &&
-                                        <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
                                 </div>
+                                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                             </CustomTabPanel>
                             <CustomTabPanel value={tabValue} index={7}>
                                 {
@@ -714,9 +711,8 @@ export const MatchDetails = ({
                                     <button className={classes.mapsButtons} onClick={submitNote}>
                                         Submit
                                     </button>
-                                    {isMobile &&
-                                        <button className={classes.mapsButtons} onClick={handleClose}>Close</button>}
                                 </div>
+                                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                             </CustomTabPanel>
                         </>
                     }
@@ -724,10 +720,6 @@ export const MatchDetails = ({
             {isAddMatchPopupOpen && <AddMatchComponent onClose={() => setAddMatchPopupOpen(false)}
                                                        snackbarData={(snackbarData) => handleMessageClick(snackbarData)}
                                                        databaseData={data} selectedMatchData={matchDetailsData}/>}
-            {isPlayerPopupOpen && <PlayerDetails data={data}
-                                                 onClose={() => setPlayerPopupOpen(false)} player={player}
-                                                 credentials={credentials} allData={allData}
-                                                 reloadData={handleReload}/>}
             <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
                 <Alert
                     onClose={closeSnackbar}

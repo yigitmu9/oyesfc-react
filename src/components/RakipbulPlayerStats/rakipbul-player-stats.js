@@ -1,39 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import classes from "./rakipbul-player-stats.module.css";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import {Bar} from "react-chartjs-2";
-import {
-    Alert,
-    FormControl, Snackbar,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material";
-import {SnackbarTypes, TeamMembers} from "../../constants/constants";
-import {CategoryScale, Chart as linear, Chart} from "chart.js/auto";
-import facilitiesIndividualStatsClasses from "../FacilitiesIndividualStats/facilities-individual-stats.module.css";
-import facilitiesStatsClasses from "../FacilitiesStats/facilities-stats.module.css";
+import React, {useCallback, useEffect, useState} from 'react';
+import {ChartTypes, SnackbarTypes, TeamMembers} from "../../constants/constants";
 import {loadWebsite} from "../../firebase";
+import ChartComponent from "../../shared/ChartComponent/chart-component";
+import {OYesFCPlayersArray} from "../../utils/utils";
+import TableComponent from "../../shared/TableComponent/table-component";
+import SelectionComponent from "../../shared/SelectionComponent/selection-component";
+import CardGrid from "../../shared/CardGrid/card-grid";
+import {Alert, Snackbar} from "@mui/material";
 
 const RakipbulPlayerStats = () => {
 
-    const [match, setMatch] = React.useState('Total of All Matches');
+    const [match, setMatch] = React.useState('Total of All Teams');
     const [rakipbulData, setRakipbulData] = React.useState(null);
     const [snackbarData, setSnackbarData] = useState(null);
-    let rakipbulRivals = [];
-
-    useEffect(() => {
-        if (!rakipbulData) fetchRakipbulData().then(r => r)
-    });
+    const tableColumnNames = ['Players', 'Number of Positions', 'Goals'];
+    const [options, setOptions] = useState(['Total of All Teams']);
+    const [playersGoalConvertRate, setPlayersGoalConvertRate] = useState([]);
+    const [tableData, setTableData] = useState([]);
 
     const fetchRakipbulData = async () => {
         try {
             const response = await loadWebsite(`rakipbul`);
             setRakipbulData(response)
+            let rakipbulRivals = ['Total of All Teams'];
+            Object.values(response).forEach(x => {
+                if (!rakipbulRivals?.includes(x?.rival?.name)) rakipbulRivals.push(x?.rival?.name)
+            })
+            setOptions(rakipbulRivals)
         } catch (error) {
             const errorResponse = {
                 open: true,
@@ -45,43 +38,48 @@ const RakipbulPlayerStats = () => {
         }
     }
 
-    const handleChange = (event) => {
-        setMatch(event.target.value);
-    };
+    useEffect(() => {
+        if (!rakipbulData) {
+            fetchRakipbulData().then(r => r)
+        }
+    }, [rakipbulData]);
 
-    const matchData = match === 'Total of All Matches' ?
-        rakipbulData :
-        rakipbulData.filter(x => x.rival.name === match)
-
-    const rows = Object.values(TeamMembers).map(x => x.name);
-    let playerTotalGoal = 0;
-    let playerTotalPosition = 0;
-    let playerGoalData = [];
-    let playerPositionData = [];
-    let goalPositionData = [];
-
-    if (rakipbulData) {
-        Object.values(rakipbulData).forEach(x => {
-            const name = x?.rival?.name + ' (' + x?.oyesfc?.goal + '-' + x?.rival?.goal + ')'
-            rakipbulRivals.push(name)
-        })
+    const calculateStats = useCallback((matchData) => {
+        let playersRakipbulData = [];
+        let goalPositionData = [];
         Object.values(TeamMembers).forEach(member => {
-            playerTotalGoal = 0;
-            playerTotalPosition = 0;
+            let playerTotalGoal = 0;
+            let playerTotalPosition = 0;
             Object.values(matchData).forEach(item => {
-                if (item?.oyesfc?.squad[member.name] && member.name !== TeamMembers.can.name) {
-                    playerTotalGoal += item.oyesfc.squad[member.name].goal;
-                    playerTotalPosition += item.oyesfc.squad[member.name].position;
+                if (item?.oyesfc?.squad[member.name]) {
+                    const goal = item?.oyesfc?.squad[member.name]?.goal ? item?.oyesfc?.squad[member.name]?.goal : 0
+                    const position = item?.oyesfc?.squad[member.name]?.position ? item?.oyesfc?.squad[member.name]?.position : 0
+                    playerTotalGoal += goal;
+                    playerTotalPosition += position;
                 }
             });
 
             const goalPositionRate = ((playerTotalGoal / playerTotalPosition) * 100)?.toFixed(0);
-
-            playerGoalData.push(playerTotalGoal)
-            playerPositionData.push(playerTotalPosition)
+            const playerData = [member.name, playerTotalPosition, playerTotalGoal]
+            playersRakipbulData.push(playerData)
             goalPositionData.push(goalPositionRate)
         });
-    }
+        setTableData(playersRakipbulData)
+        setPlayersGoalConvertRate(goalPositionData)
+    }, []);
+
+    useEffect(() => {
+        if (rakipbulData && match) {
+            const matchData = match === 'Total of All Teams' ?
+                rakipbulData :
+                Object.values(rakipbulData).filter(x => x.rival.name === match)
+            calculateStats(matchData)
+        }
+    }, [calculateStats, match, rakipbulData]);
+
+    const handleChange = (data) => {
+        setMatch(data);
+    };
 
     const closeSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -90,111 +88,35 @@ const RakipbulPlayerStats = () => {
         setSnackbarData(null);
     };
 
-    const chartDatasets = {
-        labels: Object.values(TeamMembers).map(x => x.name),
-        datasets: [
-            {
-                label: 'Rate of converting positions into goals (%)',
-                backgroundColor: 'green',
-                borderColor: 'green',
-                borderWidth: 2,
-                data: goalPositionData,
-            }
-        ]
-    }
+    const cardContent = (
+        <>
+            <ChartComponent
+                type={ChartTypes.bar}
+                color={'green'}
+                data={playersGoalConvertRate}
+                customStyle={{height: '400px'}}
+                graphLabels={OYesFCPlayersArray}
+                layout={'x'}
+                title={'Rate of Converting Positions into Goals (%)'}
+                maxValueBarGraph={100}/>
+            <TableComponent
+                columns={tableColumnNames}
+                rows={tableData}
+            />
+        </>
+    )
 
-    const options = {
-        indexAxis: 'x',
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                labels: {
-                    color: 'lightgray',
-                },
-            },
-        },
-        scales: {
-            x: {
-                beginAtZero: true,
-                suggestedMin: 0,
-                suggestedMax: 100,
-                ticks: {
-                    color: 'lightgray',
-                },
-            },
-            y: {
-                suggestedMin: 0,
-                suggestedMax: 100,
-                ticks: {
-                    color: 'lightgray',
-                },
-            },
-        },
-    };
-
-    Chart.register(CategoryScale);
-    linear.register(CategoryScale);
+    const firstPart = (
+        <>
+            <SelectionComponent options={options} onSelectionChange={handleChange} defaultSelectedValue={true}/>
+        </>
+    )
 
     return (
-        <div className={classes.grid}>
-            <Card sx={{ borderRadius: "25px", width: "100%", height: "auto", backgroundColor: "#242424" }} style={{backgroundColor: "#242424", justifyContent: "center", alignItems: "center"}}>
-                <h1 className={classes.titleStyle}>10 Specific Rakipbul Matches*</h1>
-                <div className={classes.selectionGrid}>
-                    <div className={classes.selectionInsideGrid}>
-                        <FormControl className={classes.colorStyle} fullWidth>
-                            <label className={classes.colorStyle}>
-                                Select a Match:
-                                <select className={facilitiesStatsClasses.select} onChange={handleChange}>
-                                    <option value='Total of All Matches'>Total of All Matches</option>
-                                    {rakipbulRivals?.map((x, y) => (
-                                        <option key={y} value={x}>{x}</option>
-                                    ))}
-                                </select>
-                            </label>
-                        </FormControl>
-                    </div>
-                </div>
-                <CardContent style={{backgroundColor: "#242424"}}>
-                    <div className={classes.cardContentInsideStyle}>
-                        <div className={facilitiesIndividualStatsClasses.chartStyle}>
-                            <Bar
-                                data={chartDatasets}
-                                width={"100%"}
-                                className={classes.chart}
-                                options={options}
-                            />
-                        </div>
-                        <div className={classes.tableStyle}>
-                            <TableContainer style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                <Table stickyHeader sx={{ minWidth: 650 }} aria-label="sticky table" style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                    <TableHead style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                        <TableRow style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}>Players</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Number of Position</TableCell>
-                                            <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">Goals</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rows.map((row, number) => (
-                                            <TableRow
-                                                key={row}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}}
-                                            >
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} component="th" scope="row">
-                                                    {row}
-                                                </TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerPositionData[number]}</TableCell>
-                                                <TableCell style={{backgroundColor: "rgb(36, 36, 36)", color: "lightgray"}} align="right">{playerGoalData[number]}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+        <>
+            <CardGrid title={'Goal Conversion Stats Against 7 Rakipbul Teams'} content={cardContent}
+                      firstPart={firstPart}
+                      customStyle={{marginBottom: '0'}}/>
             <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
                 <Alert
                     onClose={closeSnackbar}
@@ -205,7 +127,7 @@ const RakipbulPlayerStats = () => {
                     {snackbarData?.message}
                 </Alert>
             </Snackbar>
-        </div>
+        </>
     );
 };
 

@@ -1,0 +1,16 @@
+import React from 'react';
+import classes from './main-title.module.css';
+
+const MainTitle = ({title, size}) => {
+
+    const titleStyle = size === 'small' ? classes.smallTitleStyle :
+        size === 'mid' ? classes.midTitleStyle : classes.bigTitleStyle
+
+    return (
+        <div className={titleStyle}>
+            <span className={classes.spanStyle}>{title}</span>
+        </div>
+    );
+};
+
+export default MainTitle;

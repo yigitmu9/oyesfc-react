@@ -3,6 +3,7 @@ import Scoreboard from "../Scoreboard/scoreboard";
 import React, {useState} from "react";
 import {MatchDetails} from "../MatchDetails/match-details";
 import {matchType} from "../../constants/constants";
+import MainTitle from "../../shared/MainTitle/main-title";
 
 const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData, credentials, allData, playerDetails, selectedEra}) => {
 
@@ -48,35 +49,17 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
 
         return eventDateTime <= today;
     });
-    const upcomingMatchesData = sortedData.filter(item => {
-        const [day, month, year] = item.day.split('-').map(Number);
-        const [startTime] = item.time.split('-');
-        const [hour, minute] = startTime.split(':').map(Number);
-
-        const eventDateTime = new Date(year, month - 1, day, hour, minute);
-
-        return eventDateTime > today;
-    });
-    const liveMatchData = sortedData.filter(item => {
-        const [day, month, year] = item.day.split('-').map(Number);
-        const [startTime, endTime] = item.time.split('-');
-        const [startHour, startMinute] = startTime.split(':').map(Number);
-        const [endHour, endMinute] = endTime.split(':').map(Number);
-
-        const startDateTime = new Date(year, month - 1, day, startHour, startMinute);
-        const endDateTime = new Date(year, month - 1, day, endHour, endMinute);
-
-        return endDateTime > today && today >= startDateTime;
-    });
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [matchDetailsData, setMatchDetailsData] = useState(null);
     const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 200) + 'px' : (window.innerHeight - 230) + 'px';
 
     const openPopup = (x, fixture) => {
-        document.body.style.overflow = 'hidden';
-        isEdit ? sendMatchDetailsData(x) : setPopupOpen(true);
-        setMatchDetailsData(x);
-        setFixtureType(fixture)
+        if (!playerDetails) {
+            document.body.style.overflow = 'hidden';
+            isEdit ? sendMatchDetailsData(x) : setPopupOpen(true);
+            setMatchDetailsData(x);
+            setFixtureType(fixture)
+        }
     };
 
     const handleXClick = (matchDetailsData) => {
@@ -87,53 +70,35 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
         reloadData(data)
     }
 
+    const findMatchType = (match) => {
+        const [day, month, year] = match.day.split('-').map(Number);
+        const [startTime, endTime] = match.time.split('-');
+        const [startHour, startMinute] = startTime.split(':').map(Number);
+        const [endHour, endMinute] = endTime === '00:00' ? [23, 59] : endTime.split(':').map(Number);
+        const startDateTime = new Date(year, month - 1, day, startHour, startMinute);
+        const endDateTime = new Date(year, month - 1, day, endHour, endMinute);
+
+        if (endDateTime > today && today >= startDateTime) return matchType.live
+        else if (startDateTime > today) return matchType.upcoming
+        else if (endDateTime <= today) return matchType.previous
+        return null
+    }
+
     return (
         <>
+            { !playerDetails && <MainTitle title={'Matches'}/>}
             {matchDetailsFilteredData.length > 0 ?
                 <div style={{minHeight: windowHeight}}>
-                    {liveMatchData.length > 0 ?
+                    {sortedAllData.length > 0 ?
                         <>
-                        {!playerDetails && <h1 className={classes.matchTitle}>Live Match</h1>}
                             <div className={classes.grid}>
-                                {liveMatchData?.map((x, y) => (
+                                {sortedAllData?.map((x, y) => (
                                     <Scoreboard
                                         key={y}
                                         value={x}
-                                        openPopup={() => openPopup(x, matchType.live)}
+                                        openPopup={() => openPopup(x, findMatchType(x))}
                                         matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={matchType.live} playerDetails={playerDetails}
-                                        selectedEra={selectedEra}/>))}
-                            </div>
-                        </>
-                        :
-                        null}
-                    {upcomingMatchesData.length > 0 ?
-                        <>
-                        {!playerDetails && <h1 className={classes.matchTitle}>Upcoming Matches</h1>}
-                            <div className={classes.grid}>
-                                {upcomingMatchesData?.map((x, y) => (
-                                    <Scoreboard
-                                        key={y}
-                                        value={x}
-                                        openPopup={() => openPopup(x, matchType.upcoming)}
-                                        matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={matchType.upcoming} playerDetails={playerDetails}
-                                        selectedEra={selectedEra}/>))}
-                            </div>
-                        </>
-                        :
-                        null}
-                    {previousMatchesData.length > 0 ?
-                        <>
-                            {!playerDetails && <h1 className={classes.matchTitle}>Previous Matches</h1>}
-                            <div className={classes.grid}>
-                                {previousMatchesData?.map((x, y) => (
-                                    <Scoreboard
-                                        key={y}
-                                        value={x}
-                                        openPopup={() => openPopup(x, matchType.previous)}
-                                        matchDetailsData={(matchDetailsData) => handleXClick(matchDetailsData)}
-                                        fixture={matchType.previous} playerDetails={playerDetails}
+                                        fixture={findMatchType(x)} playerDetails={playerDetails}
                                         selectedEra={selectedEra}/>))}
                             </div>
                         </>

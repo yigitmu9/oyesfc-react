@@ -19,7 +19,7 @@ const AppPage = () => {
     const [key, setKey] = useState(0);
     const [credentials, setCredentials] = useState(null);
     const getEra = localStorage.getItem('era')
-    const [era, setEra] = useState(getEra ? getEra : 'Red & Black');
+    const [era, setEra] = useState(getEra ? getEra : 'Golden Age');
 
     const fetchData = async () => {
         try {
@@ -86,7 +86,7 @@ const AppPage = () => {
             <Routes key={key}>
                 <Route path='oyesfc-react/' element={<MainPage credentials={credentials} selectedEra={era} sendEra={handleEra}/>}/>
                 <Route path='oyesfc-react/matches' element={<MatchesPage databaseData={filteredData} reloadData={handleReload} credentials={credentials} allData={data} selectedEra={era}/>}/>
-                <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage databaseData={filteredData} credentials={credentials} allData={data} reloadData={handleReload}/>}/>
+                <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage databaseData={filteredData} credentials={credentials} allData={data} reloadData={handleReload} selectedEra={era}/>}/>
                 <Route path='oyesfc-react/team-stats' element={<TeamStatsPage databaseData={filteredData} credentials={credentials}/>}/>
             </Routes>
         </Router>

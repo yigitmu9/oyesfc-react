@@ -155,8 +155,9 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
         <>
             <div className={classes.generalTabDiv}>
                 <div className={highlightsClasses.matchSubmitModalDiv}>
-                    {credentials?.isCaptain && <Accordion
-                        sx={{bgcolor: '#2e2e2e', color: 'lightgray', border: '1px solid #4d4d4d', width: '100%'}}>
+                    {credentials?.isCaptain &&
+                        <Accordion
+                            sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%'}}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
                             aria-controls="panel1-content"
@@ -165,10 +166,10 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                             Add Video
                         </AccordionSummary>
                         <AccordionDetails sx={{textAlign: 'left'}}>
-                            <form onSubmit={handleSubmit} style={{background: "#1f1f1f"}}>
+                            <form onSubmit={handleSubmit} style={{background: "black"}}>
                                 <div className={addMatchClasses.formAlign}>
                                     <div className={addMatchClasses.infoAlign}>
-                                        <label style={{background: "#1f1f1f"}}>
+                                        <label style={{background: "transparent"}}>
                                             Video Type:
                                             <select className={addMatchClasses.select}
                                                     onChange={handleInputChange}
@@ -181,7 +182,7 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                                             </select>
                                         </label>
                                         <br/>
-                                        <label style={{background: "#1f1f1f"}}>
+                                        <label style={{background: "transparent"}}>
                                             Video Source:
                                             <select className={addMatchClasses.select}
                                                     onChange={handleInputChange}
@@ -194,7 +195,7 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                                             </select>
                                         </label>
                                         <br/>
-                                        <label style={{background: "#1f1f1f"}}>
+                                        <label style={{background: "transparent"}}>
                                             Player:
                                             <select className={addMatchClasses.select}
                                                     onChange={handleInputChange}
@@ -210,7 +211,7 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                                             </select>
                                         </label>
                                         <br/>
-                                        <label style={{background: "#1f1f1f"}}>
+                                        <label style={{background: "transparent"}}>
                                             Video URL:
                                             <input
                                                 className={addMatchClasses.inputDesign}
@@ -222,7 +223,7 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                                             />
                                         </label>
                                         <br/>
-                                        <label style={{background: "#1f1f1f"}}>
+                                        <label style={{background: "transparent"}}>
                                             Minute:
                                             <input
                                                 className={addMatchClasses.inputDesign}
@@ -253,9 +254,8 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                         videoData?.length > 0 ? videoData?.map((x, y) => (
                                 <Accordion key={y}
                                            sx={{
-                                               bgcolor: '#2e2e2e',
+                                               bgcolor: '#1C1C1E',
                                                color: 'lightgray',
-                                               border: '1px solid #4d4d4d',
                                                width: '100%',
                                            }}>
                                     <AccordionSummary
@@ -278,7 +278,7 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                                     </AccordionDetails>
                                 </Accordion>
                             )) :
-                            <section className={highlightsClasses.noVideoSection} style={{marginTop: credentials?.signedIn ? '10px' : '0'}}>
+                            <section className={highlightsClasses.noVideoSection} style={{marginTop: credentials?.signedIn ? '20px' : '0'}}>
                                 <BrowserNotSupportedIcon fontSize={'large'} className={classes.generalInfoIcon}>
                                 </BrowserNotSupportedIcon>
                                 <span className={highlightsClasses.noVideoSpan}>No video found for this match.</span>

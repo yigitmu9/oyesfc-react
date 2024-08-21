@@ -1,0 +1,20 @@
+.nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgb(28, 28, 30, 0.98);
+    color: white;
+    transition: transform 0.3s ease;
+    height: 60px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 0.00001em solid gray;
+    z-index: 99;
+    @media (max-width: 1100px) {
+        display: flex;
+    }
+}

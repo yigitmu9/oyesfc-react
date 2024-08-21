@@ -1,0 +1,63 @@
+.grid {
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.titleStyle {
+    background-color: transparent;
+    color: lightgray;
+    text-align: center;
+    font-size: 2em;
+    @media screen and (max-width: 768px) {
+        font-size: 25px;
+    }
+}
+
+.cardContentInsideStyle {
+    display: block;
+}
+
+.sectionStyle {
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    width: 100%;
+    margin-bottom: 50px;
+    height: auto;
+    background-color: #1C1C1E;
+    padding: 20px;
+    @media screen and (max-width: 768px) {
+
+    }
+}
+
+.smallCardDiv {
+    height: auto;
+    width: 48%;
+    margin-bottom: 50px;
+    background-color: #1C1C1E;
+    padding: 20px;
+    border-radius: 25px;
+    @media (max-width: 1300px) {
+        width: 100%;
+    }
+}
+
+.insideGrid {
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 1300px) {
+        display: block;
+        justify-content: center;
+    }
+}
+
+.smallTitleStyle {
+    background-color: transparent;
+    color: lightgray;
+    text-align: center;
+    @media (max-width: 768px) {
+
+    }
+}

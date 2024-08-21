@@ -68,20 +68,14 @@
 }
 
 .captainDiv {
-    margin: 10px;
+    margin: 0;
     @media (max-width: 767px) {
         margin: 0;
     }
 }
 
 .matchesDiv {
-    margin-top: -5px;
-    margin-bottom: 20px;
-    @media (max-width: 767px) {
-        margin-top: -15px;
-        margin-right: -10px;
-        margin-left: -10px;
-    }
+    margin: 20px;
 }
 
 .yellowCardStyle {
@@ -123,5 +117,12 @@
     margin-top: -15px;
     @media (max-width: 767px) {
         font-size: 25px;
+    }
+}
+
+.mobileClass {
+    display: none;
+    @media (max-width: 767px) {
+        display: block;
     }
 }
