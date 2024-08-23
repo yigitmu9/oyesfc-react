@@ -814,6 +814,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 Submit & Close
                             </button>
                         </div>
+                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
                     </div>
                 </div>
             </div>
@@ -1144,7 +1145,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 type="submit">Submit
                         </button>
                     </div>
-                <Box sx={{display: {xs: 'block', md: 'none'}, height: '110px'}}></Box>
+                <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
                 </form>
             </div>
         </div>

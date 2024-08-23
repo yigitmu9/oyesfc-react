@@ -51,13 +51,6 @@
     }
 }
 
-.chartTitleStyle {
-    background-color: rgb(36, 36, 36);
-    color: lightgray;
-    text-align: center;
-    font-size: 17px;
-}
-
 .tableDiv {
     width: 100%;
     height: auto;

@@ -18,20 +18,20 @@ const TeamView = ({teamData, rakipbul, bgColor, isDetails, selectedEra}) => {
 
     return (
         <div>
-            <div className={classes.teamStyle} style={{background: bgColor}}>
+            <div className={classes.teamStyle}>
                 {(teamData?.name && rakipbul)
                     ?
-                    <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle} style={{background: bgColor }}
+                    <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle}
                          src={require(`../../images/${teamData.name}.png`)} alt={'1'}/>
                     :
                     (teamData?.name && !rakipbul)
                         ?
-                        <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle} style={{ background: bgColor }}
+                        <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle}
                              alt={'1'} src={UnknownLogo}/>
                         :
-                        <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle} style={{background: bgColor}}
+                        <img className={isDetails ? classes.imageDetailStyle : classes.imageStyle}
                              alt={'1'} src={getTeamLogo()}/>}
-                <span className={isDetails ? classes.titleDetailStyle : classes.titleStyle} style={{ background: bgColor }}>
+                <span className={isDetails ? classes.titleDetailStyle : classes.titleStyle} >
                     {teamData?.name ? teamData?.name : TeamNames.oYesFc}
                 </span>
             </div>

@@ -7,7 +7,7 @@ const UpperNavInfo = ({title}) => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 0) {
+            if (window.scrollY > 40) {
                 setShowNavbar(true);
             } else {
                 setShowNavbar(false);

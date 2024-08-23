@@ -92,7 +92,7 @@ const ScoreboardsGrid = ({databaseData, isEdit, sendMatchDetailsData, reloadData
                     {sortedAllData.length > 0 ?
                         <>
                             <div className={classes.grid}>
-                                {sortedAllData?.map((x, y) => (
+                                {sortedData?.map((x, y) => (
                                     <Scoreboard
                                         key={y}
                                         value={x}

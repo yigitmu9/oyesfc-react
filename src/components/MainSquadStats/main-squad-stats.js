@@ -1,14 +1,13 @@
 import React from 'react';
-import {TeamMembers} from "../../constants/constants";
 import CardGrid from "../../shared/CardGrid/card-grid";
 import TubeGraph from "../../shared/TubeGraph/tube-graph";
-import {calculateTeamStats, calculateRateInfo} from "../../utils/utils";
+import {calculateTeamStats, calculateRateInfo, OYesFCPlayersArray} from "../../utils/utils";
 
 const MainSquadStats = ({data}) => {
 
     let foreignDataIndex = [];
     let foreignersTotalGoal = 0;
-    const players = Object.values(TeamMembers).map(x => x.name)
+    const players = OYesFCPlayersArray
     Object.values(data).forEach((item, index) => {
         for (let i = 0; i < Object.keys(item.oyesfc.squad).length; i++) {
             if (!players.includes(Object.keys(item.oyesfc.squad)[i])) {

@@ -437,16 +437,15 @@ export const MatchDetails = ({
     return (
         <div className={classes.overlay}>
             <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: buttonBgColor}}>
-                <BackButton handleBackButton={handleBack} bgColor={buttonBgColor}/>
+                <BackButton handleBackButton={handleBack}/>
             </Box>
             {!isAddMatchPopupOpen &&
                 <div className={playerDetails ? classes.fullContainer : classes.popupContainer} ref={popupRef}>
-
-                    <section className={classes.scoreboard} style={{background: buttonBgColor}}>
+                    <section className={classes.scoreboard}>
                         <div className={classes.scoreboardInsideDiv}>
                             <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
                                       bgColor={buttonBgColor} isDetails={true} selectedEra={selectedEra}/>
-                            <main className={classes.score} style={{background: buttonBgColor}}>
+                            <main className={classes.score}>
                                 <Result homeTeamScore={matchDetailsData?.oyesfc?.goal}
                                         awayTeamScore={matchDetailsData?.rival?.goal}
                                         bgColor={buttonBgColor}
@@ -467,19 +466,14 @@ export const MatchDetails = ({
                         {matchDetailsData.oyesfc.goal !== 0 ?
                             <div className={classes.playerGoalsDiv}>
                                 {matchDetails.map((item, index) => (
-                                    <div key={index} style={{
-                                        background: buttonBgColor,
-                                    }}
+                                    <div key={index}
                                          className={classes.goalScorerGrid}>
-                            <span style={{
-                                background: buttonBgColor,
-                            }}
+                            <span
                                   className={classes.goalScorerName}>{item[0].replace(/[0-9]/g, '')}</span>
                                         {Array.from({length: item[1].goal}).map((_, imgIndex) => (
                                             <img
                                                 key={imgIndex}
                                                 className={classes.goalImage}
-                                                style={{background: buttonBgColor}}
                                                 src={FootballLogo}
                                                 alt={`Goal ${imgIndex + 1}`}
                                             />
@@ -491,10 +485,11 @@ export const MatchDetails = ({
                             null
                         }
                     </section>
-                    <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: buttonBgColor}}>
+                    <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: {xs: 'black', md: buttonBgColor}}}>
                         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
                               scrollButtons variant="scrollable"
                               sx={{
+                                  borderBottom: {xs: '1px solid #252525', md: 0},
                                   '& .MuiTabs-indicator': {
                                       backgroundColor: 'lightgray',
                                   },

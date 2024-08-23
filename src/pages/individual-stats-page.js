@@ -19,7 +19,7 @@ const IndividualStatsPage = ({databaseData, credentials, allData, reloadData, se
         <div>
             <UpperNavInfo title={'Individual'}/>
             <PageGrid page={page}/>
-            <Box sx={{display: {xs: 'block', md: 'none'}, height: '110px'}}></Box>
+            <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                 <Footer credentials={credentials}></Footer>
             </Box>

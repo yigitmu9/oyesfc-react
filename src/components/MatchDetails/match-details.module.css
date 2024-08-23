@@ -75,8 +75,10 @@
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     border-radius: 0;
     min-width: 0;
+    background-color: #1C1C1E;
     @media (max-width: 768px) {
         padding: 20px 30px 10px;
+        background-color: black;
     }
 }
 

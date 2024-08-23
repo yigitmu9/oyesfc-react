@@ -36,8 +36,8 @@ const MainSquadStats = ({data, leftName, rightName, leftColor, rightColor}) => {
                     </div>
                 </ListItem>
                 {data?.map((x, y) => (
-                    <>
-                        <ListItem key={y} style={{
+                    <div key={y}>
+                        <ListItem style={{
                             backgroundColor: "transparent",
                             justifyContent: "space-between",
                             display: "flex",
@@ -59,7 +59,7 @@ const MainSquadStats = ({data, leftName, rightName, leftColor, rightColor}) => {
                                 backgroundColor: setBarColor(x[0], x[2])
                             }}></div>
                         </div>
-                    </>
+                    </div>
                 ))}
             </List>
         </div>

@@ -10,11 +10,11 @@ const MixedTeamStats = ({data}) => {
 
     const options = useMemo(() => ['Facilities', 'Jerseys', 'Number of Players', 'Rival', 'Weather'], []);
     const [selectedOption, setSelectedOption] = useState(options[0]);
-    const tableColumnNames = [selectedOption, 'Matches', 'Wins', 'Draws', 'Losses', 'Scored', 'Per Game', 'Conceded', 'Per Game']
+    const tableColumnNames =  useMemo(() => [selectedOption, 'Matches', 'Wins', 'Draws', 'Losses', 'Scored', 'Per Game', 'Conceded', 'Per Game'], []);
     const [winRateState, setWinRateState] = useState([]);
     const [labels, setLabels] = useState([]);
     const [fullDataState, setFullDataState] = useState(null);
-    const categoryValues = getCategoryValues(data);
+    const categoryValues = useMemo(() => getCategoryValues(data), [data]);
 
     const fetchData = useCallback((option) => {
         let result = [];
@@ -98,7 +98,8 @@ const MixedTeamStats = ({data}) => {
                 customStyle={{height: '500px'}}
                 graphLabels={labels}
                 layout={'y'}
-                title={'Win Rate'}/>
+                title={'Win Rate'}
+                maxValueBarGraph={100}/>
             <TableComponent
                 columns={tableColumnNames}
                 rows={fullDataState}

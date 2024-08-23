@@ -9,14 +9,14 @@ const SliderCard = ({selectedEra, sendEra}) => {
     const cards = [
         { number: 0, title: 'Golden Age', content: 'A special logo for the 10th anniversary of the establishment of O Yes FC. ' +
                 'It took its color from gold, which symbolizes special, and its symbol from the phoenix, the official ' +
-                'animal of the team. The gold color and logo were used on the jersey produced in July 14, 2023.', logo: 'gold2.jpeg' },
+                'animal of the team. The gold color and logo were used on the jersey produced in July 14, 2023.', logo: 'gold2.png' },
         { number: 1, title: 'Red & Black', content: 'The colors of O Yes FC are red and black. The red represents enthusiasm and ' +
                 'fieriness, and the black represents the fear of opponents to face O Yes FC. The logo and colors took their ' +
                 'final form in April 29, 2019 and were used on the jersey produced in the same year. Red jersey, designed on May 13.', logo: 'red3.jpeg'},
         { number: 2, title: 'Rising', content: 'The first O Yes FC logo appeared on May 13, 2014, as a result of gradual' +
                 ' growth and branding. As in the first 2 jerseys, a blue tone is used in this logo and represents self-confidence.' +
                 ' It was used in the Chelsea jersey released on August 28, 2014 and the Wavy' +
-                ' jersey released on August 22, 2015.', logo: 'blue2.jpeg' },
+                ' jersey released on August 22, 2015.', logo: 'blue2.png' },
         { number: 3, title: 'Origin', content: 'O Yes FC was founded on November 17, 2013 and its first jersey was introduced ' +
                 '5 days later, on November 22. The ghost logo used on the first jersey is symbol of  opponents fear, the harbinger of victory. ' +
                 'The white next to blue on the jersey represents stability, ' +

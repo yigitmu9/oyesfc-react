@@ -14,7 +14,7 @@ const TeamStatsPage = ({databaseData, credentials}) => {
         <div>
             <UpperNavInfo title={'Team'}/>
             <PageGrid page={page}/>
-            <Box sx={{display: {xs: 'block', md: 'none'}, height: '110px'}}></Box>
+            <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                 <Footer credentials={credentials}></Footer>
             </Box>

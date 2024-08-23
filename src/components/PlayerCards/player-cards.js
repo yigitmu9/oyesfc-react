@@ -140,7 +140,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
             bottom: '49.5%',
             left: 0,
             right: 0,
-            backgroundColor: '#1C1C1E',
+            backgroundColor: {xs: 'black', md: '#1C1C1E'},
             color: 'white',
             padding: '10px',
             width: '100%',
@@ -411,7 +411,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     return (
         <Card sx={styles.card}>
             <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: 'black'}}>
-                <BackButton handleBackButton={handleBack} bgColor={'#1C1C1E'}/>
+                <BackButton handleBackButton={handleBack} />
             </Box>
             <CardMedia
                 component="img"
@@ -421,7 +421,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
             <CardContent sx={styles.content}>
                 <h1>{playerName}</h1>
             </CardContent>
-            <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: '#1C1C1E', justifyContent: 'center', display: 'flex'}}>
+            <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: {xs: 'black', md: '#1C1C1E'}, justifyContent: 'center', display: 'flex'}}>
                 <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
                       scrollButtons variant="scrollable"
                       sx={{
@@ -455,6 +455,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                     }} label="matches" {...a11yProps(2)} />
                 </Tabs>
             </Box>
+            <Box sx={{borderBottom: {xs: '1px solid #252525', md: 0}, display: {xs: 'block', md: 'none'}}}></Box>
             <CustomTabs value={tabValue} index={0}>
                 {
                     playerName === TeamMembers.yigit.name &&

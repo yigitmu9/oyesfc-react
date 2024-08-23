@@ -8,8 +8,8 @@ const ListComponent = ({data, customStyle}) => {
         <div className={classes.tableDiv} style={customStyle}>
             <List component="nav" aria-label="mailbox folders" style={{width: '100%'}}>
                 {data?.map((x, y) => (
-                    <>
-                        <ListItem key={y} style={{
+                    <div key={y}>
+                        <ListItem style={{
                             backgroundColor: "transparent",
                             justifyContent: "space-between",
                             display: "flex",
@@ -19,7 +19,7 @@ const ListComponent = ({data, customStyle}) => {
                             <p className={classes.listItemSpanStyle}>{x[1]}</p>
                         </ListItem>
                         <Divider sx={{bgcolor: "#646464"}} variant="middle" color="red"/>
-                    </>
+                    </div>
                 ))}
             </List>
         </div>

@@ -244,15 +244,23 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
 
     const container = window !== undefined ? () => window.document.body : undefined;
 
+    const phoenixLogoElement = (
+        <div className={classes.phoenixDivStyle}>
+            <img className={classes.phoenixImgStyle}
+                 onClick={navigateMainPage} src={PhoenixLogo} alt={'1'}/>
+        </div>
+    )
+
     return (
         <>
             <AppBar position="sticky" sx={{bgcolor: getTeamLogo(), display: {xs: 'none', md: 'flex'}, margin: 0}}>
                 <Container maxWidth="lg" sx={{bgcolor: getTeamLogo()}}>
                     <Toolbar disableGutters sx={{bgcolor: getTeamLogo()}}>
                         <Box sx={{flexGrow: 1, display: 'flex', bgcolor: getTeamLogo()}}>
-                            <img className={classes.imgStyle}
-                                 style={{filter: getTeam() === PhoenixLogo ? 'brightness(0.5)' : ''}}
-                                 onClick={navigateMainPage} src={getTeam()} alt={'1'}/>
+                            {getTeam() === PhoenixLogo ? phoenixLogoElement :
+                                <img className={classes.imgStyle}
+                                     onClick={navigateMainPage} src={getTeam()} alt={'1'}/>
+                            }
                         </Box>
                         <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}, bgcolor: getTeamLogo()}}>
                         <span
@@ -406,7 +414,8 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                     </nav>
                 </Container>
             </AppBar>
-            <Box sx={{position: 'fixed', left: 0, bottom: -1, width: '100%', display: {xs: 'flex', md: 'none'}, zIndex: 99999999999, bgcolor: 'rgba(28, 28, 30, 0.98)'}}>
+            <Box sx={{position: 'fixed', left: 0, bottom: -2, width: '100%', display: {xs: 'flex', md: 'none'},
+                zIndex: 99999999999, bgcolor: 'rgba(0, 0, 0)', borderTop: '0.00001em solid #252525'}}>
                 <BottomNavigation
                     sx={{width: '100%', paddingBottom: '35px', height: '84px', paddingTop: '10px', bgcolor: 'transparent'}}
                     showLabels
