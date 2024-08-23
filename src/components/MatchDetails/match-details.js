@@ -444,11 +444,10 @@ export const MatchDetails = ({
                     <section className={classes.scoreboard}>
                         <div className={classes.scoreboardInsideDiv}>
                             <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
-                                      bgColor={buttonBgColor} isDetails={true} selectedEra={selectedEra}/>
+                                      isDetails={true} selectedEra={selectedEra}/>
                             <main className={classes.score}>
                                 <Result homeTeamScore={matchDetailsData?.oyesfc?.goal}
                                         awayTeamScore={matchDetailsData?.rival?.goal}
-                                        bgColor={buttonBgColor}
                                         isDetails={true}
                                         fixture={fixture}
                                         time={matchDetailsData?.time}/>
@@ -461,7 +460,7 @@ export const MatchDetails = ({
                                 }
                             </main>
                             <TeamView teamData={matchDetailsData?.rival} rakipbul={matchDetailsData?.rakipbul}
-                                      bgColor={buttonBgColor} isDetails={true}/>
+                                      isDetails={true}/>
                         </div>
                         {matchDetailsData.oyesfc.goal !== 0 ?
                             <div className={classes.playerGoalsDiv}>

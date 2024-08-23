@@ -6,7 +6,7 @@ import FirstLogo from '../../images/firstLogo.png';
 import PhoenixLogo from '../../images/phoenix.png';
 import UnknownLogo from '../../images/unknown.png';
 
-const TeamView = ({teamData, rakipbul, bgColor, isDetails, selectedEra}) => {
+const TeamView = ({teamData, rakipbul, isDetails, selectedEra}) => {
 
     const getTeamLogo = () => {
         if (selectedEra === OYesFcEras.goldenAge) return PhoenixLogo

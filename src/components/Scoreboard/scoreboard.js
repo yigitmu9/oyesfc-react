@@ -24,12 +24,12 @@ const Scoreboard = ({value, openPopup, matchDetailsData, fixture, playerDetails,
     return (
         <section className={playerDetails ? classes.scoreboardPlayerDetails : classes.scoreboard} onClick={handleXClick} onMouseEnter={handleButtonHover}
                  onMouseLeave={handleButtonLeave} style={{background: buttonBgColor}}>
-            <TeamView teamData={value?.oyesfc} rakipbul={value?.rakipbul} bgColor={buttonBgColor} selectedEra={selectedEra}/>
+            <TeamView teamData={value?.oyesfc} rakipbul={value?.rakipbul} selectedEra={selectedEra}/>
             <main className={classes.score} style={{background: buttonBgColor}}>
-                <Result homeTeamScore={value?.oyesfc?.goal} awayTeamScore={value?.rival?.goal} bgColor={buttonBgColor} fixture={fixture} time={value?.time}/>
+                <Result homeTeamScore={value?.oyesfc?.goal} awayTeamScore={value?.rival?.goal} fixture={fixture} time={value?.time}/>
                 <GameStatus status={value?.day?.replace(/-/g, '/')} bgColor={buttonBgColor} fixture={fixture}/>
             </main>
-            <TeamView teamData={value?.rival} rakipbul={value?.rakipbul} bgColor={buttonBgColor}/>
+            <TeamView teamData={value?.rival} rakipbul={value?.rakipbul}/>
         </section>
     );
 };

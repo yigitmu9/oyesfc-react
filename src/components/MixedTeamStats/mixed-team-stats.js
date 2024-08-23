@@ -10,7 +10,7 @@ const MixedTeamStats = ({data}) => {
 
     const options = useMemo(() => ['Facilities', 'Jerseys', 'Number of Players', 'Rival', 'Weather'], []);
     const [selectedOption, setSelectedOption] = useState(options[0]);
-    const tableColumnNames =  useMemo(() => [selectedOption, 'Matches', 'Wins', 'Draws', 'Losses', 'Scored', 'Per Game', 'Conceded', 'Per Game'], []);
+    const tableColumnNames =  useMemo(() => [selectedOption, 'Matches', 'Wins', 'Draws', 'Losses', 'Scored', 'Per Game', 'Conceded', 'Per Game'], [selectedOption]);
     const [winRateState, setWinRateState] = useState([]);
     const [labels, setLabels] = useState([]);
     const [fullDataState, setFullDataState] = useState(null);
