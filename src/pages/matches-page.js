@@ -5,18 +5,10 @@ import PageGrid from "../shared/PageGrid/page-grid";
 import Box from "@mui/material/Box";
 import UpperNavInfo from "../shared/UpperNavInfo/upper-nav-info";
 
-const MatchesPage = ({databaseData, reloadData, credentials, allData, selectedEra}) => {
-
-    const handleReload = (data) => {
-        reloadData(data)
-    }
+const MatchesPage = () => {
 
     const page = (
-        <ScoreboardsGrid databaseData={databaseData}
-                         reloadData={handleReload}
-                         credentials={credentials}
-                         allData={allData}
-                         selectedEra={selectedEra}/>
+        <ScoreboardsGrid/>
     )
 
     return (
@@ -26,7 +18,7 @@ const MatchesPage = ({databaseData, reloadData, credentials, allData, selectedEr
                 <PageGrid page={page}/>
                 <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
                 <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                    <Footer credentials={credentials}></Footer>
+                    <Footer/>
                 </Box>
             </main>
         </div>

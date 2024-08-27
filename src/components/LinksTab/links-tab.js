@@ -8,9 +8,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import {Facilities, matchType, TeamNames} from "../../constants/constants";
 import CloudIcon from "@mui/icons-material/Cloud";
 import PhoneIcon from '@mui/icons-material/Phone';
+import {useSelector} from "react-redux";
 
-const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
+const LinksTab = ({matchDetailsData, editMatch, fixture}) => {
 
+    const { isCaptain } = useSelector((state) => state.credentials);
     const isMobile = window.innerWidth <= 768;
     const formattedDateForCalendar = formatDate(matchDetailsData.day);
     const startTimeForCalendar = getStartTime(matchDetailsData.time);
@@ -62,7 +64,7 @@ const LinksTab = ({matchDetailsData, editMatch, credentials, fixture}) => {
         <>
             <div className={classes.generalTabDiv}>
                 {
-                    credentials?.isCaptain &&
+                    isCaptain &&
                     <section className={classes.generalTabSection}>
                         <div className={classes.urlInfoDiv}>
                             <EditIcon fontSize={isMobile ? 'medium' : 'large'}

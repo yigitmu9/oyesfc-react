@@ -5,14 +5,10 @@ import PageGrid from "../shared/PageGrid/page-grid";
 import Box from "@mui/material/Box";
 import UpperNavInfo from "../shared/UpperNavInfo/upper-nav-info";
 
-const IndividualStatsPage = ({databaseData, credentials, allData, reloadData, selectedEra}) => {
-
-    const handleReload = (data) => {
-        reloadData(data)
-    }
+const IndividualStatsPage = () => {
 
     const page = (
-        <IndividualStatsGrid databaseData={databaseData} credentials={credentials} allData={allData} reloadData={handleReload} selectedEra={selectedEra}/>
+        <IndividualStatsGrid/>
     )
 
     return (
@@ -21,7 +17,7 @@ const IndividualStatsPage = ({databaseData, credentials, allData, reloadData, se
             <PageGrid page={page}/>
             <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                <Footer credentials={credentials}></Footer>
+                <Footer/>
             </Box>
         </div>
     );

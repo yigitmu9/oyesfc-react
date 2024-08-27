@@ -9,11 +9,9 @@ import OYesFCLogo from "../../images/oyesfc.PNG";
 import classes from './navbar.module.css'
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import SignIn from "../SignIn/sign-in";
 import AddMatchComponent from "../AddMatch/add-match";
-import {onAuthStateChanged} from "firebase/auth";
-import {auth, loadWebsite} from "../../firebase";
 import {Alert, BottomNavigation, BottomNavigationAction, Drawer, Snackbar} from "@mui/material";
 import {OYesFcEras, SnackbarTypes, TeamMembers} from "../../constants/constants";
 import CardMedia from "@mui/material/CardMedia";
@@ -27,15 +25,20 @@ import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupIcon from "@mui/icons-material/Group";
 import PageGrid from "../../shared/PageGrid/page-grid";
-import BackButton from "../../shared/BackButton/back-button";
+import MainTitle from "../../shared/MainTitle/main-title";
+import {useDispatch, useSelector} from "react-redux";
+import {login, logout} from "../../redux/credentialsSlice";
+import {checkAuthState, signOutUser} from "../../services/service";
 
-function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, filteredData, selectedEra}) {
+function Navbar() {
+    const { selectedEra } = useSelector((state) => state.era);
+    const { userName, isCaptain, email, signedIn } = useSelector((state) => state.credentials);
     const [desktopMenu, setDesktopMenu] = React.useState(null);
     const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     const [isCalendarPopupOpen, setCalendarPopupOpen] = useState(false);
     const [snackbarData, setSnackbarData] = useState(null);
-    const [credentials, setCredentials] = useState(null);
+    const [mobileOpen, setMobileOpen] = React.useState(false);
     const [advancedFiltersModal, setAdvancedFiltersModal] = useState(false);
     const navigate = useNavigate()
     const location = useLocation();
@@ -44,6 +47,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
     const teamPath = '/oyesfc-react/team-stats';
     const mainPath = '/oyesfc-react/';
     const [value, setValue] = useState(0);
+    const dispatch = useDispatch();
 
     const getTeamLogo = () => {
         if (selectedEra === OYesFcEras.goldenAge) return 'goldenrod'
@@ -62,14 +66,9 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
     }
 
     const openFiltersModal = () => {
-        if (mobileOpen) handleDrawerToggle()
         setDesktopMenu(null)
         document.body.style.overflow = 'hidden';
         setAdvancedFiltersModal(true)
-    };
-
-    const setFilters = (filteredData) => {
-        setAdvancedFilters(filteredData);
     };
 
     const handleOpenDesktopMenu = (event) => {
@@ -85,23 +84,26 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
     };
 
     const navigateMatches = () => {
+        if (mobileOpen) handleDrawerToggle()
         navigate(matchesPath);
     };
 
     const navigateIndividualStats = () => {
+        if (mobileOpen) handleDrawerToggle()
         navigate(individualPath);
     };
 
     const navigateTeamStats = () => {
+        if (mobileOpen) handleDrawerToggle()
         navigate(teamPath);
     };
 
     const navigateMainPage = () => {
+        if (mobileOpen) handleDrawerToggle()
         navigate(mainPath);
     };
 
     const openCalendarPopup = () => {
-        if (mobileOpen) handleDrawerToggle()
         setDesktopMenu(null)
         document.body.style.overflow = 'hidden';
         setCalendarPopupOpen(true);
@@ -109,30 +111,26 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
 
     const handleXClick = (snackbarData) => {
         setSnackbarData(snackbarData);
-        if (snackbarData?.status === SnackbarTypes.success) handleReload(true)
     };
 
-    const openSignInPopup = () => {
-        if (mobileOpen) handleDrawerToggle()
-        setDesktopMenu(null)
-        document.body.style.overflow = 'hidden';
-        setSignInPopupOpen(true);
+    const handleCloseSignIn = (snackbarData) => {
+        setSnackbarData(snackbarData)
+        setSignInPopupOpen(false)
+    }
+
+    const openSignInPopup = (device) => {
+        if (device === 'desktop' || (!signedIn && device === 'mobile')) {
+            setDesktopMenu(null)
+            document.body.style.overflow = 'hidden';
+            setSignInPopupOpen(true);
+        }
     };
 
     const openAddMatchPopup = () => {
-        if (mobileOpen) handleDrawerToggle()
         setDesktopMenu(null)
         document.body.style.overflow = 'hidden';
         setAddMatchPopupOpen(true);
     };
-
-    const handleReload = (data) => {
-        reloadData(data);
-    }
-
-    const checkAuth = (data) => {
-        if (data) checkAuthState().then(r => r);
-    }
 
     const closeSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -142,67 +140,81 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
     };
 
     const onBottomNavChange = (pageIndex) => {
-        if (pageIndex !== 4) setValue(pageIndex)
-        if (pageIndex === 0) navigateMainPage()
-        if (pageIndex === 1) navigateMatches()
-        if (pageIndex === 2) navigateIndividualStats()
-        if (pageIndex === 3) navigateTeamStats()
-        if (pageIndex === 4) handleDrawerToggle()
-
+        if (value !== pageIndex) {
+            setValue(pageIndex)
+            if (pageIndex === 0) navigateMainPage()
+            if (pageIndex === 1) navigateMatches()
+            if (pageIndex === 2) navigateIndividualStats()
+            if (pageIndex === 3) navigateTeamStats()
+            if (pageIndex === 4 && !mobileOpen) openDrawerToggle()
+        }
     }
 
-    const checkAuthState = async () => {
-        await onAuthStateChanged(auth, async user => {
-            if (user && !credentials?.signedIn) {
-                try {
-                    const response = await loadWebsite('firebaseUID');
-                    const userName = Object.entries(response?.users)?.find(x => x[1] === user?.uid)[0];
-                    const isCaptain = Object.entries(response?.captain)?.some(x => x[1] === user?.uid);
-                    const credentialsData = {
-                        signedIn: true,
-                        userName: userName,
-                        isCaptain: isCaptain,
-                        email: user?.email,
-                        id: user?.uid
-                    }
-                    setCredentials(credentialsData)
-                    sendCredentials(credentialsData)
-                } catch (error) {
-                    const errorResponse = {
-                        open: true,
-                        status: SnackbarTypes.error,
-                        message: error?.message,
-                        duration: 18000
-                    }
-                    setSnackbarData(errorResponse)
-                }
-            } else if (!user && credentials?.signedIn) {
-                setCredentials(null)
-                sendCredentials(null)
-            }
-        })
-    }
+    const checkStateAuth = useCallback(async () => {
+        const authResponse = await checkAuthState();
+        if (authResponse?.signedIn && authResponse?.success) {
+            dispatch(login({
+                userName: authResponse?.userName,
+                isCaptain: authResponse?.isCaptain,
+                email: authResponse?.email,
+                id: authResponse?.id,
+            }))
+        } else if (!authResponse?.signedIn && authResponse?.success) {
+            dispatch(logout())
+        } else if (!authResponse?.success) {
+            setSnackbarData(authResponse?.error)
+        }
+    }, [dispatch])
 
     useEffect(() => {
-        checkAuthState().then(r => r)
-    });
-
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+        checkStateAuth().then(r => r)
+    }, [checkStateAuth]);
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
     };
 
+    const openDrawerToggle = () => {
+        setMobileOpen(true);
+    };
+
+    const startLogOut = async (device) => {
+        if (device === 'desktop') setDesktopMenu(false)
+        signOutUser()
+            .then(result => {
+                if (result.success) {
+                    dispatch(logout())
+                    const message = {
+                        open: true,
+                        status: SnackbarTypes.success,
+                        message: 'Successfully signed out!',
+                        duration: 6000
+                    };
+                    setSnackbarData(message)
+                } else {
+                    const errorResponse = {
+                        open: true,
+                        status: SnackbarTypes.error,
+                        message: result?.error?.message,
+                        duration: 18000
+                    };
+                    setSnackbarData(errorResponse)
+                }
+            })
+            .catch(error => {
+                // Handle unexpected errors
+                console.error(error);
+            });
+    }
+
     const mobileMorePage = (
         <>
-            <div style={{padding: '0 20px', marginTop: '80px'}}>
-                <span className={classes.miniTitle}>ACCOUNT</span>
-            </div>
+            <MainTitle title={'Account'}/>
             <div style={{height: '5px'}}></div>
-            <div className={classes.morePageBox} onClick={openSignInPopup}>
+            <div className={classes.morePageBox} onClick={() => openSignInPopup('mobile')}>
                 <span
-                    className={classes.drawerRoutesSpan}>{credentials?.signedIn ? credentials?.userName : 'Log In'}</span>
-                {credentials?.signedIn && <span className={classes.mobileEmailSpan}>{credentials?.email}</span>}
+                    className={classes.drawerRoutesSpan}>{signedIn ? userName : 'Sign In'}</span>
+                {signedIn && <span className={classes.mobileEmailSpan}>{email}</span>}
             </div>
             <div style={{height: '30px'}}></div>
             <div className={classes.morePageBox} onClick={openFiltersModal}>
@@ -218,7 +230,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                 <span className={classes.drawerRoutesSpan}>Calendar</span>
             </div>
             {
-                credentials?.isCaptain &&
+                isCaptain &&
                 <>
                     <div style={{height: '20px'}}></div>
                     <div className={classes.morePageBox} onClick={openAddMatchPopup}>
@@ -226,21 +238,17 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                     </div>
                 </>
             }
+            {
+                signedIn &&
+                <>
+                    <div style={{height: '20px'}}></div>
+                    <div className={classes.morePageBox} onClick={() => startLogOut('mobile')}>
+                        <span className={classes.drawerRoutesSpan} style={{color: 'red'}}>Sign Out</span>
+                    </div>
+                </>
+            }
         </>
     )
-
-    const handleBack = (data) => {
-        if (data) handleDrawerToggle()
-    }
-
-    const drawer = (
-        <Box>
-            <div >
-                <BackButton handleBackButton={handleBack}/>
-            </div>
-            <PageGrid page={mobileMorePage}/>
-        </Box>
-    );
 
     const container = window !== undefined ? () => window.document.body : undefined;
 
@@ -295,7 +303,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                             alignItems: 'center'
                         }}>
                             {
-                                credentials?.signedIn ?
+                                signedIn ?
                                     <CardMedia
                                         component="img"
                                         sx={{
@@ -306,7 +314,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                                             cursor: "pointer"
                                         }}
                                         onClick={handleOpenDesktopMenu}
-                                        image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
+                                        image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === userName)[0]}.jpeg`)}
                                     />
                                     :
                                     <AccountCircleIcon
@@ -339,18 +347,29 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                                     bgcolor: 'rgb(0,0,0,0)',
                                     zIndex: 99,
                                     "& .MuiPaper-root":
-                                        {backgroundColor: getTeamLogo(), borderRadius: '25px'},
+                                        {backgroundColor: getTeamLogo(), borderRadius: '12px'},
                                     "& .MuiList-root":
-                                        {backgroundColor: getTeamLogo(), borderRadius: '25px'},
+                                        {backgroundColor: getTeamLogo(), borderRadius: '12px'},
                                 }}
                             >
                                 <div className={classes.mobileMenu}>
-                                <span
-                                    className={classes.mobileMenuItems}
-                                    onClick={openSignInPopup}
-                                >
-                                    {credentials?.signedIn ? 'PROFILE' : 'LOG IN'}
-                                </span>
+                                    {
+                                        signedIn ?
+                                            <>
+                                                <span className={classes.mobileMenuItems} style={{cursor: 'auto'}}>
+                                                    {userName?.toUpperCase()}
+                                                </span>
+                                                <span className={classes.mobileMenuEmailItem}>{email}</span>
+                                            </>
+                                            :
+                                            <>
+                                                <span className={classes.mobileMenuItems}
+                                                      onClick={() => openSignInPopup('desktop')}>
+                                                    SIGN IN
+                                                </span>
+                                            </>
+
+                                    }
                                     <span
                                         className={classes.mobileMenuItems}
                                         onClick={openFiltersModal}
@@ -364,13 +383,24 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                                     CALENDAR
                                 </span>
                                     {
-                                        credentials?.isCaptain &&
+                                        isCaptain &&
                                         <>
                                             <span
                                                 className={classes.mobileMenuItems}
                                                 onClick={openAddMatchPopup}
                                             >
                                                 ADD MATCH
+                                            </span>
+                                        </>
+                                    }
+                                    {
+                                        signedIn &&
+                                        <>
+                                            <span
+                                                className={classes.mobileMenuItems}
+                                                onClick={() => startLogOut('desktop')}
+                                            >
+                                                SIGN OUT
                                             </span>
                                         </>
                                     }
@@ -397,6 +427,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                             anchor="right"
                             open={mobileOpen}
                             onClose={handleDrawerToggle}
+                            transitionDuration={0}
                             ModalProps={{
                                 keepMounted: true,
                             }}
@@ -409,7 +440,7 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                                 },
                             }}
                         >
-                            {drawer}
+                            <PageGrid page={mobileMorePage}/>
                         </Drawer>
                     </nav>
                 </Container>
@@ -428,22 +459,16 @@ function Navbar({databaseData, reloadData, setAdvancedFilters, sendCredentials, 
                     <BottomNavigationAction sx={{color: 'gray'}} label="Matches" icon={<SportsSoccerIcon/>}/>
                     <BottomNavigationAction sx={{color: 'gray'}} label="Individual" icon={<PersonIcon/>}/>
                     <BottomNavigationAction sx={{color: 'gray'}} label="Team" icon={<GroupIcon/>}/>
-                    <BottomNavigationAction sx={{color: 'gray'}} label="More" icon={<MenuIcon/>}/>
+                    <BottomNavigationAction sx={{color: 'gray'}} label="Account" icon={<AccountCircleIcon/>}/>
                 </BottomNavigation>
             </Box>
-            {isSignInPopupOpen && <SignIn onClose={() => setSignInPopupOpen(false)}
-                                          credentials={credentials} checkAuth={checkAuth} selectedEra={selectedEra}/>}
+            {isSignInPopupOpen && <SignIn onClose={(data) => handleCloseSignIn(data)}/>}
             {isAddMatchPopupOpen && <AddMatchComponent onClose={() => setAddMatchPopupOpen(false)}
-                                                       snackbarData={(snackbarData) => handleXClick(snackbarData)}
-                                                       databaseData={databaseData}/>}
+                                                       snackbarData={(snackbarData) => handleXClick(snackbarData)}/>}
             {advancedFiltersModal &&
-                <AdvancedFilters databaseData={databaseData} onClose={() => setAdvancedFiltersModal(false)}
-                                 setFilters={setFilters}/>}
+                <AdvancedFilters onClose={() => setAdvancedFiltersModal(false)}/>}
             {isCalendarPopupOpen &&
-                <CalendarComponent databaseData={databaseData} onClose={() => setCalendarPopupOpen(false)}
-                                   credentials={credentials} reloadData={handleReload} allData={databaseData}
-                                   filteredData={filteredData}
-                                   selectedEra={selectedEra}/>}
+                <CalendarComponent onClose={() => setCalendarPopupOpen(false)}/>}
             <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
                 <Alert
                     onClose={closeSnackbar}

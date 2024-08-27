@@ -9,9 +9,8 @@ import BootBrands from "../BootBrands/boot-brands";
 import MixedStats from "../MixedStats/mixed-stats";
 import MainTitle from "../../shared/MainTitle/main-title";
 
-const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData, selectedEra}) => {
+const IndividualStatsGrid = () => {
 
-    const filteredData = Object.values(databaseData);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [player, setPlayer] = useState(null);
 
@@ -21,24 +20,18 @@ const IndividualStatsGrid = ({databaseData, credentials, allData, reloadData, se
         setPopupOpen(true)
     }
 
-    const handleReload = (data) => {
-        reloadData(data)
-    }
-
     return (
         <div className={classes.grid}>
             <MainTitle title={'Individual'}/>
             <UltimateTeam onClickCard={openPlayerDetails}/>
-            <ChartsGrid data={filteredData}/>
-            <MixedStats data={filteredData}/>
-            <BootBrands data={filteredData}/>
-            <WeatherIndividualStats data={filteredData}/>
+            <ChartsGrid/>
+            <MixedStats/>
+            <BootBrands/>
+            <WeatherIndividualStats/>
             <RakipbulPlayerStats/>
             {isPopupOpen &&
-                <PlayerDetails data={filteredData}
-                               onClose={() => setPopupOpen(false)} player={player}
-                               credentials={credentials} allData={allData} reloadData={handleReload}
-                               selectedEra={selectedEra}/>}
+                <PlayerDetails onClose={() => setPopupOpen(false)}
+                               player={player}/>}
         </div>
     );
 };

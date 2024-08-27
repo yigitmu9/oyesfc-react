@@ -7,8 +7,11 @@ import classes from "./boot-brands.module.css"
 import MainTitle from "../../shared/MainTitle/main-title";
 import CardGrid from "../../shared/CardGrid/card-grid";
 import ListComponent from "../../shared/ListComponent/list-component";
+import {useSelector} from "react-redux";
 
-const BootBrands = ({data}) => {
+const BootBrands = () => {
+
+    const { filteredData } = useSelector((state) => state.databaseData);
     let adidasPlayer = 0;
     let nikePlayer = 0;
     let adidasGoal = 0;
@@ -19,7 +22,7 @@ const BootBrands = ({data}) => {
 
     Object.values(TeamMembers).forEach(x => {
         playerTotalGoalFacilities = 0;
-        Object.values(data).forEach(item => {
+        Object.values(filteredData).forEach(item => {
             if (item?.oyesfc?.squad[x.name] && x.name !== TeamMembers.can.name) {
                 playerTotalGoalFacilities += item.oyesfc.squad[x.name].goal;
             }

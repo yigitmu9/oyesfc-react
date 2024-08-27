@@ -5,9 +5,12 @@ import EmailIcon from '@mui/icons-material/Email';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import RedditIcon from '@mui/icons-material/Reddit';
+import {useSelector} from "react-redux";
+import {TeamNames} from "../../constants/constants";
 
-const Footer = ({credentials}) => {
+const Footer = () => {
 
+    const { signedIn } = useSelector((state) => state.credentials);
     const date = new Date();
     const year = date.getFullYear();
 
@@ -37,7 +40,7 @@ const Footer = ({credentials}) => {
         <footer className={classes.grid}>
             <div className={classes.content}>
                 <div className={classes.infoGrid}>
-                    <span className={classes.spanStyle}>{'© ' + year + ' O Yes FC™ | v' + packageJson.version}</span>
+                    <span className={classes.spanStyle}>{'© ' + year + ' ' + TeamNames.oYesFc + '™ | v' + packageJson.version}</span>
                 </div>
 
                 <div className={classes.iconsGrid}>
@@ -45,7 +48,7 @@ const Footer = ({credentials}) => {
                     <XIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToTwitter}></XIcon>
                     <EmailIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToEmail}></EmailIcon>
                     <YouTubeIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToYoutube}></YouTubeIcon>
-                    {credentials?.signedIn &&
+                    {signedIn &&
                     <RedditIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToReddit}></RedditIcon>}
                 </div>
             </div>

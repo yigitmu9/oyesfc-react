@@ -5,7 +5,7 @@
     padding: 16px 0;
     display: flex;
     justify-content: center;
-    @media (max-width: 1100px) {
+    @media (max-width: 900px) {
         font-size: 34px;
         justify-content: left;
     }
@@ -13,7 +13,7 @@
 
 .spanStyle {
     text-align: center;
-    @media (max-width: 1100px) {
+    @media (max-width: 900px) {
         text-align: left;
     }
 }

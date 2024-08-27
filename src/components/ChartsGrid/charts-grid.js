@@ -4,18 +4,20 @@ import MainTitle from "../../shared/MainTitle/main-title";
 import ChartComponent from "../../shared/ChartComponent/chart-component";
 import {calculateIndividualStats, calculateTeamStats, OYesFCPlayersArray} from "../../utils/utils";
 import CardGrid from "../../shared/CardGrid/card-grid";
+import {useSelector} from "react-redux";
 
 
-const ChartsGrid = ({data}) => {
+const ChartsGrid = () => {
 
+    const { filteredData } = useSelector((state) => state.databaseData);
     const isMobile = window.innerWidth <= 768;
-    const calculatedData = calculateIndividualStats(data)
+    const calculatedData = calculateIndividualStats(filteredData)
     const goalPerGameData = calculatedData?.map(x => x[4])
     const attendanceData = calculatedData?.map(x => x[3])
-    const totalTeamGoal = calculateTeamStats(data)?.scoredGoal
+    const totalTeamGoal = calculateTeamStats(filteredData)?.scoredGoal
     const goalPercent = calculatedData?.map(x => ((x[2] / totalTeamGoal) * 100)?.toFixed(0))
-    const rakipbulGames = data && data !== {} ? Object.values(data)?.filter(x => x.rakipbul === true) : []
-    const normalGames = data && data !== {} ? Object.values(data)?.filter(x => x.rakipbul === false) : []
+    const rakipbulGames = filteredData && filteredData !== {} ? Object.values(filteredData)?.filter(x => x.rakipbul === true) : []
+    const normalGames = filteredData && filteredData !== {} ? Object.values(filteredData)?.filter(x => x.rakipbul === false) : []
     const calculatedRakipbulData = calculateIndividualStats(rakipbulGames)
     const calculatedNormalData = calculateIndividualStats(normalGames)
     const performance = calculatedRakipbulData?.map((x, y) => (((calculatedNormalData[y][4] - x[4]) / x[4]) * 100)?.toFixed(0))

@@ -7,3 +7,14 @@
   justify-content: center;
 }
 
+.title {
+  color: lightgray;
+  margin-top: 20px;
+}
+
+.titleDiv {
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}

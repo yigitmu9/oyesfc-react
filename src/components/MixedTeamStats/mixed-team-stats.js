@@ -5,16 +5,18 @@ import TableComponent from "../../shared/TableComponent/table-component";
 import SelectionComponent from "../../shared/SelectionComponent/selection-component";
 import CardGrid from "../../shared/CardGrid/card-grid";
 import {calculateTeamStats, getCategoryValues} from "../../utils/utils";
+import {useSelector} from "react-redux";
 
-const MixedTeamStats = ({data}) => {
+const MixedTeamStats = () => {
 
+    const { filteredData } = useSelector((state) => state.databaseData);
     const options = useMemo(() => ['Facilities', 'Jerseys', 'Number of Players', 'Rival', 'Weather'], []);
     const [selectedOption, setSelectedOption] = useState(options[0]);
     const tableColumnNames =  useMemo(() => [selectedOption, 'Matches', 'Wins', 'Draws', 'Losses', 'Scored', 'Per Game', 'Conceded', 'Per Game'], [selectedOption]);
     const [winRateState, setWinRateState] = useState([]);
     const [labels, setLabels] = useState([]);
     const [fullDataState, setFullDataState] = useState(null);
-    const categoryValues = useMemo(() => getCategoryValues(data), [data]);
+    const categoryValues = useMemo(() => getCategoryValues(filteredData), [filteredData]);
 
     const fetchData = useCallback((option) => {
         let result = [];
@@ -22,8 +24,8 @@ const MixedTeamStats = ({data}) => {
         if (option === options[0]) {
             setLabels(categoryValues.facilities)
             categoryValues.facilities?.forEach(x => {
-                const filteredData = Object.values(data)?.filter(item => item.place === x)
-                const calculatedData = calculateTeamStats(filteredData)
+                const filteredDataConst = Object.values(filteredData)?.filter(item => item.place === x)
+                const calculatedData = calculateTeamStats(filteredDataConst)
                 const winRate = ((calculatedData.win / calculatedData.matches) * 100)?.toFixed(0);
                 const arrayData = Object.values(calculatedData).slice(0, -2);
                 const facilityData = [x, ...arrayData]
@@ -33,8 +35,8 @@ const MixedTeamStats = ({data}) => {
         } else if (option === options[1]) {
             setLabels(Jerseys)
             Jerseys.forEach(x => {
-                const filteredData = Object.values(data)?.filter(item => item.oyesfc.jersey === x)
-                const calculatedData = calculateTeamStats(filteredData)
+                const filteredDataConst = Object.values(filteredData)?.filter(item => item.oyesfc.jersey === x)
+                const calculatedData = calculateTeamStats(filteredDataConst)
                 const winRate = ((calculatedData.win / calculatedData.matches) * 100)?.toFixed(0);
                 const arrayData = Object.values(calculatedData).slice(0, -2);
                 const jerseyData = [x, ...arrayData]
@@ -44,8 +46,8 @@ const MixedTeamStats = ({data}) => {
         } else if (option === options[2]) {
             setLabels(categoryValues.playerNumbers)
             categoryValues.playerNumbers?.forEach(x => {
-                const filteredData = Object.values(data)?.filter(item => Object.keys(item?.oyesfc?.squad)?.length === x)
-                const calculatedData = calculateTeamStats(filteredData)
+                const filteredDataConst = Object.values(filteredData)?.filter(item => Object.keys(item?.oyesfc?.squad)?.length === x)
+                const calculatedData = calculateTeamStats(filteredDataConst)
                 const winRate = ((calculatedData.win / calculatedData.matches) * 100)?.toFixed(0);
                 const arrayData = Object.values(calculatedData).slice(0, -2);
                 const numberOfPlayersData = [x, ...arrayData]
@@ -55,8 +57,8 @@ const MixedTeamStats = ({data}) => {
         } else if (option === options[3]) {
             setLabels(categoryValues.rivals)
             categoryValues.rivals?.forEach(x => {
-                const filteredData = Object.values(data)?.filter(item => item.rival.name === x)
-                const calculatedData = calculateTeamStats(filteredData)
+                const filteredDataConst = Object.values(filteredData)?.filter(item => item.rival.name === x)
+                const calculatedData = calculateTeamStats(filteredDataConst)
                 const winRate = ((calculatedData.win / calculatedData.matches) * 100)?.toFixed(0);
                 const arrayData = Object.values(calculatedData).slice(0, -2);
                 const rivalData = [x, ...arrayData]
@@ -66,8 +68,8 @@ const MixedTeamStats = ({data}) => {
         } else if (option === options[4]) {
             setLabels(categoryValues.weathers)
             categoryValues.weathers?.forEach(x => {
-                const filteredData = Object.values(data)?.filter(item => item?.weather?.weather === x || item?.weather?.sky === x)
-                const calculatedData = calculateTeamStats(filteredData)
+                const filteredDataConst = Object.values(filteredData)?.filter(item => item?.weather?.weather === x || item?.weather?.sky === x)
+                const calculatedData = calculateTeamStats(filteredDataConst)
                 const winRate = ((calculatedData.win / calculatedData.matches) * 100)?.toFixed(0);
                 const arrayData = Object.values(calculatedData).slice(0, -2);
                 const weatherData = [x, ...arrayData]
@@ -77,7 +79,7 @@ const MixedTeamStats = ({data}) => {
         }
         setFullDataState(result)
         setWinRateState(rates)
-    }, [categoryValues.facilities, categoryValues.playerNumbers, categoryValues.rivals, categoryValues.weathers, data, options]);
+    }, [categoryValues.facilities, categoryValues.playerNumbers, categoryValues.rivals, categoryValues.weathers, filteredData, options]);
 
     useEffect(() => {
         if (selectedOption) {

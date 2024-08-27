@@ -19,9 +19,11 @@ import {PulseLoader} from "react-spinners";
 import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import BrowserNotSupportedIcon from '@mui/icons-material/BrowserNotSupported';
+import {useSelector} from "react-redux";
 
-const HighlightsTab = ({matchDetailsData, credentials}) => {
+const HighlightsTab = ({matchDetailsData}) => {
 
+    const { isCaptain, signedIn } = useSelector((state) => state.credentials);
     const initialFormData = {
         type: HighlightConstants.type.goal,
         source: HighlightConstants.source.youtube,
@@ -155,7 +157,7 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
         <>
             <div className={classes.generalTabDiv}>
                 <div className={highlightsClasses.matchSubmitModalDiv}>
-                    {credentials?.isCaptain &&
+                    {isCaptain &&
                         <Accordion
                             sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%'}}>
                         <AccordionSummary
@@ -263,7 +265,7 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                                         aria-controls="panel1-content"
                                         id="panel1-header"
                                     >
-                                        {x?.type + ' | ' + x?.player}
+                                        {x?.type + ' | ' + x?.player}{x?.minute !== 'Unknown' ? ' ' + x?.minute + '"' : ''}
                                     </AccordionSummary>
                                     <AccordionDetails sx={{textAlign: 'left'}}>
                                         <iframe
@@ -278,14 +280,14 @@ const HighlightsTab = ({matchDetailsData, credentials}) => {
                                     </AccordionDetails>
                                 </Accordion>
                             )) :
-                            <section className={highlightsClasses.noVideoSection} style={{marginTop: credentials?.signedIn ? '20px' : '0'}}>
+                            <section className={highlightsClasses.noVideoSection} style={{marginTop: signedIn ? '20px' : '0'}}>
                                 <BrowserNotSupportedIcon fontSize={'large'} className={classes.generalInfoIcon}>
                                 </BrowserNotSupportedIcon>
                                 <span className={highlightsClasses.noVideoSpan}>No video found for this match.</span>
                             </section>
                     }
                 </div>
-                <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
+                <Snackbar open={snackbarData?.open} autoHideDuration={4000} onClose={closeSnackbar}>
                     <Alert
                         onClose={closeSnackbar}
                         severity={snackbarData?.status}

@@ -1,4 +1,4 @@
-import {TeamMembers, WeatherSky} from "../constants/constants";
+import {matchType, TeamMembers, WeatherSky} from "../constants/constants";
 
 export const OYesFCPlayersArray = Object.values(TeamMembers).map(x => x.name)
 
@@ -91,4 +91,144 @@ export const calculateRateInfo = (mainData, otherData) => {
 
 export const calculateRate = (first, second) => {
     return ((first / second) * 100)?.toFixed(0)
+}
+
+export function returnFilteredData(databaseData, confirmedFilters, videosData, ratingsData) {
+    let filteredData;
+
+    if (confirmedFilters?.appliedType === 'rakipbul') {
+        filteredData = Object.values(databaseData).filter(x => x.rakipbul === true)
+    } else if (confirmedFilters?.appliedType === 'normal') {
+        filteredData = Object.values(databaseData).filter(x => x.rakipbul === false)
+    } else {
+        filteredData = Object.values(databaseData);
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedPlayers?.length > 0) {
+        filteredData = filteredData?.filter(x =>
+            confirmedFilters?.appliedPlayers?.every(v =>
+                typeof v === 'string' &&
+                Object.keys(x?.oyesfc?.squad || {}).includes(v)
+            )
+        );
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedFacilities?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedFacilities?.includes(x?.place))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedYears?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedYears?.includes(x.day.substring(x.day.lastIndexOf("-") + 1)))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedMonths?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedMonths?.includes(x.day.split('-')[1]))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedRivals?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedRivals?.includes(x?.rival.name))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedJersey?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedJersey?.includes(x?.oyesfc?.jersey))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedSky?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedSky?.includes(x?.weather?.sky))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedTemperature?.length > 0) {
+        if (confirmedFilters?.appliedTemperature?.includes('Hot Weather')) {
+            filteredData = Object.values(filteredData).filter(x => x?.weather?.temperature > 15)
+        }
+        if (confirmedFilters?.appliedTemperature?.includes('Cold Weather')) {
+            filteredData = Object.values(filteredData).filter(x => x?.weather?.temperature < 16)
+        }
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedNumberOfPlayers?.length > 0) {
+        filteredData = filteredData?.filter(x => confirmedFilters?.appliedNumberOfPlayers?.includes(Object.keys(x?.oyesfc?.squad)?.length?.toString()))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedSquad !== 'All') {
+        let foreignDataIndex = calculateForeignData(databaseData)
+        if (confirmedFilters?.appliedSquad === 'Main Squad') {
+            filteredData = Object.values(filteredData).filter((x, y) => !foreignDataIndex.includes(y))
+        } else if (confirmedFilters?.appliedSquad === 'Squad Including Foreigners') {
+            filteredData = Object.values(filteredData).filter((x, y) => foreignDataIndex.includes(y))
+        }
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedMatchVideos) {
+        filteredData = Object.values(filteredData).filter(x => Object.keys(videosData).includes(x?.day))
+    }
+
+    if (filteredData?.length > 0 && confirmedFilters?.appliedRatingMatches) {
+        filteredData = Object.values(filteredData).filter(x => Object.keys(ratingsData).includes(x?.day))
+    }
+
+    return filteredData;
+}
+
+export const hasAppliedFilters = (filters) => {
+    return !!(filters?.appliedType ||
+        filters?.appliedPlayers ||
+        filters?.appliedFacilities ||
+        filters?.appliedYears ||
+        filters?.appliedMonths ||
+        filters?.appliedRivals ||
+        filters?.appliedJersey ||
+        filters?.appliedSky ||
+        filters?.appliedTemperature ||
+        filters?.appliedNumberOfPlayers ||
+        filters?.appliedRatingMatches ||
+        filters?.appliedMatchVideos ||
+        filters?.appliedSquad);
+}
+
+export const calculateForeignData = (data) => {
+    let foreignDataIndex = [];
+    Object.values(data).forEach((item, index) => {
+        for (let i = 0; i < Object.keys(item.oyesfc.squad).length; i++) {
+            if (!OYesFCPlayersArray.includes(Object.keys(item.oyesfc.squad)[i])) {
+                if (!foreignDataIndex.includes(index)) {
+                    foreignDataIndex.push(index)
+                }
+            }
+        }
+    });
+    return foreignDataIndex
+}
+
+export const sortData = (data) => {
+    return Object.values(data)?.slice().sort((x, y) => {
+        if (x.day && y.day) {
+            const [dayA, monthA, yearA] = x.day.split('-').map(Number);
+            const [dayB, monthB, yearB] = y.day.split('-').map(Number);
+            if (yearA !== yearB) {
+                return yearB - yearA;
+            }
+            if (monthA !== monthB) {
+                return monthB - monthA;
+            }
+            return dayB - dayA;
+        } else {
+            return null
+        }
+    });
+}
+
+export const findMatchType = (match) => {
+    const today = new Date();
+    const [day, month, year] = match?.day?.split('-')?.map(Number);
+    const [startTime, endTime] = match?.time?.split('-');
+    const [startHour, startMinute] = startTime?.split(':')?.map(Number);
+    const [endHour, endMinute] = endTime === '00:00' ? [23, 59] : endTime?.split(':')?.map(Number);
+    const startDateTime = new Date(year, month - 1, day, startHour, startMinute);
+    const endDateTime = new Date(year, month - 1, day, endHour, endMinute);
+
+    if (endDateTime > today && today >= startDateTime) return matchType.live
+    else if (startDateTime > today) return matchType.upcoming
+    else if (endDateTime <= today) return matchType.previous
+    return null
 }

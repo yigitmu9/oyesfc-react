@@ -5,9 +5,11 @@ import TableComponent from "../../shared/TableComponent/table-component";
 import SelectionComponent from "../../shared/SelectionComponent/selection-component";
 import CardGrid from "../../shared/CardGrid/card-grid";
 import {calculateIndividualStats, getCategoryValues, OYesFCPlayersArray} from "../../utils/utils";
+import {useSelector} from "react-redux";
 
-const MixedStats = ({data}) => {
+const MixedStats = () => {
 
+    const { filteredData } = useSelector((state) => state.databaseData);
     const tableColumnNames = ['Players', 'Matches', 'Goals', 'Rate of Attendance', 'Goals per Game']
     const statTypes = useMemo(() => ['Facilities', 'Jerseys', 'Number of Players', 'Rival', 'Weather'], []);
     const [statType, setStatType] = useState('');
@@ -20,19 +22,19 @@ const MixedStats = ({data}) => {
     const updateSecondOptions = useCallback((type) => {
         let optionsArray = [];
         if (type === statTypes[0]) {
-            optionsArray = getCategoryValues(data)?.facilities
+            optionsArray = getCategoryValues(filteredData)?.facilities
         } else if (type === statTypes[1]) {
-            optionsArray = getCategoryValues(data)?.rivals
+            optionsArray = getCategoryValues(filteredData)?.rivals
         } else if (type === statTypes[2]) {
             optionsArray = Jerseys
         } else if (type === statTypes[3]) {
-            optionsArray = getCategoryValues(data)?.playerNumbers
+            optionsArray = getCategoryValues(filteredData)?.playerNumbers
         } else if (type === statTypes[4]) {
-            optionsArray = getCategoryValues(data)?.weathers
+            optionsArray = getCategoryValues(filteredData)?.weathers
         }
         setOptions(optionsArray);
         setSelectedOption('');
-    }, [data, statTypes]);
+    }, [filteredData, statTypes]);
 
     useEffect(() => {
         if (statType) {
@@ -41,17 +43,17 @@ const MixedStats = ({data}) => {
     }, [statType, updateSecondOptions]);
 
     const fetchData = useCallback((type, option) => {
-        const fetchedData = type === statTypes[0] ? Object.values(data).filter(x => x.place === option) :
-            type === statTypes[1] ? Object.values(data).filter(x => x.rival.name === option) :
-                type === statTypes[2] ? Object.values(data).filter(x => x.oyesfc.jersey === option) :
-                    type === statTypes[3] ? Object.values(data).filter(x => Object.keys(x?.oyesfc?.squad)?.length?.toString() === option) :
-                        type === statTypes[4] ? Object.values(data).filter(x => x?.weather?.weather === option || x?.weather?.sky === option) : [];
+        const fetchedData = type === statTypes[0] ? Object.values(filteredData).filter(x => x.place === option) :
+            type === statTypes[1] ? Object.values(filteredData).filter(x => x.rival.name === option) :
+                type === statTypes[2] ? Object.values(filteredData).filter(x => x.oyesfc.jersey === option) :
+                    type === statTypes[3] ? Object.values(filteredData).filter(x => Object.keys(x?.oyesfc?.squad)?.length?.toString() === option) :
+                        type === statTypes[4] ? Object.values(filteredData).filter(x => x?.weather?.weather === option || x?.weather?.sky === option) : [];
 
         const playerStats = calculateIndividualStats(fetchedData);
         const graphData = playerStats?.map(x => x[4])
         setPlayerGoalPerGameDataState(graphData)
         setFullDataState(playerStats)
-    }, [data, statTypes]);
+    }, [filteredData, statTypes]);
 
     useEffect(() => {
         if (statType && selectedOption) {

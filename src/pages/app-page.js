@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import MainPage from '../pages/main-page';
 import MatchesPage from "../pages/matches-page";
@@ -8,72 +8,53 @@ import {loadWebsite} from "../firebase";
 import LoadingPage from "../pages/loading-page";
 import ErrorPage from "../pages/error-page";
 import Navbar from '../components/Navbar/navbar';
-import {returnFilteredData} from "../components/AdvancedFilters/advanced-filters";
+import {useDispatch, useSelector} from "react-redux";
+import {changeEra} from "../redux/eraSlice";
+import {updateData} from "../redux/databaseDataSlice";
+import {hasAppliedFilters, returnFilteredData} from "../utils/utils";
 
 const AppPage = () => {
 
-    const [data, setData] = useState(null);
-    const [filteredData, setFilteredData] = useState(null);
+    const dispatch = useDispatch();
+    const { selectedEra } = useSelector((state) => state.era);
+    const { allData } = useSelector((state) => state.databaseData);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [key, setKey] = useState(0);
-    const [credentials, setCredentials] = useState(null);
-    const getEra = localStorage.getItem('era')
-    const [era, setEra] = useState(getEra ? getEra : 'Golden Age');
 
-    const fetchData = async () => {
+    useEffect(() => {
+        const localEra = localStorage.getItem('era')
+        const era = localEra ? localEra : 'Golden Age';
+        if (selectedEra !== era) dispatch(changeEra({selectedEra: era}))
+    }, [dispatch, selectedEra]);
+
+    const fetchData = useCallback(async () => {
         try {
             const response = await loadWebsite('matches');
-            setData(response);
             const filtersInStorage = JSON.parse(localStorage.getItem('filters'));
-            if (filtersInStorage?.appliedType ||
-                filtersInStorage?.appliedPlayers ||
-                filtersInStorage?.appliedFacilities ||
-                filtersInStorage?.appliedYears ||
-                filtersInStorage?.appliedMonths ||
-                filtersInStorage?.appliedRivals ||
-                filtersInStorage?.appliedJersey ||
-                filtersInStorage?.appliedSky ||
-                filtersInStorage?.appliedTemperature ||
-                filtersInStorage?.appliedNumberOfPlayers ||
-                filtersInStorage?.appliedSquad) {
-                const filterData = returnFilteredData(response, filtersInStorage)
-                setFilteredData(filterData)
+            const hasFilter = hasAppliedFilters(filtersInStorage)
+            if (hasFilter) {
+                const videosResponse = await loadWebsite(`videos`);
+                const ratingsResponse = await loadWebsite(`rates`);
+                const filterData = returnFilteredData(response, filtersInStorage, videosResponse, ratingsResponse)
+                dispatch(updateData({allData: response, filteredData: filterData}))
             } else {
-                setFilteredData(response);
+                dispatch(updateData({allData: response, filteredData: response}))
             }
-            setKey(prevKey => prevKey + 1);
             setLoading(false);
         } catch (error) {
             setError(error);
             setLoading(false);
         }
-    };
+    }, [dispatch]);
 
-    const handleReload = (data) => {
-        if (data) fetchData().then(() => setKey(prevKey => prevKey + 1));
-    }
-
-    const setAdvancedFilters = (filteredData) => {
-        setFilteredData(filteredData);
-        setKey(prevKey => prevKey + 1);
-    };
-
-    const setUpCredentials = (credentialsData) => {
-        setCredentials(credentialsData);
-        setKey(prevKey => prevKey + 1);
-    };
-
-    const handleEra = (data) => {
-        setEra(data)
-    }
-
-    if (!data) {
-        fetchData().then(r => r);
-    }
+    useEffect(() => {
+        if (!allData) {
+            fetchData().then(r => r);
+        }
+    }, [allData, fetchData]);
 
     if (loading) {
-        return <LoadingPage selectedEra={era}/>;
+        return <LoadingPage/>;
     }
 
     if (error) {
@@ -82,12 +63,12 @@ const AppPage = () => {
 
     return (
         <Router>
-            <Navbar databaseData={data} reloadData={handleReload} setAdvancedFilters={setAdvancedFilters} sendCredentials={setUpCredentials} filteredData={filteredData} selectedEra={era}/>
-            <Routes key={key}>
-                <Route path='oyesfc-react/' element={<MainPage credentials={credentials} selectedEra={era} sendEra={handleEra}/>}/>
-                <Route path='oyesfc-react/matches' element={<MatchesPage databaseData={filteredData} reloadData={handleReload} credentials={credentials} allData={data} selectedEra={era}/>}/>
-                <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage databaseData={filteredData} credentials={credentials} allData={data} reloadData={handleReload} selectedEra={era}/>}/>
-                <Route path='oyesfc-react/team-stats' element={<TeamStatsPage databaseData={filteredData} credentials={credentials}/>}/>
+            <Navbar/>
+            <Routes key={0}>
+                <Route path='oyesfc-react/' element={<MainPage/>}/>
+                <Route path='oyesfc-react/matches' element={<MatchesPage/>}/>
+                <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage/>}/>
+                <Route path='oyesfc-react/team-stats' element={<TeamStatsPage/>}/>
             </Routes>
         </Router>
     );

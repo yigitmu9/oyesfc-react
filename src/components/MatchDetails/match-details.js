@@ -28,6 +28,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HighlightsTab from "../HighlightsTab/highlights-tab";
 import BackButton from "../../shared/BackButton/back-button";
+import {useSelector} from "react-redux";
+import {findMatchType, sortData} from "../../utils/utils";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -62,18 +64,13 @@ function a11yProps(index) {
     };
 }
 
-export const MatchDetails = ({
-                                 onClose,
-                                 matchDetailsData,
-                                 fixture,
-                                 data,
-                                 reloadData,
-                                 credentials,
-                                 allData,
-                                 playerDetails,
-                                 selectedEra
-                             }) => {
+export const MatchDetails = ({onClose, matchDate}) => {
 
+    const { allData } = useSelector((state) => state.databaseData);
+    const { userName, id, signedIn } = useSelector((state) => state.credentials);
+    const matchDetailsData = Object.values(allData).find(x => x.day === matchDate)
+    const sortedAllData = sortData(allData);
+    const fixture = findMatchType(matchDetailsData)
     const hourDifference = () => {
         const [day, month, year] = matchDetailsData.day.split('-');
         const time = matchDetailsData.time.split('-');
@@ -86,7 +83,7 @@ export const MatchDetails = ({
 
     const checkButton = () => {
         const differenceInHours = hourDifference()
-        if (differenceInHours >= 48 || !Object.keys(matchDetailsData?.oyesfc?.squad)?.includes(credentials?.userName)) {
+        if (differenceInHours >= 48 || !Object.keys(matchDetailsData?.oyesfc?.squad)?.includes(userName)) {
             return 'Not Available'
         }
         return 'Submit'
@@ -101,7 +98,7 @@ export const MatchDetails = ({
     const matchDetails = Object.entries(matchDetailsData?.oyesfc?.squad)?.filter(x => x[1].goal > 0)
     const popupRef = useRef(null);
     const [tabValue, setTabValue] = React.useState(0);
-    const matchIndex = Object.values(allData).findIndex(x => x === matchDetailsData)
+    const matchIndex = Object.values(sortedAllData).findIndex(x => x === matchDetailsData)
     const [oYesFCStarFormData, setOYesFCStarFormData] = useState(initialOYesFCStarFormData);
     const [snackbarData, setSnackbarData] = useState(null);
     const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
@@ -178,13 +175,7 @@ export const MatchDetails = ({
 
     const handleMessageClick = (snackbarData) => {
         setSnackbarData(snackbarData);
-        if (snackbarData?.status === SnackbarTypes.success) handleReload(true)
     };
-
-    const handleReload = (data) => {
-        reloadData(data)
-        handleClose()
-    }
 
     const editMatch = (data) => {
         setAddMatchPopupOpen(data)
@@ -194,7 +185,7 @@ export const MatchDetails = ({
         if (Object.keys(oYesFCStarFormData).length === (Object.entries(matchDetailsData.oyesfc.squad).length - 1)) {
             if (starsErrorMessage) setStarsErrorMessage(null)
             try {
-                await set(ref(dataBase, `rates/${matchDetailsData?.day}/rates/${credentials?.id}`), oYesFCStarFormData);
+                await set(ref(dataBase, `rates/${matchDetailsData?.day}/rates/${id}`), oYesFCStarFormData);
                 setStarsSubmitButton('Submitted')
             } catch (error) {
                 setStarsErrorMessage(error?.message)
@@ -208,13 +199,13 @@ export const MatchDetails = ({
         try {
             const response = await loadWebsite(`rates/${matchDetailsData?.day}`);
             setRatesData(response)
-            if (credentials?.signedIn) {
+            if (signedIn) {
                 const ratedOrNot = await whoRatedWhoNotRated(response)
                 setRatedPeople(ratedOrNot)
             }
             if (response?.rates) {
-                if (Object.entries(response?.rates).some(x => x[0] === credentials?.id)) {
-                    const form = Object.entries(response?.rates).find(x => x[0] === credentials?.id)[1]
+                if (Object.entries(response?.rates).some(x => x[0] === id)) {
+                    const form = Object.entries(response?.rates).find(x => x[0] === id)[1]
                     setOYesFCStarFormData(form)
                     setStarsSubmitButton('Submitted')
                 }
@@ -242,9 +233,9 @@ export const MatchDetails = ({
             if (response?.notes) {
                 const notesArray = Object.entries(response?.notes)
                 setMatchNotes(notesArray)
-                if (Object.entries(response?.notes).some(x => x[0] === credentials?.userName)) {
+                if (Object.entries(response?.notes).some(x => x[0] === userName)) {
                     const noteData = {
-                        note: Object.entries(response?.notes).find(x => x[0] === credentials?.userName)[1]?.note
+                        note: Object.entries(response?.notes).find(x => x[0] === userName)[1]?.note
                     }
                     setNoteFormData(noteData);
                     setNotesTitle('Edit your note:')
@@ -305,13 +296,13 @@ export const MatchDetails = ({
         if (noteFormData['note']?.length > 0) {
             if (notesErrorMessage) setNotesErrorMessage(null)
             try {
-                await set(ref(dataBase, `notes/${matchDetailsData?.day}/notes/${credentials?.userName}`), noteFormData);
+                await set(ref(dataBase, `notes/${matchDetailsData?.day}/notes/${userName}`), noteFormData);
                 const newNote = [
-                    credentials?.userName,
+                    userName,
                     noteFormData
                 ]
                 setMatchNotes((prevData) => ([
-                    ...prevData?.filter(x => x[0] !== credentials?.userName),
+                    ...prevData?.filter(x => x[0] !== userName),
                     newNote
                 ]));
                 if (notesTitle === 'Add your note:') setNotesTitle('Edit your note:')
@@ -427,24 +418,17 @@ export const MatchDetails = ({
 
     }
 
-    const closeSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbarData(null);
-    };
-
     return (
         <div className={classes.overlay}>
             <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: buttonBgColor}}>
                 <BackButton handleBackButton={handleBack}/>
             </Box>
             {!isAddMatchPopupOpen &&
-                <div className={playerDetails ? classes.fullContainer : classes.popupContainer} ref={popupRef}>
+                <div className={classes.popupContainer} ref={popupRef}>
                     <section className={classes.scoreboard}>
                         <div className={classes.scoreboardInsideDiv}>
                             <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
-                                      isDetails={true} selectedEra={selectedEra}/>
+                                      isDetails={true}/>
                             <main className={classes.score}>
                                 <Result homeTeamScore={matchDetailsData?.oyesfc?.goal}
                                         awayTeamScore={matchDetailsData?.rival?.goal}
@@ -540,7 +524,7 @@ export const MatchDetails = ({
                                 }
                             }} label="highlights" {...a11yProps(5)} />
                             {
-                                credentials?.signedIn && fixture === matchType.previous &&
+                                signedIn && fixture === matchType.previous &&
                                 <Tab sx={{
                                     '&.MuiTab-root': {
                                         color: 'gray'
@@ -550,7 +534,7 @@ export const MatchDetails = ({
                                 }} label="rating" {...a11yProps(6)} />
                             }
                             {
-                                credentials?.signedIn && fixture === matchType.previous &&
+                                signedIn && fixture === matchType.previous &&
                                 <Tab sx={{
                                     '&.MuiTab-root': {
                                         color: 'gray'
@@ -562,13 +546,13 @@ export const MatchDetails = ({
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={tabValue} index={0}>
-                        <PreviewTab matchDetailsData={matchDetailsData} allData={allData} matchIndex={matchIndex}
+                        <PreviewTab matchDetailsData={matchDetailsData} allData={sortedAllData} matchIndex={matchIndex}
                                     bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherData={weatherData}/>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
                         <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings}
-                                  redirectToTab={redirectToTab} credentials={credentials}/>
+                                  redirectToTab={redirectToTab}/>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={2}>
@@ -577,27 +561,27 @@ export const MatchDetails = ({
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={3}>
                         <section className={classes.defaultSection}>
-                            <RivalComparison data={allData} selectedRival={matchDetailsData?.rival.name}/>
+                            <RivalComparison data={sortedAllData} selectedRival={matchDetailsData?.rival.name}/>
                         </section>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={4}>
-                        <LinksTab matchDetailsData={matchDetailsData} editMatch={editMatch} credentials={credentials}
+                        <LinksTab matchDetailsData={matchDetailsData} editMatch={editMatch}
                                   fixture={fixture}/>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={5}>
-                        <HighlightsTab matchDetailsData={matchDetailsData} credentials={credentials}
+                        <HighlightsTab matchDetailsData={matchDetailsData}
                                        snackbarData={(snackbarData) => handleMessageClick(snackbarData)}/>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
 
                     </CustomTabPanel>
                     {
-                        credentials?.signedIn && fixture === matchType.previous &&
+                        signedIn && fixture === matchType.previous &&
                         <>
                             <CustomTabPanel value={tabValue} index={6}>
                                 {
-                                    Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== credentials?.userName)?.map((x, y) => (
+                                    Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== userName)?.map((x, y) => (
                                         <section key={y} className={classes.starSection}>
                                             <span className={classes.starSpan}>{x[0]}</span>
                                             {
@@ -691,7 +675,7 @@ export const MatchDetails = ({
                                             name="note"
                                             value={noteFormData['note']}
                                             onChange={handleNoteInputChange}
-                                            maxLength={250}
+                                            maxLength={750}
                                         />
 
                                     </section>
@@ -713,10 +697,9 @@ export const MatchDetails = ({
                 </div>}
             {isAddMatchPopupOpen && <AddMatchComponent onClose={() => setAddMatchPopupOpen(false)}
                                                        snackbarData={(snackbarData) => handleMessageClick(snackbarData)}
-                                                       databaseData={data} selectedMatchData={matchDetailsData}/>}
-            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
+                                                       selectedMatchData={matchDetailsData}/>}
+            <Snackbar open={snackbarData?.open} autoHideDuration={4000}>
                 <Alert
-                    onClose={closeSnackbar}
                     severity={snackbarData?.status}
                     variant="filled"
                     sx={{width: '100%'}}

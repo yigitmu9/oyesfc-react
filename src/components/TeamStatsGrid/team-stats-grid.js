@@ -6,18 +6,19 @@ import RakipbulTeamStats from "../RakipbulTeamStats/rakipbul-team-stats";
 import MainSquadStats from "../MainSquadStats/main-squad-stats";
 import MainTitle from "../../shared/MainTitle/main-title";
 import MixedTeamStats from "../MixedTeamStats/mixed-team-stats";
+import {useSelector} from "react-redux";
 
-const TeamStatsGrid = ({databaseData, credentials}) => {
+const TeamStatsGrid = () => {
 
-    const matchDetailsFilteredData = Object.values(databaseData);
+    const { signedIn } = useSelector((state) => state.credentials);
 
     return (
         <div className={classes.grid}>
             <MainTitle title={'Team'}/>
-            <GeneralResults data={matchDetailsFilteredData}/>
-            <MixedTeamStats data={matchDetailsFilteredData}/>
-            {credentials?.signedIn && <MainSquadStats data={matchDetailsFilteredData}/>}
-            <WeatherTeamStats data={matchDetailsFilteredData}/>
+            <GeneralResults/>
+            <MixedTeamStats/>
+            {signedIn && <MainSquadStats/>}
+            <WeatherTeamStats/>
             <RakipbulTeamStats/>
         </div>
     );

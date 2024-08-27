@@ -6,11 +6,13 @@ import CardGrid from "../../shared/CardGrid/card-grid";
 import MainTitle from "../../shared/MainTitle/main-title";
 import ListComponent from "../../shared/ListComponent/list-component";
 import {calculateRate, calculateTeamStats} from "../../utils/utils";
+import {useSelector} from "react-redux";
 
-const WeatherTeamStats = ({data}) => {
+const WeatherTeamStats = () => {
 
-    const hotWeatherData = Object.values(data).filter(item => item?.weather?.temperature > 15);
-    const coldWeatherData = Object.values(data).filter(item => item?.weather?.temperature < 16);
+    const { filteredData } = useSelector((state) => state.databaseData);
+    const hotWeatherData = Object.values(filteredData).filter(item => item?.weather?.temperature > 15);
+    const coldWeatherData = Object.values(filteredData).filter(item => item?.weather?.temperature < 16);
     const calculatedHotWeatherData = calculateTeamStats(hotWeatherData)
     const calculatedColdWeatherData = calculateTeamStats(coldWeatherData)
 

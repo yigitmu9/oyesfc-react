@@ -5,10 +5,10 @@ import PageGrid from "../shared/PageGrid/page-grid";
 import Box from "@mui/material/Box";
 import UpperNavInfo from "../shared/UpperNavInfo/upper-nav-info";
 
-const TeamStatsPage = ({databaseData, credentials}) => {
+const TeamStatsPage = () => {
 
     const page = (
-        <TeamStatsGrid databaseData={databaseData} credentials={credentials}/>
+        <TeamStatsGrid/>
     )
     return (
         <div>
@@ -16,7 +16,7 @@ const TeamStatsPage = ({databaseData, credentials}) => {
             <PageGrid page={page}/>
             <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                <Footer credentials={credentials}></Footer>
+                <Footer/>
             </Box>
         </div>
     );

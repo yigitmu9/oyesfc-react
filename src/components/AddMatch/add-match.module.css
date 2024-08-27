@@ -29,7 +29,7 @@
         max-height: 100%;
         min-height: 100%;
     }
-    @media (min-width: 768px) and (max-width: 1100px) {
+    @media (min-width: 768px) and (max-width: 900px) {
         width: 100%;
         border-radius: 0;
         height: 100%;
@@ -40,7 +40,7 @@
         max-height: 100%;
         min-height: 100%;
     }
-    @media (min-width: 1101px) and (max-width: 1700px) {
+    @media (min-width: 901px) and (max-width: 1700px) {
         width: 30%;
         max-width: 50%;
         min-width: 550px;
@@ -235,7 +235,7 @@ label {
 .generalTitle {
     background-color: transparent;
     margin-bottom: 40px;
-    @media (max-width: 1100px) {
+    @media (max-width: 900px) {
         margin-top: 50px;
     }
 }

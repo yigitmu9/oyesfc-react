@@ -29,6 +29,7 @@ import NikeLogo from "../../images/nike.png";
 import AdidasLogo from "../../images/adidas.PNG";
 import TollIcon from '@mui/icons-material/Toll';
 import BackButton from "../../shared/BackButton/back-button";
+import {useSelector} from "react-redux";
 
 function CustomTabs(props) {
     const {children, value, index, ...other} = props;
@@ -63,16 +64,17 @@ function a11yProps(index) {
     };
 }
 
-const PlayerCards = ({playerName, data, close , credentials, allData , reloadData, selectedEra}) => {
+const PlayerCards = ({playerName, close}) => {
 
+    const { allData, filteredData } = useSelector((state) => state.databaseData);
     const isMobile = window.innerWidth <= 768;
     const [tabValue, setTabValue] = React.useState(0);
-    const numberOfMatches = Object.values(data).length;
+    const numberOfMatches = Object.values(filteredData).length;
     const playerNumber = Object.values(TeamMembers).find(x => x.name === playerName).number;
     const imageUrl = Object.entries(TeamMembers).find(x => x[1].name === playerName)[0];
     const playerFoot = playerName === TeamMembers.atakan.name ? 'Left' :
         (playerName === TeamMembers.yigit.name || playerName === TeamMembers.mert.name) ? 'Both' : 'Right';
-    const filteredWithPlayerData = Object.values(data).filter(x => {
+    const filteredWithPlayerData = Object.values(filteredData).filter(x => {
         return Object.keys(x.oyesfc.squad).includes(playerName)
     })
     const [ratesData, setRatesData] = useState(null);
@@ -86,7 +88,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     const playerBootCollection = Object.values(TeamMembers).find(x => x.name === playerName).bootCollection;
     const playerBootModel = Object.values(TeamMembers).find(x => x.name === playerName).bootModel;
 
-    Object.values(data).forEach(item => {
+    Object.values(filteredData).forEach(item => {
         if (item?.oyesfc?.squad[playerName] && playerName !== TeamMembers.can.name) {
             playerTotalGoal += item.oyesfc.squad[playerName].goal;
         }
@@ -110,7 +112,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     };
 
 
-    const playerTotalMatch = Object.values(data).filter(item =>
+    const playerTotalMatch = Object.values(filteredData).filter(item =>
         Object.keys(item.oyesfc.squad).includes(playerName)).length;
 
     useEffect(() => {
@@ -274,10 +276,6 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
         }
     }
 
-    const handleReload = (data) => {
-        reloadData(data)
-    }
-
     const playersPositions = {
         [TeamMembers.atakan.name]: ['Centre Back', 'Left Back', 'Right Back'],
         [TeamMembers.yigit.name]: ['Centre Attacking Midfielder', 'Centre Forward', 'Centre Midfielder'],
@@ -325,7 +323,7 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
                 ?.map(a => a[0])?.filter(b => oyesfcMembers?.includes(b))?.length
             const showRatings = Object.values(allData)?.find(match => match?.day === x[0])?.showRatings
             const differenceInHours = hourDifference(Object.values(allData)?.find(match => match?.day === x[0])?.day, Object.values(allData)?.find(match => match?.day === x[0])?.time)
-            return Object.values(data)?.map(x => x?.day)?.includes(x[0]) && (Object.values(x[1]?.rates)?.length >= oyesfcMemberLength || showRatings === 'enable' ||
+            return Object.values(filteredData)?.map(x => x?.day)?.includes(x[0]) && (Object.values(x[1]?.rates)?.length >= oyesfcMemberLength || showRatings === 'enable' ||
                 (differenceInHours >= 48 && Object.values(x[1]?.rates)?.length >= 4)) && showRatings !== 'disable'
         })
         const matchCount = superFilteredData.filter(superMatch => {
@@ -395,13 +393,6 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
     const findTopPlayers = (averageRatings) => {
         const maxAverage = Math.max(...Object.values(averageRatings));
         return Object.keys(averageRatings)?.filter(player => averageRatings[player] === maxAverage);
-    };
-
-    const closeSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbarData(null);
     };
 
     const handleBack = (data) => {
@@ -661,16 +652,13 @@ const PlayerCards = ({playerName, data, close , credentials, allData , reloadDat
             </CustomTabs>
             <CustomTabs value={tabValue} index={2}>
                 <div className={classes.matchesDiv}>
-                    <ScoreboardsGrid databaseData={filteredWithPlayerData} reloadData={handleReload}
-                                     credentials={credentials}
-                                     allData={allData} playerDetails={true}
-                                     selectedEra={selectedEra}/>
+                    <ScoreboardsGrid databaseData={filteredWithPlayerData}
+                                     playerDetails={true}/>
                 </div>
                 <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
             </CustomTabs>
-            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
+            <Snackbar open={snackbarData?.open} autoHideDuration={4000}>
                 <Alert
-                    onClose={closeSnackbar}
                     severity={snackbarData?.status}
                     variant="filled"
                     sx={{width: '100%'}}

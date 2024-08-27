@@ -3,11 +3,13 @@ import {calculateIndividualStats, OYesFCPlayersArray, calculateRateInfo} from ".
 import CardGrid from "../../shared/CardGrid/card-grid";
 import TubeGraph from "../../shared/TubeGraph/tube-graph";
 import SelectionComponent from "../../shared/SelectionComponent/selection-component";
+import {useSelector} from "react-redux";
 
-const WeatherIndividualStats = ({data}) => {
+const WeatherIndividualStats = () => {
 
-    const hotWeather = Object.values(data).filter(item => item?.weather?.temperature > 15);
-    const coldWeather = Object.values(data).filter(item => item?.weather?.temperature < 16);
+    const { filteredData } = useSelector((state) => state.databaseData);
+    const hotWeather = Object.values(filteredData).filter(item => item?.weather?.temperature > 15);
+    const coldWeather = Object.values(filteredData).filter(item => item?.weather?.temperature < 16);
 
     const emptyData = [
         [0, 'Matches', 0, 0, 100],

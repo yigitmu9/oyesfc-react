@@ -3,9 +3,17 @@ import React, {useEffect, useRef, useState} from "react";
 import {Jerseys, TeamMembers, WeatherSky} from "../../constants/constants";
 import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 import matchDetailsClasses from '../MatchDetails/match-details.module.css'
+import BackButton from "../../shared/BackButton/back-button";
+import Box from "@mui/material/Box";
+import {returnFilteredData} from "../../utils/utils";
+import {loadWebsite} from "../../firebase";
+import {useDispatch, useSelector} from "react-redux";
+import {updateData} from "../../redux/databaseDataSlice";
 
-const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
+const AdvancedFilters = ({onClose}) => {
 
+    const dispatch = useDispatch();
+    const { allData } = useSelector((state) => state.databaseData);
     const filtersInStorage = JSON.parse(localStorage.getItem('filters'));
     document.body.style.overflow = 'hidden';
     const [matchType, setMatchType] = useState(!filtersInStorage?.appliedType ? 'all' : filtersInStorage?.appliedType);
@@ -20,6 +28,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
     const [filteredTemperature, setFilteredTemperature] = useState(!filtersInStorage?.appliedTemperature ? [] : filtersInStorage?.appliedTemperature);
     const [filteredSquad, setFilteredSquad] = useState(!filtersInStorage?.appliedSquad ? 'All' : filtersInStorage?.appliedSquad);
     const [filteredNumberOfPlayers, setFilteredNumberOfPlayers] = useState(!filtersInStorage?.appliedNumberOfPlayers ? [] : filtersInStorage?.appliedNumberOfPlayers);
+    const [filteredMatchVideos, setFilteredMatchVideos] = useState(!filtersInStorage?.appliedMatchVideos ? false : filtersInStorage?.appliedMatchVideos);
+    const [filteredRatingMatches, setFilteredRatingMatches] = useState(!filtersInStorage?.appliedRatingMatches ? false : filtersInStorage?.appliedRatingMatches);
     let facilities = [];
     let years = [];
     let months = [];
@@ -33,33 +43,33 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
     const matchCategories = ['All', 'Rakipbul', 'Normal']
     const squadTypes = ['All', 'Main Squad', 'Squad Including Foreigners']
 
-    Object.values(databaseData)?.forEach((x) => {
+    Object.values(allData)?.forEach((x) => {
         if (!facilities.includes(x.place) && (matchType === 'all' || x.rakipbul === (matchType === 'rakipbul'))) {
             facilities.push(x.place)
         }
     })
 
-    Object.values(databaseData)?.forEach((x) => {
+    Object.values(allData)?.forEach((x) => {
         const dateYear = x.day.substring(x.day.lastIndexOf("-") + 1)
         if (!years.includes(dateYear) && (matchType === 'all' || x.rakipbul === (matchType === 'rakipbul'))) {
             years.push(dateYear)
         }
     })
 
-    Object.values(databaseData)?.forEach((x) => {
+    Object.values(allData)?.forEach((x) => {
         const dateMonth = x.day.split('-')[1];
         if (!months.includes(dateMonth) && (matchType === 'all' || x.rakipbul === (matchType === 'rakipbul'))) {
             months.push(dateMonth)
         }
     })
 
-    Object.values(databaseData)?.forEach((x) => {
+    Object.values(allData)?.forEach((x) => {
         if (!rivalNames.includes(x.rival.name) && (matchType === 'all' || x.rakipbul === (matchType === 'rakipbul'))) {
             rivalNames.push(x.rival.name)
         }
     })
 
-    Object.values(databaseData)?.forEach(x => {
+    Object.values(allData)?.forEach(x => {
         const playerLength = Object.keys(x?.oyesfc?.squad)?.length
         if (!playerLengthArray.includes(playerLength)) playerLengthArray.push(playerLength)
     });
@@ -96,6 +106,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
         setFilteredSky([])
         setFilteredNumberOfPlayers([])
         setFilteredSquad('All')
+        setFilteredRatingMatches(false)
+        setFilteredMatchVideos(false)
     }
 
     const handleMatchTypeChange = (event) => {
@@ -205,6 +217,24 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
         }
     };
 
+    const handleMatchVideosChange = (event) => {
+        const checked = event.target.checked;
+        if (filteredMatchVideos && !checked) {
+            setFilteredMatchVideos(false)
+        } else if (!filteredMatchVideos && checked) {
+            setFilteredMatchVideos(true)
+        }
+    }
+
+    const handleRatingMatchesChange = (event) => {
+        const checked = event.target.checked;
+        if (filteredRatingMatches && !checked) {
+            setFilteredRatingMatches(false)
+        } else if (!filteredRatingMatches && checked) {
+            setFilteredRatingMatches(true)
+        }
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -218,6 +248,8 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
             filteredSky?.length > 0 ||
             filteredTemperature?.length > 0 ||
             filteredNumberOfPlayers?.length > 0 ||
+            filteredRatingMatches ||
+            filteredMatchVideos ||
             filteredSquad !== 'All') {
             appliedFilters = {
                 appliedType: matchType,
@@ -230,20 +262,31 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                 appliedSky: filteredSky,
                 appliedTemperature: filteredTemperature,
                 appliedNumberOfPlayers: filteredNumberOfPlayers,
+                appliedMatchVideos: filteredMatchVideos,
+                appliedRatingMatches: filteredRatingMatches,
                 appliedSquad: filteredSquad
             }
             localStorage.setItem('filters', JSON.stringify(appliedFilters))
         } else {
-            localStorage.clear();
+            localStorage.removeItem('filters');
         }
-        const finalData = returnFilteredData(databaseData, appliedFilters)
-        setFilters(finalData)
+        const videosResponse = await loadWebsite(`videos`);
+        const ratingsResponse = await loadWebsite(`rates`);
+        const finalData = returnFilteredData(allData, appliedFilters, videosResponse, ratingsResponse)
+        dispatch(updateData({allData: allData, filteredData: finalData}))
         handleClose();
     };
+
+    const handleBack = (data) => {
+        if (data) handleClose()
+    }
 
     return (
         <div className={matchDetailsClasses.overlay}>
             <div className={classes.popupContainer} style={{display: "block"}} ref={popupRef}>
+                <Box sx={{display: {xs: 'flex', md: 'none'}}}>
+                    <BackButton handleBackButton={handleBack}/>
+                </Box>
                 <div style={{display: "block", height: '100%'}}>
                     <form onSubmit={handleSubmit}>
                         <div className={classes.formAlign}>
@@ -272,7 +315,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {Object.values(TeamMembers).map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {x.name}
                                                 <input
                                                     type="checkbox"
@@ -291,7 +334,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {facilities.sort().map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {x}
                                                 <input
                                                     type="checkbox"
@@ -313,7 +356,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     }).map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {x}
                                                 <input
                                                     type="checkbox"
@@ -335,7 +378,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     }).map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {monthNames[Number(x) - 1]}
                                                 <input
                                                     type="checkbox"
@@ -354,7 +397,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {rivalNames.sort().map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {x}
                                                 <input
                                                     type="checkbox"
@@ -373,7 +416,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {squadTypes.map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {x}
                                                 <input
                                                     type="checkbox"
@@ -392,7 +435,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {Jerseys.map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {x}
                                                 <input
                                                     type="checkbox"
@@ -411,7 +454,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {WeatherSky.map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {x}
                                                 <input
                                                     type="checkbox"
@@ -429,7 +472,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     <h2 className={classes.title}>Temperature</h2>
                                     <div>
                                         <label
-                                               className={classes.customCheckbox}>
+                                            className={classes.customCheckbox}>
                                             Cold Weather{' (<16'}&#176;{')'}
                                             <input
                                                 type="checkbox"
@@ -443,7 +486,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     </div>
                                     <div>
                                         <label
-                                               className={classes.customCheckbox}>
+                                            className={classes.customCheckbox}>
                                             Hot Weather{' (>15'}&#176;{')'}
                                             <input
                                                 type="checkbox"
@@ -461,7 +504,7 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                     {playerLengthArray?.map((x, y) => (
                                         <div key={y}>
                                             <label
-                                                   className={classes.customCheckbox}>
+                                                className={classes.customCheckbox}>
                                                 {x + 'v' + x}
                                                 <input
                                                     type="checkbox"
@@ -475,7 +518,42 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
                                         </div>
                                     ))}
                                 </div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Videos</h2>
+                                    <div>
+                                        <label
+                                            className={classes.customCheckbox}>
+                                            Match Videos
+                                            <input
+                                                type="checkbox"
+                                                name={'Match Videos'}
+                                                onChange={handleMatchVideosChange}
+                                                checked={filteredMatchVideos}
+                                            />
+                                            <span className={classes.checkmark}></span>
+                                        </label>
+                                        <br/>
+                                    </div>
+                                </div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Ratings</h2>
+                                    <div>
+                                        <label
+                                            className={classes.customCheckbox}>
+                                            Match Ratings
+                                            <input
+                                                type="checkbox"
+                                                name={'Match Ratings'}
+                                                onChange={handleRatingMatchesChange}
+                                                checked={filteredRatingMatches}
+                                            />
+                                            <span className={classes.checkmark}></span>
+                                        </label>
+                                        <br/>
+                                    </div>
+                                </div>
                             </div>
+                            <Box sx={{display: {xs: 'block', md: 'none'}, height: '190px'}}></Box>
                         </div>
                         <div className={classes.buttonDivStyle}>
                             <button className={matchDetailsClasses.mapsButtons}
@@ -497,81 +575,3 @@ const AdvancedFilters = ({onClose, databaseData, setFilters}) => {
 };
 
 export default AdvancedFilters;
-
-export function returnFilteredData(databaseData, confirmedFilters) {
-    let filteredData;
-    const players = Object.values(TeamMembers).map(x => x.name)
-
-    if (confirmedFilters?.appliedType === 'rakipbul') {
-        filteredData = Object.values(databaseData).filter(x => x.rakipbul === true)
-    } else if (confirmedFilters?.appliedType === 'normal') {
-        filteredData = Object.values(databaseData).filter(x => x.rakipbul === false)
-    } else {
-        filteredData = Object.values(databaseData);
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedPlayers?.length > 0) {
-        filteredData = filteredData?.filter(x =>
-            confirmedFilters?.appliedPlayers?.every(v =>
-                typeof v === 'string' &&
-                Object.keys(x?.oyesfc?.squad || {}).includes(v)
-            )
-        );
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedFacilities?.length > 0) {
-        filteredData = filteredData?.filter(x => confirmedFilters?.appliedFacilities?.includes(x?.place))
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedYears?.length > 0) {
-        filteredData = filteredData?.filter(x => confirmedFilters?.appliedYears?.includes(x.day.substring(x.day.lastIndexOf("-") + 1)))
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedMonths?.length > 0) {
-        filteredData = filteredData?.filter(x => confirmedFilters?.appliedMonths?.includes(x.day.split('-')[1]))
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedRivals?.length > 0) {
-        filteredData = filteredData?.filter(x => confirmedFilters?.appliedRivals?.includes(x?.rival.name))
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedJersey?.length > 0) {
-        filteredData = filteredData?.filter(x => confirmedFilters?.appliedJersey?.includes(x?.oyesfc?.jersey))
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedSky?.length > 0) {
-        filteredData = filteredData?.filter(x => confirmedFilters?.appliedSky?.includes(x?.weather?.sky))
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedTemperature?.length > 0) {
-        if (confirmedFilters?.appliedTemperature?.includes('Hot Weather')) {
-            filteredData = Object.values(filteredData).filter(x => x?.weather?.temperature > 15)
-        }
-        if (confirmedFilters?.appliedTemperature?.includes('Cold Weather')) {
-            filteredData = Object.values(filteredData).filter(x => x?.weather?.temperature < 16)
-        }
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedNumberOfPlayers?.length > 0) {
-        filteredData = filteredData?.filter(x => confirmedFilters?.appliedNumberOfPlayers?.includes(Object.keys(x?.oyesfc?.squad)?.length?.toString()))
-    }
-
-    if (filteredData?.length > 0 && confirmedFilters?.appliedSquad !== 'All') {
-        let foreignDataIndex = [];
-        Object.values(filteredData).forEach((item, index) => {
-            for (let i = 0; i < Object.keys(item.oyesfc.squad).length; i++) {
-                if (!players.includes(Object.keys(item.oyesfc.squad)[i])) {
-                    if (!foreignDataIndex.includes(index)) {
-                        foreignDataIndex.push(index)
-                    }
-                }
-            }
-        });
-        if (confirmedFilters?.appliedSquad === 'Main Squad') {
-            filteredData = Object.values(filteredData).filter((x, y) => !foreignDataIndex.includes(y))
-        } else if (confirmedFilters?.appliedSquad === 'Squad Including Foreigners') {
-            filteredData = Object.values(filteredData).filter((x, y) => foreignDataIndex.includes(y))
-        }
-    }
-    return filteredData;
-}

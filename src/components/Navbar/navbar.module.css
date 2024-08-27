@@ -53,6 +53,15 @@
     font-weight: bold;
 }
 
+.mobileMenuEmailItem {
+    background-color: transparent;
+    padding: 0 20px 10px;
+    margin-top: -15px;
+    border-radius: 25px;
+    color: #222222;
+    font-size: 14px;
+}
+
 .drawerRoutesSpan {
     color: lightgray;
     font-size: 18px;
@@ -134,8 +143,8 @@
     background-color: #1C1C1E;
     display: flex;
     flex-direction: column;
-    border-radius: 16px;
+    border-radius: 12px;
     width: 100%;
-    padding: 15px 20px;
+    padding: 12px 20px;
     height: auto;
 }

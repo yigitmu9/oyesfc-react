@@ -1,23 +1,27 @@
 import React, {useEffect, useRef, useState} from 'react';
 import classes from "./sign-in.module.css";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import {signInWithEmailAndPassword, signOut} from "firebase/auth"
-import {auth} from "../../firebase"
 import {Loading} from "../../pages/loading-page";
-import CardMedia from "@mui/material/CardMedia";
-import {SnackbarMessages, TeamMembers} from "../../constants/constants";
+import {OYesFcEras, SnackbarMessages, SnackbarTypes} from "../../constants/constants";
 import {Alert} from "@mui/material";
 import Box from "@mui/material/Box";
 import BackButton from "../../shared/BackButton/back-button";
 import MainTitle from "../../shared/MainTitle/main-title";
+import {useDispatch, useSelector} from "react-redux";
+import {checkAuthState, signInUser} from "../../services/service";
+import {login, logout} from "../../redux/credentialsSlice";
+import GhostLogo from "../../images/ghost.png";
+import PhoenixLogo from "../../images/phoenix.png";
+import OYesFCLogo from "../../images/oyesfc.PNG";
+import FirstLogo from "../../images/firstLogo.png";
 
-const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
+const SignIn = ({onClose}) => {
 
+    const dispatch = useDispatch();
+    const { selectedEra } = useSelector((state) => state.era);
     const popupRef = useRef(null);
-    const [email, setEmail] = useState('')
+    const [emailInput, setEmailInput] = useState('')
     const [password, setPassword] = useState('')
-    const [signedIn, setSignedIn] = useState(credentials?.signedIn)
     const [errorMessage, setErrorMessage] = useState(null)
     const [loading, setLoading] = useState(false);
 
@@ -35,104 +39,65 @@ const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
         };
     });
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setLoading(true);
-        await signInWithEmailAndPassword(auth, email, password)
-            .then(() => {
-                checkAuth(true)
-                setSignedIn(true)
-                if (errorMessage) setErrorMessage(null)
-            })
-            .catch((error) => {
-                if (error?.message === SnackbarMessages.invalid_credentials) {
-                    setErrorMessage(SnackbarMessages.invalid_email_password)
-                } else {
-                    setErrorMessage(error?.message)
-                }
-            })
-        setLoading(false);
-    };
+    const getTeam = () => {
+        if (selectedEra === OYesFcEras.goldenAge) return PhoenixLogo
+        if (selectedEra === OYesFcEras.redAndBlack) return OYesFCLogo
+        if (selectedEra === OYesFcEras.rising) return FirstLogo
+        if (selectedEra === OYesFcEras.origins) return GhostLogo
+        return PhoenixLogo
+    }
 
-    const handleClose = () => {
+    const handleClose = (snackbarMessage) => {
         document.body.style.overflow = 'visible';
-        onClose();
+        onClose(snackbarMessage);
     }
 
     const handleBack = (data) => {
         if (data) handleClose()
     }
 
-    const logOut = async () => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         setLoading(true)
-        await signOut(auth)
-            .then(() => {
-                if (signedIn) {
-                    checkAuth(true)
-                    setSignedIn(false)
-                    if (errorMessage) setErrorMessage(null)
-                }
-            })
-            .catch((error) => {
-                setErrorMessage(error?.message)
-            })
+        const response = await signInUser(emailInput, password);
+        if (response?.success) {
+            const authResponse = await checkAuthState();
+            if (authResponse?.signedIn && authResponse?.success) {
+                dispatch(login({
+                    userName: authResponse?.userName,
+                    isCaptain: authResponse?.isCaptain,
+                    email: authResponse?.email,
+                    id: authResponse?.id,
+                }))
+                const message = {
+                    open: true,
+                    status: SnackbarTypes.success,
+                    message: 'Welcome ' + authResponse?.userName + '!',
+                    duration: 6000
+                };
+                handleClose(message)
+            } else if (!authResponse?.signedIn && authResponse?.success) {
+                dispatch(logout())
+            } else if (!authResponse?.success) {
+                setErrorMessage(authResponse?.error)
+            }
+        } else {
+            if (response?.error?.message === SnackbarMessages.invalid_credentials) {
+                setErrorMessage(SnackbarMessages.invalid_email_password)
+            } else {
+                setErrorMessage(response?.error?.message)
+            }
+        }
         setLoading(false)
     }
 
-    if (loading || (signedIn && !credentials)) {
+    if (loading) {
         return (
             <div className={classes.overlay}>
                 <div className={classes.generalStyle} ref={popupRef}>
                     <div className={classes.loadingDiv}>
-                        {Loading(selectedEra)}
+                        {Loading(selectedEra, '500px')}
                     </div>
-                </div>
-            </div>
-        )
-    }
-
-    if (!signedIn) {
-        return (
-            <div className={classes.overlay}>
-                <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: 'black'}}>
-                    <BackButton handleBackButton={handleBack}/>
-                </Box>
-                <div className={classes.generalStyle} ref={popupRef}>
-                    <form onSubmit={handleSubmit}>
-                        <div className={classes.infoAlign}>
-                            <MainTitle title={'Account'}/>
-                            <div style={{padding: '0 20px', marginTop: '20px'}}>
-                                <span className={classes.miniTitle}>Email</span>
-                            </div>
-                            <input
-                                className={classes.inputDesign}
-                                required={true}
-                                type="email"
-                                name="email"
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                            />
-                            <br/>
-                            <div style={{padding: '0 20px', marginTop: '20px'}}>
-                                <span className={classes.miniTitle}>Password</span>
-                            </div>
-                            <input
-                                className={classes.inputDesign}
-                                required={true}
-                                type="password"
-                                name="password"
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                            />
-                            {errorMessage &&
-                                <Alert sx={{borderRadius: '25px', bgcolor: 'transparent', color: 'red', padding: 0}}
-                                       variant="standard" severity="error">{errorMessage}</Alert>}
-                        </div>
-                        <div className={classes.buttonDivStyle}>
-                            <button className={matchDetailsClasses.mapsButtons} type="submit">Log In
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
         )
@@ -144,41 +109,54 @@ const SignIn = ({onClose, credentials, checkAuth, selectedEra}) => {
                 <BackButton handleBackButton={handleBack}/>
             </Box>
             <div className={classes.generalStyle} ref={popupRef}>
-                <div className={classes.signedInStyle}>
-                    <div className={classes.iconDivStyle}>
-                        {
-                            credentials?.signedIn ?
-                                <CardMedia
-                                    component="img"
-                                    sx={{height: {xs: '400px', md: '300px'}, width: '100%', marginTop: {xs: '50px', md: 0}}}
-                                    image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === credentials?.userName)[0]}.jpeg`)}
-                                />
-                                :
-                                <AccountCircleIcon sx={{width: "200px", height: "200px"}}
-                                                   className={classes.iconStyle}></AccountCircleIcon>
-                        }
-                    </div>
-                    <div style={{padding: '20px'}}>
-                        <MainTitle title={'Account'}/>
-                        <div style={{height: '5px'}}></div>
-                        <div className={classes.morePageBox}>
-                            <span
-                                className={classes.drawerRoutesSpan}>{credentials?.signedIn ? credentials?.userName : 'Log In'}</span>
-                            <span className={classes.mobileEmailSpan}>{credentials?.email}</span>
+                <form>
+                    <div className={classes.infoAlign}>
+                        <Box sx={{display: {xs: 'none', md: 'block'}}}>
+                            <MainTitle title={'Account'} size={'large'}/>
+                        </Box>
+                        <Box sx={{display: {xs: 'flex', md: 'none'}, justifyContent: 'center'}}>
+                            <img style={{
+                                width: "150px",
+                                height: "150px",
+                                background: "transparent",
+                                marginBottom: "20px"
+                            }}
+                                 src={getTeam()} alt={'1'}/>
+                        </Box>
+                        <div style={{padding: '0 20px', marginTop: '20px'}}>
+                            <span className={classes.miniTitle}>Email</span>
                         </div>
-                        <div style={{height: '5px'}}></div>
-                        <div style={{padding: '0 20px'}}>
-                            <span className={classes.miniTitle}>{'Welcome ' + credentials?.userName + '.'}</span>
+                        <input
+                            className={classes.inputDesign}
+                            required={true}
+                            type="email"
+                            name="email"
+                            value={emailInput}
+                            onChange={(event) => setEmailInput(event.target.value)}
+                        />
+                        <br/>
+                        <div style={{padding: '0 20px', marginTop: '20px'}}>
+                            <span className={classes.miniTitle}>Password</span>
                         </div>
+                        <input
+                            className={classes.inputDesign}
+                            required={true}
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                        />
+                        {errorMessage &&
+                            <Alert sx={{borderRadius: '25px', bgcolor: 'transparent', color: 'red', padding: 0}}
+                                   variant="standard" severity="error">{errorMessage}</Alert>}
                     </div>
-                    {errorMessage && <Alert sx={{borderRadius: '25px'}}
-                                            variant="filled" severity="error">{errorMessage}</Alert>}
                     <div className={classes.buttonDivStyle}>
-                        <button className={matchDetailsClasses.mapsButtons} onClick={logOut}>Log
-                            Out
+                        <button className={matchDetailsClasses.mapsButtons}
+                                onClick={(event) => handleSubmit(event)}>
+                            Sign In
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

@@ -5,22 +5,23 @@ import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/en-gb';
 import {matchType, TeamNames} from "../../constants/constants";
-import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import {MatchDetails} from "../MatchDetails/match-details";
 import Box from "@mui/material/Box";
 import BackButton from "../../shared/BackButton/back-button";
+import {useSelector} from "react-redux";
 
-const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allData, filteredData, selectedEra}) => {
+const CalendarComponent = ({onClose}) => {
 
+    const { allData, filteredData } = useSelector((state) => state.databaseData);
     const today = new Date();
-    const isMobile = window.innerWidth <= 1100;
+    const isMobile = window.innerWidth <= 900;
     const popupRef = useRef(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [matchDetailsData, setMatchDetailsData] = useState(null);
     const [fixtureType, setFixtureType] = useState(null);
     moment.locale("us-US");
     let calendarEvents = [];
-    Object.values(databaseData)?.forEach(match => {
+    Object.values(filteredData)?.forEach(match => {
         const [day, month, year] = match?.day?.split('-')
         const [startTime, endTime] = match?.time?.split('-')
         const [startHour, startMinute] = startTime?.split(':')
@@ -64,10 +65,6 @@ const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allD
             document.removeEventListener('mousedown', handleOutsideClick);
         };
     });
-
-    const handleReload = (data) => {
-        reloadData(data)
-    }
 
     const sortedData = Object.values(filteredData)?.slice()?.sort((a, b) => {
         if (a?.day && b?.day) {
@@ -128,19 +125,14 @@ const CalendarComponent = ({databaseData, onClose, credentials, reloadData, allD
                         style={{height: isMobile ? '80%' : '100%', width: '100%'}}
                         onSelectEvent={handleSelectEvent}
                     />
-                    {
-                        isMobile &&
-                        <button className={matchDetailsClasses.mapsButtons} style={{marginLeft: "1rem"}}
-                                onClick={handleClose}>Close</button>
-                    }
                 </div>
             </div>}
             {isPopupOpen &&
                 <MatchDetails matchDetailsData={matchDetailsData}
                               onClose={() => setPopupOpen(false)}
-                              fixture={fixtureType} data={previousMatchesData} reloadData={handleReload}
-                              credentials={credentials} allData={sortedAllData} playerDetails={null}
-                              selectedEra={selectedEra}/>}
+                              fixture={fixtureType}
+                              data={previousMatchesData}
+                              allData={sortedAllData}/>}
         </>
     );
 };

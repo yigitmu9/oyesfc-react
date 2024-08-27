@@ -5,8 +5,10 @@ import GhostLogo from '../../images/ghost.png';
 import FirstLogo from '../../images/firstLogo.png';
 import PhoenixLogo from '../../images/phoenix.png';
 import UnknownLogo from '../../images/unknown.png';
+import {useSelector} from "react-redux";
 
-const TeamView = ({teamData, rakipbul, isDetails, selectedEra}) => {
+const TeamView = ({teamData, rakipbul, isDetails}) => {
+    const { selectedEra } = useSelector((state) => state.era);
 
     const getTeamLogo = () => {
         if (selectedEra === OYesFcEras.goldenAge) return PhoenixLogo

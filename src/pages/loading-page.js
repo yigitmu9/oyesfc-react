@@ -5,8 +5,10 @@ import {OYesFcEras} from "../constants/constants";
 import PhoenixLogo from "../images/phoenix.png";
 import FirstLogo from "../images/firstLogo.png";
 import GhostLogo from "../images/ghost.png";
+import {useSelector} from "react-redux";
 
-const LoadingPage = ({selectedEra}) => {
+const LoadingPage = () => {
+    const { selectedEra } = useSelector((state) => state.era);
     return (
         <div
             style={{
@@ -25,7 +27,7 @@ const LoadingPage = ({selectedEra}) => {
 
 export default LoadingPage;
 
-export function Loading(selectedEra) {
+export function Loading(selectedEra, heightSize) {
 
     const getTeamLogo = () => {
         if (selectedEra === OYesFcEras.goldenAge) return PhoenixLogo
@@ -50,7 +52,7 @@ export function Loading(selectedEra) {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '90vh',
+                height: heightSize ? heightSize : '90vh',
                 color: 'lightgray'
             }}
         >

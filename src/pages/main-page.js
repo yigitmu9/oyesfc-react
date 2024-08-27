@@ -5,14 +5,10 @@ import Box from "@mui/material/Box";
 import PageGrid from "../shared/PageGrid/page-grid";
 import UpperNavInfo from "../shared/UpperNavInfo/upper-nav-info";
 
-const MainPage = ({credentials, selectedEra, sendEra}) => {
-
-    const handleEra = (data) => {
-        sendEra(data)
-    }
+const MainPage = () => {
 
     const page = (
-        <SliderCard selectedEra={selectedEra} sendEra={handleEra} />
+        <SliderCard/>
     )
 
     return (
@@ -21,7 +17,7 @@ const MainPage = ({credentials, selectedEra, sendEra}) => {
             <PageGrid page={page}/>
             <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                <Footer credentials={credentials}></Footer>
+                <Footer/>
             </Box>
         </div>
 

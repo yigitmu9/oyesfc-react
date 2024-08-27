@@ -21,13 +21,13 @@
         height: 100%;
         background-color: black;
     }
-    @media (min-width: 768px) and (max-width: 1100px) {
+    @media (min-width: 768px) and (max-width: 900px) {
         width: 100%;
         border-radius: 0;
         height: 100%;
         background-color: black;
     }
-    @media (min-width: 1101px) and (max-width: 1500px) {
+    @media (min-width: 901px) and (max-width: 1500px) {
         min-width: 600px;
         width: 600px;
         max-width: 600px;
@@ -43,31 +43,6 @@
     }
 }
 
-.fullContainer {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #404040;
-    border-radius: 25px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    align-items: center;
-    overflow: auto;
-    z-index: 12;
-    min-width: 600px;
-    width: 600px;
-    max-width: 600px;
-    height: 100%;
-    max-height: 100%;
-    @media (max-width: 600px) {
-        min-width: 97%;
-        width: 97%;
-        max-width: 97%;
-        height: 100%;
-        max-height: 100%;
-    }
-}
-
 .scoreboard {
     display: flex;
     flex-direction: column;
@@ -76,7 +51,7 @@
     border-radius: 0;
     min-width: 0;
     background-color: #1C1C1E;
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
         padding: 20px 30px 10px;
         background-color: black;
     }
@@ -87,7 +62,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    @media (max-width: 1100px) {
+    @media (max-width: 900px) {
         min-width: 0;
         margin-top: 50px;
     }
@@ -246,6 +221,7 @@
     margin-left: 10px;
     font-size: 18px;
     color: lightgray;
+    cursor: pointer;
     @media (max-width: 768px) {
         font-size: 14px;
     }

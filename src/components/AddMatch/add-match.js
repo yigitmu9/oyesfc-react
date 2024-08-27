@@ -34,9 +34,14 @@ import {PulseLoader} from "react-spinners";
 import Box from "@mui/material/Box";
 import BackButton from "../../shared/BackButton/back-button";
 import MainTitle from "../../shared/MainTitle/main-title";
+import {useDispatch, useSelector} from "react-redux";
+import {getCategoryValues, hasAppliedFilters, returnFilteredData} from "../../utils/utils";
+import {updateData} from "../../redux/databaseDataSlice";
 
-const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchData}) => {
+const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
 
+    const dispatch = useDispatch();
+    const { allData } = useSelector((state) => state.databaseData);
     document.body.style.overflow = 'hidden';
     const [loading, setLoading] = useState(selectedMatchData ? null : '');
     const [calendarButtonLoading, setCalendarButtonLoading] = useState(false);
@@ -49,21 +54,8 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
     const [weatherButtonStatus, setWeatherButtonStatus] = useState(null);
     const [submittedMatchData, setSubmittedMatchData] = useState(null);
     const allFacilities = Facilities.map(x => x.name)
-
-    let facilities = [];
-    Object.values(databaseData)?.forEach((x) => {
-        if (!facilities.includes(x.place)) {
-            facilities.push(x.place)
-        }
-    })
-
     const [isRakipbul, setIsRakipbul] = useState(false);
-    let rivalNames = [];
-    Object.values(databaseData)?.forEach((x) => {
-        if (!rivalNames.includes(x.rival.name) && x.rakipbul === isRakipbul) {
-            rivalNames.push(x.rival.name)
-        }
-    })
+    const rivalNames = getCategoryValues(allData).rivals
 
     const popupRef = useRef(null);
 
@@ -265,6 +257,17 @@ const AddMatchComponent = ({onClose, snackbarData, databaseData, selectedMatchDa
             setNewSquadMember('');
             document.body.style.overflow = 'visible';
             setLoading(false)
+            const response = await loadWebsite('matches');
+            const filtersInStorage = JSON.parse(localStorage.getItem('filters'));
+            const hasAlreadyFilter = hasAppliedFilters(filtersInStorage)
+            if (hasAlreadyFilter) {
+                const videosResponse = await loadWebsite(`videos`);
+                const ratingsResponse = await loadWebsite(`rates`);
+                const filterData = returnFilteredData(response, filtersInStorage, videosResponse, ratingsResponse)
+                dispatch(updateData({allData: response, filteredData: filterData}))
+            } else {
+                dispatch(updateData({allData: response, filteredData: response}))
+            }
             onClose()
             const messageResponse = {
                 open: true,
@@ -633,6 +636,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
             throw new Error('There are missing data in this form, please check the warnings!');
         }
     };
+
     const clearSubmittedMatchData = () => {
         const [day, month, year] = submittedMatchData?.day?.split('-')
         const time = submittedMatchData?.time?.split('-')[0]

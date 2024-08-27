@@ -5,10 +5,12 @@ import ChartComponent from "../../shared/ChartComponent/chart-component";
 import ListComponent from "../../shared/ListComponent/list-component";
 import {ChartTypes} from "../../constants/constants";
 import {calculateTeamStats} from "../../utils/utils";
+import {useSelector} from "react-redux";
 
-const GeneralResults = ({data}) => {
+const GeneralResults = () => {
 
-    const calculatedData = calculateTeamStats(data)
+    const { filteredData } = useSelector((state) => state.databaseData);
+    const calculatedData = calculateTeamStats(filteredData)
     const winRate = Number(((calculatedData?.win / calculatedData?.matches) * 100)?.toFixed(0))
     const drawRate = Number(((calculatedData?.draw / calculatedData?.matches) * 100)?.toFixed(0))
     const loseRate = Number(((calculatedData?.lose / calculatedData?.matches) * 100)?.toFixed(0))

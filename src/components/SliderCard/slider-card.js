@@ -4,8 +4,12 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import MainTitle from "../../shared/MainTitle/main-title";
+import {useDispatch, useSelector} from "react-redux";
+import {changeEra} from "../../redux/eraSlice";
 
-const SliderCard = ({selectedEra, sendEra}) => {
+const SliderCard = () => {
+    const dispatch = useDispatch();
+    const { selectedEra } = useSelector((state) => state.era);
     const cards = [
         { number: 0, title: 'Golden Age', content: 'A special logo for the 10th anniversary of the establishment of O Yes FC. ' +
                 'It took its color from gold, which symbolizes special, and its symbol from the phoenix, the official ' +
@@ -99,7 +103,7 @@ const SliderCard = ({selectedEra, sendEra}) => {
             setCurrentCard(index);
             const era = cards.find(x => x.number === index).title;
             localStorage.setItem('era', era)
-            sendEra(era)
+            dispatch(changeEra({selectedEra: era}))
         }
     }
 

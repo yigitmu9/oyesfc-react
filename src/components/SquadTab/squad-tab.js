@@ -6,9 +6,10 @@ import PersonIcon from "@mui/icons-material/Person";
 import SoccerLineUp from "react-soccer-lineup";
 import {FootballRoles, Jerseys, TeamMembers} from "../../constants/constants";
 import squadTabClasses from './squad-tab.module.css'
+import {useSelector} from "react-redux";
 
-const SquadTab = ({matchDetailsData, squadRatings, credentials}) => {
-
+const SquadTab = ({matchDetailsData, squadRatings}) => {
+    const { signedIn } = useSelector((state) => state.credentials);
     const isMobile = window.innerWidth <= 768;
     let oyesfcSquad;
     let playerColor;
@@ -178,7 +179,7 @@ const SquadTab = ({matchDetailsData, squadRatings, credentials}) => {
                     Object.entries(matchDetailsData?.oyesfc?.squad).map((x, y) => (
                         <div key={y} className={classes.generalInfoDiv}>
                             {
-                                squadRatings && credentials?.signedIn ?
+                                squadRatings && signedIn ?
                                     <span
                                         style={{background: squadRatings?.find(rating => rating?.name === x[0])?.rating >= 7 ? 'darkgreen' :
                                             squadRatings?.find(rating => rating?.name === x[0])?.rating < 5 ? 'darkred' : 'darkgoldenrod'}}
@@ -190,7 +191,7 @@ const SquadTab = ({matchDetailsData, squadRatings, credentials}) => {
                                                 className={classes.generalInfoIcon}>
                                     </PersonIcon>
                             }
-                            <span className={Object.values(TeamMembers).some(member => member?.name === x[0]) ? classes.generalInfoSpanCursor : classes.generalInfoSpan}>
+                            <span className={classes.generalInfoSpan}>
                                 {x[0]}
                             </span>
                             {x[1]?.card &&

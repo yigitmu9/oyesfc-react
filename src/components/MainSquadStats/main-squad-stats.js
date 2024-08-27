@@ -1,29 +1,21 @@
 import React from 'react';
 import CardGrid from "../../shared/CardGrid/card-grid";
 import TubeGraph from "../../shared/TubeGraph/tube-graph";
-import {calculateTeamStats, calculateRateInfo, OYesFCPlayersArray} from "../../utils/utils";
+import {calculateTeamStats, calculateRateInfo, OYesFCPlayersArray, calculateForeignData} from "../../utils/utils";
+import {useSelector} from "react-redux";
 
-const MainSquadStats = ({data}) => {
+const MainSquadStats = () => {
 
-    let foreignDataIndex = [];
+    const { filteredData } = useSelector((state) => state.databaseData);
+    let foreignDataIndex = calculateForeignData(filteredData)
     let foreignersTotalGoal = 0;
-    const players = OYesFCPlayersArray
-    Object.values(data).forEach((item, index) => {
-        for (let i = 0; i < Object.keys(item.oyesfc.squad).length; i++) {
-            if (!players.includes(Object.keys(item.oyesfc.squad)[i])) {
-                if (!foreignDataIndex.includes(index)) {
-                    foreignDataIndex.push(index)
-                }
-            }
-        }
-    });
-    const mainData = Object.values(data).filter((x, y) => !foreignDataIndex.includes(y))
-    const foreignData = Object.values(data).filter((x, y) => foreignDataIndex.includes(y))
+    const mainData = Object.values(filteredData).filter((x, y) => !foreignDataIndex.includes(y))
+    const foreignData = Object.values(filteredData).filter((x, y) => foreignDataIndex.includes(y))
     const calculatedMainData = calculateTeamStats(mainData)
     const calculatedForeignData = calculateTeamStats(foreignData)
-    Object.values(data).forEach(item => {
+    Object.values(filteredData).forEach(item => {
         Object.entries(item?.oyesfc?.squad).forEach(x => {
-            if (!players.includes(x[0])) {
+            if (!OYesFCPlayersArray.includes(x[0])) {
                 foreignersTotalGoal += x[1].goal
             }
         })
