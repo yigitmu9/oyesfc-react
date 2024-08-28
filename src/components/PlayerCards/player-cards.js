@@ -89,7 +89,7 @@ const PlayerCards = ({playerName, close}) => {
     const playerBootModel = Object.values(TeamMembers).find(x => x.name === playerName).bootModel;
 
     Object.values(filteredData).forEach(item => {
-        if (item?.oyesfc?.squad[playerName] && playerName !== TeamMembers.can.name) {
+        if (item?.oyesfc?.squad[playerName]) {
             playerTotalGoal += item.oyesfc.squad[playerName].goal;
         }
         if (item?.oyesfc?.squad[playerName]?.card === 'yellow') {
