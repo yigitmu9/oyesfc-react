@@ -116,11 +116,13 @@ function Navbar() {
     const handleCloseSignIn = (snackbarData) => {
         setSnackbarData(snackbarData)
         setSignInPopupOpen(false)
+        setMobileOpen(true)
     }
 
     const openSignInPopup = (device) => {
         if (device === 'desktop' || (!signedIn && device === 'mobile')) {
             setDesktopMenu(null)
+            setMobileOpen(false)
             document.body.style.overflow = 'hidden';
             setSignInPopupOpen(true);
         }

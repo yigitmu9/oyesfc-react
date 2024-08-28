@@ -24,6 +24,12 @@ const SignIn = ({onClose}) => {
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
     const [loading, setLoading] = useState(false);
+    const initialFormData = {
+        email: '',
+        password: ''
+    };
+
+    const [formData, setFormData] = useState(initialFormData);
 
     const handleOutsideClick = (event) => {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -56,10 +62,18 @@ const SignIn = ({onClose}) => {
         if (data) handleClose()
     }
 
+    const handleInputChange = (event) => {
+        const {name, value} = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true)
-        const response = await signInUser(emailInput, password);
+        const response = await signInUser(formData.email, formData.password);
         if (response?.success) {
             const authResponse = await checkAuthState();
             if (authResponse?.signedIn && authResponse?.success) {
@@ -131,8 +145,8 @@ const SignIn = ({onClose}) => {
                             required={true}
                             type="email"
                             name="email"
-                            value={emailInput}
-                            onChange={(event) => setEmailInput(event.target.value)}
+                            value={formData.email}
+                            onChange={handleInputChange}
                         />
                         <br/>
                         <div style={{padding: '0 20px', marginTop: '20px'}}>
@@ -143,8 +157,8 @@ const SignIn = ({onClose}) => {
                             required={true}
                             type="password"
                             name="password"
-                            value={password}
-                            onChange={(event) => setPassword(event.target.value)}
+                            value={formData.password}
+                            onChange={handleInputChange}
                         />
                         {errorMessage &&
                             <Alert sx={{borderRadius: '25px', bgcolor: 'transparent', color: 'red', padding: 0}}
