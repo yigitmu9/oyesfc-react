@@ -20,8 +20,6 @@ const SignIn = ({onClose}) => {
     const dispatch = useDispatch();
     const { selectedEra } = useSelector((state) => state.era);
     const popupRef = useRef(null);
-    const [emailInput, setEmailInput] = useState('')
-    const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
     const [loading, setLoading] = useState(false);
     const initialFormData = {
