@@ -66,6 +66,7 @@ function Navbar() {
     }
 
     const openFiltersModal = () => {
+        setMobileOpen(false)
         setDesktopMenu(null)
         document.body.style.overflow = 'hidden';
         setAdvancedFiltersModal(true)
@@ -105,6 +106,7 @@ function Navbar() {
 
     const openCalendarPopup = () => {
         setDesktopMenu(null)
+        setMobileOpen(false)
         document.body.style.overflow = 'hidden';
         setCalendarPopupOpen(true);
     };
@@ -119,6 +121,21 @@ function Navbar() {
         setMobileOpen(true)
     }
 
+    const handleCloseAddMatch = () => {
+        setAddMatchPopupOpen(false)
+        setMobileOpen(true)
+    }
+
+    const handleCloseCalendar = () => {
+        setCalendarPopupOpen(false)
+        setMobileOpen(true)
+    }
+
+    const handleCloseFilters = () => {
+        setAdvancedFiltersModal(false)
+        setMobileOpen(true)
+    }
+
     const openSignInPopup = (device) => {
         if (device === 'desktop' || (!signedIn && device === 'mobile')) {
             setDesktopMenu(null)
@@ -130,6 +147,7 @@ function Navbar() {
 
     const openAddMatchPopup = () => {
         setDesktopMenu(null)
+        if (mobileOpen) setMobileOpen(false)
         document.body.style.overflow = 'hidden';
         setAddMatchPopupOpen(true);
     };
@@ -465,12 +483,12 @@ function Navbar() {
                 </BottomNavigation>
             </Box>
             {isSignInPopupOpen && <SignIn onClose={(data) => handleCloseSignIn(data)}/>}
-            {isAddMatchPopupOpen && <AddMatchComponent onClose={() => setAddMatchPopupOpen(false)}
+            {isAddMatchPopupOpen && <AddMatchComponent onClose={handleCloseAddMatch}
                                                        snackbarData={(snackbarData) => handleXClick(snackbarData)}/>}
             {advancedFiltersModal &&
-                <AdvancedFilters onClose={() => setAdvancedFiltersModal(false)}/>}
+                <AdvancedFilters onClose={handleCloseFilters}/>}
             {isCalendarPopupOpen &&
-                <CalendarComponent onClose={() => setCalendarPopupOpen(false)}/>}
+                <CalendarComponent onClose={handleCloseCalendar}/>}
             <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
                 <Alert
                     onClose={closeSnackbar}
