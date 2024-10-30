@@ -1,0 +1,23 @@
+.grid {
+
+}
+
+.starSection {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 20px 0;
+    background: #1C1C1E;
+    border-radius: 16px;
+    @media (max-width: 768px) {
+        padding: 15px;
+    }
+}
+
+.starSpan {
+    color: lightgray;
+    font-size: 25px;
+    @media (max-width: 768px) {
+        font-size: 16px;
+    }
+}

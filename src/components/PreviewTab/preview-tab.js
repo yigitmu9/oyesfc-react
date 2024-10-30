@@ -1,29 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from "../MatchDetails/match-details.module.css";
 import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import {TeamMembers, TeamNames} from "../../constants/constants";
+import {Facilities, TeamMembers, TeamNames} from "../../constants/constants";
 import CheckroomIcon from "@mui/icons-material/Checkroom";
 import InfoIcon from "@mui/icons-material/Info";
-import {Divider} from "@mui/material";
+import {
+    Accordion,
+    AccordionActions,
+    AccordionDetails,
+    AccordionSummary,
+    Button,
+    Divider
+} from "@mui/material";
 import LabelIcon from "@mui/icons-material/Label";
 import CloudIcon from '@mui/icons-material/Cloud';
+import {loadWebsite} from "../../firebase";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import JerseyTab from "../JerseyTab/jersey-tab";
 
 const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirectToTab, weatherData}) => {
 
     const isMobile = window.innerWidth <= 768;
     const lastFiveGames = Object.values(allData).filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3 || y === matchIndex + 4 || y === matchIndex + 5));
     const matchInformation = createMatchInfos();
-
-    const redirectToUrlTab = () => {
-        redirectToTab(4)
-    }
-
-    const redirectToKitsTab = () => {
-        redirectToTab(2)
-    }
+    const [facilityRatingData, setFacilityRatingData] = useState(null);
 
     const redirectToSquadTab = () => {
         redirectToTab(1)
@@ -192,6 +195,59 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
         return infosForMatch
     }
 
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await loadWebsite(`facilityRatings/${matchDetailsData?.place}`);
+                if (response) calculateFacilityRating(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        fetchData().then(r => r);
+    }, [matchDetailsData?.place]);
+
+    const calculateFacilityRating = (data) => {
+        const calculatedAverages = {};
+
+        for (const user in data) {
+            for (const key in data[user]) {
+                if (calculatedAverages[key]) {
+                    calculatedAverages[key].push(data[user][key]);
+                } else {
+                    calculatedAverages[key] = [data[user][key]];
+                }
+            }
+        }
+
+        const averagesResult = {};
+        for (const key in calculatedAverages) {
+            const values = calculatedAverages[key];
+            const avg = values.reduce((a, b) => a + b, 0) / values.length;
+            averagesResult[key] = avg.toFixed(2);
+        }
+
+        setFacilityRatingData(averagesResult);
+    }
+
+    const redirectToAppleMaps = () => {
+        const url = Facilities.find(x => x?.name === matchDetailsData.place)?.appleUrl
+        if (url) window.open(url, "_blank");
+    };
+
+    const redirectToGoogleMaps = () => {
+        const url = Facilities.find(x => x?.name === matchDetailsData.place)?.googleUrl
+        if (url) window.open(url, "_blank");
+    };
+
+    /*
+    const redirectToCall = () => {
+        const phone = Facilities.find(x => x.name === matchDetailsData?.place)?.phoneNumber?.replace(/[\s()]/g, '');
+        window.location.href = 'tel://' + phone;
+    };
+     */
+
     return (
         <div className={classes.generalTabDiv}>
             {
@@ -212,38 +268,170 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                 </section>
             }
             <section className={classes.generalTabSection}>
-                <div className={classes.generalInfoDiv}>
-                    <LocationOnIcon fontSize={isMobile ? 'medium' : 'large'}
-                                    className={classes.generalInfoIcon}>
-                    </LocationOnIcon>
-                    <span className={classes.generalInfoSpanCursor} onClick={redirectToUrlTab}>
-                                        {matchDetailsData.place}
-                                    </span>
-                </div>
-                <div className={classes.generalInfoDiv}>
-                    <CalendarMonthIcon fontSize={isMobile ? 'medium' : 'large'}
-                                       className={classes.generalInfoIcon}>
-                    </CalendarMonthIcon>
-                    <span className={classes.generalInfoSpanCursor} onClick={redirectToUrlTab}>
-                                        {matchDetailsData.day.replace(/-/g, '/')}
-                                    </span>
-                </div>
-                <div className={classes.generalInfoDiv}>
-                    <AccessTimeIcon fontSize={isMobile ? 'medium' : 'large'}
-                                    className={classes.generalInfoIcon}>
-                    </AccessTimeIcon>
-                    <span className={classes.generalInfoSpanCursor} onClick={redirectToUrlTab}>
-                                        {matchDetailsData.time}
-                                    </span>
-                </div>
-                <div className={classes.generalInfoDiv}>
-                    <CheckroomIcon fontSize={isMobile ? 'medium' : 'large'}
-                                   className={classes.generalInfoIcon}>
-                    </CheckroomIcon>
-                    <span className={classes.generalInfoSpanCursor} onClick={redirectToKitsTab}>
-                                                {matchDetailsData?.oyesfc?.jersey}
-                                            </span>
-                </div>
+                <Accordion sx={{
+                    bgcolor: '#1C1C1E',
+                    color: 'lightgray',
+                    width: '100%',
+                    border: 0,
+                    boxShadow: 0
+                }}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                        aria-controls="panel3-content"
+                        id="panel3-header"
+                        sx={{padding: '0 10px'}}
+                    >
+                        <div className={classes.generalInfoDivAccordion}>
+                            <LocationOnIcon fontSize={isMobile ? 'medium' : 'large'}
+                                            className={classes.generalInfoIcon}>
+                            </LocationOnIcon>
+                            <span className={classes.generalInfoSpan}>
+                        {matchDetailsData.place}
+                    </span>
+                        </div>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {
+                            facilityRatingData ?
+                                <>
+                                    <div className={classes.facilityRatingStyle}>
+                                        <div className={classes.facilityRatingDiv} style={{
+                                            background: (Object.values(facilityRatingData)
+                                                .map(value => parseFloat(value))
+                                                .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length) >= 7 ? 'darkgreen' :
+                                                (Object.values(facilityRatingData)
+                                                    .map(value => parseFloat(value))
+                                                    .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length) < 5 ? 'darkred' : 'darkgoldenrod'
+                                        }}>
+                                        <span className={classes.facilityRating}>
+                                            {(Object.values(facilityRatingData)
+                                                .map(value => parseFloat(value))
+                                                .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length)?.toFixed(1)}
+                                                </span>
+                                            <span className={classes.facilityRatingName}>
+                                            Overall
+                                        </span>
+                                        </div>
+                                    </div>
+                                    <div className={classes.facilityRatingStyle}>
+                                        {
+                                            Object.entries(facilityRatingData)?.filter((z, y) => y % 2 === 0)?.map((x, y) => (
+                                                <div key={y} className={classes.facilityRatingDiv} style={{
+                                                    background: x[1] >= 7 ? 'darkgreen' :
+                                                        x[1] < 5 ? 'darkred' : 'darkgoldenrod'
+                                                }}>
+                                                    <span className={classes.facilityRating}>
+                                                        {Number(x[1])?.toFixed(1)}
+                                                    </span>
+                                                    <span className={classes.facilityRatingName}>
+                                                        {x[0]}
+                                                    </span>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                    <div className={classes.facilityRatingStyle}>
+                                        {
+                                            Object.entries(facilityRatingData)?.filter((z, y) => y % 2 !== 0)?.map((x, y) => (
+                                                <div key={y} className={classes.facilityRatingDiv} style={{
+                                                    background: x[1] >= 7 ? 'darkgreen' :
+                                                        x[1] < 5 ? 'darkred' : 'darkgoldenrod'
+                                                }}>
+                                                    <span className={classes.facilityRating}>
+                                                        {Number(x[1])?.toFixed(1)}
+                                                    </span>
+                                                    <span className={classes.facilityRatingName}>
+                                                        {x[0]}
+                                                    </span>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+
+                                </> :
+                                <span className={classes.generalInfoSpan}>
+                                This facility is not rated.
+                            </span>
+                        }
+                    </AccordionDetails>
+                    <AccordionActions>
+                        {/*<Button onClick={redirectToCall}>Call</Button>*/}
+                        <Button onClick={redirectToAppleMaps}>Apple Maps</Button>
+                        <Button onClick={redirectToGoogleMaps}>Google Maps</Button>
+                    </AccordionActions>
+                </Accordion>
+                <Accordion sx={{
+                    bgcolor: '#1C1C1E',
+                    color: 'lightgray',
+                    width: '100%',
+                    border: 0,
+                    boxShadow: 0
+                }}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                        aria-controls="panel3-content"
+                        id="panel3-header"
+                        sx={{padding: '0 10px'}}
+                    >
+                        <div className={classes.generalInfoDivAccordion}>
+                            <CalendarMonthIcon fontSize={isMobile ? 'medium' : 'large'}
+                                               className={classes.generalInfoIcon}>
+                            </CalendarMonthIcon>
+                            <span className={classes.generalInfoSpanCursor}>
+                                {matchDetailsData.day.replace(/-/g, '/')}
+                            </span>
+                        </div>
+                    </AccordionSummary>
+                </Accordion>
+                <Accordion sx={{
+                    bgcolor: '#1C1C1E',
+                    color: 'lightgray',
+                    width: '100%',
+                    border: 0,
+                    boxShadow: 0,
+                }}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                        aria-controls="panel3-content"
+                        id="panel3-header"
+                        sx={{padding: '0 10px'}}
+                    >
+                        <div className={classes.generalInfoDivAccordion}>
+                            <AccessTimeIcon fontSize={isMobile ? 'medium' : 'large'}
+                                            className={classes.generalInfoIcon}>
+                            </AccessTimeIcon>
+                            <span className={classes.generalInfoSpanCursor}>
+                                {matchDetailsData.time}
+                            </span>
+                        </div>
+                    </AccordionSummary>
+                </Accordion>
+                <Accordion sx={{
+                    bgcolor: '#1C1C1E',
+                    color: 'lightgray',
+                    width: '100%',
+                    border: 0,
+                    boxShadow: 0
+                }}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                        aria-controls="panel3-content"
+                        id="panel3-header"
+                        sx={{padding: '0 10px'}}
+                    >
+                        <div className={classes.generalInfoDivAccordion}>
+                            <CheckroomIcon fontSize={isMobile ? 'medium' : 'large'}
+                                           className={classes.generalInfoIcon}>
+                            </CheckroomIcon>
+                            <span className={classes.generalInfoSpanCursor}>
+                                {matchDetailsData?.oyesfc?.jersey}
+                            </span>
+                        </div>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <JerseyTab matchDetailsData={matchDetailsData}/>
+                    </AccordionDetails>
+                </Accordion>
             </section>
             {
                 lastFiveGames.length > 0 &&

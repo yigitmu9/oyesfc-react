@@ -21,8 +21,6 @@ import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import PreviewTab from "../PreviewTab/preview-tab";
 import SquadTab from "../SquadTab/squad-tab";
-import JerseyTab from "../JerseyTab/jersey-tab";
-import LinksTab from "../LinksTab/links-tab";
 import {getWeather} from "../../services/service";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -30,6 +28,7 @@ import HighlightsTab from "../HighlightsTab/highlights-tab";
 import BackButton from "../../shared/BackButton/back-button";
 import {useSelector} from "react-redux";
 import {findMatchType, sortData} from "../../utils/utils";
+import EditIcon from "@mui/icons-material/Edit";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -67,7 +66,7 @@ function a11yProps(index) {
 export const MatchDetails = ({onClose, matchDate}) => {
 
     const { allData } = useSelector((state) => state.databaseData);
-    const { userName, id, signedIn } = useSelector((state) => state.credentials);
+    const { userName, id, signedIn, isCaptain } = useSelector((state) => state.credentials);
     const matchDetailsData = Object.values(allData).find(x => x.day === matchDate)
     const sortedAllData = sortData(allData);
     const fixture = findMatchType(matchDetailsData)
@@ -177,8 +176,8 @@ export const MatchDetails = ({onClose, matchDate}) => {
         setSnackbarData(snackbarData);
     };
 
-    const editMatch = (data) => {
-        setAddMatchPopupOpen(data)
+    const editMatch = () => {
+        setAddMatchPopupOpen(true)
     }
 
     const submitStars = async () => {
@@ -496,33 +495,19 @@ export const MatchDetails = ({onClose, matchDate}) => {
                             }} label="squad" {...a11yProps(1)} />
                             <Tab sx={{
                                 '&.MuiTab-root': {
-                                    color: 'gray'
-                                }, '&.Mui-selected': {
-                                    color: 'lightgray'
-                                }
-                            }} label="Jersey" {...a11yProps(2)} />
-                            <Tab sx={{
-                                '&.MuiTab-root': {
                                     color: 'gray',
                                     size: 14
                                 }, '&.Mui-selected': {
                                     color: 'lightgray'
                                 }
-                            }} label="comparison" {...a11yProps(3)} />
+                            }} label="comparison" {...a11yProps(2)} />
                             <Tab sx={{
                                 '&.MuiTab-root': {
                                     color: 'gray'
                                 }, '&.Mui-selected': {
                                     color: 'lightgray'
                                 }
-                            }} label="links" {...a11yProps(4)} />
-                            <Tab sx={{
-                                '&.MuiTab-root': {
-                                    color: 'gray'
-                                }, '&.Mui-selected': {
-                                    color: 'lightgray'
-                                }
-                            }} label="highlights" {...a11yProps(5)} />
+                            }} label="highlights" {...a11yProps(3)} />
                             {
                                 signedIn && fixture === matchType.previous &&
                                 <Tab sx={{
@@ -531,7 +516,7 @@ export const MatchDetails = ({onClose, matchDate}) => {
                                     }, '&.Mui-selected': {
                                         color: 'lightgray'
                                     }
-                                }} label="rating" {...a11yProps(6)} />
+                                }} label="rating" {...a11yProps(4)} />
                             }
                             {
                                 signedIn && fixture === matchType.previous &&
@@ -541,36 +526,41 @@ export const MatchDetails = ({onClose, matchDate}) => {
                                     }, '&.Mui-selected': {
                                         color: 'lightgray'
                                     }
-                                }} label="notes" {...a11yProps(7)} />
+                                }} label="notes" {...a11yProps(5)} />
                             }
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={tabValue} index={0}>
                         <PreviewTab matchDetailsData={matchDetailsData} allData={sortedAllData} matchIndex={matchIndex}
                                     bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherData={weatherData}/>
+                        {
+                            isCaptain &&
+                            <div style={{margin: '0 10px'}}>
+                                <section className={classes.generalTabSection} onClick={editMatch} style={{cursor: 'pointer'}}>
+                                    <div className={classes.urlInfoDiv}>
+                                        <EditIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                  className={classes.generalInfoIcon}>
+                                        </EditIcon>
+                                        <span className={classes.generalInfoSpan}>
+                                            Edit Match
+                                        </span>
+                                    </div>
+                                </section>
+                            </div>
+                        }
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
-                        <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings}
-                                  redirectToTab={redirectToTab}/>
+                        <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings}/>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={2}>
-                        <JerseyTab matchDetailsData={matchDetailsData}/>
-                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
-                    </CustomTabPanel>
-                    <CustomTabPanel value={tabValue} index={3}>
                         <section className={classes.defaultSection}>
                             <RivalComparison data={sortedAllData} selectedRival={matchDetailsData?.rival.name}/>
                         </section>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
-                    <CustomTabPanel value={tabValue} index={4}>
-                        <LinksTab matchDetailsData={matchDetailsData} editMatch={editMatch}
-                                  fixture={fixture}/>
-                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
-                    </CustomTabPanel>
-                    <CustomTabPanel value={tabValue} index={5}>
+                    <CustomTabPanel value={tabValue} index={3}>
                         <HighlightsTab matchDetailsData={matchDetailsData}
                                        snackbarData={(snackbarData) => handleMessageClick(snackbarData)}/>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
@@ -579,7 +569,7 @@ export const MatchDetails = ({onClose, matchDate}) => {
                     {
                         signedIn && fixture === matchType.previous &&
                         <>
-                            <CustomTabPanel value={tabValue} index={6}>
+                            <CustomTabPanel value={tabValue} index={4}>
                                 {
                                     Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== userName)?.map((x, y) => (
                                         <section key={y} className={classes.starSection}>
@@ -654,7 +644,7 @@ export const MatchDetails = ({onClose, matchDate}) => {
                                 </div>
                                 <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                             </CustomTabPanel>
-                            <CustomTabPanel value={tabValue} index={7}>
+                            <CustomTabPanel value={tabValue} index={5}>
                                 {
                                     matchNotes && matchNotes?.map((x, y) => (
                                         <section key={y} className={classes.notesSection}>

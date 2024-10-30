@@ -211,6 +211,11 @@
     margin: 10px;
 }
 
+.generalInfoDivAccordion {
+    display: flex;
+    align-items: center;
+}
+
 .urlInfoDiv {
     display: flex;
     align-items: center;
@@ -752,4 +757,46 @@ input[type="radio"] {
 .defaultMargin {
     margin-left: 20px;
     margin-right: 20px;
+}
+
+.facilityRating {
+    font-size: 25px;
+    font-weight: bold;
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
+}
+
+.facilityRatingName {
+    font-size: 15px;
+    @media (max-width: 768px) {
+        font-size: 13px;
+    }
+}
+
+.facilityRatingDiv {
+    align-items: center;
+    margin: 10px;
+    border-radius: 10px;
+    width: 100px;
+    justify-items: center;
+    justify-content: center;
+    height: 70px;
+    text-align: center;
+    align-content: center;
+    color: lightgray;
+    display: flex;
+    flex-direction: column;
+    @media (max-width: 768px) {
+        margin: 5px;
+        height: 60px;
+    }
+}
+
+.facilityRatingStyle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px;
+    justify-content: space-evenly;
 }

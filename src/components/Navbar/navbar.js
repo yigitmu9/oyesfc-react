@@ -46,6 +46,7 @@ function Navbar() {
     const individualPath = '/oyesfc-react/individual-stats';
     const teamPath = '/oyesfc-react/team-stats';
     const mainPath = '/oyesfc-react/';
+    const ratingsPath = '/oyesfc-react/ratings';
     const [value, setValue] = useState(0);
     const dispatch = useDispatch();
 
@@ -109,6 +110,12 @@ function Navbar() {
         setMobileOpen(false)
         document.body.style.overflow = 'hidden';
         setCalendarPopupOpen(true);
+    };
+
+    const openRatingsPage = () => {
+        if (mobileOpen) handleDrawerToggle()
+        if (desktopMenu) setDesktopMenu(null)
+        navigate(ratingsPath);
     };
 
     const handleXClick = (snackbarData) => {
@@ -249,6 +256,15 @@ function Navbar() {
             <div className={classes.morePageBox} onClick={openCalendarPopup}>
                 <span className={classes.drawerRoutesSpan}>Calendar</span>
             </div>
+            {
+                signedIn &&
+                <>
+                    <div style={{height: '20px'}}></div>
+                    <div className={classes.morePageBox} onClick={openRatingsPage}>
+                        <span className={classes.drawerRoutesSpan}>Ratings</span>
+                    </div>
+                </>
+            }
             {
                 isCaptain &&
                 <>
@@ -402,6 +418,12 @@ function Navbar() {
                                     >
                                     CALENDAR
                                 </span>
+                                    {
+                                        signedIn &&
+                                        <span className={classes.mobileMenuItems} onClick={openRatingsPage}>
+                                            RATINGS
+                                        </span>
+                                    }
                                     {
                                         isCaptain &&
                                         <>

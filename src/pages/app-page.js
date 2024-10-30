@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeEra} from "../redux/eraSlice";
 import {updateData} from "../redux/databaseDataSlice";
 import {hasAppliedFilters, returnFilteredData} from "../utils/utils";
+import RatingsPage from "./ratings-page";
 
 const AppPage = () => {
 
@@ -69,6 +70,7 @@ const AppPage = () => {
                 <Route path='oyesfc-react/matches' element={<MatchesPage/>}/>
                 <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage/>}/>
                 <Route path='oyesfc-react/team-stats' element={<TeamStatsPage/>}/>
+                <Route path='oyesfc-react/ratings' element={<RatingsPage/>}/>
             </Routes>
         </Router>
     );

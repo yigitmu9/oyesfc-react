@@ -15,6 +15,7 @@ export const TeamMembers = {
             bootBrand: 'Nike',
             bootCollection: 'Mercurial',
             bootModel: 'Vapor 12',
+            fifaRole: 'GK',
 
         },
     atakan:
@@ -29,6 +30,7 @@ export const TeamMembers = {
             bootBrand: 'Nike',
             bootCollection: 'Tiempo',
             bootModel: 'Legend 8',
+            fifaRole: 'CB',
         },
     berk:
         {
@@ -42,6 +44,7 @@ export const TeamMembers = {
             bootBrand: 'Nike',
             bootCollection: 'Mercurial',
             bootModel: 'Vapor 11',
+            fifaRole: 'LWB',
         },
     berent:
         {
@@ -55,6 +58,7 @@ export const TeamMembers = {
             bootBrand: 'Adidas',
             bootCollection: 'Deportivo',
             bootModel: '1',
+            fifaRole: 'RW',
         },
     gokhan:
         {
@@ -68,6 +72,7 @@ export const TeamMembers = {
             bootBrand: '',
             bootCollection: '',
             bootModel: '',
+            fifaRole: 'CM',
         },
     mehmet:
         {
@@ -81,6 +86,7 @@ export const TeamMembers = {
             bootBrand: '',
             bootCollection: '',
             bootModel: '',
+            fifaRole: 'CB',
         },
     mert:
         {
@@ -94,6 +100,7 @@ export const TeamMembers = {
             bootBrand: 'Adidas',
             bootCollection: 'Predator',
             bootModel: '20.4',
+            fifaRole: 'LW',
         },
     oguzhan:
         {
@@ -107,6 +114,7 @@ export const TeamMembers = {
             bootBrand: '',
             bootCollection: '',
             bootModel: '',
+            fifaRole: 'CB',
         },
     ogulcan:
         {
@@ -120,6 +128,7 @@ export const TeamMembers = {
             bootBrand: 'Nike',
             bootCollection: 'Phantom',
             bootModel: 'Gx',
+            fifaRole: 'CM',
         },
     utku:
         {
@@ -133,6 +142,7 @@ export const TeamMembers = {
             bootBrand: 'Adidas',
             bootCollection: 'Copa',
             bootModel: '20.3',
+            fifaRole: 'RWB',
         },
     yigit:
         {
@@ -146,6 +156,7 @@ export const TeamMembers = {
             bootBrand: 'Nike',
             bootCollection: 'Phantom',
             bootModel: 'Vision',
+            fifaRole: 'CF',
         }
 }
 
@@ -702,3 +713,482 @@ export const ChartTypes = {
     doughnut: 'doughnut',
     polarArea: 'polarArea'
 }
+
+export const FifaCalculations = [
+    {
+        name: 'Crossing',
+        category: 'Attacking',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.02,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.10,
+            lw: 0.10,
+            cf: 0.05
+        }
+    },
+    {
+        name: 'Finishing',
+        category: 'Attacking',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.02,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.10,
+            lw: 0.10,
+            cf: 0.10
+        }
+    },
+    {
+        name: 'Heading Accuracy',
+        category: 'Attacking',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.05,
+            lwb: 0.02,
+            cm: 0.02,
+            rw: 0.02,
+            lw: 0.02,
+            cf: 0.02
+        }
+    },
+    {
+        name: 'Short Passing',
+        category: 'Attacking',
+        calculation: {
+            gk: 0,
+            rwb: 0.08,
+            cb: 0.02,
+            lwb: 0.08,
+            cm: 0.08,
+            rw: 0.10,
+            lw: 0.10,
+            cf: 0.10
+        }
+    },
+    {
+        name: 'Volleys',
+        category: 'Attacking',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.02,
+            lwb: 0.05,
+            cm: 0.03,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.03
+        }
+    },
+    {
+        name: 'Dribbling',
+        category: 'Skill',
+        calculation: {
+            gk: 0,
+            rwb: 0.10,
+            cb: 0.02,
+            lwb: 0.10,
+            cm: 0.10,
+            rw: 0.15,
+            lw: 0.15,
+            cf: 0.15
+        }
+    },
+    {
+        name: 'Curve',
+        category: 'Skill',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.02,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.05
+        }
+    },
+    {
+        name: 'Free Kick Accuracy',
+        category: 'Skill',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.02,
+            lwb: 0.02,
+            cm: 0.03,
+            rw: 0.03,
+            lw: 0.03,
+            cf: 0.03
+        }
+    },
+    {
+        name: 'Long Passing',
+        category: 'Skill',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.02,
+            lwb: 0.05,
+            cm: 0.10,
+            rw: 0.08,
+            lw: 0.08,
+            cf: 0.10
+        }
+    },
+    {
+        name: 'Ball Control',
+        category: 'Skill',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.02,
+            lwb: 0.05,
+            cm: 0.10,
+            rw: 0.10,
+            lw: 0.10,
+            cf: 0.10
+        }
+    },
+    {
+        name: 'Acceleration',
+        category: 'Movement',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.02,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.05
+        }
+    },
+    {
+        name: 'Sprint speed',
+        category: 'Movement',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.02,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.03
+        }
+    },
+    {
+        name: 'Agility',
+        category: 'Movement',
+        calculation: {
+            gk: 0,
+            rwb: 0.08,
+            cb: 0.02,
+            lwb: 0.08,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.05
+        }
+    },
+    {
+        name: 'Reactions',
+        category: 'Movement',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.05,
+            lwb: 0.02,
+            cm: 0.03,
+            rw: 0.02,
+            lw: 0.02,
+            cf: 0.05
+        }
+    },
+    {
+        name: 'Balance',
+        category: 'Movement',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.05,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.05
+        }
+    },
+    {
+        name: 'Shot Power',
+        category: 'Power',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.05,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.05
+        }
+    },
+    {
+        name: 'Long Shots',
+        category: 'Power',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.05,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.05
+        }
+    },
+    {
+        name: 'Stamina',
+        category: 'Power',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.08,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.02,
+            lw: 0.02,
+            cf: 0.02
+        }
+    },
+    {
+        name: 'Strength',
+        category: 'Power',
+        calculation: {
+            gk: 0,
+            rwb: 0.05,
+            cb: 0.08,
+            lwb: 0.05,
+            cm: 0.05,
+            rw: 0.02,
+            lw: 0.02,
+            cf: 0.02
+        }
+    },
+    {
+        name: 'Jumping',
+        category: 'Power',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.05,
+            lwb: 0.02,
+            cm: 0.02,
+            rw: 0.02,
+            lw: 0.02,
+            cf: 0.02
+        }
+    },
+    {
+        name: 'Aggression',
+        category: 'Mentality',
+        calculation: {
+            gk: 0,
+            rwb: 0.03,
+            cb: 0.05,
+            lwb: 0.03,
+            cm: 0.03,
+            rw: 0.01,
+            lw: 0.01,
+            cf: 0.02
+        }
+    },
+    {
+        name: 'Interceptions',
+        category: 'Mentality',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.08,
+            lwb: 0.02,
+            cm: 0.02,
+            rw: 0.01,
+            lw: 0.01,
+            cf: 0.01
+        }
+    },
+    {
+        name: 'Attacking Positioning',
+        category: 'Mentality',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.02,
+            lwb: 0.02,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.08
+        }
+    },
+    {
+        name: 'Vision',
+        category: 'Mentality',
+        calculation: {
+            gk: 0,
+            rwb: 0.03,
+            cb: 0.02,
+            lwb: 0.03,
+            cm: 0.05,
+            rw: 0.05,
+            lw: 0.05,
+            cf: 0.08
+        }
+    },
+    {
+        name: 'Penalties',
+        category: 'Mentality',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.02,
+            lwb: 0.02,
+            cm: 0.02,
+            rw: 0.02,
+            lw: 0.02,
+            cf: 0.02
+        }
+    },
+    {
+        name: 'Composure',
+        category: 'Mentality',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.02,
+            lwb: 0.02,
+            cm: 0.03,
+            rw: 0.02,
+            lw: 0.02,
+            cf: 0.03
+        }
+    },
+    {
+        name: 'Defensive Awareness',
+        category: 'Defending',
+        calculation: {
+            gk: 0,
+            rwb: 0.03,
+            cb: 0.10,
+            lwb: 0.03,
+            cm: 0.02,
+            rw: 0,
+            lw: 0,
+            cf: 0.01
+        }
+    },
+    {
+        name: 'Standing Tackle',
+        category: 'Defending',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.10,
+            lwb: 0.02,
+            cm: 0.02,
+            rw: 0,
+            lw: 0,
+            cf: 0.01
+        }
+    },
+    {
+        name: 'Sliding Tackle',
+        category: 'Defending',
+        calculation: {
+            gk: 0,
+            rwb: 0.02,
+            cb: 0.10,
+            lwb: 0.02,
+            cm: 0.02,
+            rw: 0,
+            lw: 0,
+            cf: 0.01
+        }
+    },
+    {
+        name: 'GK Diving',
+        category: 'Goalkeeping',
+        calculation: {
+            gk: 0.20,
+            rwb: 0,
+            cb: 0,
+            lwb: 0,
+            cm: 0,
+            rw: 0,
+            lw: 0,
+            cf: 0
+        }
+    },
+    {
+        name: 'GK Handling',
+        category: 'Goalkeeping',
+        calculation: {
+            gk: 0.20,
+            rwb: 0,
+            cb: 0,
+            lwb: 0,
+            cm: 0,
+            rw: 0,
+            lw: 0,
+            cf: 0
+        }
+    },
+    {
+        name: 'GK Kicking',
+        category: 'Goalkeeping',
+        calculation: {
+            gk: 0.15,
+            rwb: 0,
+            cb: 0,
+            lwb: 0,
+            cm: 0,
+            rw: 0,
+            lw: 0,
+            cf: 0
+        }
+    },
+    {
+        name: 'GK Positioning',
+        category: 'Goalkeeping',
+        calculation: {
+            gk: 0.20,
+            rwb: 0,
+            cb: 0,
+            lwb: 0,
+            cm: 0,
+            rw: 0,
+            lw: 0,
+            cf: 0
+        }
+    },
+    {
+        name: 'GK Reflexes',
+        category: 'Goalkeeping',
+        calculation: {
+            gk: 0.25,
+            rwb: 0,
+            cb: 0,
+            lwb: 0,
+            cm: 0,
+            rw: 0,
+            lw: 0,
+            cf: 0
+        }
+    },
+]
