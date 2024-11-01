@@ -21,3 +21,18 @@
         font-size: 16px;
     }
 }
+
+.facilityRating {
+    font-size: 25px;
+    font-weight: bold;
+    @media (max-width: 768px) {
+        font-size: 15px;
+    }
+}
+
+.facilityRatingName {
+    font-size: 15px;
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+}

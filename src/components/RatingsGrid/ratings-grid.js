@@ -238,6 +238,61 @@ const RatingsGrid = () => {
 
     const playerRatingContent = (
         <>
+            <section className={classes.starSection}>
+                <span className={classes.starSpan}>Rating Helper</span>
+                <div className={matchDetailsClasses.facilityRatingStyle}>
+                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                        background: 'darkred'
+                    }}>
+                        <span className={classes.facilityRating}>
+                            60-
+                        </span>
+                        <span className={classes.facilityRatingName}>
+                            Very Bad
+                        </span>
+                    </div>
+                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                        background: 'firebrick'
+                    }}>
+                        <span className={classes.facilityRating}>
+                            60-70
+                        </span>
+                        <span className={classes.facilityRatingName}>
+                            Bad
+                        </span>
+                    </div>
+                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                        background: 'darkgoldenrod'
+                    }}>
+                        <span className={classes.facilityRating}>
+                            70-80
+                        </span>
+                        <span className={classes.facilityRatingName}>
+                            Ok
+                        </span>
+                    </div>
+                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                        background: 'green'
+                    }}>
+                        <span className={classes.facilityRating}>
+                            80-90
+                        </span>
+                        <span className={classes.facilityRatingName}>
+                            Good
+                        </span>
+                    </div>
+                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                        background: 'darkgreen'
+                    }}>
+                        <span className={classes.facilityRating}>
+                            90+
+                        </span>
+                        <span className={classes.facilityRatingName}>
+                            Very Good
+                        </span>
+                    </div>
+                </div>
+            </section>
             {FifaCalculations?.map((x, y) => (
                 <section key={y} className={classes.starSection}>
                     <span className={classes.starSpan}>{x.name}</span>
