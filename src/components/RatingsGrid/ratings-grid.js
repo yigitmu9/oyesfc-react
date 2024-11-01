@@ -48,6 +48,7 @@ const RatingsGrid = () => {
         setSelectedOption(data);
         if (facilityRatingInfoData) setFacilityRatingInfoData(null)
         if (statType === statTypes[0]) fetchFacilityRatingData(data).then(r => r)
+        if (statType === statTypes[1]) fetchPlayerRatingData(data).then(r => r)
     };
 
     const handleCategoryChange = (data) => {
@@ -146,6 +147,23 @@ const RatingsGrid = () => {
                 if (response[userName]) setFacilitiesFormData(response[userName])
                 const infoData = Object.entries(response)?.filter(x => x[0] !== userName)
                 setFacilityRatingInfoData(infoData)
+            }
+        } catch (error) {
+            const successResponse = {
+                open: true,
+                status: SnackbarTypes.error,
+                message: error?.message,
+                duration: 3000
+            }
+            setSnackbarData(successResponse)
+        }
+    }
+
+    const fetchPlayerRatingData = async (player) => {
+        try {
+            const response = await loadWebsite(`playerRatings/${player}`);
+            if (response) {
+                if (response[id]) setFacilitiesFormData(response[id])
             }
         } catch (error) {
             const successResponse = {
