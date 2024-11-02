@@ -652,7 +652,7 @@ const PlayerCards = ({playerName, close}) => {
             </CustomTabs>
             <CustomTabs value={tabValue} index={2}>
                 <div className={classes.matchesDiv}>
-                    <ScoreboardsGrid databaseData={filteredWithPlayerData}
+                    <ScoreboardsGrid filteredWithPlayerData={filteredWithPlayerData}
                                      playerDetails={true}/>
                 </div>
                 <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>

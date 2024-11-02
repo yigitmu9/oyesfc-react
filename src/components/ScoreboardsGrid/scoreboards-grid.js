@@ -6,10 +6,10 @@ import MainTitle from "../../shared/MainTitle/main-title";
 import {useSelector} from "react-redux";
 import {sortData} from "../../utils/utils";
 
-const ScoreboardsGrid = ({playerDetails}) => {
+const ScoreboardsGrid = ({playerDetails, filteredWithPlayerData}) => {
 
     const { filteredData } = useSelector((state) => state.databaseData);
-    const sortedFilteredData = sortData(filteredData);
+    const sortedFilteredData = sortData(playerDetails ? filteredWithPlayerData : filteredData);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [matchDate, setMatchDate] = useState(null);
     const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 200) + 'px' : (window.innerHeight - 230) + 'px';

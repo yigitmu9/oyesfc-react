@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import classes from "./ratings-grid.module.css";
 import {useSelector} from "react-redux";
 import {OYesFCPlayersArray} from "../../utils/utils";
-import {Facilities, FifaCalculations, SnackbarTypes} from "../../constants/constants";
+import {Facilities, FifaCalculations} from "../../constants/constants";
 import SelectionComponent from "../../shared/SelectionComponent/selection-component";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -10,7 +10,7 @@ import matchDetailsClasses from '../MatchDetails/match-details.module.css'
 import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import MainTitle from "../../shared/MainTitle/main-title";
-import {Alert, Snackbar} from "@mui/material";
+import {Alert} from "@mui/material";
 
 const RatingsGrid = () => {
 
@@ -23,8 +23,8 @@ const RatingsGrid = () => {
     const isMobile = window.innerWidth <= 768;
     const [facilitiesFormData, setFacilitiesFormData] = useState(initialFacilitiesFormData);
     const facilitiesRateCategories = ['Ground', 'Locker Room', 'Location', 'Goal Size', 'Field Size', 'Cafe']
-    const [snackbarData, setSnackbarData] = useState(null);
     const [facilityRatingInfoData, setFacilityRatingInfoData] = useState(null);
+    const [warnings, setWarnings] = useState(null);
 
     const updateSecondOptions = useCallback((type) => {
         let optionsArray = [];
@@ -47,6 +47,7 @@ const RatingsGrid = () => {
         setFacilitiesFormData(initialFacilitiesFormData)
         setSelectedOption(data);
         if (facilityRatingInfoData) setFacilityRatingInfoData(null)
+        if (warnings) setWarnings(null)
         if (statType === statTypes[0]) fetchFacilityRatingData(data).then(r => r)
         if (statType === statTypes[1]) fetchPlayerRatingData(data).then(r => r)
     };
@@ -56,10 +57,12 @@ const RatingsGrid = () => {
         setStatType(data);
         if (facilityRatingInfoData) setFacilityRatingInfoData(null)
         if (selectedOption) setSelectedOption('')
+        if (warnings) setWarnings(null)
     };
 
     const handleStarChange = (player, rating) => {
         if (selectedOption) {
+            if (warnings) setWarnings(null)
             setFacilitiesFormData((prevData) => ({
                 ...prevData,
                 [player]: parseInt(rating)
@@ -71,6 +74,7 @@ const RatingsGrid = () => {
         const playerRating = facilitiesFormData[player]
         if (playerRating &&
             ((playerRating !== 1 && operation === 'minus') || (playerRating !== 10 && operation === 'plus'))) {
+            if (warnings) setWarnings(null)
             const newRating = operation === 'plus' ? parseFloat((playerRating + 0.1).toFixed(1)) :
                 parseFloat((playerRating - 0.1).toFixed(1));
             setFacilitiesFormData((prevData) => ({
@@ -84,6 +88,7 @@ const RatingsGrid = () => {
         const playerRating = facilitiesFormData[player]
         if (playerRating &&
             ((playerRating !== 1 && operation === 'minus') || (playerRating !== 99 && operation === 'plus'))) {
+            if (warnings) setWarnings(null)
             const newRating = operation === 'plus' ? parseFloat((playerRating + 1).toFixed(1)) :
                 parseFloat((playerRating - 1).toFixed(1));
             setFacilitiesFormData((prevData) => ({
@@ -97,22 +102,12 @@ const RatingsGrid = () => {
         if (statType === statTypes[0] && selectedOption && Object.values(facilitiesFormData)?.length === 6) {
             try {
                 await set(ref(dataBase, `facilityRatings/${selectedOption}/${userName}`), facilitiesFormData);
-                const successResponse = {
-                    open: true,
-                    status: SnackbarTypes.success,
-                    message: 'Your ratings have been saved successfully!',
-                    duration: 3000
-                }
-                setSnackbarData(successResponse)
+                showWarning('Your ratings have been saved successfully!', 'success')
             } catch (error) {
-                const successResponse = {
-                    open: true,
-                    status: SnackbarTypes.error,
-                    message: error?.message,
-                    duration: 3000
-                }
-                setSnackbarData(successResponse)
+                showWarning(error?.message, 'error')
             }
+        } else {
+            showWarning('Some fields were skipped without a rating, please check again!', 'warning')
         }
     };
 
@@ -121,22 +116,12 @@ const RatingsGrid = () => {
         if (statType === statTypes[1] && selectedOption && Object.values(facilitiesFormData)?.length === FifaCalculations.length) {
             try {
                 await set(ref(dataBase, `playerRatings/${selectedOption}/${id}`), facilitiesFormData);
-                const successResponse = {
-                    open: true,
-                    status: SnackbarTypes.success,
-                    message: 'Your ratings have been saved successfully!',
-                    duration: 3000
-                }
-                setSnackbarData(successResponse)
+                showWarning('Your ratings have been saved successfully!', 'success')
             } catch (error) {
-                const successResponse = {
-                    open: true,
-                    status: SnackbarTypes.error,
-                    message: error?.message,
-                    duration: 3000
-                }
-                setSnackbarData(successResponse)
+                showWarning(error?.message, 'error')
             }
+        } else {
+            showWarning('Some fields were skipped without a rating, please check again!', 'warning')
         }
     };
 
@@ -149,13 +134,7 @@ const RatingsGrid = () => {
                 setFacilityRatingInfoData(infoData)
             }
         } catch (error) {
-            const successResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 3000
-            }
-            setSnackbarData(successResponse)
+            showWarning(error?.message, 'error')
         }
     }
 
@@ -166,14 +145,18 @@ const RatingsGrid = () => {
                 if (response[id]) setFacilitiesFormData(response[id])
             }
         } catch (error) {
-            const successResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 3000
-            }
-            setSnackbarData(successResponse)
+            showWarning(error?.message, 'error')
         }
+    }
+
+    const showWarning = (message, severity) => {
+        const warningData = [
+            {
+                message: message,
+                severity: severity
+            }
+        ]
+        setWarnings(warningData)
     }
 
     const facilityRatingContent = (
@@ -229,6 +212,17 @@ const RatingsGrid = () => {
                     </div>
                 </section>
             ))}
+            <Alert sx={{ padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                   variant="outlined" severity="info">You can change and submit the ratings you gave whenever you want.</Alert>
+            {
+                warnings &&
+                warnings?.map((x, y) => (
+                    <Alert key={y}
+                           sx={{ padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                           variant="outlined" severity={x?.severity}>{x?.message}</Alert>
+                ))
+
+            }
             <div className={matchDetailsClasses.submitButtonDiv}>
                 <button className={matchDetailsClasses.mapsButtons}
                         onClick={facilityStarsSubmit}>{'Submit'}</button>
@@ -241,7 +235,7 @@ const RatingsGrid = () => {
             <section className={classes.starSection}>
                 <span className={classes.starSpan}>Rating Helper</span>
                 <div className={matchDetailsClasses.facilityRatingStyle}>
-                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                    <div className={classes.facilityRatingDiv} style={{
                         background: 'darkred'
                     }}>
                         <span className={classes.facilityRating}>
@@ -251,7 +245,7 @@ const RatingsGrid = () => {
                             Very Bad
                         </span>
                     </div>
-                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                    <div className={classes.facilityRatingDiv} style={{
                         background: 'firebrick'
                     }}>
                         <span className={classes.facilityRating}>
@@ -261,7 +255,7 @@ const RatingsGrid = () => {
                             Bad
                         </span>
                     </div>
-                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                    <div className={classes.facilityRatingDiv} style={{
                         background: 'darkgoldenrod'
                     }}>
                         <span className={classes.facilityRating}>
@@ -271,7 +265,7 @@ const RatingsGrid = () => {
                             Ok
                         </span>
                     </div>
-                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                    <div className={classes.facilityRatingDiv} style={{
                         background: 'green'
                     }}>
                         <span className={classes.facilityRating}>
@@ -281,7 +275,7 @@ const RatingsGrid = () => {
                             Good
                         </span>
                     </div>
-                    <div className={matchDetailsClasses.facilityRatingDiv} style={{
+                    <div className={classes.facilityRatingDiv} style={{
                         background: 'darkgreen'
                     }}>
                         <span className={classes.facilityRating}>
@@ -340,6 +334,17 @@ const RatingsGrid = () => {
                     </div>
                 </section>
             ))}
+            <Alert sx={{ padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                   variant="outlined" severity="info">You can change and submit the ratings you gave whenever you want.</Alert>
+            {
+                warnings &&
+                warnings?.map((x, y) => (
+                    <Alert key={y}
+                           sx={{ padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                           variant="outlined" severity={x?.severity}>{x?.message}</Alert>
+                ))
+
+            }
             <div className={matchDetailsClasses.submitButtonDiv}>
                 <button className={matchDetailsClasses.mapsButtons}
                         onClick={playerStarsSubmit}>{'Submit'}</button>
@@ -386,15 +391,6 @@ const RatingsGrid = () => {
             <MainTitle title={'Ratings'}/>
             {firstPart}
             {secondPart}
-            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration}>
-                <Alert
-                    severity={snackbarData?.status}
-                    variant="filled"
-                    sx={{width: '100%'}}
-                >
-                    {snackbarData?.message}
-                </Alert>
-            </Snackbar>
         </div>
     );
 };
