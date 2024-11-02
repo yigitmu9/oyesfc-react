@@ -551,7 +551,7 @@ export const MatchDetails = ({onClose, matchDate}) => {
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
-                        <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings}/>
+                        <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings} bestOfMatch={bestOfMatch}/>
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={2}>

@@ -7,19 +7,20 @@ import {TeamMembers} from "../../constants/constants";
 import HexagonIcon from '@mui/icons-material/Hexagon';
 import {Divider} from "@mui/material";
 
-const PlayerRadarChart = ({playerName}) => {
+const PlayerRadarChart = ({playerName, attributes}) => {
 
     const isMobile = window.innerWidth <= 768;
-    const keepOrDefLabel = playerName === TeamMembers.can.name ? 'KEEP' : 'DEF'
+    const labels = ['PAC', 'SHO', 'PAS', 'DRI', 'DEF', 'PHY']
+    const gkLabels = ['DIV', 'HAN', 'KIC', 'REF', 'SPD', 'POS']
     const performanceRateDatasets = {
-        labels: ['ATT', 'TEC', 'STA', keepOrDefLabel, 'POW', 'SPD'],
+        labels: playerName === TeamMembers.can.name ? gkLabels : labels,
         datasets: [
             {
                 label: playerName,
                 backgroundColor: 'rgba(139, 0, 0, 0)',
                 borderColor: 'red',
                 borderWidth: isMobile ? 3 : 4,
-                data: Object.values(TeamMembers).find(x => x.name === playerName).ratings,
+                data: attributes,
             }
         ]
     }
@@ -30,7 +31,7 @@ const PlayerRadarChart = ({playerName}) => {
         scales: {
             r: {
                 beginAtZero: true,
-                max: 10,
+                max: 99,
                 backgroundColor: '#252525',
                 angleLines: {
                     color: 'transparent'
@@ -78,7 +79,7 @@ const PlayerRadarChart = ({playerName}) => {
                                      className={matchDetailsClasses.generalInfoIcon}>
                         </HexagonIcon>
                         <span className={matchDetailsClasses.generalInfoSpan}>
-                            Rating Chart
+                            Rating Hexagon
                         </span>
                     </div>
                     <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>

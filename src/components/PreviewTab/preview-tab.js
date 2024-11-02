@@ -20,6 +20,7 @@ import CloudIcon from '@mui/icons-material/Cloud';
 import {loadWebsite} from "../../firebase";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import JerseyTab from "../JerseyTab/jersey-tab";
+import {returnAverageData} from "../../utils/utils";
 
 const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirectToTab, weatherData}) => {
 
@@ -209,26 +210,8 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
     }, [matchDetailsData?.place]);
 
     const calculateFacilityRating = (data) => {
-        const calculatedAverages = {};
-
-        for (const user in data) {
-            for (const key in data[user]) {
-                if (calculatedAverages[key]) {
-                    calculatedAverages[key].push(data[user][key]);
-                } else {
-                    calculatedAverages[key] = [data[user][key]];
-                }
-            }
-        }
-
-        const averagesResult = {};
-        for (const key in calculatedAverages) {
-            const values = calculatedAverages[key];
-            const avg = values.reduce((a, b) => a + b, 0) / values.length;
-            averagesResult[key] = avg.toFixed(2);
-        }
-
-        setFacilityRatingData(averagesResult);
+        const calculatedAverages = returnAverageData(data)
+        setFacilityRatingData(calculatedAverages);
     }
 
     const redirectToAppleMaps = () => {

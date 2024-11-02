@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import {Alert, Divider, List, ListItem, Snackbar, Tab, Tabs} from "@mui/material";
-import {BootBrandsList, SnackbarTypes, TeamMembers} from "../../constants/constants";
+import {BootBrandsList, FifaCalculations, SnackbarTypes, TeamMembers} from "../../constants/constants";
 import classes from "../PlayerCards/player-cards.module.css"
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import Box from "@mui/material/Box";
@@ -30,6 +30,14 @@ import AdidasLogo from "../../images/adidas.PNG";
 import TollIcon from '@mui/icons-material/Toll';
 import BackButton from "../../shared/BackButton/back-button";
 import {useSelector} from "react-redux";
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import ShieldIcon from '@mui/icons-material/Shield';
+import PanToolIcon from '@mui/icons-material/PanTool';
+import FlashOnIcon from '@mui/icons-material/FlashOn';
+import {returnAverageData} from "../../utils/utils";
 
 function CustomTabs(props) {
     const {children, value, index, ...other} = props;
@@ -66,7 +74,8 @@ function a11yProps(index) {
 
 const PlayerCards = ({playerName, close}) => {
 
-    const { allData, filteredData } = useSelector((state) => state.databaseData);
+    const {allData, filteredData} = useSelector((state) => state.databaseData);
+    const {signedIn} = useSelector((state) => state.credentials);
     const isMobile = window.innerWidth <= 768;
     const [tabValue, setTabValue] = React.useState(0);
     const numberOfMatches = Object.values(filteredData).length;
@@ -82,21 +91,68 @@ const PlayerCards = ({playerName, close}) => {
     const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
     const [snackbarData, setSnackbarData] = useState(null);
     let playerTotalGoal = 0;
-    let playerYellowCard = 0;
-    let playerRedCard = 0;
     const playerBootBrand = Object.values(TeamMembers).find(x => x.name === playerName).bootBrand;
     const playerBootCollection = Object.values(TeamMembers).find(x => x.name === playerName).bootCollection;
     const playerBootModel = Object.values(TeamMembers).find(x => x.name === playerName).bootModel;
+    const [playerRatingData, setPlayerRatingData] = useState(null);
+    const categories = ['Attacking', 'Skill', 'Movement', 'Power', 'Mentality', 'Defending', 'Goalkeeping']
+
+    const returnIcon = (selection) => {
+        if (selection === categories[0]) {
+            return (
+                <FlashOnIcon fontSize={isMobile ? 'medium' : 'large'}
+                             className={matchDetailsClasses.generalInfoIcon}>
+                </FlashOnIcon>
+            )
+        }
+        if (selection === categories[1]) {
+            return (
+                <PrecisionManufacturingIcon fontSize={isMobile ? 'medium' : 'large'}
+                                            className={matchDetailsClasses.generalInfoIcon}>
+                </PrecisionManufacturingIcon>
+            )
+        }
+        if (selection === categories[2]) {
+            return (
+                <DirectionsRunIcon fontSize={isMobile ? 'medium' : 'large'}
+                                   className={matchDetailsClasses.generalInfoIcon}>
+                </DirectionsRunIcon>
+            )
+        }
+        if (selection === categories[3]) {
+            return (
+                <FitnessCenterIcon fontSize={isMobile ? 'medium' : 'large'}
+                                   className={matchDetailsClasses.generalInfoIcon}>
+                </FitnessCenterIcon>
+            )
+        }
+        if (selection === categories[4]) {
+            return (
+                <PsychologyIcon fontSize={isMobile ? 'medium' : 'large'}
+                                className={matchDetailsClasses.generalInfoIcon}>
+                </PsychologyIcon>
+            )
+        }
+        if (selection === categories[5]) {
+            return (
+                <ShieldIcon fontSize={isMobile ? 'medium' : 'large'}
+                            className={matchDetailsClasses.generalInfoIcon}>
+                </ShieldIcon>
+            )
+        }
+        if (selection === categories[6]) {
+            return (
+                <PanToolIcon fontSize={isMobile ? 'medium' : 'large'}
+                             className={matchDetailsClasses.generalInfoIcon}>
+                </PanToolIcon>
+            )
+        }
+        return null
+    };
 
     Object.values(filteredData).forEach(item => {
         if (item?.oyesfc?.squad[playerName]) {
             playerTotalGoal += item.oyesfc.squad[playerName].goal;
-        }
-        if (item?.oyesfc?.squad[playerName]?.card === 'yellow') {
-            playerYellowCard += 1;
-        }
-        if (item?.oyesfc?.squad[playerName]?.card === 'red') {
-            playerRedCard += 1;
         }
     });
 
@@ -399,10 +455,74 @@ const PlayerCards = ({playerName, close}) => {
         if (data) handleClose()
     }
 
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await loadWebsite(`playerRatings/${playerName}`);
+                if (response && Object.keys(response)?.length > 4) calculatePlayerRating(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        fetchData().then(r => r);
+    }, [playerName]);
+
+    const calculatePlayerRating = (data) => {
+        const calculatedAverages = returnAverageData(data)
+        setPlayerRatingData(calculatedAverages);
+    }
+
+    const calculateAttributes = () => {
+        if (playerRatingData) {
+            const PAC = ((Number(playerRatingData["Acceleration"]) + Number(playerRatingData["Sprint speed"])) / 2).toFixed(2);
+            const SHO = ((Number(playerRatingData["Finishing"]) + Number(playerRatingData["Long Shots"]) + Number(playerRatingData["Penalties"]) + Number(playerRatingData["Shot Power"]) + Number(playerRatingData["Volleys"])) / 5).toFixed(2);
+            const PAS = ((Number(playerRatingData["Crossing"]) + Number(playerRatingData["Curve"]) + Number(playerRatingData["Free Kick Accuracy"]) + Number(playerRatingData["Long Passing"]) + Number(playerRatingData["Short Passing"]) + Number(playerRatingData["Vision"])) / 6).toFixed(2);
+            const DRI = ((Number(playerRatingData["Agility"]) + Number(playerRatingData["Balance"]) + Number(playerRatingData["Ball Control"]) + Number(playerRatingData["Composure"]) + Number(playerRatingData["Dribbling"]) + Number(playerRatingData["Reactions"])) / 6).toFixed(2);
+            const DEF = ((Number(playerRatingData["Defensive Awareness"]) + Number(playerRatingData["Interceptions"]) + Number(playerRatingData["Sliding Tackle"]) + Number(playerRatingData["Standing Tackle"]) + Number(playerRatingData["Heading Accuracy"])) / 5).toFixed(2);
+            const PHY = ((Number(playerRatingData["Aggression"]) + Number(playerRatingData["Jumping"]) + Number(playerRatingData["Stamina"]) + Number(playerRatingData["Strength"])) / 4).toFixed(2);
+
+            const DIV = Number(playerRatingData["GK Diving"]).toFixed(2);
+            const HAN = Number(playerRatingData["GK Handling"]).toFixed(2);
+            const KIC = Number(playerRatingData["GK Kicking"]).toFixed(2);
+            const REF = Number(playerRatingData["GK Reflexes"]).toFixed(2);
+            const POS = Number(playerRatingData["GK Positioning"]).toFixed(2);
+
+
+            if (playerName === TeamMembers.can.name) return [ Number(DIV), Number(HAN), Number(KIC), Number(REF), Number(PAC), Number(POS) ];
+            return [ Number(PAC), Number(SHO), Number(PAS), Number(DRI), Number(DEF), Number(PHY) ];
+        }
+    };
+
+    const attributes = calculateAttributes();
+    const attributeNames = playerName === TeamMembers.can.name ? ['Diving', 'Handling', 'Kicking', 'Reflex', 'Speed', 'Positioning'] : ['Pace', 'Shooting', 'Passing', 'Dribbling', 'Defending', 'Physique']
+
+    const calculateOverall = (role) => {
+        if (playerRatingData) {
+            let overallScore = 0;
+            let totalWeight = 0;
+
+            FifaCalculations.forEach(({ name, calculation }) => {
+                const weight = calculation[role] || 0;
+
+                if (weight > 0) {
+                    overallScore += playerRatingData[name] * weight;
+                    totalWeight += weight;
+                }
+            });
+
+            return ((overallScore / totalWeight)).toFixed(0);
+        }
+
+    };
+
+
+    const playerOverall = calculateOverall(Object.values(TeamMembers).find(x => x.name === playerName).fifaRole.toLowerCase());
+
     return (
         <Card sx={styles.card}>
             <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: 'black'}}>
-                <BackButton handleBackButton={handleBack} />
+                <BackButton handleBackButton={handleBack}/>
             </Box>
             <CardMedia
                 component="img"
@@ -412,7 +532,13 @@ const PlayerCards = ({playerName, close}) => {
             <CardContent sx={styles.content}>
                 <h1>{playerName}</h1>
             </CardContent>
-            <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: {xs: 'black', md: '#1C1C1E'}, justifyContent: 'center', display: 'flex'}}>
+            <Box sx={{
+                borderBottom: 1,
+                borderColor: 'divider',
+                bgcolor: {xs: 'black', md: '#1C1C1E'},
+                justifyContent: 'center',
+                display: 'flex'
+            }}>
                 <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
                       scrollButtons variant="scrollable"
                       sx={{
@@ -444,6 +570,16 @@ const PlayerCards = ({playerName, close}) => {
                             color: 'lightgray'
                         }
                     }} label="matches" {...a11yProps(2)} />
+                    {
+                        signedIn && playerRatingData &&
+                        <Tab sx={{
+                            '&.MuiTab-root': {
+                                color: 'gray'
+                            }, '&.Mui-selected': {
+                                color: 'lightgray'
+                            }
+                        }} label="rating" {...a11yProps(3)} />
+                    }
                 </Tabs>
             </Box>
             <Box sx={{borderBottom: {xs: '1px solid #252525', md: 0}, display: {xs: 'block', md: 'none'}}}></Box>
@@ -536,7 +672,6 @@ const PlayerCards = ({playerName, close}) => {
                         />
                     </div>
                 </section>
-                <PlayerRadarChart playerName={playerName}/>
                 {playerBootBrand && <section className={matchDetailsClasses.squadSection}>
                     <div className={matchDetailsClasses.generalInfoDiv}>
                         <TollIcon fontSize={isMobile ? 'medium' : 'large'}
@@ -636,18 +771,6 @@ const PlayerCards = ({playerName, close}) => {
                         </ListItem>
                     </List>
                 </section>
-                <section className={matchDetailsClasses.squadSection}>
-                    <div className={classes.yellowAndRedCardsDiv}>
-                        <div className={classes.generalInfoInsideDiv}>
-                            <div className={classes.yellowCardStyle}></div>
-                            <span className={classes.belowIconSpan}>{playerYellowCard}</span>
-                        </div>
-                        <div className={classes.generalInfoInsideDiv}>
-                            <div className={classes.redCardStyle}></div>
-                            <span className={classes.belowIconSpan}>{playerRedCard}</span>
-                        </div>
-                    </div>
-                </section>
                 <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
             </CustomTabs>
             <CustomTabs value={tabValue} index={2}>
@@ -657,6 +780,77 @@ const PlayerCards = ({playerName, close}) => {
                 </div>
                 <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
             </CustomTabs>
+            {
+                signedIn && playerRatingData &&
+                <CustomTabs value={tabValue} index={3}>
+                    <div className={matchDetailsClasses.generalTabDiv}>
+                        <section className={matchDetailsClasses.generalTabSection}>
+                            <div className={matchDetailsClasses.generalInfoDiv}>
+                            <span className={classes.ratingSpan} style={{
+                                background: playerOverall >= 80 ? 'darkgreen' :
+                                    playerOverall < 60 ? 'darkred' : 'darkgoldenrod'
+                            }}>
+                                {playerOverall}
+                            </span>
+                                <span className={matchDetailsClasses.generalInfoSpan}>
+                                Overall
+                            </span>
+                            </div>
+                            <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                            {
+                                attributes?.map((a, b) => (
+                                    <div key={b} className={matchDetailsClasses.generalInfoDiv}>
+                                        <span className={classes.ratingSpan} style={{
+                                            background: a?.toFixed(0) >= 80 ? 'darkgreen' :
+                                                a?.toFixed(0) < 60 ? 'darkred' : 'darkgoldenrod'
+                                        }}>
+                                            {a?.toFixed(0)}
+                                        </span>
+                                        <span className={matchDetailsClasses.generalInfoSpan}>
+                                            {attributeNames[b]}
+                                        </span>
+                                    </div>
+                                ))
+                            }
+
+                        </section>
+                    </div>
+
+                    {<PlayerRadarChart playerName={playerName} attributes={attributes}/>}
+                    <div className={matchDetailsClasses.generalTabDiv}>
+                        {
+                            categories.map((category, i) => (
+                                <section key={i} className={matchDetailsClasses.generalTabSection}>
+                                    <div className={matchDetailsClasses.generalInfoDiv}>
+                                        {returnIcon(category)}
+                                        <span className={matchDetailsClasses.generalInfoSpan}>
+                                            {category}
+                                        </span>
+                                    </div>
+                                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                                    {
+                                        Object.entries(playerRatingData)?.filter(z => FifaCalculations.find(f => f.name === z[0]).category === category)
+                                            ?.map((x, y) => (
+                                                <div key={y} className={matchDetailsClasses.generalInfoDiv}>
+                                                    <span className={classes.ratingSpan} style={{
+                                                        background: x[1] >= 80 ? 'darkgreen' :
+                                                            x[1] < 60 ? 'darkred' : 'darkgoldenrod'
+                                                    }}>
+                                                        {Number(x[1])?.toFixed(0)}
+                                                    </span>
+                                                    <span className={matchDetailsClasses.generalInfoSpan}>
+                                                        {x[0]}
+                                                    </span>
+                                                </div>
+                                            ))
+                                    }
+                                </section>
+                            ))
+                        }
+                    </div>
+                    <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
+                </CustomTabs>
+            }
             <Snackbar open={snackbarData?.open} autoHideDuration={4000}>
                 <Alert
                     severity={snackbarData?.status}

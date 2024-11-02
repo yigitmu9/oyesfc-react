@@ -78,7 +78,7 @@
 }
 
 .rating {
-    font-size: 18px;
+    font-size: 16px;
     padding: 3px;
     border-radius: 25px;
     width: 40px;
@@ -89,9 +89,30 @@
     align-content: center;
     align-items: center;
     color: lightgray;
+    display: flex;
     @media (max-width: 768px) {
-        font-size: 16px;
+        font-size: 14px;
         width: 35px;
+        height: 20px;
+    }
+}
+
+.momRating {
+    font-size: 16px;
+    padding: 3px;
+    border-radius: 25px;
+    width: 50px;
+    height: 23px;
+    justify-items: center;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    color: lightgray;
+    display: flex;
+    @media (max-width: 768px) {
+        font-size: 14px;
+        width: 42px;
         height: 20px;
     }
 }

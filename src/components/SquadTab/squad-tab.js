@@ -4,8 +4,10 @@ import {FootballRoles, Jerseys, TeamMembers} from "../../constants/constants";
 import squadTabClasses from './squad-tab.module.css'
 import {useSelector} from "react-redux";
 import Box from "@mui/material/Box";
+import classes from "../MatchDetails/match-details.module.css";
+import StarIcon from "@mui/icons-material/Star";
 
-const SquadTab = ({matchDetailsData, squadRatings}) => {
+const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
     const { signedIn } = useSelector((state) => state.credentials);
     let oyesfcSquad;
     let playerColor;
@@ -176,6 +178,7 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
         oyesfcSquad.squad.fw = null
     }
 
+    console.log(bestOfMatch)
     return (
         <>
             <Box className={squadTabClasses.footballField}>
@@ -184,22 +187,36 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                         <div className={squadTabClasses.playerDesign}>
                             <Badge
                                 overlap="circular"
-                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                                badgeContent={ (squadRatings && signedIn) &&
-                            <span
-                                style={{
-                                    background: squadRatings?.find(rating => rating?.name === oyesfcSquad?.squad?.gk?.fullName)?.rating >= 7 ? 'darkgreen' :
-                                        squadRatings?.find(rating => rating?.name === oyesfcSquad?.squad?.gk?.fullName)?.rating < 5 ? 'darkred' : 'darkgoldenrod'
-                                }}
-                                className={squadTabClasses.rating}>
+                                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                                badgeContent={(squadRatings && signedIn) &&
+                                    <span
+                                        style={{
+                                            background: bestOfMatch?.name === oyesfcSquad?.squad?.gk?.fullName ? 'royalblue' :
+                                                squadRatings?.find(rating => rating?.name === oyesfcSquad?.squad?.gk?.fullName)?.rating >= 7 ? 'darkgreen' :
+                                                    squadRatings?.find(rating => rating?.name === oyesfcSquad?.squad?.gk?.fullName)?.rating < 5 ? 'darkred' : 'darkgoldenrod'
+                                        }}
+                                        className={bestOfMatch?.name === oyesfcSquad?.squad?.gk?.fullName ? squadTabClasses.momRating : squadTabClasses.rating}>
                                         {squadRatings?.find(rating => rating?.name === oyesfcSquad?.squad?.gk?.fullName)?.rating.toFixed(1)}
+                                        {bestOfMatch?.name === oyesfcSquad?.squad?.gk?.fullName ?
+                                            <StarIcon fontSize={'small'} className={classes.momStarIcon}>
+                                            </StarIcon> :
+                                            null}
                                     </span>
-                        }
+                                }
                             >
-                                <Avatar alt="Travis Howard" src={Object.values(TeamMembers)?.some(item => item?.name === oyesfcSquad?.squad?.gk?.fullName) ? require(`../../images/number${oyesfcSquad?.squad?.gk?.number}.png`) : require("../../images/unknown.png")}
-                                        sx={{height: {xs: '60px', md: '70px'}, width: {xs: '60px', md: '70px'}, border: '3px solid #555'}}/>
+                                <Avatar alt="Travis Howard"
+                                        src={Object.values(TeamMembers)?.some(item => item?.name === oyesfcSquad?.squad?.gk?.fullName) ? require(`../../images/number${oyesfcSquad?.squad?.gk?.number}.png`) : require("../../images/unknown.png")}
+                                        sx={{
+                                            height: {xs: '60px', md: '70px'},
+                                            width: {xs: '60px', md: '70px'},
+                                            border: '3px solid #555'
+                                        }}/>
                             </Badge>
-                            <span className={squadTabClasses.playerNameStyle}>{oyesfcSquad?.squad?.gk?.number + ' ' + oyesfcSquad?.squad?.gk?.name}</span>
+                            <div style={{display: 'flex', textAlign: 'center'}}>
+                                <span className={squadTabClasses.playerNameStyle}
+                                      style={{fontWeight: 'normal', marginRight: '5px'}}>{oyesfcSquad?.squad?.gk?.number}</span>
+                                <span className={squadTabClasses.playerNameStyle}>{oyesfcSquad?.squad?.gk?.name}</span>
+                            </div>
                         </div>
                     }
                 </Box>
@@ -209,22 +226,35 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                             <Badge
                                 overlap="circular"
                                 anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-                                badgeContent={ (squadRatings && signedIn) &&
+                                badgeContent={(squadRatings && signedIn) &&
                                     <span
                                         style={{
-                                            background: squadRatings?.find(rating => rating?.name === x?.fullName)?.rating >= 7 ? 'darkgreen' :
-                                                squadRatings?.find(rating => rating?.name === x?.fullName)?.rating < 5 ? 'darkred' : 'darkgoldenrod'
+                                            background: bestOfMatch?.name === x?.fullName ? 'royalblue' :
+                                                squadRatings?.find(rating => rating?.name === x?.fullName)?.rating >= 7 ? 'darkgreen' :
+                                                    squadRatings?.find(rating => rating?.name === x?.fullName)?.rating < 5 ? 'darkred' : 'darkgoldenrod'
                                         }}
-                                        className={squadTabClasses.rating}>
+                                        className={bestOfMatch?.name === x?.fullName ? squadTabClasses.momRating : squadTabClasses.rating}>
                                         {squadRatings?.find(rating => rating?.name === x?.fullName)?.rating.toFixed(1)}
+                                        {bestOfMatch?.name === x?.fullName ?
+                                            <StarIcon fontSize={'small'} className={classes.momStarIcon}>
+                                            </StarIcon> :
+                                            null}
                                     </span>
                                 }
                             >
                                 <Avatar alt="Travis Howard"
                                         src={Object.values(TeamMembers)?.some(item => item?.name === x?.fullName) ? require(`../../images/number${x?.number}.png`) : require("../../images/unknown.png")}
-                                        sx={{height: {xs: '60px', md: '70px'}, width: {xs: '60px', md: '70px'}, border: '3px solid #555'}}/>
+                                        sx={{
+                                            height: {xs: '60px', md: '70px'},
+                                            width: {xs: '60px', md: '70px'},
+                                            border: '3px solid #555'
+                                        }}/>
                             </Badge>
-                            <span className={squadTabClasses.playerNameStyle}>{x?.number + ' ' + x?.name}</span>
+                            <div style={{display: 'flex', textAlign: 'center'}}>
+                                <span className={squadTabClasses.playerNameStyle}
+                                      style={{fontWeight: 'normal', marginRight: '5px'}}>{x?.number}</span>
+                                <span className={squadTabClasses.playerNameStyle}>{x?.name}</span>
+                            </div>
                         </div>
                     ))}
                 </Box>
@@ -232,25 +262,38 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                     <Box className={squadTabClasses.midfield}>
                         {oyesfcSquad?.squad?.cm?.map((x, y) => (
                             <div key={y} className={squadTabClasses.playerDesign}>
-                                <Badge
+                            <Badge
                                     overlap="circular"
                                     anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-                                    badgeContent={ (squadRatings && signedIn) &&
+                                    badgeContent={(squadRatings && signedIn) &&
                                         <span
                                             style={{
-                                                background: squadRatings?.find(rating => rating?.name === x?.fullName)?.rating >= 7 ? 'darkgreen' :
-                                                    squadRatings?.find(rating => rating?.name === x?.fullName)?.rating < 5 ? 'darkred' : 'darkgoldenrod'
+                                                background: bestOfMatch?.name === x?.fullName ? 'royalblue' :
+                                                    squadRatings?.find(rating => rating?.name === x?.fullName)?.rating >= 7 ? 'darkgreen' :
+                                                        squadRatings?.find(rating => rating?.name === x?.fullName)?.rating < 5 ? 'darkred' : 'darkgoldenrod'
                                             }}
-                                            className={squadTabClasses.rating}>
+                                            className={bestOfMatch?.name === x?.fullName ? squadTabClasses.momRating : squadTabClasses.rating}>
                                         {squadRatings?.find(rating => rating?.name === x?.fullName)?.rating.toFixed(1)}
+                                            {bestOfMatch?.name === x?.fullName ?
+                                                <StarIcon fontSize={'small'} className={classes.momStarIcon}>
+                                                </StarIcon> :
+                                                null}
                                     </span>
                                     }
                                 >
                                     <Avatar alt="Travis Howard"
                                             src={Object.values(TeamMembers)?.some(item => item?.name === x?.fullName) ? require(`../../images/number${x?.number}.png`) : require("../../images/unknown.png")}
-                                            sx={{height: {xs: '60px', md: '70px'}, width: {xs: '60px', md: '70px'}, border: '3px solid #555'}}/>
+                                            sx={{
+                                                height: {xs: '60px', md: '70px'},
+                                                width: {xs: '60px', md: '70px'},
+                                                border: '3px solid #555'
+                                            }}/>
                                 </Badge>
-                                <span className={squadTabClasses.playerNameStyle}>{x?.number + ' ' + x?.name}</span>
+                                <div style={{display: 'flex', textAlign: 'center'}}>
+                                    <span className={squadTabClasses.playerNameStyle}
+                                          style={{fontWeight: 'normal', marginRight: '5px'}}>{x?.number}</span>
+                                    <span className={squadTabClasses.playerNameStyle}>{x?.name}</span>
+                                </div>
                             </div>
                         ))}
                     </Box>
@@ -264,11 +307,16 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                                 badgeContent={ (squadRatings && signedIn) &&
                                     <span
                                         style={{
-                                            background: squadRatings?.find(rating => rating?.name === x?.fullName)?.rating >= 7 ? 'darkgreen' :
+                                            background: bestOfMatch?.name === x?.fullName ? 'royalblue' :
+                                                squadRatings?.find(rating => rating?.name === x?.fullName)?.rating >= 7 ? 'darkgreen' :
                                                 squadRatings?.find(rating => rating?.name === x?.fullName)?.rating < 5 ? 'darkred' : 'darkgoldenrod'
                                         }}
-                                        className={squadTabClasses.rating}>
+                                        className={bestOfMatch?.name === x?.fullName ? squadTabClasses.momRating : squadTabClasses.rating}>
                                         {squadRatings?.find(rating => rating?.name === x?.fullName)?.rating.toFixed(1)}
+                                        {bestOfMatch?.name === x?.fullName ?
+                                            <StarIcon fontSize={'small'} className={classes.momStarIcon}>
+                                            </StarIcon> :
+                                            null}
                                     </span>
                                 }
                             >
@@ -276,7 +324,10 @@ const SquadTab = ({matchDetailsData, squadRatings}) => {
                                         src={Object.values(TeamMembers)?.some(item => item?.name === x?.fullName) ? require(`../../images/number${x?.number}.png`) : require("../../images/unknown.png")}
                                         sx={{height: {xs: '60px', md: '70px'}, width: {xs: '60px', md: '70px'}, border: '3px solid #555'}}/>
                             </Badge>
-                            <span className={squadTabClasses.playerNameStyle}>{x?.number + ' ' + x?.name}</span>
+                            <div style={{display: 'flex', textAlign: 'center'}}>
+                                <span className={squadTabClasses.playerNameStyle} style={{fontWeight: 'normal', marginRight: '5px'}}>{x?.number}</span>
+                                <span className={squadTabClasses.playerNameStyle}>{x?.name}</span>
+                            </div>
                         </div>
                     ))}
                 </Box>

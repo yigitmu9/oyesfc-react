@@ -126,3 +126,19 @@
         display: block;
     }
 }
+
+.ratingSpan {
+    color: lightgray;
+    border-radius: 12px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    font-size: 18px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    @media (max-width: 767px) {
+
+    }
+}

@@ -119,7 +119,7 @@ form {
     overflow-y: scroll;
     overflow-x: hidden;
     @media (max-width: 900px) {
-        margin-top: 50px;
+        margin-top: 30px;
         height: 100%;
     }
 }

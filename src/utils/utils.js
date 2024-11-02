@@ -232,3 +232,23 @@ export const findMatchType = (match) => {
     else if (endDateTime <= today) return matchType.previous
     return null
 }
+
+export const returnAverageData = (data) => {
+    const calculatedAverages = {};
+    for (const user in data) {
+        for (const key in data[user]) {
+            if (calculatedAverages[key]) {
+                calculatedAverages[key].push(data[user][key]);
+            } else {
+                calculatedAverages[key] = [data[user][key]];
+            }
+        }
+    }
+    const averagesResult = {};
+    for (const key in calculatedAverages) {
+        const values = calculatedAverages[key];
+        const avg = values.reduce((a, b) => a + b, 0) / values.length;
+        averagesResult[key] = avg.toFixed(2);
+    }
+    return averagesResult;
+}
