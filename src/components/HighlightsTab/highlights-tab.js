@@ -156,137 +156,138 @@ const HighlightsTab = ({matchDetailsData}) => {
     return (
         <>
             <div className={classes.generalTabDiv}>
-                <div className={highlightsClasses.matchSubmitModalDiv}>
-                    {isCaptain &&
-                        <Accordion
-                            sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%'}}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
-                            aria-controls="panel1-content"
-                            id="panel1-header"
-                        >
-                            Add Video
-                        </AccordionSummary>
-                        <AccordionDetails sx={{textAlign: 'left'}}>
-                            <form onSubmit={handleSubmit} style={{background: "black"}}>
-                                <div className={addMatchClasses.formAlign}>
-                                    <div className={addMatchClasses.infoAlign}>
-                                        <label style={{background: "transparent"}}>
-                                            Video Type:
-                                            <select className={addMatchClasses.select}
-                                                    onChange={handleInputChange}
-                                                    required={true}
-                                                    name="type"
-                                                    value={formData.type}>
-                                                {Object.values(HighlightConstants.type).map((x, y) => (
-                                                    <option key={y} value={x}>{x}</option>
-                                                ))}
-                                            </select>
-                                        </label>
-                                        <br/>
-                                        <label style={{background: "transparent"}}>
-                                            Video Source:
-                                            <select className={addMatchClasses.select}
-                                                    onChange={handleInputChange}
-                                                    required={true}
-                                                    name="source"
-                                                    value={formData.source}>
-                                                {Object.values(HighlightConstants.source).map((x, y) => (
-                                                    <option key={y} value={x}>{x}</option>
-                                                ))}
-                                            </select>
-                                        </label>
-                                        <br/>
-                                        <label style={{background: "transparent"}}>
-                                            Player:
-                                            <select className={addMatchClasses.select}
-                                                    onChange={handleInputChange}
-                                                    required={true}
-                                                    name="player"
-                                                    value={formData.player}>
-                                                <option value={TeamNames.oYesFc}>{TeamNames.oYesFc}</option>
-                                                <option
-                                                    value={matchDetailsData?.rival?.name}>{matchDetailsData?.rival?.name}</option>
-                                                {Object.keys(matchDetailsData?.oyesfc?.squad)?.map((x, y) => (
-                                                    <option key={y} value={x}>{x}</option>
-                                                ))}
-                                            </select>
-                                        </label>
-                                        <br/>
-                                        <label style={{background: "transparent"}}>
-                                            Video URL:
-                                            <input
-                                                className={addMatchClasses.inputDesign}
-                                                required={true}
-                                                type="text"
-                                                name="url"
-                                                value={formData.url}
-                                                onChange={handleInputChange}
-                                            />
-                                        </label>
-                                        <br/>
-                                        <label style={{background: "transparent"}}>
-                                            Minute:
-                                            <input
-                                                className={addMatchClasses.inputDesign}
-                                                required={true}
-                                                type="text"
-                                                name="minute"
-                                                value={formData.minute}
-                                                onChange={handleInputChange}
-                                            />
-                                        </label>
-                                        <br/>
-                                        <div className={addMatchClasses.matchSubmitButtonDiv}>
-                                            <button className={matchDetailsClasses.mapsButtons} type="submit">
-                                                {
-                                                    loading ?
-                                                        <PulseLoader color="red" speedMultiplier={0.7}/>
-                                                        :
-                                                        <span>Submit</span>
-                                                }
-                                            </button>
+                <>
+                    <section className={classes.generalTabSection}>
+                        {isCaptain &&
+                            <Accordion
+                                sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%',border: 0, boxShadow: 0}}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                                    aria-controls="panel1-content"
+                                    id="panel1-header"
+                                >
+                                    Add Video
+                                </AccordionSummary>
+                                <AccordionDetails sx={{textAlign: 'left'}}>
+                                    <form onSubmit={handleSubmit} style={{background: "black"}}>
+                                        <div className={addMatchClasses.formAlign}>
+                                            <div className={addMatchClasses.infoAlign}>
+                                                <label style={{background: "transparent"}}>
+                                                    Video Type:
+                                                    <select className={addMatchClasses.select}
+                                                            onChange={handleInputChange}
+                                                            required={true}
+                                                            name="type"
+                                                            value={formData.type}>
+                                                        {Object.values(HighlightConstants.type).map((x, y) => (
+                                                            <option key={y} value={x}>{x}</option>
+                                                        ))}
+                                                    </select>
+                                                </label>
+                                                <br/>
+                                                <label style={{background: "transparent"}}>
+                                                    Video Source:
+                                                    <select className={addMatchClasses.select}
+                                                            onChange={handleInputChange}
+                                                            required={true}
+                                                            name="source"
+                                                            value={formData.source}>
+                                                        {Object.values(HighlightConstants.source).map((x, y) => (
+                                                            <option key={y} value={x}>{x}</option>
+                                                        ))}
+                                                    </select>
+                                                </label>
+                                                <br/>
+                                                <label style={{background: "transparent"}}>
+                                                    Player:
+                                                    <select className={addMatchClasses.select}
+                                                            onChange={handleInputChange}
+                                                            required={true}
+                                                            name="player"
+                                                            value={formData.player}>
+                                                        <option value={TeamNames.oYesFc}>{TeamNames.oYesFc}</option>
+                                                        <option
+                                                            value={matchDetailsData?.rival?.name}>{matchDetailsData?.rival?.name}</option>
+                                                        {Object.keys(matchDetailsData?.oyesfc?.squad)?.map((x, y) => (
+                                                            <option key={y} value={x}>{x}</option>
+                                                        ))}
+                                                    </select>
+                                                </label>
+                                                <br/>
+                                                <label style={{background: "transparent"}}>
+                                                    Video URL:
+                                                    <input
+                                                        className={addMatchClasses.inputDesign}
+                                                        required={true}
+                                                        type="text"
+                                                        name="url"
+                                                        value={formData.url}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </label>
+                                                <br/>
+                                                <label style={{background: "transparent"}}>
+                                                    Minute:
+                                                    <input
+                                                        className={addMatchClasses.inputDesign}
+                                                        required={true}
+                                                        type="text"
+                                                        name="minute"
+                                                        value={formData.minute}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </label>
+                                                <br/>
+                                                <div className={addMatchClasses.matchSubmitButtonDiv}>
+                                                    <button className={matchDetailsClasses.mapsButtons} type="submit">
+                                                        {
+                                                            loading ?
+                                                                <PulseLoader color="red" speedMultiplier={0.7}/>
+                                                                :
+                                                                <span>Submit</span>
+                                                        }
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </AccordionDetails>
-                    </Accordion>}
-                    {
-                        videoData?.length > 0 ? videoData?.map((x, y) => (
-                                <Accordion key={y}
-                                           sx={{
-                                               bgcolor: '#1C1C1E',
-                                               color: 'lightgray',
-                                               width: '100%',
-                                           }}>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
-                                        aria-controls="panel1-content"
-                                        id="panel1-header"
-                                    >
-                                        {x?.type + ' | ' + x?.player}{x?.minute !== 'Unknown' ? ' ' + x?.minute + '"' : ''}
-                                    </AccordionSummary>
-                                    <AccordionDetails sx={{textAlign: 'left'}}>
-                                        <iframe
-                                            src={getVideoUrl(x)}
-                                            width="100%"
-                                            height= {isMobile ? '200' : '300'}
-                                            allow="autoplay"
-                                            title="Video"
-                                            allowFullScreen
-                                            style={{border: '0', borderRadius: '25px'}}
-                                        ></iframe>
-                                    </AccordionDetails>
-                                </Accordion>
-                            )) :
-                            <section className={highlightsClasses.noVideoSection} style={{marginTop: signedIn ? '20px' : '0'}}>
-                                <BrowserNotSupportedIcon fontSize={'large'} className={classes.generalInfoIcon}>
-                                </BrowserNotSupportedIcon>
-                                <span className={highlightsClasses.noVideoSpan}>No video found for this match.</span>
-                            </section>
-                    }
-                </div>
+                                    </form>
+                                </AccordionDetails>
+                            </Accordion>}
+                        {
+                            videoData?.length > 0 ? videoData?.map((x, y) => (
+                                    <Accordion key={y}
+                                               sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%',border: 0, boxShadow: 0}}>
+                                        <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                                            aria-controls="panel1-content"
+                                            id="panel1-header"
+                                        >
+                                            {x?.type + ' | ' + x?.player}{x?.minute !== 'Unknown' ? ' ' + x?.minute + '"' : ''}
+                                        </AccordionSummary>
+                                        <AccordionDetails sx={{textAlign: 'left'}}>
+                                            <iframe
+                                                src={getVideoUrl(x)}
+                                                width="100%"
+                                                height={isMobile ? '200' : '300'}
+                                                allow="autoplay"
+                                                title="Video"
+                                                allowFullScreen
+                                                style={{border: '0', borderRadius: '25px'}}
+                                            ></iframe>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                )) :
+                                <section className={highlightsClasses.noVideoSection}
+                                         style={{marginTop: signedIn ? '20px' : '0'}}>
+                                    <BrowserNotSupportedIcon fontSize={'large'} className={classes.generalInfoIcon}>
+                                    </BrowserNotSupportedIcon>
+                                    <span
+                                        className={highlightsClasses.noVideoSpan}>No video found for this match.</span>
+                                </section>
+                        }
+                    </section>
+
+                </>
                 <Snackbar open={snackbarData?.open} autoHideDuration={4000} onClose={closeSnackbar}>
                     <Alert
                         onClose={closeSnackbar}

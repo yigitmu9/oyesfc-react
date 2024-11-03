@@ -13,7 +13,7 @@ import {useCallback, useEffect, useState} from "react";
 import SignIn from "../SignIn/sign-in";
 import AddMatchComponent from "../AddMatch/add-match";
 import {Alert, BottomNavigation, BottomNavigationAction, Drawer, Snackbar} from "@mui/material";
-import {OYesFcEras, SnackbarTypes, TeamMembers} from "../../constants/constants";
+import {OYesFcEras, SnackbarTypes, TeamMembers, TeamNames} from "../../constants/constants";
 import CardMedia from "@mui/material/CardMedia";
 import AdvancedFilters from "../AdvancedFilters/advanced-filters";
 import CalendarComponent from "../Calendar/calendar";
@@ -29,6 +29,11 @@ import MainTitle from "../../shared/MainTitle/main-title";
 import {useDispatch, useSelector} from "react-redux";
 import {login, logout} from "../../redux/credentialsSlice";
 import {checkAuthState, signOutUser} from "../../services/service";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import XIcon from "@mui/icons-material/X";
+import EmailIcon from "@mui/icons-material/Email";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import RedditIcon from "@mui/icons-material/Reddit";
 
 function Navbar() {
     const { selectedEra } = useSelector((state) => state.era);
@@ -49,6 +54,9 @@ function Navbar() {
     const ratingsPath = '/oyesfc-react/ratings';
     const [value, setValue] = useState(0);
     const dispatch = useDispatch();
+    const packageJson = require('./../../../package.json');
+    const date = new Date();
+    const year = date.getFullYear();
 
     const getTeamLogo = () => {
         if (selectedEra === OYesFcEras.goldenAge) return 'goldenrod'
@@ -157,6 +165,26 @@ function Navbar() {
         if (mobileOpen) setMobileOpen(false)
         document.body.style.overflow = 'hidden';
         setAddMatchPopupOpen(true);
+    };
+
+    const redirectToEmail = () => {
+        window.location.href = "mailto:oyesfc@gmail.com";
+    };
+
+    const redirectToTwitter = () => {
+        window.open("https://x.com/oyesfc?s=21", "_blank");
+    };
+
+    const redirectToInstagram = () => {
+        window.open("https://www.instagram.com/oyesfc?igsh=MXRrbmp1a3lvdW4wNg==", "_blank");
+    };
+
+    const redirectToYoutube = () => {
+        window.open("https://youtube.com/@oyesfc?si=ER9YlrYaittkOeRu", "_blank");
+    };
+
+    const redirectToReddit = () => {
+        window.open("https://www.reddit.com/r/a:t5_4r4dfa/", "_blank");
     };
 
     const closeSnackbar = (event, reason) => {
@@ -274,6 +302,26 @@ function Navbar() {
                     </div>
                 </>
             }
+            <div style={{height: '20px'}}></div>
+            <div className={classes.morePageBoxLinks}>
+                <span className={classes.drawerRoutesSpanLinks}>
+                    <InstagramIcon className={classes.iconStyle} style={{fontSize: "50px"}}
+                                   onClick={redirectToInstagram}></InstagramIcon>
+                    <XIcon className={classes.iconStyle} style={{fontSize: "50px"}}
+                           onClick={redirectToTwitter}></XIcon>
+                    <EmailIcon className={classes.iconStyle} style={{fontSize: "50px"}}
+                               onClick={redirectToEmail}></EmailIcon>
+                    <YouTubeIcon className={classes.iconStyle} style={{fontSize: "50px"}}
+                                 onClick={redirectToYoutube}></YouTubeIcon>
+                    {signedIn &&
+                        <RedditIcon className={classes.iconStyle} style={{fontSize: "50px"}}
+                                    onClick={redirectToReddit}></RedditIcon>}
+                </span>
+            </div>
+            <div style={{height: '5px'}}></div>
+            <div style={{padding: '0 20px'}}>
+                <span className={classes.miniTitle}>{'© ' + year + ' ' + TeamNames.oYesFc + '™ | v' + packageJson.version}</span>
+            </div>
             {
                 signedIn &&
                 <>

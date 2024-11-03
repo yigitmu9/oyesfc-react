@@ -112,7 +112,7 @@
     display: flex;
     @media (max-width: 768px) {
         font-size: 14px;
-        width: 42px;
+        width: 40px;
         height: 20px;
     }
 }

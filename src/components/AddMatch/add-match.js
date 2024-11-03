@@ -155,7 +155,7 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
         }));
     };
 
-    const handleSquadInputChange = (member, event, goal, role, description) => {
+    const handleSquadInputChange = (member, event, goal, role, position, description) => {
         const {name, value, type} = event.target;
         const inputValue = type === "number" ? parseInt(value) : value;
         setOYesFCSquadFormData((prevData) => ({
@@ -163,6 +163,7 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
             [member]: {
                 'goal': name.includes('goal') ? inputValue : goal,
                 'role': name.includes('role') ? inputValue : role,
+                'position': name.includes('position') ? inputValue : position,
                 'description': name.includes('description') ? inputValue : description
             },
         }));
@@ -183,7 +184,8 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
                 ...prevData,
                 [newSquadMember]: {
                     goal: 0,
-                    role: (Object.values(TeamMembers).find(x => x?.name === newSquadMember)?.role || '')
+                    role: (Object.values(TeamMembers).find(x => x?.name === newSquadMember)?.role || ''),
+                    position: (Object.values(TeamMembers).find(x => x?.name === newSquadMember)?.position || 0)
                 },
             }));
             setNewSquadMember('');
@@ -312,6 +314,7 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
     }
 
     const finalizeData = () => {
+        console.log(oYesFCSquadFormData)
         for (const key in oYesFCSquadFormData) {
             if (oYesFCSquadFormData.hasOwnProperty(key)) {
                 if (!oYesFCSquadFormData[key].hasOwnProperty('description') || !oYesFCSquadFormData[key]['description']) {
@@ -611,6 +614,10 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                 }
                 if (!x[1]?.role || x[1]?.role === 'Select Role' || x[1]?.role === '') {
                     const message = `${x[0]} missing ROLE value!`
+                    errorMessages.push(message)
+                }
+                if (!x[1]?.position || x[1]?.position === 0) {
+                    const message = `${x[0]} missing POSITION value!`
                     errorMessages.push(message)
                 }
                 if (!Object.values(TeamMembers).map(x => x.name).includes(x[0]) && !x[1]?.description) {
@@ -1068,7 +1075,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                             name={`oyesfc.squad.${member}.goal`}
                                             value={oYesFCSquadFormData[member].goal}
                                             onChange={(e) =>
-                                                handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.description)}
+                                                handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
                                         />
                                     </label>
                                     <br/>
@@ -1076,7 +1083,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                         {member} Role:
                                         <select className={classes.select}
                                                 onChange={(e) =>
-                                                    handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.description)}
+                                                    handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
                                                 required={true}
                                                 name={`oyesfc.squad.${member}.role`}
                                                 value={oYesFCSquadFormData[member].role ? oYesFCSquadFormData[member].role : (Object.values(TeamMembers).find(x => x?.name === member)?.role || oYesFCSquadFormData[member].role)}>
@@ -1086,6 +1093,18 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                             ))}
                                         </select>
                                     </label>
+                                    <br/>
+                                    <label>
+                                        {member} Position (Start from Left Wing):
+                                        <input className={classes.inputDesign}
+                                               type="number"
+                                               onChange={(e) =>
+                                                   handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
+                                               name={`oyesfc.squad.${member}.position`}
+                                               value={oYesFCSquadFormData[member].position ? oYesFCSquadFormData[member].position : (Object.values(TeamMembers).find(x => x?.name === member)?.position || oYesFCSquadFormData[member].position)}
+                                        />
+                                    </label>
+
                                     <br/>
                                     {!Object.values(TeamMembers).some(x => x?.name === member) &&
                                         <>
@@ -1097,7 +1116,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                                     name={`oyesfc.squad.${member}.description`}
                                                     value={oYesFCSquadFormData[member].description}
                                                     onChange={(e) =>
-                                                        handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.description)}
+                                                        handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
                                                 />
                                             </label>
                                             <br/>

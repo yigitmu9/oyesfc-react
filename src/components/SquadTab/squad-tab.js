@@ -94,7 +94,8 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                         `../../images/unknown.png`,
                     number: Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number ?
                         Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number :
-                        Math.floor(Math.random() * (98 - 19 + 1)) + 19
+                        Math.floor(Math.random() * (98 - 19 + 1)) + 19,
+                    position: x[1]?.position
                 }
             } else {
                 player = {
@@ -107,7 +108,8 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                         Object.values(TeamMembers)?.find(y => y?.name === x[0])?.number :
                         Math.floor(Math.random() * (98 - 19 + 1)) + 19,
                     color: gkColor,
-                    numberColor: gkNumberColor
+                    numberColor: gkNumberColor,
+                    position: x[1]?.position
                 }
             }
 
@@ -198,7 +200,7 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                                         className={bestOfMatch?.name === oyesfcSquad?.squad?.gk?.fullName ? squadTabClasses.momRating : squadTabClasses.rating}>
                                         {squadRatings?.find(rating => rating?.name === oyesfcSquad?.squad?.gk?.fullName)?.rating.toFixed(1)}
                                         {bestOfMatch?.name === oyesfcSquad?.squad?.gk?.fullName ?
-                                            <StarIcon fontSize={'small'} className={classes.momStarIcon}>
+                                            <StarIcon sx={{height: {xs: '12px', md: '15px'}, width: {xs: '12px', md: '15px'}}} className={classes.momStarIcon}>
                                             </StarIcon> :
                                             null}
                                     </span>
@@ -221,7 +223,7 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                     }
                 </Box>
                 <Box className={squadTabClasses.defense}>
-                    {oyesfcSquad?.squad?.df?.map((x, y) => (
+                    {oyesfcSquad?.squad?.df?.sort((a, b) => b?.position - a?.position)?.map((x, y) => (
                         <div key={y} className={squadTabClasses.playerDesign}>
                             <Badge
                                 overlap="circular"
@@ -236,7 +238,7 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                                         className={bestOfMatch?.name === x?.fullName ? squadTabClasses.momRating : squadTabClasses.rating}>
                                         {squadRatings?.find(rating => rating?.name === x?.fullName)?.rating.toFixed(1)}
                                         {bestOfMatch?.name === x?.fullName ?
-                                            <StarIcon fontSize={'small'} className={classes.momStarIcon}>
+                                            <StarIcon sx={{height: {xs: '12px', md: '15px'}, width: {xs: '12px', md: '15px'}}} className={classes.momStarIcon}>
                                             </StarIcon> :
                                             null}
                                     </span>
@@ -258,7 +260,7 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                         </div>
                     ))}
                 </Box>
-                {oyesfcSquad?.squad?.cm?.length > 0 &&
+                {oyesfcSquad?.squad?.cm?.sort((a, b) => b?.position - a?.position)?.length > 0 &&
                     <Box className={squadTabClasses.midfield}>
                         {oyesfcSquad?.squad?.cm?.map((x, y) => (
                             <div key={y} className={squadTabClasses.playerDesign}>
@@ -275,7 +277,7 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                                             className={bestOfMatch?.name === x?.fullName ? squadTabClasses.momRating : squadTabClasses.rating}>
                                         {squadRatings?.find(rating => rating?.name === x?.fullName)?.rating.toFixed(1)}
                                             {bestOfMatch?.name === x?.fullName ?
-                                                <StarIcon fontSize={'small'} className={classes.momStarIcon}>
+                                                <StarIcon sx={{height: {xs: '12px', md: '15px'}, width: {xs: '12px', md: '15px'}}} className={classes.momStarIcon}>
                                                 </StarIcon> :
                                                 null}
                                     </span>
@@ -299,7 +301,7 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                     </Box>
                 }
                 <Box className={squadTabClasses.forward}>
-                    {oyesfcSquad?.squad?.fw?.map((x, y) => (
+                    {oyesfcSquad?.squad?.fw?.sort((a, b) => b?.position - a?.position)?.map((x, y) => (
                         <div key={y} className={squadTabClasses.playerDesign}>
                             <Badge
                                 overlap="circular"
@@ -314,7 +316,7 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
                                         className={bestOfMatch?.name === x?.fullName ? squadTabClasses.momRating : squadTabClasses.rating}>
                                         {squadRatings?.find(rating => rating?.name === x?.fullName)?.rating.toFixed(1)}
                                         {bestOfMatch?.name === x?.fullName ?
-                                            <StarIcon fontSize={'small'} className={classes.momStarIcon}>
+                                            <StarIcon sx={{height: {xs: '12px', md: '15px'}, width: {xs: '12px', md: '15px'}}} className={classes.momStarIcon}>
                                             </StarIcon> :
                                             null}
                                     </span>

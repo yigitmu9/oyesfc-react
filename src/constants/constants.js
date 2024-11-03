@@ -16,7 +16,7 @@ export const TeamMembers = {
             bootCollection: 'Mercurial',
             bootModel: 'Vapor 12',
             fifaRole: 'GK',
-
+            position: 1
         },
     atakan:
         {
@@ -31,6 +31,7 @@ export const TeamMembers = {
             bootCollection: 'Tiempo',
             bootModel: 'Legend 8',
             fifaRole: 'CB',
+            position: 2
         },
     berk:
         {
@@ -45,6 +46,7 @@ export const TeamMembers = {
             bootCollection: 'Mercurial',
             bootModel: 'Vapor 11',
             fifaRole: 'LWB',
+            position: 1
         },
     berent:
         {
@@ -59,6 +61,7 @@ export const TeamMembers = {
             bootCollection: 'Deportivo',
             bootModel: '1',
             fifaRole: 'RW',
+            position: 4
         },
     gokhan:
         {
@@ -73,6 +76,7 @@ export const TeamMembers = {
             bootCollection: '',
             bootModel: '',
             fifaRole: 'CM',
+            position: 2
         },
     mehmet:
         {
@@ -87,6 +91,7 @@ export const TeamMembers = {
             bootCollection: '',
             bootModel: '',
             fifaRole: 'CB',
+            position: 2
         },
     mert:
         {
@@ -101,6 +106,7 @@ export const TeamMembers = {
             bootCollection: 'Predator',
             bootModel: '20.4',
             fifaRole: 'LW',
+            position: 1
         },
     oguzhan:
         {
@@ -115,6 +121,7 @@ export const TeamMembers = {
             bootCollection: '',
             bootModel: '',
             fifaRole: 'CB',
+            position: 2
         },
     ogulcan:
         {
@@ -129,6 +136,7 @@ export const TeamMembers = {
             bootCollection: 'Phantom',
             bootModel: 'Gx',
             fifaRole: 'CM',
+            position: 3
         },
     utku:
         {
@@ -143,6 +151,7 @@ export const TeamMembers = {
             bootCollection: 'Copa',
             bootModel: '20.3',
             fifaRole: 'RWB',
+            position: 4
         },
     yigit:
         {
@@ -157,6 +166,7 @@ export const TeamMembers = {
             bootCollection: 'Phantom',
             bootModel: 'Vision',
             fifaRole: 'CF',
+            position: 2
         }
 }
 
