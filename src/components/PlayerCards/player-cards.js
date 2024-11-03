@@ -459,7 +459,7 @@ const PlayerCards = ({playerName, close}) => {
         async function fetchData() {
             try {
                 const response = await loadWebsite(`playerRatings/${playerName}`);
-                if (response && Object.keys(response)?.length > 0) calculatePlayerRating(response)
+                if (response && Object.keys(response)?.length > 3) calculatePlayerRating(response)
             } catch (error) {
                 console.log(error)
             }
