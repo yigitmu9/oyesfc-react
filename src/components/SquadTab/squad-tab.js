@@ -180,7 +180,6 @@ const SquadTab = ({matchDetailsData, squadRatings, bestOfMatch}) => {
         oyesfcSquad.squad.fw = null
     }
 
-    console.log(bestOfMatch)
     return (
         <>
             <Box className={squadTabClasses.footballField}>

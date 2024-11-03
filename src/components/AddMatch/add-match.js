@@ -317,8 +317,12 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
         console.log(oYesFCSquadFormData)
         for (const key in oYesFCSquadFormData) {
             if (oYesFCSquadFormData.hasOwnProperty(key)) {
+                oYesFCSquadFormData[key] = { ...oYesFCSquadFormData[key] };
                 if (!oYesFCSquadFormData[key].hasOwnProperty('description') || !oYesFCSquadFormData[key]['description']) {
                     oYesFCSquadFormData[key]['description'] = "No description";
+                }
+                if (selectedMatchData && (!oYesFCSquadFormData[key].hasOwnProperty('position') || !oYesFCSquadFormData[key]['position'])) {
+                    oYesFCSquadFormData[key]['position'] = Object.values(TeamMembers).find(x => x?.name === key)?.position || 0;
                 }
             }
         }

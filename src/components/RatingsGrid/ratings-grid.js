@@ -112,7 +112,6 @@ const RatingsGrid = () => {
     };
 
     const playerStarsSubmit = async () => {
-        console.log(facilitiesFormData)
         if (statType === statTypes[1] && selectedOption && Object.values(facilitiesFormData)?.length === FifaCalculations.length) {
             try {
                 await set(ref(dataBase, `playerRatings/${selectedOption}/${id}`), facilitiesFormData);
