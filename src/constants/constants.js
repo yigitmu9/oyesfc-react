@@ -869,7 +869,7 @@ export const FifaCalculations = [
         name: 'Acceleration',
         category: 'Movement',
         calculation: {
-            gk: 0,
+            gk: 0.05,
             rwb: 0.05,
             cb: 0.02,
             lwb: 0.05,
@@ -883,7 +883,7 @@ export const FifaCalculations = [
         name: 'Sprint speed',
         category: 'Movement',
         calculation: {
-            gk: 0,
+            gk: 0.05,
             rwb: 0.05,
             cb: 0.02,
             lwb: 0.05,
@@ -1149,7 +1149,7 @@ export const FifaCalculations = [
         name: 'GK Handling',
         category: 'Goalkeeping',
         calculation: {
-            gk: 0.20,
+            gk: 0.15,
             rwb: 0,
             cb: 0,
             lwb: 0,
@@ -1163,7 +1163,7 @@ export const FifaCalculations = [
         name: 'GK Kicking',
         category: 'Goalkeeping',
         calculation: {
-            gk: 0.15,
+            gk: 0.10,
             rwb: 0,
             cb: 0,
             lwb: 0,
