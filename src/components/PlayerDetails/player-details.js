@@ -5,11 +5,9 @@ import PlayerCards from "../PlayerCards/player-cards";
 const PlayerDetails = ({onClose, player}) => {
 
     const popupRef = useRef(null);
-    document.body.style.overflow = 'hidden';
 
     const handleOutside = (event) => {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
-            document.body.style.overflow = 'visible';
             onClose();
         }
     };
@@ -22,7 +20,6 @@ const PlayerDetails = ({onClose, player}) => {
     });
 
     const handleClose = () => {
-        document.body.style.overflow = 'visible';
         onClose()
     };
 

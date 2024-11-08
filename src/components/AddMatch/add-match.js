@@ -8,8 +8,6 @@ import {
     FootballRoles,
     Jerseys,
     openWeatherType,
-    SnackbarMessages,
-    SnackbarTypes,
     TeamMembers,
     TeamNames, TurkishJerseys,
     WeatherSky
@@ -33,16 +31,17 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {PulseLoader} from "react-spinners";
 import Box from "@mui/material/Box";
 import BackButton from "../../shared/BackButton/back-button";
-import MainTitle from "../../shared/MainTitle/main-title";
 import {useDispatch, useSelector} from "react-redux";
 import {getCategoryValues, hasAppliedFilters, returnFilteredData} from "../../utils/utils";
 import {updateData} from "../../redux/databaseDataSlice";
+import navbarClasses from "../Navbar/navbar.module.css";
+import accountClasses from '../AccountGrid/account-grid.module.css'
+import {useNavigate} from "react-router-dom";
 
-const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
+const AddMatchComponent = ({onClose, selectedMatchData}) => {
 
     const dispatch = useDispatch();
     const { allData } = useSelector((state) => state.databaseData);
-    document.body.style.overflow = 'hidden';
     const [loading, setLoading] = useState(selectedMatchData ? null : '');
     const [calendarButtonLoading, setCalendarButtonLoading] = useState(false);
     const [emailJsButtonLoading, setEmailJsButtonLoading] = useState(false);
@@ -56,12 +55,12 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
     const allFacilities = Facilities.map(x => x.name)
     const [isRakipbul, setIsRakipbul] = useState(false);
     const rivalNames = getCategoryValues(allData).rivals
+    const navigate = useNavigate()
 
     const popupRef = useRef(null);
 
     const handleOutsideClick = (event) => {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
-            document.body.style.overflow = 'visible';
             onClose();
         }
     };
@@ -130,7 +129,7 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
         if (type === "checkbox" && isRakipbul !== checked) {
             setIsRakipbul(checked);
         }
-        if (name === 'day') checkWeatherButtons(inputValue)
+        if (name === 'place') checkWeatherButtons(formData?.day, inputValue)
         setFormData((prevData) => ({
             ...prevData,
             [name]: inputValue,
@@ -207,13 +206,6 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
             ]));
             setSiriShortcutButtonLoading(false)
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            snackbarData(errorResponse)
             const message = AddMatchMessages.siri_shortcut_run_failed
             setFinalErrors((prevData) => ([
                 ...prevData,
@@ -241,13 +233,6 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
             setSubmittedMatchData(formData)
             if (warnings) setWarnings(null)
         } catch (error) {
-            const messageResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            snackbarData(messageResponse)
         }
     };
 
@@ -257,7 +242,6 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
             await set(ref(dataBase, `matches/${submittedMatchData.day}`), submittedMatchData);
             setFormData(initialFormData);
             setNewSquadMember('');
-            document.body.style.overflow = 'visible';
             setLoading(false)
             const response = await loadWebsite('matches');
             const filtersInStorage = JSON.parse(localStorage.getItem('filters'));
@@ -271,22 +255,8 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
                 dispatch(updateData({allData: response, filteredData: response}))
             }
             onClose()
-            const messageResponse = {
-                open: true,
-                status: SnackbarTypes.success,
-                message: selectedMatchData ? SnackbarMessages.successfully_updated : SnackbarMessages.successfully_added,
-                duration: 6000
-            }
-            snackbarData(messageResponse)
         } catch (error) {
             setLoading(false)
-            const messageResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            snackbarData(messageResponse)
         }
     }
 
@@ -309,7 +279,6 @@ const AddMatchComponent = ({onClose, snackbarData, selectedMatchData}) => {
     };
 
     const handleClose = () => {
-        document.body.style.overflow = 'visible';
         onClose();
     }
 
@@ -394,13 +363,6 @@ END:VCALENDAR`;
             ]));
             setCalendarButtonLoading(false)
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            snackbarData(errorResponse)
             const message = AddMatchMessages.calendar_create_failed
             setFinalErrors((prevData) => [
                 ...prevData,
@@ -469,13 +431,6 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
             ]));
             setEmailJsButtonLoading(false)
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            snackbarData(errorResponse)
             const message = AddMatchMessages.email_sent_failed
             setFinalErrors((prevData) => ([
                 ...prevData,
@@ -486,8 +441,8 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
 
     };
 
-    const getGeoCoordinates = () => {
-        const xLocation = Facilities.find(x => x.name === formData?.place).xAppleLocation
+    const getGeoCoordinates = (place) => {
+        const xLocation = Facilities.find(x => x.name === place).xAppleLocation
         const xLocationWithoutSpaces = xLocation.replace(/\s+/g, '');
         const match = xLocationWithoutSpaces.match(/geo:[\d.,]+/);
         return match ? match[0]?.split(':')[1] : 'Geo coordinates not found';
@@ -500,18 +455,18 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
             ?.join(' ');
     }
 
-    const handleGetOpenWeather = async (type) => {
+    const handleGetOpenWeather = async (type, day, place) => {
         setWeatherButtonLoading(true)
-        if (formData?.day && formData?.place) {
-            const endDate = new Date(formData?.day);
+        if (day && place) {
+            const endDate = new Date(day);
             const startDate = new Date();
             const timeDifference = endDate.getTime() - startDate.getTime();
             const dayDifference = timeDifference / (1000 * 3600 * 24);
             if (dayDifference <= 5) {
-                const coordinates = getGeoCoordinates();
+                const coordinates = getGeoCoordinates(place);
                 const [latitude, longitude] = coordinates.split(',');
-                const date = new Date(formData.day.split('T')[0])
-                const hour = parseInt(formData.day.split('T')[1].split(':')[0], 10);
+                const date = new Date(day.split('T')[0])
+                const hour = parseInt(day.split('T')[1].split(':')[0], 10);
                 const roundedHour = hour >= 23 || hour <= 1 ? '00' : Math.round(hour / 3) * 3;
                 if (hour >= 23) date.setDate(date.getDate() + 1);
                 const finalDate = date.toISOString().split('T')[0];
@@ -529,7 +484,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                     sunriseTimestamp = weatherResponse?.sys?.sunrise
                     sunsetTimestamp = weatherResponse?.sys?.sunset
                 }
-                const specificDate = new Date(formData.day);
+                const specificDate = new Date(day);
                 const sunriseDate = new Date(sunriseTimestamp * 1000);
                 if (type === openWeatherType.forecast) {
                     sunriseDate.setFullYear(specificDate.getFullYear());
@@ -565,7 +520,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
         setWeatherButtonLoading(false)
     }
 
-    const checkWeatherButtons = (dateTimeValue) => {
+    const checkWeatherButtons = (dateTimeValue, place) => {
         let endDate = new Date(dateTimeValue)
         endDate.setHours(endDate.getHours() + 1);
         const startDate = new Date();
@@ -574,23 +529,41 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
         let buttonState;
         if (hourDifference > 120) {
             buttonState = {
-                button: null,
+                severity: 'info',
                 warning: 'Match date is more than 5 days away, try again later.'
             }
         } else if (hourDifference <= 120 && hourDifference > 2) {
-            buttonState = {
-                button: 'forecast',
-                warning: 'The match date is within 5 days, the weather forecast for the selected time can be viewed.'
-            }
+            handleGetOpenWeather(openWeatherType.forecast, dateTimeValue, place).then(() => {
+                buttonState = {
+                    severity: 'success',
+                    warning: 'Weather data for the selected date was successfully retrieved.'
+                }
+                setWeatherButtonStatus(buttonState)
+            }).catch(error => {
+                buttonState = {
+                    severity: 'error',
+                    warning: error?.message
+                }
+                setWeatherButtonStatus(buttonState)
+            })
         } else if (hourDifference <= 2 && hourDifference >= -1) {
-            buttonState = {
-                button: 'current',
-                warning: 'Match time is near, current weather conditions can be checked.'
-            }
+            handleGetOpenWeather(openWeatherType.weather, dateTimeValue, place).then(() => {
+                buttonState = {
+                    severity: 'success',
+                    warning: 'Current weather data has been successfully retrieved.'
+                }
+                setWeatherButtonStatus(buttonState)
+            }).catch(error => {
+                buttonState = {
+                    severity: 'error',
+                    warning: error?.message
+                }
+                setWeatherButtonStatus(buttonState)
+            })
         } else {
             buttonState = {
-                button: null,
-                warning: 'At least 1 hour past match time, weather forecast cannot be checked.'
+                severity: 'warning',
+                warning: 'At least 1 hour past match time, weather forecast cannot be checked!'
             }
         }
         setWeatherButtonStatus(buttonState)
@@ -696,7 +669,9 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
     });
 
     const handleBack = (data) => {
-        if (data) handleClose()
+        if (data) {
+            navigate('/oyesfc-react/account')
+        }
     }
 
     function BpRadio(props) {
@@ -723,112 +698,124 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
 
     if (submittedMatchData) {
         return (
-            <div className={classes.overlay}>
-                <div className={classes.generalStyle} ref={popupRef}>
-                    <Box sx={{display: {xs: 'flex', md: 'none'}}}>
-                        <BackButton handleBackButton={handleBack}/>
-                    </Box>
+            <div style={{minHeight: '70vh'}}>
+                <div>
+                    <BackButton handleBackButton={() => clearSubmittedMatchData()} generalTitle={'Complete'} backButtonTitle={'Add Match'}/>
+                    <Box sx={{display: {xs: 'flex', md: 'none'}, height: '10px'}}></Box>
                     <div className={classes.completeProcessDiv}>
-                        <div className={classes.generalTitle}>
-                            <MainTitle title={'Complete'}/>
+                        <div className={classes.section}>
+                            <div>
+                                <Accordion sx={{
+                                    bgcolor: '#1C1C1E',
+                                    color: 'lightgray',
+                                    width: '100%',
+                                    border: 0,
+                                    boxShadow: 0
+                                }}>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                                        aria-controls="panel1-content"
+                                        id="panel1-header"
+                                    >
+                                        Match Payload
+                                    </AccordionSummary>
+                                    <AccordionDetails sx={{textAlign: 'left'}}>
+                                        {<pre>{JSON.stringify(submittedMatchData, null, 2)}</pre>}
+                                    </AccordionDetails>
+                                </Accordion>
+                            </div>
                         </div>
-                        <div className={classes.matchSubmitModalDiv}>
-                            <Accordion sx={{
-                                bgcolor: '#2e2e2e',
-                                color: 'lightgray',
-                                border: '1px solid #4d4d4d',
-                                width: '100%'
-                            }}>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
-                                    aria-controls="panel1-content"
-                                    id="panel1-header"
-                                >
-                                    Match Payload
-                                </AccordionSummary>
-                                <AccordionDetails sx={{textAlign: 'left'}}>
-                                    {<pre>{JSON.stringify(submittedMatchData, null, 2)}</pre>}
-                                </AccordionDetails>
-                            </Accordion>
-                        </div>
+
                         {
                             finalErrors?.length > 0 &&
                             finalErrors?.map((x, y) => (
-                                <Alert key={y}
-                                       sx={{padding: '2px 13px', margin: '10px 20px', borderRadius: '25px'}}
-                                       variant="filled" severity="error">{x}</Alert>
+                                <>
+                                    <div style={{height: '20px'}}></div>
+                                    <Alert key={y}
+                                           sx={{
+                                               padding: 1,
+                                               borderRadius: '15px',
+                                               bgcolor: '#1C1C1E',
+                                               color: 'lightgray'
+                                           }}
+                                           variant="outlined" severity="error">{x}</Alert>
+                                </>
                             ))
-
                         }
                         {
                             finalSuccesses?.length > 0 &&
                             finalSuccesses?.map((x, y) => (
-                                <Alert key={y}
-                                       sx={{padding: '2px 13px', margin: '10px 20px', borderRadius: '25px'}}
-                                       variant="filled" severity="success">{x}</Alert>
+                                <>
+                                    <div style={{height: '20px'}}></div>
+                                    <Alert key={y}
+                                           sx={{
+                                               padding: 1,
+                                               borderRadius: '15px',
+                                               bgcolor: '#1C1C1E',
+                                               color: 'lightgray'
+                                           }}
+                                           variant="outlined" severity="success">{x}</Alert>
+                                </>
                             ))
-
                         }
-                        <div className={classes.matchSubmitModalDiv}>
-                            <button className={matchDetailsClasses.mapsButtons} style={{margin: "1rem", width: '100%'}}
-                                    disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
-                                    onClick={clearSubmittedMatchData}>
-                                Back
-                            </button>
-                            <button className={matchDetailsClasses.mapsButtons} style={{margin: "1rem", width: '100%'}}
-                                    disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
-                                    onClick={handleClose}>
-                                Cancel
-                            </button>
-                            {
-                                !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.calendar_create_successful) &&
-                                <button className={matchDetailsClasses.mapsButtons}
-                                        style={{margin: "1rem", width: '100%'}}
-                                        disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
-                                        onClick={createCalendar}>
+                        <div style={{height: '20px'}}></div>
+                        <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && clearSubmittedMatchData()}>
+                            <span className={navbarClasses.drawerRoutesSpan}>Back</span>
+                        </div>
+                        <div style={{height: '20px'}}></div>
+                        <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && handleClose()}>
+                            <span className={navbarClasses.drawerRoutesSpan}>Cancel</span>
+                        </div>
+                        {
+                            !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.calendar_create_successful) &&
+                            <>
+                                <div style={{height: '20px'}}></div>
+                                <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && createCalendar()}>
                                     {
                                         calendarButtonLoading ?
                                             <PulseLoader color="red" speedMultiplier={0.7}/>
                                             :
-                                            <span>Create Calendar Event</span>
+                                            <span
+                                                className={navbarClasses.drawerRoutesSpan}>Create Calendar Event</span>
                                     }
-                                </button>
-                            }
-                            {
-                                !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.email_sent_successful) &&
-                                <button className={matchDetailsClasses.mapsButtons}
-                                        style={{margin: "1rem", width: '100%'}}
-                                        disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
-                                        onClick={sendEmails}>
+                                </div>
+                            </>
+                        }
+                        {
+                            !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.email_sent_successful) &&
+                            <>
+                                <div style={{height: '20px'}}></div>
+                                <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && sendEmails()}>
                                     {
                                         emailJsButtonLoading ?
                                             <PulseLoader color="red" speedMultiplier={0.7}/>
                                             :
-                                            <span>Send Emails</span>
+                                            <span className={navbarClasses.drawerRoutesSpan}>Send Emails</span>
                                     }
-                                </button>
-                            }
-
-                            {
-                                !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.siri_shortcut_run_successful) &&
-                                <button className={matchDetailsClasses.mapsButtons}
-                                        style={{margin: "1rem", width: '100%'}}
-                                        disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
-                                        onClick={sendWhatsAppNotificationToSquadMembers}>
+                                </div>
+                            </>
+                        }
+                        {
+                            !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.siri_shortcut_run_successful) &&
+                            <>
+                                <div style={{height: '20px'}}></div>
+                                <div className={accountClasses.morePageBox}
+                                     onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && sendWhatsAppNotificationToSquadMembers()}>
                                     {
                                         siriShortcutButtonLoading ?
                                             <PulseLoader color="red" speedMultiplier={0.7}/>
                                             :
-                                            <span>Run Siri Shortcut</span>
+                                            <span className={navbarClasses.drawerRoutesSpan}>Run Siri Shortcut</span>
                                     }
-                                </button>
-                            }
-                            <button className={matchDetailsClasses.mapsButtons} style={{margin: "1rem", width: '100%'}}
-                                    disabled={calendarButtonLoading || emailJsButtonLoading || siriShortcutButtonLoading}
-                                    onClick={completeAddMatch}>
-                                Submit & Close
-                            </button>
+                                </div>
+                            </>
+                        }
+
+                        <div style={{height: '20px'}}></div>
+                        <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && completeAddMatch()}>
+                            <span className={navbarClasses.drawerRoutesSpan}>Submit & Close</span>
                         </div>
+
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
                     </div>
                 </div>
@@ -837,33 +824,32 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
     }
 
     return (
-        <div className={classes.overlay}>
-            <div className={classes.generalStyle} ref={popupRef}>
-                <Box sx={{display: {xs: 'flex', md: 'none'}}}>
-                    <BackButton handleBackButton={handleBack}/>
-                </Box>
-            <form onSubmit={handleSubmit}>
+        <div>
+            <div>
+                <BackButton handleBackButton={handleBack} generalTitle={'Add Match'}/>
+                <Box sx={{display: {xs: 'flex', md: 'none'}, height: '10px'}}></Box>
+                <form className={classes.formStyle}>
                     <div className={classes.formAlign}>
                         <div className={classes.infoAlign}>
-                            <div className={classes.generalTitle}>
-                                <MainTitle title={selectedMatchData ? 'Edit Match' : 'Add Match'}/>
-                            </div>
-                            <label className={classes.matchTypeTitle}>
-                                Select Match Type:
-                            </label>
-                            <label className={classes.customCheckbox}>
-                                Rakipbul
-                                <input
-                                    type="checkbox"
-                                    name="rakipbul"
-                                    checked={formData.rakipbul}
-                                    onChange={handleGeneralInputChange}
-                                />
-                                <span className={classes.checkmark}></span>
-                            </label>
-                            <br/>
-                            {
 
+
+                            <div className={classes.boxStyle}>
+                                <label className={classes.matchTypeTitle}>
+                                    Select Match Type:
+                                </label>
+                                <label className={classes.customCheckbox}>
+                                    Rakipbul
+                                    <input
+                                        type="checkbox"
+                                        name="rakipbul"
+                                        checked={formData.rakipbul}
+                                        onChange={handleGeneralInputChange}
+                                    />
+                                    <span className={classes.checkmark}></span>
+                                </label>
+                            </div>
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
                                 <>
                                     <label className={classes.matchTypeTitle}>
                                         Show Player Ratings:
@@ -880,299 +866,325 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                         <FormControlLabel value="disable" control={<BpRadio/>} label="Disable"
                                                           onChange={handleShowRatingsChange}/>
                                     </RadioGroup>
-                                    <br/>
                                 </>
-                            }
-                            <label>
-                                Select a Rival:
-                                <select className={classes.select}
-                                        onChange={handleRivalInputChange}
+                            </div>
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
+                                <label>
+                                    Select a Rival:
+                                    <select className={classes.select}
+                                            onChange={handleRivalInputChange}
+                                            required={true}
+                                            name="name"
+                                            value={rivalFormData.name}>
+                                        <option value={'New Rival'}>New Rival</option>
+                                        {rivalNames.sort().map((x, y) => (
+                                            <option key={y} value={x}>{x}</option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <br/>
+                                <label>
+                                    Rival Name:
+                                    <input
+                                        className={classes.inputDesign}
                                         required={true}
+                                        type="text"
                                         name="name"
-                                        value={rivalFormData.name}>
-                                    <option value={'New Rival'}>New Rival</option>
-                                    {rivalNames.sort().map((x, y) => (
-                                        <option key={y} value={x}>{x}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <br/>
-                            <label>
-                                Rival Name:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="text"
-                                    name="name"
-                                    value={rivalFormData.name}
-                                    onChange={handleRivalInputChange}
-                                />
-                            </label>
-                            <br/>
-                            <label style={{width: "100%", minWidth: "100%"}}>
-                                Day & Time:
-                                <input
-                                    style={{width: "100%", minWidth: "100%"}}
-                                    className={classes.dayTimeDesign}
-                                    required={true}
-                                    type="datetime-local"
-                                    name="day"
-                                    value={formData.day}
-                                    onChange={handleGeneralInputChange}
-                                />
-                            </label>
-                            <br/>
-                            <label>
-                                Select a Facility:
-                                <select className={classes.select}
-                                        onChange={handleGeneralInputChange}
+                                        value={rivalFormData.name}
+                                        onChange={handleRivalInputChange}
+                                    />
+                                </label>
+                            </div>
+
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
+                                <label style={{width: "100%", minWidth: "100%"}}>
+                                    Day & Time:
+                                    <input
+                                        style={{width: "100%", minWidth: "100%"}}
+                                        className={classes.dayTimeDesign}
                                         required={true}
-                                        name="place"
-                                        value={formData.place}>
-                                    <option value={'New Facility'}>New Facility</option>
-                                    {allFacilities.sort().map((x, y) => (
-                                        <option key={y} value={x}>{x}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <br/>
-                            <label>
-                                Place:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="text"
-                                    name="place"
-                                    value={formData.place}
-                                    onChange={handleGeneralInputChange}
-                                />
-                            </label>
-                            <br/>
-                            <label>
-                                Get Weather from Api:
-                                {
-                                    weatherButtonStatus?.button &&
-                                    <div className={classes.weatherButtonDiv}>
-                                        {
-                                            weatherButtonStatus?.button === 'current' &&
-                                            <div className={matchDetailsClasses.mapsButtons}
-                                                 onClick={() => handleGetOpenWeather(openWeatherType.weather)}>
-                                                {
-                                                    weatherButtonLoading ?
-                                                        <PulseLoader color="red" speedMultiplier={0.7}/>
-                                                        :
-                                                        <span>Current</span>
-                                                }
-                                            </div>
-                                        }
-                                        {
-                                            weatherButtonStatus?.button === 'forecast' &&
-                                            <div className={matchDetailsClasses.mapsButtons}
-                                                 onClick={() => handleGetOpenWeather(openWeatherType.forecast)}>
-                                                {
-                                                    weatherButtonLoading ?
-                                                        <PulseLoader color="red" speedMultiplier={0.7}/>
-                                                        :
-                                                        <span>Selected Date</span>
-                                                }
-                                            </div>
-                                        }
-                                    </div>
-                                }
-                            </label>
-                            <br/>
+                                        type="datetime-local"
+                                        name="day"
+                                        value={formData.day}
+                                        onChange={handleGeneralInputChange}
+                                    />
+                                </label>
+                            </div>
+
+
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
+                                <label>
+                                    Select a Facility:
+                                    <select className={classes.select}
+                                            onChange={handleGeneralInputChange}
+                                            required={true}
+                                            name="place"
+                                            value={formData.place}>
+                                        <option value={'New Facility'}>New Facility</option>
+                                        {allFacilities.sort().map((x, y) => (
+                                            <option key={y} value={x}>{x}</option>
+                                        ))}
+                                    </select>
+                                </label>
+                            </div>
+
                             {
                                 weatherButtonStatus?.warning &&
-                                <Alert
-                                    sx={{bgcolor: 'transparent', color: 'lightgray', padding: 0, marginBottom: '20px'}}
-                                    variant="standard" severity="info">{weatherButtonStatus?.warning}</Alert>
-                            }
-                            <>
-                                <label>
-                                    Weather: {weatherFormData?.weather}
-                                </label>
-                                <br/>
-                                <label>
-                                    Temperature: {weatherFormData?.temperature}&#176;
-                                </label>
-                                <br/>
-                                <label>
-                                    Feels Like: {weatherFormData?.feels_like}&#176;
-                                </label>
-                                <br/>
-                                <label>
-                                    Ground Level Pressure: {weatherFormData?.grnd_level} hPa
-                                </label>
-                                <br/>
-                                <label>
-                                    Sea Level Pressure: {weatherFormData?.sea_level} hPa
-                                </label>
-                                <br/>
-                                <label>
-                                    Humidity: {weatherFormData?.humidity} %
-                                </label>
-                                <br/>
-                                <label>
-                                    Description: {weatherFormData?.description}
-                                </label>
-                                <br/>
-                                <label>
-                                    Wind Speed: {weatherFormData?.windSpeed} km/h
-                                </label>
-                                <br/>
-                                <label>
-                                    Clouds: {weatherFormData?.clouds} %
-                                </label>
-                                <br/>
-                                <label>
-                                    Sky: {weatherFormData?.sky}
-                                </label>
-                                <br/>
-                            </>
-                            <label>
-                                O Yes FC Jersey:
-                                <select className={classes.select}
-                                        onChange={handleOYesFCInputChange}
-                                        required={true}
-                                        name="jersey"
-                                        value={oYesFCFormData.jersey}>
-                                    <option>Select Jersey</option>
-                                    {Jerseys.map((x, y) => (
-                                        <option key={y} value={x}>{x}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <br/>
-                            <label>
-                                O Yes FC Goal:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="number"
-                                    name="goal"
-                                    value={oYesFCFormData.goal}
-                                    onChange={handleOYesFCInputChange}
-                                />
-                            </label>
-                            <br/>
-                            <label>
-                                Rival Goal:
-                                <input
-                                    className={classes.inputDesign}
-                                    required={true}
-                                    type="number"
-                                    name="goal"
-                                    value={rivalFormData.goal}
-                                    onChange={handleRivalInputChange}
-                                />
-                            </label>
-                            <br/>
-                        </div>
-                        <div className={classes.playersAlign}>
-                            {Object.keys(oYesFCSquadFormData).map((member) => (
-                                <div key={member}>
-                                    <label>
-                                        {member} Goal:
-                                        <input
-                                            className={classes.inputDesign}
-                                            type="number"
-                                            name={`oyesfc.squad.${member}.goal`}
-                                            value={oYesFCSquadFormData[member].goal}
-                                            onChange={(e) =>
-                                                handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
-                                        />
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        {member} Role:
-                                        <select className={classes.select}
-                                                onChange={(e) =>
-                                                    handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
-                                                required={true}
-                                                name={`oyesfc.squad.${member}.role`}
-                                                value={oYesFCSquadFormData[member].role ? oYesFCSquadFormData[member].role : (Object.values(TeamMembers).find(x => x?.name === member)?.role || oYesFCSquadFormData[member].role)}>
-                                            <option>Select Role</option>
-                                            {FootballRoles.map((x, y) => (
-                                                <option key={y} value={x}>{x}</option>
-                                            ))}
-                                        </select>
-                                    </label>
-                                    <br/>
-                                    <label>
-                                        {member} Position (Start from Left Wing):
-                                        <input className={classes.inputDesign}
-                                               type="number"
-                                               onChange={(e) =>
-                                                   handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
-                                               name={`oyesfc.squad.${member}.position`}
-                                               value={oYesFCSquadFormData[member].position ? oYesFCSquadFormData[member].position : (Object.values(TeamMembers).find(x => x?.name === member)?.position || oYesFCSquadFormData[member].position)}
-                                        />
-                                    </label>
+                                <>
+                                    <div style={{height: '20px'}}></div>
+                                    <Alert sx={{padding: 1, borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                                           variant="outlined" severity={weatherButtonStatus?.severity}>{weatherButtonStatus?.warning}</Alert>
+                                </>
 
+                            }
+
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
+                                <>
+                                    <label>
+                                        <span>Weather: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.weather}
+                                        </span>
+                                    </label>
                                     <br/>
-                                    {!Object.values(TeamMembers).some(x => x?.name === member) &&
-                                        <>
+                                    <label>
+                                        <span>Temperature: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.temperature}&#176;
+                                        </span>
+                                    </label>
+                                    <br/>
+                                    <label>
+                                        <span>Feels Like: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.feels_like}&#176;
+                                        </span>
+                                    </label>
+                                    <br/>
+                                    <label>
+                                        <span>Ground Level Pressure: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.grnd_level} hPa
+                                        </span>
+                                    </label>
+                                    <br/>
+                                    <label>
+                                        <span>Sea Level Pressure: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.sea_level} hPa
+                                        </span>
+                                    </label>
+                                    <br/>
+                                    <label>
+                                        <span>Humidity: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.humidity} %
+                                        </span>
+                                    </label>
+                                    <br/>
+                                    <label>
+                                        <span>Description: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.description}
+                                        </span>
+                                    </label>
+                                    <br/>
+                                    <label>
+                                        <span>Wind Speed: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.windSpeed} km/h
+                                        </span>
+                                    </label>
+                                    <br/>
+                                    <label>
+                                        <span>Clouds: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.clouds} %
+                                        </span>
+                                    </label>
+                                    <br/>
+                                    <label>
+                                        <span>Sky: {weatherButtonLoading ?
+                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            : weatherFormData?.sky}
+                                        </span>
+                                    </label>
+                                    <br/>
+                                </>
+                            </div>
+
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
+                            <label>
+                                    O Yes FC Jersey:
+                                    <select className={classes.select}
+                                            onChange={handleOYesFCInputChange}
+                                            required={true}
+                                            name="jersey"
+                                            value={oYesFCFormData.jersey}>
+                                        <option>Select Jersey</option>
+                                        {Jerseys.map((x, y) => (
+                                            <option key={y} value={x}>{x}</option>
+                                        ))}
+                                    </select>
+                                </label>
+                            </div>
+
+
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
+                                <label>
+                                    O Yes FC Goal:
+                                    <input
+                                        className={classes.inputDesign}
+                                        required={true}
+                                        type="number"
+                                        name="goal"
+                                        value={oYesFCFormData.goal}
+                                        onChange={handleOYesFCInputChange}
+                                    />
+                                </label>
+                            </div>
+
+
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
+                                <label>
+                                    Rival Goal:
+                                    <input
+                                        className={classes.inputDesign}
+                                        required={true}
+                                        type="number"
+                                        name="goal"
+                                        value={rivalFormData.goal}
+                                        onChange={handleRivalInputChange}
+                                    />
+                                </label>
+                            </div>
+
+                        </div>
+
+
+                        <div className={classes.playersAlign}>
+                            <>
+                                {Object.keys(oYesFCSquadFormData).map((member) => (
+                                    <>
+                                        <div style={{height: '20px'}}></div>
+                                        <div className={classes.boxStyle} key={member}>
                                             <label>
-                                                {member} Description:
+                                                {member} Goal:
                                                 <input
                                                     className={classes.inputDesign}
-                                                    type="text"
-                                                    name={`oyesfc.squad.${member}.description`}
-                                                    value={oYesFCSquadFormData[member].description}
+                                                    type="number"
+                                                    name={`oyesfc.squad.${member}.goal`}
+                                                    value={oYesFCSquadFormData[member].goal}
                                                     onChange={(e) =>
                                                         handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
                                                 />
                                             </label>
                                             <br/>
-                                        </>
-                                    }
-                                </div>
-                            ))}
-                            <label>
-                                Select Player:
-                                <select className={classes.select}
-                                        onChange={(e) =>
-                                            setNewSquadMember(e.target.value !== 'None' ? e.target.value : '')}
-                                        value={newSquadMember}>
-                                    <option>New Player</option>
-                                    {Object.values(TeamMembers).map((x, y) => (
-                                        <option key={y} value={x.name}>{x.name}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <br/>
-                            <label>
-                                Add Squad Member:
-                                <input
-                                    className={classes.inputDesign}
-                                    type="text"
-                                    value={newSquadMember}
-                                    onChange={(e) => setNewSquadMember(e.target.value)}
-                                />
-                                <div className={classes.addPlayerButtonDiv}>
-                                    <div className={matchDetailsClasses.mapsButtons} onClick={handleAddSquadMember}>
-                                        <PersonAddAlt1Icon className={classes.iconStyle}></PersonAddAlt1Icon>
+                                            <label>
+                                                {member} Role:
+                                                <select className={classes.select}
+                                                        onChange={(e) =>
+                                                            handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
+                                                        required={true}
+                                                        name={`oyesfc.squad.${member}.role`}
+                                                        value={oYesFCSquadFormData[member].role ? oYesFCSquadFormData[member].role : (Object.values(TeamMembers).find(x => x?.name === member)?.role || oYesFCSquadFormData[member].role)}>
+                                                    <option>Select Role</option>
+                                                    {FootballRoles.map((x, y) => (
+                                                        <option key={y} value={x}>{x}</option>
+                                                    ))}
+                                                </select>
+                                            </label>
+                                            <br/>
+                                            <label>
+                                                {member} Position (Start from Left Wing):
+                                                <input className={classes.inputDesign}
+                                                       type="number"
+                                                       onChange={(e) =>
+                                                           handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
+                                                       name={`oyesfc.squad.${member}.position`}
+                                                       value={oYesFCSquadFormData[member].position ? oYesFCSquadFormData[member].position : (Object.values(TeamMembers).find(x => x?.name === member)?.position || oYesFCSquadFormData[member].position)}
+                                                />
+                                            </label>
+
+                                            <br/>
+                                            {!Object.values(TeamMembers).some(x => x?.name === member) &&
+                                                <>
+                                                    <label>
+                                                        {member} Description:
+                                                        <input
+                                                            className={classes.inputDesign}
+                                                            type="text"
+                                                            name={`oyesfc.squad.${member}.description`}
+                                                            value={oYesFCSquadFormData[member].description}
+                                                            onChange={(e) =>
+                                                                handleSquadInputChange(member, e, oYesFCSquadFormData[member]?.goal, oYesFCSquadFormData[member]?.role, oYesFCSquadFormData[member]?.position, oYesFCSquadFormData[member]?.description)}
+                                                        />
+                                                    </label>
+                                                    <br/>
+                                                </>
+                                            }
+                                        </div>
+                                    </>
+                                ))}
+                            </>
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.boxStyle}>
+                                <label>
+                                    Select Player:
+                                    <select className={classes.select}
+                                            onChange={(e) =>
+                                                setNewSquadMember(e.target.value !== 'None' ? e.target.value : '')}
+                                            value={newSquadMember}>
+                                        <option>New Player</option>
+                                        {Object.values(TeamMembers).map((x, y) => (
+                                            <option key={y} value={x.name}>{x.name}</option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <br/>
+                                <label>
+                                    Add Squad Member:
+                                    <input
+                                        className={classes.inputDesign}
+                                        type="text"
+                                        value={newSquadMember}
+                                        onChange={(e) => setNewSquadMember(e.target.value)}
+                                    />
+                                    <div className={classes.addPlayerButtonDiv}>
+                                        <div className={matchDetailsClasses.mapsButtons} onClick={handleAddSquadMember}>
+                                            <PersonAddAlt1Icon className={classes.iconStyle}></PersonAddAlt1Icon>
+                                        </div>
                                     </div>
-                                </div>
-                            </label>
-                            <br/>
+                                </label>
+                                <br/>
+                            </div>
+
                         </div>
                     </div>
                     {
                         warnings &&
                         warnings?.map((x, y) => (
-                            <Alert key={y}
-                                   sx={{bgcolor: 'transparent', color: '#ed6c02', padding: 0, marginBottom: '20px'}}
-                                   variant="standard" severity="warning">{x}</Alert>
+                            <>
+                                <div style={{height: '20px'}}></div>
+                                <Alert key={y}
+                                       sx={{padding: 1, borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                                       variant="outlined" severity="warning">{x}</Alert>
+                            </>
+
                         ))
 
                     }
-                    <div className={classes.matchSubmitButtonDiv}>
-                        <button className={matchDetailsClasses.mapsButtons} style={{marginRight: "1rem"}}
-                                type="submit">Submit
-                        </button>
+                    <div style={{height: '20px'}}></div>
+                    <div className={accountClasses.morePageBox} onClick={handleSubmit}>
+                        <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
                     </div>
-                <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
                 </form>
             </div>
         </div>

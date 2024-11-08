@@ -2,21 +2,15 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import OYesFCLogo from "../../images/oyesfc.PNG";
 import classes from './navbar.module.css'
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
-import SignIn from "../SignIn/sign-in";
-import AddMatchComponent from "../AddMatch/add-match";
-import {Alert, BottomNavigation, BottomNavigationAction, Drawer, Snackbar} from "@mui/material";
-import {OYesFcEras, SnackbarTypes, TeamMembers, TeamNames} from "../../constants/constants";
+import {Alert, BottomNavigation, BottomNavigationAction, Snackbar} from "@mui/material";
+import {OYesFcEras, TeamMembers} from "../../constants/constants";
 import CardMedia from "@mui/material/CardMedia";
-import AdvancedFilters from "../AdvancedFilters/advanced-filters";
-import CalendarComponent from "../Calendar/calendar";
 import PhoenixLogo from "../../images/phoenix.png";
 import FirstLogo from "../../images/firstLogo.png";
 import GhostLogo from "../../images/ghost.png";
@@ -24,39 +18,23 @@ import HomeIcon from "@mui/icons-material/Home";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupIcon from "@mui/icons-material/Group";
-import PageGrid from "../../shared/PageGrid/page-grid";
-import MainTitle from "../../shared/MainTitle/main-title";
 import {useDispatch, useSelector} from "react-redux";
 import {login, logout} from "../../redux/credentialsSlice";
-import {checkAuthState, signOutUser} from "../../services/service";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import XIcon from "@mui/icons-material/X";
-import EmailIcon from "@mui/icons-material/Email";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import RedditIcon from "@mui/icons-material/Reddit";
+import {checkAuthState} from "../../services/service";
 
 function Navbar() {
     const { selectedEra } = useSelector((state) => state.era);
-    const { userName, isCaptain, email, signedIn } = useSelector((state) => state.credentials);
-    const [desktopMenu, setDesktopMenu] = React.useState(null);
-    const [isSignInPopupOpen, setSignInPopupOpen] = useState(false);
-    const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
-    const [isCalendarPopupOpen, setCalendarPopupOpen] = useState(false);
+    const { userName, signedIn } = useSelector((state) => state.credentials);
     const [snackbarData, setSnackbarData] = useState(null);
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [advancedFiltersModal, setAdvancedFiltersModal] = useState(false);
     const navigate = useNavigate()
     const location = useLocation();
     const matchesPath = '/oyesfc-react/matches';
     const individualPath = '/oyesfc-react/individual-stats';
     const teamPath = '/oyesfc-react/team-stats';
     const mainPath = '/oyesfc-react/';
-    const ratingsPath = '/oyesfc-react/ratings';
+    const accountPath = '/oyesfc-react/account';
     const [value, setValue] = useState(0);
     const dispatch = useDispatch();
-    const packageJson = require('./../../../package.json');
-    const date = new Date();
-    const year = date.getFullYear();
 
     const getTeamLogo = () => {
         if (selectedEra === OYesFcEras.goldenAge) return 'goldenrod'
@@ -74,117 +52,24 @@ function Navbar() {
         return PhoenixLogo
     }
 
-    const openFiltersModal = () => {
-        setMobileOpen(false)
-        setDesktopMenu(null)
-        document.body.style.overflow = 'hidden';
-        setAdvancedFiltersModal(true)
-    };
-
-    const handleOpenDesktopMenu = (event) => {
-        if (!desktopMenu) {
-            setDesktopMenu(event.currentTarget);
-        } else {
-            setDesktopMenu(null);
-        }
-    };
-
-    const handleCloseDesktopMenu = () => {
-        setDesktopMenu(null);
-    };
-
     const navigateMatches = () => {
-        if (mobileOpen) handleDrawerToggle()
         navigate(matchesPath);
     };
 
     const navigateIndividualStats = () => {
-        if (mobileOpen) handleDrawerToggle()
         navigate(individualPath);
     };
 
     const navigateTeamStats = () => {
-        if (mobileOpen) handleDrawerToggle()
         navigate(teamPath);
     };
 
     const navigateMainPage = () => {
-        if (mobileOpen) handleDrawerToggle()
         navigate(mainPath);
     };
 
-    const openCalendarPopup = () => {
-        setDesktopMenu(null)
-        setMobileOpen(false)
-        document.body.style.overflow = 'hidden';
-        setCalendarPopupOpen(true);
-    };
-
-    const openRatingsPage = () => {
-        if (mobileOpen) handleDrawerToggle()
-        if (desktopMenu) setDesktopMenu(null)
-        navigate(ratingsPath);
-    };
-
-    const handleXClick = (snackbarData) => {
-        setSnackbarData(snackbarData);
-    };
-
-    const handleCloseSignIn = (snackbarData) => {
-        setSnackbarData(snackbarData)
-        setSignInPopupOpen(false)
-        setMobileOpen(true)
-    }
-
-    const handleCloseAddMatch = () => {
-        setAddMatchPopupOpen(false)
-        setMobileOpen(true)
-    }
-
-    const handleCloseCalendar = () => {
-        setCalendarPopupOpen(false)
-        setMobileOpen(true)
-    }
-
-    const handleCloseFilters = () => {
-        setAdvancedFiltersModal(false)
-        setMobileOpen(true)
-    }
-
-    const openSignInPopup = (device) => {
-        if (device === 'desktop' || (!signedIn && device === 'mobile')) {
-            setDesktopMenu(null)
-            setMobileOpen(false)
-            document.body.style.overflow = 'hidden';
-            setSignInPopupOpen(true);
-        }
-    };
-
-    const openAddMatchPopup = () => {
-        setDesktopMenu(null)
-        if (mobileOpen) setMobileOpen(false)
-        document.body.style.overflow = 'hidden';
-        setAddMatchPopupOpen(true);
-    };
-
-    const redirectToEmail = () => {
-        window.location.href = "mailto:oyesfc@gmail.com";
-    };
-
-    const redirectToTwitter = () => {
-        window.open("https://x.com/oyesfc?s=21", "_blank");
-    };
-
-    const redirectToInstagram = () => {
-        window.open("https://www.instagram.com/oyesfc?igsh=MXRrbmp1a3lvdW4wNg==", "_blank");
-    };
-
-    const redirectToYoutube = () => {
-        window.open("https://youtube.com/@oyesfc?si=ER9YlrYaittkOeRu", "_blank");
-    };
-
-    const redirectToReddit = () => {
-        window.open("https://www.reddit.com/r/a:t5_4r4dfa/", "_blank");
+    const navigateAccountPage = () => {
+        navigate(accountPath);
     };
 
     const closeSnackbar = (event, reason) => {
@@ -201,7 +86,7 @@ function Navbar() {
             if (pageIndex === 1) navigateMatches()
             if (pageIndex === 2) navigateIndividualStats()
             if (pageIndex === 3) navigateTeamStats()
-            if (pageIndex === 4 && !mobileOpen) openDrawerToggle()
+            if (pageIndex === 4) navigateAccountPage()
         }
     }
 
@@ -225,131 +110,18 @@ function Navbar() {
         checkStateAuth().then(r => r)
     }, [checkStateAuth]);
 
-    const handleDrawerToggle = () => {
-        setMobileOpen((prevState) => !prevState);
-    };
-
-    const openDrawerToggle = () => {
-        setMobileOpen(true);
-    };
-
-    const startLogOut = async (device) => {
-        if (device === 'desktop') setDesktopMenu(false)
-        signOutUser()
-            .then(result => {
-                if (result.success) {
-                    dispatch(logout())
-                    const message = {
-                        open: true,
-                        status: SnackbarTypes.success,
-                        message: 'Successfully signed out!',
-                        duration: 6000
-                    };
-                    setSnackbarData(message)
-                } else {
-                    const errorResponse = {
-                        open: true,
-                        status: SnackbarTypes.error,
-                        message: result?.error?.message,
-                        duration: 18000
-                    };
-                    setSnackbarData(errorResponse)
-                }
-            })
-            .catch(error => {
-                // Handle unexpected errors
-                console.error(error);
-            });
-    }
-
-    const mobileMorePage = (
-        <>
-            <MainTitle title={'Account'}/>
-            <div style={{height: '5px'}}></div>
-            <div className={classes.morePageBox} onClick={() => openSignInPopup('mobile')}>
-                <span
-                    className={classes.drawerRoutesSpan}>{signedIn ? userName : 'Sign In'}</span>
-                {signedIn && <span className={classes.mobileEmailSpan}>{email}</span>}
-            </div>
-            <div style={{height: '30px'}}></div>
-            <div className={classes.morePageBox} onClick={openFiltersModal}>
-                <span className={classes.drawerRoutesSpan}>Filters</span>
-            </div>
-            <div style={{height: '5px'}}></div>
-            <div style={{padding: '0 20px'}}>
-                <span className={classes.miniTitle}>{'Personalize data according to your choices, ' +
-                    'your choices apply to all pages and are remembered even if you close the site.'}</span>
-            </div>
-            <div style={{height: '30px'}}></div>
-            <div className={classes.morePageBox} onClick={openCalendarPopup}>
-                <span className={classes.drawerRoutesSpan}>Calendar</span>
-            </div>
-            {
-                signedIn &&
-                <>
-                    <div style={{height: '20px'}}></div>
-                    <div className={classes.morePageBox} onClick={openRatingsPage}>
-                        <span className={classes.drawerRoutesSpan}>Ratings</span>
-                    </div>
-                </>
-            }
-            {
-                isCaptain &&
-                <>
-                    <div style={{height: '20px'}}></div>
-                    <div className={classes.morePageBox} onClick={openAddMatchPopup}>
-                        <span className={classes.drawerRoutesSpan}>Add Match</span>
-                    </div>
-                </>
-            }
-            <div style={{height: '20px'}}></div>
-            <div className={classes.morePageBoxLinks}>
-                <span className={classes.drawerRoutesSpanLinks}>
-                    <InstagramIcon className={classes.iconStyle} style={{fontSize: "50px"}}
-                                   onClick={redirectToInstagram}></InstagramIcon>
-                    <XIcon className={classes.iconStyle} style={{fontSize: "50px"}}
-                           onClick={redirectToTwitter}></XIcon>
-                    <EmailIcon className={classes.iconStyle} style={{fontSize: "50px"}}
-                               onClick={redirectToEmail}></EmailIcon>
-                    <YouTubeIcon className={classes.iconStyle} style={{fontSize: "50px"}}
-                                 onClick={redirectToYoutube}></YouTubeIcon>
-                    {signedIn &&
-                        <RedditIcon className={classes.iconStyle} style={{fontSize: "50px"}}
-                                    onClick={redirectToReddit}></RedditIcon>}
-                </span>
-            </div>
-            <div style={{height: '5px'}}></div>
-            <div style={{padding: '0 20px'}}>
-                <span className={classes.miniTitle}>{'© ' + year + ' ' + TeamNames.oYesFc + '™ | v' + packageJson.version}</span>
-            </div>
-            {
-                signedIn &&
-                <>
-                    <div style={{height: '20px'}}></div>
-                    <div className={classes.morePageBox} onClick={() => startLogOut('mobile')}>
-                        <span className={classes.drawerRoutesSpan} style={{color: 'red'}}>Sign Out</span>
-                    </div>
-                </>
-            }
-        </>
-    )
-
-    const container = window !== undefined ? () => window.document.body : undefined;
-
-    const phoenixLogoElement = (
-        <div className={classes.phoenixDivStyle}>
-            <img className={classes.phoenixImgStyle}
-                 onClick={navigateMainPage} src={PhoenixLogo} alt={'1'}/>
-        </div>
-    )
-
     return (
         <>
             <AppBar position="sticky" sx={{bgcolor: getTeamLogo(), display: {xs: 'none', md: 'flex'}, margin: 0}}>
                 <Container maxWidth="lg" sx={{bgcolor: getTeamLogo()}}>
                     <Toolbar disableGutters sx={{bgcolor: getTeamLogo()}}>
                         <Box sx={{flexGrow: 1, display: 'flex', bgcolor: getTeamLogo()}}>
-                            {getTeam() === PhoenixLogo ? phoenixLogoElement :
+                            {getTeam() === PhoenixLogo ?
+                                <div className={classes.phoenixDivStyle}>
+                                    <img className={classes.phoenixImgStyle}
+                                         onClick={navigateMainPage} src={PhoenixLogo} alt={'1'}/>
+                                </div>
+                                :
                                 <img className={classes.imgStyle}
                                      onClick={navigateMainPage} src={getTeam()} alt={'1'}/>
                             }
@@ -397,7 +169,7 @@ function Navbar() {
                                             background: "0, 0, 0, 0",
                                             cursor: "pointer"
                                         }}
-                                        onClick={handleOpenDesktopMenu}
+                                        onClick={navigateAccountPage}
                                         image={require(`../../images/${Object.entries(TeamMembers).find(x => x[1].name === userName)[0]}.jpeg`)}
                                     />
                                     :
@@ -409,130 +181,11 @@ function Navbar() {
                                             color: "black",
                                             cursor: "pointer"
                                         }}
-                                        onClick={handleOpenDesktopMenu} className={classes.userButtonLinkStyle}>
+                                        onClick={navigateAccountPage} className={classes.userButtonLinkStyle}>
                                     </AccountCircleIcon>
                             }
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={desktopMenu}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                open={Boolean(desktopMenu)}
-                                onClose={handleCloseDesktopMenu}
-                                sx={{
-                                    display: {xs: 'block', md: 'block'},
-                                    bgcolor: 'rgb(0,0,0,0)',
-                                    zIndex: 99,
-                                    "& .MuiPaper-root":
-                                        {backgroundColor: getTeamLogo(), borderRadius: '12px'},
-                                    "& .MuiList-root":
-                                        {backgroundColor: getTeamLogo(), borderRadius: '12px'},
-                                }}
-                            >
-                                <div className={classes.mobileMenu}>
-                                    {
-                                        signedIn ?
-                                            <>
-                                                <span className={classes.mobileMenuItems} style={{cursor: 'auto'}}>
-                                                    {userName?.toUpperCase()}
-                                                </span>
-                                                <span className={classes.mobileMenuEmailItem}>{email}</span>
-                                            </>
-                                            :
-                                            <>
-                                                <span className={classes.mobileMenuItems}
-                                                      onClick={() => openSignInPopup('desktop')}>
-                                                    SIGN IN
-                                                </span>
-                                            </>
-
-                                    }
-                                    <span
-                                        className={classes.mobileMenuItems}
-                                        onClick={openFiltersModal}
-                                    >
-                                    FILTERS
-                                </span>
-                                    <span
-                                        className={classes.mobileMenuItems}
-                                        onClick={openCalendarPopup}
-                                    >
-                                    CALENDAR
-                                </span>
-                                    {
-                                        signedIn &&
-                                        <span className={classes.mobileMenuItems} onClick={openRatingsPage}>
-                                            RATINGS
-                                        </span>
-                                    }
-                                    {
-                                        isCaptain &&
-                                        <>
-                                            <span
-                                                className={classes.mobileMenuItems}
-                                                onClick={openAddMatchPopup}
-                                            >
-                                                ADD MATCH
-                                            </span>
-                                        </>
-                                    }
-                                    {
-                                        signedIn &&
-                                        <>
-                                            <span
-                                                className={classes.mobileMenuItems}
-                                                onClick={() => startLogOut('desktop')}
-                                            >
-                                                SIGN OUT
-                                            </span>
-                                        </>
-                                    }
-                                </div>
-                            </Menu>
-                        </Box>
-                        <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}, bgcolor: getTeamLogo()}}>
-                            <MenuIcon
-                                sx={{
-                                    width: 40,
-                                    height: 40,
-                                    color: "black",
-                                    cursor: "pointer",
-                                    bgcolor: "rgb(0, 0, 0, 0)"
-                                }}
-                                onClick={handleDrawerToggle}>
-                            </MenuIcon>
                         </Box>
                     </Toolbar>
-                    <nav>
-                        <Drawer
-                            container={container}
-                            variant="temporary"
-                            anchor="right"
-                            open={mobileOpen}
-                            onClose={handleDrawerToggle}
-                            transitionDuration={0}
-                            ModalProps={{
-                                keepMounted: true,
-                            }}
-                            sx={{
-                                display: {xs: 'block', md: 'none'},
-                                '& .MuiDrawer-paper': {
-                                    boxSizing: 'border-box',
-                                    width: '100%',
-                                    background: 'black'
-                                },
-                            }}
-                        >
-                            <PageGrid page={mobileMorePage}/>
-                        </Drawer>
-                    </nav>
                 </Container>
             </AppBar>
             <Box sx={{position: 'fixed', left: 0, bottom: -2, width: '100%', display: {xs: 'flex', md: 'none'},
@@ -552,13 +205,6 @@ function Navbar() {
                     <BottomNavigationAction sx={{color: 'gray'}} label="Account" icon={<AccountCircleIcon/>}/>
                 </BottomNavigation>
             </Box>
-            {isSignInPopupOpen && <SignIn onClose={(data) => handleCloseSignIn(data)}/>}
-            {isAddMatchPopupOpen && <AddMatchComponent onClose={handleCloseAddMatch}
-                                                       snackbarData={(snackbarData) => handleXClick(snackbarData)}/>}
-            {advancedFiltersModal &&
-                <AdvancedFilters onClose={handleCloseFilters}/>}
-            {isCalendarPopupOpen &&
-                <CalendarComponent onClose={handleCloseCalendar}/>}
             <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
                 <Alert
                     onClose={closeSnackbar}

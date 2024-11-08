@@ -16,7 +16,6 @@ const ScoreboardsGrid = ({playerDetails, filteredWithPlayerData}) => {
 
     const openPopup = (matchDay) => {
         if (!playerDetails) {
-            document.body.style.overflow = 'hidden';
             setPopupOpen(true);
             setMatchDate(matchDay?.day);
         }

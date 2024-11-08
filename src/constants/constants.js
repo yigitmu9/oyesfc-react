@@ -1202,3 +1202,11 @@ export const FifaCalculations = [
         }
     },
 ]
+
+export const DirectionList = {
+    instagram: 'instagram',
+    email: 'email',
+    twitter: 'twitter',
+    youtube: 'youtube',
+    reddit: 'reddit'
+}

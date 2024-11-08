@@ -6,34 +6,14 @@ import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import RedditIcon from '@mui/icons-material/Reddit';
 import {useSelector} from "react-redux";
-import {TeamNames} from "../../constants/constants";
+import {DirectionList, TeamNames} from "../../constants/constants";
+import {redirect} from "../../utils/utils";
 
 const Footer = () => {
 
     const { signedIn } = useSelector((state) => state.credentials);
     const date = new Date();
     const year = date.getFullYear();
-
-    const redirectToEmail = () => {
-        window.location.href = "mailto:oyesfc@gmail.com";
-    };
-
-    const redirectToTwitter = () => {
-        window.open("https://x.com/oyesfc?s=21", "_blank");
-    };
-
-    const redirectToInstagram = () => {
-        window.open("https://www.instagram.com/oyesfc?igsh=MXRrbmp1a3lvdW4wNg==", "_blank");
-    };
-
-    const redirectToYoutube = () => {
-        window.open("https://youtube.com/@oyesfc?si=ER9YlrYaittkOeRu", "_blank");
-    };
-
-    const redirectToReddit = () => {
-        window.open("https://www.reddit.com/r/a:t5_4r4dfa/", "_blank");
-    };
-
     const packageJson = require('./../../../package.json');
 
     return (
@@ -42,14 +22,13 @@ const Footer = () => {
                 <div className={classes.infoGrid}>
                     <span className={classes.spanStyle}>{'© ' + year + ' ' + TeamNames.oYesFc + '™ | v' + packageJson.version}</span>
                 </div>
-
                 <div className={classes.iconsGrid}>
-                    <InstagramIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToInstagram}></InstagramIcon>
-                    <XIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToTwitter}></XIcon>
-                    <EmailIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToEmail}></EmailIcon>
-                    <YouTubeIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToYoutube}></YouTubeIcon>
+                    <InstagramIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={() => redirect(DirectionList.instagram)}></InstagramIcon>
+                    <XIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={() => redirect(DirectionList.twitter)}></XIcon>
+                    <EmailIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={() => redirect(DirectionList.email)}></EmailIcon>
+                    <YouTubeIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={() => redirect(DirectionList.youtube)}></YouTubeIcon>
                     {signedIn &&
-                    <RedditIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={redirectToReddit}></RedditIcon>}
+                    <RedditIcon className={classes.iconStyle} style={{fontSize: "50px"}} onClick={() => redirect(DirectionList.reddit)}></RedditIcon>}
                 </div>
             </div>
         </footer>

@@ -1,26 +1,45 @@
 .divStyle {
-    font-size: 40px;
-    color: #007AFF;
-    padding: 0 10px 12px;
     display: flex;
-    justify-content: left;
+    text-align: center;
     align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 14;
-    background-color: black;
-    @media (max-width: 768px) {
-        font-size: 34px;
-        justify-content: left;
-    }
+    margin-top: 10px;
 }
 
 .spanStyle {
+    color: #007AFF;
+}
+
+.morePageBox {
+    background-color: #1C1C1E;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    width: 100%;
+    padding: 12px 20px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.desktopStyle {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    align-items: center;
     text-align: center;
-    font-size: 17px;
+}
+
+.desktopSpanStyle {
+    color: lightgrey;
+    font-size: 20px;
     @media (max-width: 768px) {
-        text-align: left;
+
     }
+}
+
+.mobileStyle {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 5px;
+    align-items: center;
+    width: 100%;
 }

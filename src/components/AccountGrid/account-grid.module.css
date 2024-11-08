@@ -1,0 +1,20 @@
+.morePageBox {
+    background-color: #1C1C1E;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    width: 100%;
+    padding: 12px 20px;
+    height: auto;
+    cursor: pointer;
+}
+
+.morePageBoxLinks {
+    background-color: #1C1C1E;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    width: 100%;
+    padding: 4px 20px;
+    height: auto;
+}

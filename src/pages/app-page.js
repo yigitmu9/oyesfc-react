@@ -13,6 +13,10 @@ import {changeEra} from "../redux/eraSlice";
 import {updateData} from "../redux/databaseDataSlice";
 import {hasAppliedFilters, returnFilteredData} from "../utils/utils";
 import RatingsPage from "./ratings-page";
+import AccountPage from "./account-page";
+import FiltersPage from "./filters-page";
+import CalendarPage from "./calendar-page";
+import AddMatchPage from "./add-match-page";
 
 const AppPage = () => {
 
@@ -71,6 +75,10 @@ const AppPage = () => {
                 <Route path='oyesfc-react/individual-stats' element={<IndividualStatsPage/>}/>
                 <Route path='oyesfc-react/team-stats' element={<TeamStatsPage/>}/>
                 <Route path='oyesfc-react/ratings' element={<RatingsPage/>}/>
+                <Route path='oyesfc-react/account' element={<AccountPage/>}/>
+                <Route path='oyesfc-react/filters' element={<FiltersPage/>}/>
+                <Route path='oyesfc-react/calendar' element={<CalendarPage/>}/>
+                <Route path='oyesfc-react/add-match' element={<AddMatchPage/>}/>
             </Routes>
         </Router>
     );

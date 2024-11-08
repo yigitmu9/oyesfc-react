@@ -1,4 +1,4 @@
-import {matchType, TeamMembers, WeatherSky} from "../constants/constants";
+import {DirectionList, matchType, TeamMembers, WeatherSky} from "../constants/constants";
 
 export const OYesFCPlayersArray = Object.values(TeamMembers).map(x => x.name)
 
@@ -251,4 +251,13 @@ export const returnAverageData = (data) => {
         averagesResult[key] = avg.toFixed(2);
     }
     return averagesResult;
+}
+
+export const redirect = (direction) => {
+    if (direction === DirectionList.instagram) window.open("https://www.instagram.com/oyesfc?igsh=MXRrbmp1a3lvdW4wNg==", "_blank");
+    if (direction === DirectionList.twitter) window.open("https://x.com/oyesfc?s=21", "_blank");
+    if (direction === DirectionList.reddit) window.open("https://www.reddit.com/r/a:t5_4r4dfa/", "_blank");
+    if (direction === DirectionList.youtube) window.open("https://youtube.com/@oyesfc?si=ER9YlrYaittkOeRu", "_blank");
+    if (direction === DirectionList.email) window.location.href = "mailto:oyesfc@gmail.com";
+
 }

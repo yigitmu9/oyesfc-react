@@ -16,7 +16,6 @@ const IndividualStatsGrid = () => {
 
     const openPlayerDetails = (data) => {
         setPlayer(data)
-        document.body.style.overflow = 'hidden';
         setPopupOpen(true)
     }
 

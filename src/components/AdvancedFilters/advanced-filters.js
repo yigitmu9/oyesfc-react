@@ -1,23 +1,22 @@
 import classes from "./advanced-filters.module.css";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import {Jerseys, TeamMembers, WeatherSky} from "../../constants/constants";
-import FilterListOffIcon from '@mui/icons-material/FilterListOff';
-import matchDetailsClasses from '../MatchDetails/match-details.module.css'
 import BackButton from "../../shared/BackButton/back-button";
 import Box from "@mui/material/Box";
 import {returnFilteredData} from "../../utils/utils";
 import {loadWebsite} from "../../firebase";
 import {useDispatch, useSelector} from "react-redux";
 import {updateData} from "../../redux/databaseDataSlice";
+import navbarClasses from "../Navbar/navbar.module.css";
+import accountClasses from "../AccountGrid/account-grid.module.css";
+import {useNavigate} from "react-router-dom";
 
-const AdvancedFilters = ({onClose}) => {
+const AdvancedFilters = () => {
 
     const dispatch = useDispatch();
-    const { allData } = useSelector((state) => state.databaseData);
+    const {allData} = useSelector((state) => state.databaseData);
     const filtersInStorage = JSON.parse(localStorage.getItem('filters'));
-    document.body.style.overflow = 'hidden';
     const [matchType, setMatchType] = useState(!filtersInStorage?.appliedType ? 'all' : filtersInStorage?.appliedType);
-    const popupRef = useRef(null);
     const [filteredPlayers, setFilteredPlayers] = useState(!filtersInStorage?.appliedPlayers ? [] : filtersInStorage?.appliedPlayers)
     const [filteredFacilities, setFilteredFacilities] = useState(!filtersInStorage?.appliedFacilities ? [] : filtersInStorage?.appliedFacilities)
     const [filteredYears, setFilteredYears] = useState(!filtersInStorage?.appliedYears ? [] : filtersInStorage?.appliedYears);
@@ -42,6 +41,7 @@ const AdvancedFilters = ({onClose}) => {
     ];
     const matchCategories = ['All', 'Rakipbul', 'Normal']
     const squadTypes = ['All', 'Main Squad', 'Squad Including Foreigners']
+    const navigate = useNavigate()
 
     Object.values(allData)?.forEach((x) => {
         if (!facilities.includes(x.place) && (matchType === 'all' || x.rakipbul === (matchType === 'rakipbul'))) {
@@ -74,25 +74,6 @@ const AdvancedFilters = ({onClose}) => {
         if (!playerLengthArray.includes(playerLength)) playerLengthArray.push(playerLength)
     });
     playerLengthArray = playerLengthArray.sort()
-
-    const handleClose = () => {
-        document.body.style.overflow = 'visible';
-        onClose();
-    }
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleOutsideClick);
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick);
-        };
-    });
-
-    const handleOutsideClick = (event) => {
-        if (popupRef.current && !popupRef.current.contains(event.target)) {
-            document.body.style.overflow = 'visible';
-            onClose();
-        }
-    };
 
     const resetFilters = () => {
         setMatchType('all')
@@ -274,54 +255,35 @@ const AdvancedFilters = ({onClose}) => {
         const ratingsResponse = await loadWebsite(`rates`);
         const finalData = returnFilteredData(allData, appliedFilters, videosResponse, ratingsResponse)
         dispatch(updateData({allData: allData, filteredData: finalData}))
-        handleClose();
+        handleBack(true);
     };
 
     const handleBack = (data) => {
-        if (data) handleClose()
+        if (data) {
+            navigate('/oyesfc-react/account')
+        }
     }
 
     return (
-        <div className={matchDetailsClasses.overlay}>
-            <div className={classes.popupContainer} style={{display: "block"}} ref={popupRef}>
-                <Box sx={{display: {xs: 'flex', md: 'none'}}}>
-                    <BackButton handleBackButton={handleBack}/>
-                </Box>
+        <div>
+            <div style={{display: "block", minHeight: '70vh'}}>
+                <BackButton handleBackButton={handleBack} generalTitle={'Filters'}/>
                 <div style={{display: "block", height: '100%'}}>
-                    <form onSubmit={handleSubmit}>
+                    <form className={classes.formStyle} onSubmit={handleSubmit}>
                         <div className={classes.formAlign}>
-                            <div className={classes.filterPartStyle}>
-                                <h2 className={classes.title}>Match Type</h2>
-                                {matchCategories.map((x, y) => (
-                                    <div key={y}>
-                                        <label
-                                               className={classes.customCheckbox}>
-                                            {x}
-                                            <input
-                                                type="checkbox"
-                                                name={x.toLowerCase()}
-                                                onChange={handleMatchTypeChange}
-                                                checked={matchType === x.toLowerCase()}
-                                            />
-                                            <span className={classes.checkmark}></span>
-                                        </label>
-                                        <br/>
-                                    </div>
-                                ))}
-                            </div>
-                            <div>
+                            <div className={classes.boxStyles}>
                                 <div className={classes.filterPartStyle}>
-                                    <h2 className={classes.title}>Players</h2>
-                                    {Object.values(TeamMembers).map((x, y) => (
+                                    <h2 className={classes.title}>Match Type</h2>
+                                    {matchCategories.map((x, y) => (
                                         <div key={y}>
                                             <label
                                                 className={classes.customCheckbox}>
-                                                {x.name}
+                                                {x}
                                                 <input
                                                     type="checkbox"
-                                                    name={x.name}
-                                                    onChange={handlePlayerChange}
-                                                    checked={filteredPlayers?.includes(x.name)}
+                                                    name={x.toLowerCase()}
+                                                    onChange={handleMatchTypeChange}
+                                                    checked={matchType === x.toLowerCase()}
                                                 />
                                                 <span className={classes.checkmark}></span>
                                             </label>
@@ -329,6 +291,49 @@ const AdvancedFilters = ({onClose}) => {
                                         </div>
                                     ))}
                                 </div>
+                                <div className={classes.emptySpace}></div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Match Squad</h2>
+                                    {squadTypes.map((x, y) => (
+                                        <div key={y}>
+                                            <label
+                                                className={classes.customCheckbox}>
+                                                {x}
+                                                <input
+                                                    type="checkbox"
+                                                    name={x}
+                                                    onChange={handleSquadTypeChange}
+                                                    checked={filteredSquad === x}
+                                                />
+                                                <span className={classes.checkmark}></span>
+                                            </label>
+                                            <br/>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className={classes.filterPartStyle}>
+                                <h2 className={classes.title}>Players</h2>
+                                {Object.values(TeamMembers).map((x, y) => (
+                                    <div key={y}>
+                                        <label
+                                            className={classes.customCheckbox}>
+                                            {x.name}
+                                            <input
+                                                type="checkbox"
+                                                name={x.name}
+                                                onChange={handlePlayerChange}
+                                                checked={filteredPlayers?.includes(x.name)}
+                                            />
+                                            <span className={classes.checkmark}></span>
+                                        </label>
+                                        <br/>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className={classes.boxStyles}>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Facilities</h2>
                                     {facilities.sort().map((x, y) => (
@@ -349,6 +354,51 @@ const AdvancedFilters = ({onClose}) => {
 
                                     ))}
                                 </div>
+                                <div className={classes.emptySpace}></div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Rivals</h2>
+                                    {rivalNames.sort().map((x, y) => (
+                                        <div key={y}>
+                                            <label
+                                                className={classes.customCheckbox}>
+                                                {x}
+                                                <input
+                                                    type="checkbox"
+                                                    name={x}
+                                                    onChange={handleRivalChange}
+                                                    checked={filteredRivals?.includes(x)}
+                                                />
+                                                <span className={classes.checkmark}></span>
+                                            </label>
+                                            <br/>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className={classes.boxStyles}>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Months</h2>
+                                    {months.sort((a, b) => {
+                                        return a - b;
+                                    }).map((x, y) => (
+                                        <div key={y}>
+                                            <label
+                                                className={classes.customCheckbox}>
+                                                {monthNames[Number(x) - 1]}
+                                                <input
+                                                    type="checkbox"
+                                                    name={x}
+                                                    onChange={handleMonthChange}
+                                                    checked={filteredMonths?.includes(x)}
+                                                />
+                                                <span className={classes.checkmark}></span>
+                                            </label>
+                                            <br/>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className={classes.emptySpace}></div>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Years</h2>
                                     {years.sort((a, b) => {
@@ -371,65 +421,9 @@ const AdvancedFilters = ({onClose}) => {
 
                                     ))}
                                 </div>
-                                <div className={classes.filterPartStyle}>
-                                    <h2 className={classes.title}>Months</h2>
-                                    {months.sort((a, b) => {
-                                        return a - b;
-                                    }).map((x, y) => (
-                                        <div key={y}>
-                                            <label
-                                                className={classes.customCheckbox}>
-                                                {monthNames[Number(x) - 1]}
-                                                <input
-                                                    type="checkbox"
-                                                    name={x}
-                                                    onChange={handleMonthChange}
-                                                    checked={filteredMonths?.includes(x)}
-                                                />
-                                                <span className={classes.checkmark}></span>
-                                            </label>
-                                            <br/>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className={classes.filterPartStyle}>
-                                    <h2 className={classes.title}>Rivals</h2>
-                                    {rivalNames.sort().map((x, y) => (
-                                        <div key={y}>
-                                            <label
-                                                className={classes.customCheckbox}>
-                                                {x}
-                                                <input
-                                                    type="checkbox"
-                                                    name={x}
-                                                    onChange={handleRivalChange}
-                                                    checked={filteredRivals?.includes(x)}
-                                                />
-                                                <span className={classes.checkmark}></span>
-                                            </label>
-                                            <br/>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className={classes.filterPartStyle}>
-                                    <h2 className={classes.title}>Match Squad</h2>
-                                    {squadTypes.map((x, y) => (
-                                        <div key={y}>
-                                            <label
-                                                className={classes.customCheckbox}>
-                                                {x}
-                                                <input
-                                                    type="checkbox"
-                                                    name={x}
-                                                    onChange={handleSquadTypeChange}
-                                                    checked={filteredSquad === x}
-                                                />
-                                                <span className={classes.checkmark}></span>
-                                            </label>
-                                            <br/>
-                                        </div>
-                                    ))}
-                                </div>
+                            </div>
+
+                            <div className={classes.boxStyles}>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Jersey</h2>
                                     {Jerseys.map((x, y) => (
@@ -449,6 +443,29 @@ const AdvancedFilters = ({onClose}) => {
                                         </div>
                                     ))}
                                 </div>
+                                <div className={classes.emptySpace}></div>
+                                <div className={classes.filterPartStyle}>
+                                    <h2 className={classes.title}>Number of Players</h2>
+                                    {playerLengthArray?.map((x, y) => (
+                                        <div key={y}>
+                                            <label
+                                                className={classes.customCheckbox}>
+                                                {x + 'v' + x}
+                                                <input
+                                                    type="checkbox"
+                                                    name={x}
+                                                    onChange={handleNumberOfPlayersChange}
+                                                    checked={filteredNumberOfPlayers?.includes(x.toString())}
+                                                />
+                                                <span className={classes.checkmark}></span>
+                                            </label>
+                                            <br/>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className={classes.boxStyles}>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Sky</h2>
                                     {WeatherSky.map((x, y) => (
@@ -468,6 +485,7 @@ const AdvancedFilters = ({onClose}) => {
                                         </div>
                                     ))}
                                 </div>
+                                <div className={classes.emptySpace}></div>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Temperature</h2>
                                     <div>
@@ -499,25 +517,10 @@ const AdvancedFilters = ({onClose}) => {
                                         <br/>
                                     </div>
                                 </div>
-                                <div className={classes.filterPartStyle}>
-                                    <h2 className={classes.title}>Number of Players</h2>
-                                    {playerLengthArray?.map((x, y) => (
-                                        <div key={y}>
-                                            <label
-                                                className={classes.customCheckbox}>
-                                                {x + 'v' + x}
-                                                <input
-                                                    type="checkbox"
-                                                    name={x}
-                                                    onChange={handleNumberOfPlayersChange}
-                                                    checked={filteredNumberOfPlayers?.includes(x.toString())}
-                                                />
-                                                <span className={classes.checkmark}></span>
-                                            </label>
-                                            <br/>
-                                        </div>
-                                    ))}
-                                </div>
+                            </div>
+
+
+                            <div className={classes.boxStyles}>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Videos</h2>
                                     <div>
@@ -535,6 +538,7 @@ const AdvancedFilters = ({onClose}) => {
                                         <br/>
                                     </div>
                                 </div>
+                                <div className={classes.emptySpace}></div>
                                 <div className={classes.filterPartStyle}>
                                     <h2 className={classes.title}>Ratings</h2>
                                     <div>
@@ -553,19 +557,17 @@ const AdvancedFilters = ({onClose}) => {
                                     </div>
                                 </div>
                             </div>
-                            <Box sx={{display: {xs: 'block', md: 'none'}, height: '190px'}}></Box>
-                        </div>
-                        <div className={classes.buttonDivStyle}>
-                            <button className={matchDetailsClasses.mapsButtons}
-                                    onClick={handleSubmit}>Apply
-                            </button>
-                            <div className={matchDetailsClasses.mapsButtons}
-                                 onClick={resetFilters}>
-                                <FilterListOffIcon style={{height: "21px", width: "21px"}}>
-                                </FilterListOffIcon>
+                            <div className={classes.boxStyles}>
+                                <div className={accountClasses.morePageBox} onClick={resetFilters}>
+                                    <span className={navbarClasses.drawerRoutesSpan}>Reset Filters</span>
+                                </div>
+                                <div className={classes.emptySpaceButton}></div>
+                                <div className={accountClasses.morePageBox} onClick={resetFilters}>
+                                    <span className={navbarClasses.drawerRoutesSpan}>Apply Filters</span>
+                                </div>
                             </div>
-                            <div className={matchDetailsClasses.mapsButtons} onClick={handleClose}>Cancel</div>
                         </div>
+
                     </form>
                 </div>
             </div>

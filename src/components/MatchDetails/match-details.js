@@ -88,7 +88,6 @@ export const MatchDetails = ({onClose, matchDate}) => {
         return 'Submit'
     };
 
-    document.body.style.overflow = 'hidden';
     const initialOYesFCStarFormData = {};
     const [ratesData, setRatesData] = useState(null);
     const isMobile = window.innerWidth <= 768;
@@ -118,13 +117,11 @@ export const MatchDetails = ({onClose, matchDate}) => {
 
     const handleOutsideClick = (event) => {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
-            document.body.style.overflow = 'visible';
             onClose();
         }
     };
 
     const handleClose = () => {
-        document.body.style.overflow = 'visible';
         onClose();
     };
 

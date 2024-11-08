@@ -9,8 +9,10 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import matchDetailsClasses from '../MatchDetails/match-details.module.css'
 import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
-import MainTitle from "../../shared/MainTitle/main-title";
 import {Alert} from "@mui/material";
+import BackButton from "../../shared/BackButton/back-button";
+import {useNavigate} from "react-router-dom";
+import Box from "@mui/material/Box";
 
 const RatingsGrid = () => {
 
@@ -25,6 +27,7 @@ const RatingsGrid = () => {
     const facilitiesRateCategories = ['Ground', 'Locker Room', 'Location', 'Goal Size', 'Field Size', 'Cafe']
     const [facilityRatingInfoData, setFacilityRatingInfoData] = useState(null);
     const [warnings, setWarnings] = useState(null);
+    const navigate = useNavigate()
 
     const updateSecondOptions = useCallback((type) => {
         let optionsArray = [];
@@ -156,6 +159,12 @@ const RatingsGrid = () => {
             }
         ]
         setWarnings(warningData)
+    }
+
+    const handleBack = (data) => {
+        if (data) {
+            navigate('/oyesfc-react/account')
+        }
     }
 
     const facilityRatingContent = (
@@ -353,7 +362,8 @@ const RatingsGrid = () => {
 
     const firstPart = (
         <>
-            <section className={classes.starSection}>
+            <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
+            <section className={classes.starSection} style={{marginTop: '0'}}>
                 <span className={classes.starSpan}>Select Category</span>
                 <SelectionComponent options={statTypes} onSelectionChange={handleCategoryChange}
                                     defaultSelectedValue={false}/>
@@ -387,7 +397,7 @@ const RatingsGrid = () => {
 
     return (
         <div style={{minHeight: '70vh'}}>
-            <MainTitle title={'Ratings'}/>
+            <BackButton handleBackButton={handleBack} generalTitle={'Ratings'}/>
             {firstPart}
             {secondPart}
         </div>
