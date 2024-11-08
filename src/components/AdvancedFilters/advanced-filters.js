@@ -2,7 +2,6 @@ import classes from "./advanced-filters.module.css";
 import React, {useState} from "react";
 import {Jerseys, TeamMembers, WeatherSky} from "../../constants/constants";
 import BackButton from "../../shared/BackButton/back-button";
-import Box from "@mui/material/Box";
 import {returnFilteredData} from "../../utils/utils";
 import {loadWebsite} from "../../firebase";
 import {useDispatch, useSelector} from "react-redux";
