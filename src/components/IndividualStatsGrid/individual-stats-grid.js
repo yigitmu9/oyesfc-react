@@ -1,22 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ChartsGrid from "../ChartsGrid/charts-grid.js";
 import WeatherIndividualStats from "../WeatherIndividualStats/weather-individual-stats";
 import RakipbulPlayerStats from "../RakipbulPlayerStats/rakipbul-player-stats";
 import classes from "./individual-stats-grid.module.css";
 import UltimateTeam from "../UltimateTeam/ultimate-team";
-import PlayerDetails from "../PlayerDetails/player-details";
 import BootBrands from "../BootBrands/boot-brands";
 import MixedStats from "../MixedStats/mixed-stats";
 import MainTitle from "../../shared/MainTitle/main-title";
+import {useNavigate} from "react-router-dom";
 
 const IndividualStatsGrid = () => {
 
-    const [isPopupOpen, setPopupOpen] = useState(false);
-    const [player, setPlayer] = useState(null);
+    const navigate = useNavigate()
 
-    const openPlayerDetails = (data) => {
-        setPlayer(data)
-        setPopupOpen(true)
+    const openPlayerDetails = (player) => {
+        navigate('/oyesfc-react/player-details', {state: player})
     }
 
     return (
@@ -28,9 +26,6 @@ const IndividualStatsGrid = () => {
             <BootBrands/>
             <WeatherIndividualStats/>
             <RakipbulPlayerStats/>
-            {isPopupOpen &&
-                <PlayerDetails onClose={() => setPopupOpen(false)}
-                               player={player}/>}
         </div>
     );
 };

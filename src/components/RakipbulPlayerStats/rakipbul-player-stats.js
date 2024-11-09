@@ -1,18 +1,16 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ChartTypes, SnackbarTypes, TeamMembers} from "../../constants/constants";
+import {ChartTypes, TeamMembers} from "../../constants/constants";
 import {loadWebsite} from "../../firebase";
 import ChartComponent from "../../shared/ChartComponent/chart-component";
 import {OYesFCPlayersArray} from "../../utils/utils";
 import TableComponent from "../../shared/TableComponent/table-component";
 import SelectionComponent from "../../shared/SelectionComponent/selection-component";
 import CardGrid from "../../shared/CardGrid/card-grid";
-import {Alert, Snackbar} from "@mui/material";
 
 const RakipbulPlayerStats = () => {
 
     const [match, setMatch] = React.useState('Total of All Teams');
     const [rakipbulData, setRakipbulData] = React.useState(null);
-    const [snackbarData, setSnackbarData] = useState(null);
     const tableColumnNames = ['Players', 'Number of Positions', 'Goals'];
     const [options, setOptions] = useState(['Total of All Teams']);
     const [playersGoalConvertRate, setPlayersGoalConvertRate] = useState([]);
@@ -28,13 +26,7 @@ const RakipbulPlayerStats = () => {
             })
             setOptions(rakipbulRivals)
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            setSnackbarData(errorResponse)
+            throw new Error(error?.message);
         }
     }
 
@@ -81,13 +73,6 @@ const RakipbulPlayerStats = () => {
         setMatch(data);
     };
 
-    const closeSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbarData(null);
-    };
-
     const cardContent = (
         <>
             <ChartComponent
@@ -114,19 +99,14 @@ const RakipbulPlayerStats = () => {
 
     return (
         <>
-            <CardGrid title={'Goal Conversion Stats Against 7 Rakipbul Teams'} content={cardContent}
-                      firstPart={firstPart}
-                      customStyle={{marginBottom: '0'}}/>
-            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
-                <Alert
-                    onClose={closeSnackbar}
-                    severity={snackbarData?.status}
-                    variant="filled"
-                    sx={{width: '100%'}}
-                >
-                    {snackbarData?.message}
-                </Alert>
-            </Snackbar>
+            {
+                rakipbulData ?
+                    <CardGrid title={'Goal Conversion Stats Against 7 Rakipbul Teams'} content={cardContent}
+                              firstPart={firstPart}
+                              customStyle={{marginBottom: '0'}}/> :
+                    <h1>ERROR 404</h1>
+            }
+
         </>
     );
 };

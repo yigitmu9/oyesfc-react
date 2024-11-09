@@ -8,7 +8,7 @@ import classes from './navbar.module.css'
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
-import {Alert, BottomNavigation, BottomNavigationAction, Snackbar} from "@mui/material";
+import {BottomNavigation, BottomNavigationAction} from "@mui/material";
 import {OYesFcEras, TeamMembers} from "../../constants/constants";
 import CardMedia from "@mui/material/CardMedia";
 import PhoenixLogo from "../../images/phoenix.png";
@@ -25,7 +25,6 @@ import {checkAuthState} from "../../services/service";
 function Navbar() {
     const { selectedEra } = useSelector((state) => state.era);
     const { userName, signedIn } = useSelector((state) => state.credentials);
-    const [snackbarData, setSnackbarData] = useState(null);
     const navigate = useNavigate()
     const location = useLocation();
     const matchesPath = '/oyesfc-react/matches';
@@ -72,13 +71,6 @@ function Navbar() {
         navigate(accountPath);
     };
 
-    const closeSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbarData(null);
-    };
-
     const onBottomNavChange = (pageIndex) => {
         if (value !== pageIndex) {
             setValue(pageIndex)
@@ -102,7 +94,7 @@ function Navbar() {
         } else if (!authResponse?.signedIn && authResponse?.success) {
             dispatch(logout())
         } else if (!authResponse?.success) {
-            setSnackbarData(authResponse?.error)
+            throw new Error(authResponse?.error);
         }
     }, [dispatch])
 
@@ -205,16 +197,6 @@ function Navbar() {
                     <BottomNavigationAction sx={{color: 'gray'}} label="Account" icon={<AccountCircleIcon/>}/>
                 </BottomNavigation>
             </Box>
-            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
-                <Alert
-                    onClose={closeSnackbar}
-                    severity={snackbarData?.status}
-                    variant="filled"
-                    sx={{width: '100%'}}
-                >
-                    {snackbarData?.message}
-                </Alert>
-            </Snackbar>
         </>
     );
 }

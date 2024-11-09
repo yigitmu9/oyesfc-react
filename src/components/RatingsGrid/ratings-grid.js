@@ -13,6 +13,8 @@ import {Alert} from "@mui/material";
 import BackButton from "../../shared/BackButton/back-button";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
+import accountClasses from "../AccountGrid/account-grid.module.css";
+import navbarClasses from "../Navbar/navbar.module.css";
 
 const RatingsGrid = () => {
 
@@ -220,20 +222,26 @@ const RatingsGrid = () => {
                     </div>
                 </section>
             ))}
-            <Alert sx={{ padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
-                   variant="outlined" severity="info">You can change and submit the ratings you gave whenever you want.</Alert>
+            <Alert sx={{padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                   variant="outlined" severity="info">You can change and submit the ratings you gave whenever you
+                want.</Alert>
             {
                 warnings &&
                 warnings?.map((x, y) => (
                     <Alert key={y}
-                           sx={{ padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                           sx={{
+                               padding: 1,
+                               marginBottom: '20px',
+                               borderRadius: '15px',
+                               bgcolor: '#1C1C1E',
+                               color: 'lightgray'
+                           }}
                            variant="outlined" severity={x?.severity}>{x?.message}</Alert>
                 ))
 
             }
-            <div className={matchDetailsClasses.submitButtonDiv}>
-                <button className={matchDetailsClasses.mapsButtons}
-                        onClick={facilityStarsSubmit}>{'Submit'}</button>
+            <div className={accountClasses.morePageBox} onClick={facilityStarsSubmit}>
+                <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
             </div>
         </>
     )
@@ -342,27 +350,32 @@ const RatingsGrid = () => {
                     </div>
                 </section>
             ))}
-            <Alert sx={{ padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
-                   variant="outlined" severity="info">You can change and submit the ratings you gave whenever you want.</Alert>
+            <Alert sx={{padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                   variant="outlined" severity="info">You can change and submit the ratings you gave whenever you
+                want.</Alert>
             {
                 warnings &&
                 warnings?.map((x, y) => (
                     <Alert key={y}
-                           sx={{ padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                           sx={{
+                               padding: 1,
+                               marginBottom: '20px',
+                               borderRadius: '15px',
+                               bgcolor: '#1C1C1E',
+                               color: 'lightgray'
+                           }}
                            variant="outlined" severity={x?.severity}>{x?.message}</Alert>
                 ))
 
             }
-            <div className={matchDetailsClasses.submitButtonDiv}>
-                <button className={matchDetailsClasses.mapsButtons}
-                        onClick={playerStarsSubmit}>{'Submit'}</button>
+            <div className={accountClasses.morePageBox} onClick={playerStarsSubmit}>
+                <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
             </div>
         </>
     )
 
     const firstPart = (
         <>
-            <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
             <section className={classes.starSection} style={{marginTop: '0'}}>
                 <span className={classes.starSpan}>Select Category</span>
                 <SelectionComponent options={statTypes} onSelectionChange={handleCategoryChange}
@@ -398,6 +411,7 @@ const RatingsGrid = () => {
     return (
         <div style={{minHeight: '70vh'}}>
             <BackButton handleBackButton={handleBack} generalTitle={'Ratings'}/>
+            <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
             {firstPart}
             {secondPart}
         </div>

@@ -9,6 +9,7 @@ import {updateData} from "../../redux/databaseDataSlice";
 import navbarClasses from "../Navbar/navbar.module.css";
 import accountClasses from "../AccountGrid/account-grid.module.css";
 import {useNavigate} from "react-router-dom";
+import Box from "@mui/material/Box";
 
 const AdvancedFilters = () => {
 
@@ -267,6 +268,7 @@ const AdvancedFilters = () => {
         <div>
             <div style={{display: "block", minHeight: '70vh'}}>
                 <BackButton handleBackButton={handleBack} generalTitle={'Filters'}/>
+                <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
                 <div style={{display: "block", height: '100%'}}>
                     <form className={classes.formStyle} onSubmit={handleSubmit}>
                         <div className={classes.formAlign}>

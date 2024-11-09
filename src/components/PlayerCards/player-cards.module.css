@@ -75,7 +75,7 @@
 }
 
 .matchesDiv {
-    margin: 20px;
+    margin: 0;
 }
 
 .yellowCardStyle {
@@ -139,6 +139,8 @@
     width: 40px;
     text-align: center;
     @media (max-width: 767px) {
-
+        font-size: 16px;
+        height: 37px;
+        width: 37px;
     }
 }

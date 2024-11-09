@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from "./add-match.module.css";
 import {dataBase, loadWebsite} from "../../firebase";
 import {ref, set} from "firebase/database";
@@ -13,7 +13,6 @@ import {
     WeatherSky
 } from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import LoadingPage from "../../pages/loading-page";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import {
     Accordion,
@@ -38,7 +37,7 @@ import navbarClasses from "../Navbar/navbar.module.css";
 import accountClasses from '../AccountGrid/account-grid.module.css'
 import {useNavigate} from "react-router-dom";
 
-const AddMatchComponent = ({onClose, selectedMatchData}) => {
+const AddMatchComponent = ({selectedMatchData}) => {
 
     const dispatch = useDispatch();
     const { allData } = useSelector((state) => state.databaseData);
@@ -57,22 +56,7 @@ const AddMatchComponent = ({onClose, selectedMatchData}) => {
     const rivalNames = getCategoryValues(allData).rivals
     const navigate = useNavigate()
 
-    const popupRef = useRef(null);
-
-    const handleOutsideClick = (event) => {
-        if (popupRef.current && !popupRef.current.contains(event.target)) {
-            onClose();
-        }
-    };
-
     const initialOYesFCSquadFormData = selectedMatchData ? selectedMatchData?.oyesfc?.squad : {};
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleOutsideClick);
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick);
-        };
-    });
 
     useEffect(() => {
         if (selectedMatchData && !weatherButtonStatus) {
@@ -228,12 +212,9 @@ const AddMatchComponent = ({onClose, selectedMatchData}) => {
         const unconvertedDay = formData?.day
         finalizeData();
         setDayTime();
-        try {
-            checkPayload(formData, unconvertedDay)
-            setSubmittedMatchData(formData)
-            if (warnings) setWarnings(null)
-        } catch (error) {
-        }
+        checkPayload(formData, unconvertedDay)
+        setSubmittedMatchData(formData)
+        if (warnings) setWarnings(null)
     };
 
     const completeAddMatch = async () => {
@@ -254,9 +235,14 @@ const AddMatchComponent = ({onClose, selectedMatchData}) => {
             } else {
                 dispatch(updateData({allData: response, filteredData: response}))
             }
-            onClose()
+            navigate('/oyesfc-react/match-details', {state: {day: submittedMatchData.day, cameFrom: 'matches'}})
         } catch (error) {
             setLoading(false)
+            const message = `${error?.message}`
+            setFinalErrors((prevData) => ([
+                ...prevData,
+                message
+            ]));
         }
     }
 
@@ -277,10 +263,6 @@ const AddMatchComponent = ({onClose, selectedMatchData}) => {
         formData.day = dateFormat;
         formData.time = `${timeFormat}-${nextTimeFormat}`;
     };
-
-    const handleClose = () => {
-        onClose();
-    }
 
     const finalizeData = () => {
         console.log(oYesFCSquadFormData)
@@ -670,7 +652,11 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
 
     const handleBack = (data) => {
         if (data) {
-            navigate('/oyesfc-react/account')
+            if (selectedMatchData) {
+                navigate('/oyesfc-react/match-details', {state: {day: selectedMatchData?.day, cameFrom: 'matches'}})
+            } else {
+                navigate('/oyesfc-react/account')
+            }
         }
     }
 
@@ -686,21 +672,11 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
         );
     }
 
-    if (loading) {
-        return (
-            <div className={classes.overlay}>
-                <div className={classes.generalStyle} ref={popupRef}>
-                    <LoadingPage/>
-                </div>
-            </div>
-        )
-    }
-
     if (submittedMatchData) {
         return (
             <div style={{minHeight: '70vh'}}>
                 <div>
-                    <BackButton handleBackButton={() => clearSubmittedMatchData()} generalTitle={'Complete'} backButtonTitle={'Add Match'}/>
+                    <BackButton handleBackButton={() => clearSubmittedMatchData()} generalTitle={'Complete'} backButtonTitle={selectedMatchData ? 'Edit Match' : 'Add Match'}/>
                     <Box sx={{display: {xs: 'flex', md: 'none'}, height: '10px'}}></Box>
                     <div className={classes.completeProcessDiv}>
                         <div className={classes.section}>
@@ -758,14 +734,6 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 </>
                             ))
                         }
-                        <div style={{height: '20px'}}></div>
-                        <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && clearSubmittedMatchData()}>
-                            <span className={navbarClasses.drawerRoutesSpan}>Back</span>
-                        </div>
-                        <div style={{height: '20px'}}></div>
-                        <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && handleClose()}>
-                            <span className={navbarClasses.drawerRoutesSpan}>Cancel</span>
-                        </div>
                         {
                             !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.calendar_create_successful) &&
                             <>
@@ -813,7 +781,12 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
 
                         <div style={{height: '20px'}}></div>
                         <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && completeAddMatch()}>
-                            <span className={navbarClasses.drawerRoutesSpan}>Submit & Close</span>
+                            {
+                                loading ?
+                                    <PulseLoader color="red" speedMultiplier={0.7}/>
+                                    :
+                                    <span className={navbarClasses.drawerRoutesSpan}>Submit & Close</span>
+                            }
                         </div>
 
                         <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
@@ -826,8 +799,8 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
     return (
         <div>
             <div>
-                <BackButton handleBackButton={handleBack} generalTitle={'Add Match'}/>
-                <Box sx={{display: {xs: 'flex', md: 'none'}, height: '10px'}}></Box>
+                <BackButton handleBackButton={handleBack} generalTitle={selectedMatchData ? 'Edit Match' : 'Add Match'}/>
+                <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
                 <form className={classes.formStyle}>
                     <div className={classes.formAlign}>
                         <div className={classes.infoAlign}>
@@ -1157,15 +1130,12 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                         value={newSquadMember}
                                         onChange={(e) => setNewSquadMember(e.target.value)}
                                     />
-                                    <div className={classes.addPlayerButtonDiv}>
-                                        <div className={matchDetailsClasses.mapsButtons} onClick={handleAddSquadMember}>
-                                            <PersonAddAlt1Icon className={classes.iconStyle}></PersonAddAlt1Icon>
-                                        </div>
+                                    <div style={{height: '10px'}}></div>
+                                    <div className={accountClasses.morePageBox} onClick={handleAddSquadMember} style={{background: 'black', width: '60px'}}>
+                                        <PersonAddAlt1Icon className={classes.iconStyle}></PersonAddAlt1Icon>
                                     </div>
                                 </label>
-                                <br/>
                             </div>
-
                         </div>
                     </div>
                     {

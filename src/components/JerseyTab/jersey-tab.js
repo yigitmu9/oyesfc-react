@@ -24,14 +24,14 @@ const JerseyTab = ({matchDetailsData}) => {
     }
 
     return (
-        <>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
             <img
                 key={'1'}
                 className={classes.kitImage}
                 src={jerseyImage}
                 alt={`1`}
             />
-        </>
+        </div>
     );
 };
 

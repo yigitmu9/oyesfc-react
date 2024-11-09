@@ -1,13 +1,16 @@
 import React from 'react';
-import Footer from "../components/Footer/footer";
 import PageGrid from "../shared/PageGrid/page-grid";
 import Box from "@mui/material/Box";
-import CalendarComponent from "../components/Calendar/calendar";
+import Footer from "../components/Footer/footer";
+import {useLocation} from "react-router-dom";
+import {MatchDetails} from "../components/MatchDetails/match-details";
 
-const CalendarPage = () => {
+const MatchDetailsPage = () => {
+
+    const { state } = useLocation();
 
     const page = (
-        <CalendarComponent/>
+        <MatchDetails matchDate={state?.day} cameFrom={state?.cameFrom}/>
     )
 
     return (
@@ -21,4 +24,4 @@ const CalendarPage = () => {
     );
 };
 
-export default CalendarPage;
+export default MatchDetailsPage;

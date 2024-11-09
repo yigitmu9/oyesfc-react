@@ -1,13 +1,16 @@
 import React from 'react';
-import Footer from "../components/Footer/footer";
+import PlayerCards from "../components/PlayerCards/player-cards";
 import PageGrid from "../shared/PageGrid/page-grid";
 import Box from "@mui/material/Box";
-import CalendarComponent from "../components/Calendar/calendar";
+import Footer from "../components/Footer/footer";
+import {useLocation} from "react-router-dom";
 
-const CalendarPage = () => {
+const PlayerDetailsPage = () => {
+
+    const { state } = useLocation();
 
     const page = (
-        <CalendarComponent/>
+        <PlayerCards playerName={state}/>
     )
 
     return (
@@ -21,4 +24,4 @@ const CalendarPage = () => {
     );
 };
 
-export default CalendarPage;
+export default PlayerDetailsPage;

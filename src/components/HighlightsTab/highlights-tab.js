@@ -5,7 +5,6 @@ import {
     AccordionDetails,
     AccordionSummary,
     Alert,
-    Snackbar
 } from "@mui/material";
 import {
     HighlightConstants, SnackbarMessages, SnackbarTypes,
@@ -14,12 +13,13 @@ import {
 import highlightsClasses from './highlights-tab.module.css';
 import addMatchClasses from '../AddMatch/add-match.module.css';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import {PulseLoader} from "react-spinners";
 import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import BrowserNotSupportedIcon from '@mui/icons-material/BrowserNotSupported';
 import {useSelector} from "react-redux";
+import accountClasses from "../AccountGrid/account-grid.module.css";
+import navbarClasses from "../Navbar/navbar.module.css";
 
 const HighlightsTab = ({matchDetailsData}) => {
 
@@ -146,13 +146,6 @@ const HighlightsTab = ({matchDetailsData}) => {
         return null;
     };
 
-    const closeSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbarData(null);
-    };
-
     return (
         <>
             <div className={classes.generalTabDiv}>
@@ -169,7 +162,7 @@ const HighlightsTab = ({matchDetailsData}) => {
                                     Add Video
                                 </AccordionSummary>
                                 <AccordionDetails sx={{textAlign: 'left'}}>
-                                    <form onSubmit={handleSubmit} style={{background: "black"}}>
+                                    <form>
                                         <div className={addMatchClasses.formAlign}>
                                             <div className={addMatchClasses.infoAlign}>
                                                 <label style={{background: "transparent"}}>
@@ -238,15 +231,28 @@ const HighlightsTab = ({matchDetailsData}) => {
                                                     />
                                                 </label>
                                                 <br/>
-                                                <div className={addMatchClasses.matchSubmitButtonDiv}>
-                                                    <button className={matchDetailsClasses.mapsButtons} type="submit">
-                                                        {
-                                                            loading ?
-                                                                <PulseLoader color="red" speedMultiplier={0.7}/>
-                                                                :
-                                                                <span>Submit</span>
-                                                        }
-                                                    </button>
+                                                {
+                                                    snackbarData &&
+                                                    <>
+                                                        <div style={{height: '20px'}}></div>
+                                                        <Alert sx={{
+                                                            padding: 1,
+                                                            borderRadius: '15px',
+                                                            bgcolor: '#1C1C1E',
+                                                            color: 'lightgray'
+                                                        }}
+                                                               variant="outlined"
+                                                               severity={snackbarData?.status}>{snackbarData?.message}</Alert>
+                                                    </>
+                                                }
+                                                <div style={{height: '20px'}}></div>
+                                                <div className={accountClasses.morePageBox} onClick={handleSubmit} style={{background: "black"}}>
+                                                    {
+                                                        loading ?
+                                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                                            :
+                                                            <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -288,16 +294,6 @@ const HighlightsTab = ({matchDetailsData}) => {
                     </section>
 
                 </>
-                <Snackbar open={snackbarData?.open} autoHideDuration={4000} onClose={closeSnackbar}>
-                    <Alert
-                        onClose={closeSnackbar}
-                        severity={snackbarData?.status}
-                        variant="filled"
-                        sx={{width: '100%'}}
-                    >
-                        {snackbarData?.message}
-                    </Alert>
-                </Snackbar>
             </div>
         </>
     );

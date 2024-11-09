@@ -1,23 +1,21 @@
 import classes from "./scoreboards-grid.module.css";
 import Scoreboard from "../Scoreboard/scoreboard";
-import React, {useState} from "react";
-import {MatchDetails} from "../MatchDetails/match-details";
+import React from "react";
 import MainTitle from "../../shared/MainTitle/main-title";
 import {useSelector} from "react-redux";
 import {sortData} from "../../utils/utils";
+import {useNavigate} from "react-router-dom";
 
 const ScoreboardsGrid = ({playerDetails, filteredWithPlayerData}) => {
 
     const { filteredData } = useSelector((state) => state.databaseData);
     const sortedFilteredData = sortData(playerDetails ? filteredWithPlayerData : filteredData);
-    const [isPopupOpen, setPopupOpen] = useState(false);
-    const [matchDate, setMatchDate] = useState(null);
+    const navigate = useNavigate()
     const windowHeight = window.innerWidth > 768 ? (window.innerHeight - 200) + 'px' : (window.innerHeight - 230) + 'px';
 
-    const openPopup = (matchDay) => {
+    const openMatchDetails = (matchDay) => {
         if (!playerDetails) {
-            setPopupOpen(true);
-            setMatchDate(matchDay?.day);
+            navigate('/oyesfc-react/match-details', {state: {day: matchDay?.day, cameFrom: 'matches'}})
         }
     };
 
@@ -31,12 +29,9 @@ const ScoreboardsGrid = ({playerDetails, filteredWithPlayerData}) => {
                             <Scoreboard
                                 key={y}
                                 value={x}
-                                openPopup={() => openPopup(x)}
+                                openPopup={() => openMatchDetails(x)}
                                 playerDetails={playerDetails}/>))}
                     </div>
-                    {isPopupOpen &&
-                        <MatchDetails matchDate={matchDate}
-                                      onClose={() => setPopupOpen(false)}/>}
                 </div>
                 :
                 <div style={{minHeight: windowHeight}} className={classes.titleDiv}>

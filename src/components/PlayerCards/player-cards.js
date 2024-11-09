@@ -1,10 +1,9 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import {Alert, Divider, List, ListItem, Snackbar, Tab, Tabs} from "@mui/material";
-import {BootBrandsList, FifaCalculations, SnackbarTypes, TeamMembers} from "../../constants/constants";
+import {Divider, List, ListItem, Tab, Tabs} from "@mui/material";
+import {BootBrandsList, FifaCalculations, TeamMembers} from "../../constants/constants";
 import classes from "../PlayerCards/player-cards.module.css"
 import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import Box from "@mui/material/Box";
@@ -38,6 +37,7 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import {returnAverageData} from "../../utils/utils";
+import {useNavigate} from "react-router-dom";
 
 function CustomTabs(props) {
     const {children, value, index, ...other} = props;
@@ -72,7 +72,7 @@ function a11yProps(index) {
     };
 }
 
-const PlayerCards = ({playerName, close}) => {
+const PlayerCards = ({playerName}) => {
 
     const {allData, filteredData} = useSelector((state) => state.databaseData);
     const {signedIn} = useSelector((state) => state.credentials);
@@ -89,13 +89,13 @@ const PlayerCards = ({playerName, close}) => {
     const [ratesData, setRatesData] = useState(null);
     const [playerRatingMvp, setPlayerRatingMvp] = useState({rating: '-', mvp: 0});
     const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
-    const [snackbarData, setSnackbarData] = useState(null);
     let playerTotalGoal = 0;
     const playerBootBrand = Object.values(TeamMembers).find(x => x.name === playerName).bootBrand;
     const playerBootCollection = Object.values(TeamMembers).find(x => x.name === playerName).bootCollection;
     const playerBootModel = Object.values(TeamMembers).find(x => x.name === playerName).bootModel;
     const [playerRatingData, setPlayerRatingData] = useState(null);
     const categories = ['Attacking', 'Skill', 'Movement', 'Power', 'Mentality', 'Defending', 'Goalkeeping']
+    const navigate = useNavigate()
 
     const returnIcon = (selection) => {
         if (selection === categories[0]) {
@@ -184,30 +184,29 @@ const PlayerCards = ({playerName, close}) => {
     const styles = {
         card: {
             position: 'relative',
-            backgroundColor: {xs: 'black', md: '#252525'},
+            backgroundColor: 'black',
             width: '100%',
             height: '100%',
             overflow: 'auto',
             overflowX: 'hidden'
         },
         media: {
-            height: '50%',
+            height: '400px',
+            borderRadius: {xs: '12px', md: '12px 12px 0 0'},
+            objectFit: 'cover',
+            objectPosition: {xs: '', md: '0 -100px'},
         },
         content: {
             position: 'absolute',
             bottom: '49.5%',
             left: 0,
             right: 0,
-            backgroundColor: {xs: 'black', md: '#1C1C1E'},
+            backgroundColor: 'black',
             color: 'white',
             padding: '10px',
             width: '100%',
             textAlign: 'center'
         },
-    };
-
-    const handleClose = () => {
-        close(true);
     };
 
     const positionStyle = {
@@ -354,13 +353,7 @@ const PlayerCards = ({playerName, close}) => {
                 setRatesData(response)
             }
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            setSnackbarData(errorResponse)
+            throw new Error(error?.message);
         }
     }
     const hourDifference = (matchDay, time) => {
@@ -452,7 +445,9 @@ const PlayerCards = ({playerName, close}) => {
     };
 
     const handleBack = (data) => {
-        if (data) handleClose()
+        if (data) {
+            navigate('/oyesfc-react/individual-stats')
+        }
     }
 
     useEffect(() => {
@@ -461,7 +456,7 @@ const PlayerCards = ({playerName, close}) => {
                 const response = await loadWebsite(`playerRatings/${playerName}`);
                 if (response && Object.keys(response)?.length > 3) calculatePlayerRating(response)
             } catch (error) {
-                console.log(error)
+                throw new Error(error?.message);
             }
         }
 
@@ -516,28 +511,24 @@ const PlayerCards = ({playerName, close}) => {
 
     };
 
-
     const playerOverall = calculateOverall(Object.values(TeamMembers).find(x => x.name === playerName).fifaRole.toLowerCase());
 
     return (
         <Card sx={styles.card}>
-            <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: 'black'}}>
-                <BackButton handleBackButton={handleBack}/>
-            </Box>
+            <BackButton handleBackButton={handleBack} generalTitle={playerName}/>
+            <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
             <CardMedia
                 component="img"
                 sx={styles.media}
                 image={require(`../../images/${imageUrl}.jpeg`)}
             />
-            <CardContent sx={styles.content}>
-                <h1>{playerName}</h1>
-            </CardContent>
             <Box sx={{
                 borderBottom: 1,
                 borderColor: 'divider',
                 bgcolor: {xs: 'black', md: '#1C1C1E'},
                 justifyContent: 'center',
-                display: 'flex'
+                display: 'flex',
+                borderRadius: '0 0 12px 12px'
             }}>
                 <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
                       scrollButtons variant="scrollable"
@@ -586,22 +577,26 @@ const PlayerCards = ({playerName, close}) => {
             <CustomTabs value={tabValue} index={0}>
                 {
                     playerName === TeamMembers.yigit.name &&
-                    <div className={classes.captainDiv}>
-                        <section className={matchDetailsClasses.momSection}>
-                            <>
-                                <CopyrightIcon fontSize={isMobile ? 'medium' : 'large'}
-                                               className={matchDetailsClasses.starIcon}>
-                                </CopyrightIcon>
-                            </>
-                            <div className={matchDetailsClasses.momDetailsDiv}>
+                    <>
+                        <div style={{height: '20px'}}></div>
+                        <div className={classes.captainDiv}>
+                            <section className={matchDetailsClasses.momSection}>
+                                <>
+                                    <CopyrightIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                   className={matchDetailsClasses.starIcon}>
+                                    </CopyrightIcon>
+                                </>
+                                <div className={matchDetailsClasses.momDetailsDiv}>
 
                                 <span className={matchDetailsClasses.momNameSpan}>
                                 Captain
                             </span>
-                            </div>
-                        </section>
-                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </>
                 }
+                <div style={{height: '20px'}}></div>
                 <section className={matchDetailsClasses.squadSection}>
                     <div className={classes.generalInfoDiv}>
                         <div className={classes.generalInfoInsideDiv}>
@@ -624,6 +619,7 @@ const PlayerCards = ({playerName, close}) => {
                         </div>
                     </div>
                 </section>
+                <div style={{height: '20px'}}></div>
                 <section className={matchDetailsClasses.squadSection}>
                     <div className={matchDetailsClasses.generalInfoDiv}>
                         <PushPinIcon fontSize={isMobile ? 'medium' : 'large'}
@@ -672,27 +668,32 @@ const PlayerCards = ({playerName, close}) => {
                         />
                     </div>
                 </section>
-                {playerBootBrand && <section className={matchDetailsClasses.squadSection}>
-                    <div className={matchDetailsClasses.generalInfoDiv}>
-                        <TollIcon fontSize={isMobile ? 'medium' : 'large'}
-                                  className={matchDetailsClasses.generalInfoIcon}>
-                        </TollIcon>
-                        <span className={matchDetailsClasses.generalInfoSpan}>
+                {playerBootBrand &&
+                    <>
+                        <div style={{height: '20px'}}></div>
+                        <section className={matchDetailsClasses.squadSection}>
+                            <div className={matchDetailsClasses.generalInfoDiv}>
+                                <TollIcon fontSize={isMobile ? 'medium' : 'large'}
+                                          className={matchDetailsClasses.generalInfoIcon}>
+                                </TollIcon>
+                                <span className={matchDetailsClasses.generalInfoSpan}>
                             Football Boot
                         </span>
-                    </div>
-                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
-                    <div className={classes.bootStyle}>
-                        <img className={playerBootBrand === BootBrandsList.nike ?
-                            bootBrandsClasses.nikeImageStyle : bootBrandsClasses.adidasImageStyle}
-                             src={playerBootBrand === BootBrandsList.nike ? NikeLogo : AdidasLogo}
-                             alt={'1'}/>
-                        <h1 className={classes.collectionNameStyle}>{playerBootCollection + ' ' + playerBootModel}</h1>
-                    </div>
-                </section>}
-                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
+                            </div>
+                            <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                            <div className={classes.bootStyle}>
+                                <img className={playerBootBrand === BootBrandsList.nike ?
+                                    bootBrandsClasses.nikeImageStyle : bootBrandsClasses.adidasImageStyle}
+                                     src={playerBootBrand === BootBrandsList.nike ? NikeLogo : AdidasLogo}
+                                     alt={'1'}/>
+                                <h1 className={classes.collectionNameStyle}>{playerBootCollection + ' ' + playerBootModel}</h1>
+                            </div>
+                        </section>
+                    </>
+                }
             </CustomTabs>
             <CustomTabs value={tabValue} index={1}>
+                <div style={{height: '20px'}}></div>
                 <section className={matchDetailsClasses.squadSection}>
                     <div className={classes.generalPointsDiv}>
                         <div className={classes.generalInfoInsideDiv}>
@@ -714,6 +715,7 @@ const PlayerCards = ({playerName, close}) => {
                         </div>
                     </div>
                 </section>
+                <div style={{height: '20px'}}></div>
                 <section className={matchDetailsClasses.squadSection}>
                     <List component="nav" aria-label="mailbox folders">
                         <ListItem style={{
@@ -771,19 +773,20 @@ const PlayerCards = ({playerName, close}) => {
                         </ListItem>
                     </List>
                 </section>
-                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
             </CustomTabs>
             <CustomTabs value={tabValue} index={2}>
+                <div style={{height: '20px'}}></div>
                 <div className={classes.matchesDiv}>
                     <ScoreboardsGrid filteredWithPlayerData={filteredWithPlayerData}
                                      playerDetails={true}/>
                 </div>
-                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
+
             </CustomTabs>
             {
                 signedIn && playerRatingData &&
                 <CustomTabs value={tabValue} index={3}>
                     <div className={matchDetailsClasses.generalTabDiv}>
+                        <div style={{height: '20px'}}></div>
                         <section className={matchDetailsClasses.generalTabSection}>
                             <div className={matchDetailsClasses.generalInfoDiv}>
                             <span className={classes.ratingSpan} style={{
@@ -812,54 +815,46 @@ const PlayerCards = ({playerName, close}) => {
                                     </div>
                                 ))
                             }
-
                         </section>
                     </div>
-
+                    <div style={{height: '20px'}}></div>
                     {<PlayerRadarChart playerName={playerName} attributes={attributes}/>}
                     <div className={matchDetailsClasses.generalTabDiv}>
                         {
                             categories.map((category, i) => (
-                                <section key={i} className={matchDetailsClasses.generalTabSection}>
-                                    <div className={matchDetailsClasses.generalInfoDiv}>
-                                        {returnIcon(category)}
-                                        <span className={matchDetailsClasses.generalInfoSpan}>
+                                <>
+                                    <div style={{height: '20px'}}></div>
+                                    <section key={i} className={matchDetailsClasses.generalTabSection}>
+                                        <div className={matchDetailsClasses.generalInfoDiv}>
+                                            {returnIcon(category)}
+                                            <span className={matchDetailsClasses.generalInfoSpan}>
                                             {category}
                                         </span>
-                                    </div>
-                                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
-                                    {
-                                        Object.entries(playerRatingData)?.filter(z => FifaCalculations.find(f => f.name === z[0]).category === category)
-                                            ?.map((x, y) => (
-                                                <div key={y} className={matchDetailsClasses.generalInfoDiv}>
+                                        </div>
+                                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                                        {
+                                            Object.entries(playerRatingData)?.filter(z => FifaCalculations.find(f => f.name === z[0]).category === category)
+                                                ?.map((x, y) => (
+                                                    <div key={y} className={matchDetailsClasses.generalInfoDiv}>
                                                     <span className={classes.ratingSpan} style={{
-                                                        background: x[1] >= 80 ? 'darkgreen' :
-                                                            x[1] < 60 ? 'darkred' : 'darkgoldenrod'
+                                                        background: Number(x[1])?.toFixed(0) >= 80 ? 'darkgreen' :
+                                                            Number(x[1])?.toFixed(0) < 60 ? 'darkred' : 'darkgoldenrod'
                                                     }}>
                                                         {Number(x[1])?.toFixed(0)}
                                                     </span>
-                                                    <span className={matchDetailsClasses.generalInfoSpan}>
+                                                        <span className={matchDetailsClasses.generalInfoSpan}>
                                                         {x[0]}
                                                     </span>
-                                                </div>
-                                            ))
-                                    }
-                                </section>
+                                                    </div>
+                                                ))
+                                        }
+                                    </section>
+                                </>
                             ))
                         }
                     </div>
-                    <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                 </CustomTabs>
             }
-            <Snackbar open={snackbarData?.open} autoHideDuration={4000}>
-                <Alert
-                    severity={snackbarData?.status}
-                    variant="filled"
-                    sx={{width: '100%'}}
-                >
-                    {snackbarData?.message}
-                </Alert>
-            </Snackbar>
         </Card>
     );
 }

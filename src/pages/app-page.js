@@ -17,6 +17,8 @@ import AccountPage from "./account-page";
 import FiltersPage from "./filters-page";
 import CalendarPage from "./calendar-page";
 import AddMatchPage from "./add-match-page";
+import PlayerDetailsPage from "./player-details-page";
+import MatchDetailsPage from "./match-details-page";
 
 const AppPage = () => {
 
@@ -79,6 +81,8 @@ const AppPage = () => {
                 <Route path='oyesfc-react/filters' element={<FiltersPage/>}/>
                 <Route path='oyesfc-react/calendar' element={<CalendarPage/>}/>
                 <Route path='oyesfc-react/add-match' element={<AddMatchPage/>}/>
+                <Route path='oyesfc-react/player-details' element={<PlayerDetailsPage/>}/>
+                <Route path='oyesfc-react/match-details' element={<MatchDetailsPage/>}/>
             </Routes>
         </Router>
     );

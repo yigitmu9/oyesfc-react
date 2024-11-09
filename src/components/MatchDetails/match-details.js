@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from "./match-details.module.css"
 import TeamView from "../TeamView/team-view";
 import Result from "../Result/result";
@@ -8,15 +8,13 @@ import {
     Facilities,
     matchType,
     openWeatherType,
-    SnackbarTypes,
     TeamMembers,
     WeatherSky
 } from "../../constants/constants";
 import Box from "@mui/material/Box";
-import {Alert, Divider, Snackbar, Tab, Tabs} from "@mui/material";
+import {Alert, Divider, Tab, Tabs} from "@mui/material";
 import PropTypes from "prop-types";
 import RivalComparison from "../RivalComparison/rival-comparison";
-import AddMatchComponent from "../AddMatch/add-match";
 import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import PreviewTab from "../PreviewTab/preview-tab";
@@ -29,6 +27,9 @@ import BackButton from "../../shared/BackButton/back-button";
 import {useSelector} from "react-redux";
 import {findMatchType, sortData} from "../../utils/utils";
 import EditIcon from "@mui/icons-material/Edit";
+import {useNavigate} from "react-router-dom";
+import accountClasses from "../AccountGrid/account-grid.module.css";
+import navbarClasses from "../Navbar/navbar.module.css";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -63,7 +64,7 @@ function a11yProps(index) {
     };
 }
 
-export const MatchDetails = ({onClose, matchDate}) => {
+export const MatchDetails = ({matchDate, cameFrom}) => {
 
     const { allData } = useSelector((state) => state.databaseData);
     const { userName, id, signedIn, isCaptain } = useSelector((state) => state.credentials);
@@ -94,12 +95,9 @@ export const MatchDetails = ({onClose, matchDate}) => {
     const buttonBgColor = '#1C1C1E'
     const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
     const matchDetails = Object.entries(matchDetailsData?.oyesfc?.squad)?.filter(x => x[1].goal > 0)
-    const popupRef = useRef(null);
     const [tabValue, setTabValue] = React.useState(0);
     const matchIndex = Object.values(sortedAllData).findIndex(x => x === matchDetailsData)
     const [oYesFCStarFormData, setOYesFCStarFormData] = useState(initialOYesFCStarFormData);
-    const [snackbarData, setSnackbarData] = useState(null);
-    const [isAddMatchPopupOpen, setAddMatchPopupOpen] = useState(false);
     const [starsErrorMessage, setStarsErrorMessage] = useState(null);
     const [notesErrorMessage, setNotesErrorMessage] = useState(null);
     const [starsSubmitButton, setStarsSubmitButton] = useState(checkButton());
@@ -110,19 +108,10 @@ export const MatchDetails = ({onClose, matchDate}) => {
     const [bestOfMatch, setBestOfMatch] = useState(null);
     const [ratedPeople, setRatedPeople] = useState(null);
     const [weatherData, setWeatherData] = useState(null);
+    const navigate = useNavigate()
 
     const handleTabChange = (event, newTabValue) => {
         setTabValue(newTabValue);
-    };
-
-    const handleOutsideClick = (event) => {
-        if (popupRef.current && !popupRef.current.contains(event.target)) {
-            onClose();
-        }
-    };
-
-    const handleClose = () => {
-        onClose();
     };
 
     useEffect(() => {
@@ -135,10 +124,6 @@ export const MatchDetails = ({onClose, matchDate}) => {
         if (!weatherData && fixture !== matchType.previous) {
             getOpenWeather().then(r => r)
         }
-        document.addEventListener('mousedown', handleOutsideClick);
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick);
-        };
     });
 
 
@@ -169,12 +154,8 @@ export const MatchDetails = ({onClose, matchDate}) => {
         }
     };
 
-    const handleMessageClick = (snackbarData) => {
-        setSnackbarData(snackbarData);
-    };
-
     const editMatch = () => {
-        setAddMatchPopupOpen(true)
+        navigate('/oyesfc-react/add-match', {state: matchDetailsData})
     }
 
     const submitStars = async () => {
@@ -213,13 +194,7 @@ export const MatchDetails = ({onClose, matchDate}) => {
             }
 
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            setSnackbarData(errorResponse)
+            throw new Error(error?.message);
         }
     }
 
@@ -238,13 +213,7 @@ export const MatchDetails = ({onClose, matchDate}) => {
                 }
             }
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            setSnackbarData(errorResponse)
+            throw new Error(error?.message);
         }
     }
 
@@ -258,7 +227,9 @@ export const MatchDetails = ({onClose, matchDate}) => {
     };
 
     const handleBack = (data) => {
-        if (data) handleClose()
+        if (data) {
+            navigate(`/oyesfc-react/${cameFrom}`)
+        }
     }
 
     const calculatePlayerRatings = (ratingResponse) => {
@@ -316,13 +287,7 @@ export const MatchDetails = ({onClose, matchDate}) => {
         try {
             responseForRatedPlayers = await loadWebsite('firebaseUID');
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            setSnackbarData(errorResponse)
+            throw new Error(error?.message);
         }
         const keys = Object.keys(response?.rates)
         let ratedPlayers = [];
@@ -415,12 +380,11 @@ export const MatchDetails = ({onClose, matchDate}) => {
     }
 
     return (
-        <div className={classes.overlay}>
-            <Box sx={{display: {xs: 'flex', md: 'none'}, bgcolor: buttonBgColor}}>
-                <BackButton handleBackButton={handleBack}/>
-            </Box>
-            {!isAddMatchPopupOpen &&
-                <div className={classes.popupContainer} ref={popupRef}>
+        <div>
+            <BackButton handleBackButton={handleBack} generalTitle={'Match Details'}/>
+            <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
+            {
+                <div>
                     <section className={classes.scoreboard}>
                         <div className={classes.scoreboardInsideDiv}>
                             <TeamView teamData={matchDetailsData?.oyesfc} rakipbul={matchDetailsData?.rakipbul}
@@ -464,7 +428,7 @@ export const MatchDetails = ({onClose, matchDate}) => {
                             null
                         }
                     </section>
-                    <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: {xs: 'black', md: buttonBgColor}}}>
+                    <Box sx={{borderBottom: 1, borderColor: 'divider', bgcolor: {xs: 'black', md: buttonBgColor}, borderRadius: {xs: '0', md: '0 0 12px 12px'}}}>
                         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example"
                               scrollButtons variant="scrollable"
                               sx={{
@@ -532,7 +496,8 @@ export const MatchDetails = ({onClose, matchDate}) => {
                                     bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherData={weatherData}/>
                         {
                             isCaptain &&
-                            <div style={{margin: '0 10px'}}>
+                            <>
+                                <div style={{height: '20px'}}></div>
                                 <section className={classes.generalTabSection} onClick={editMatch} style={{cursor: 'pointer'}}>
                                     <div className={classes.urlInfoDiv}>
                                         <EditIcon fontSize={isMobile ? 'medium' : 'large'}
@@ -543,90 +508,93 @@ export const MatchDetails = ({onClose, matchDate}) => {
                                         </span>
                                     </div>
                                 </section>
-                            </div>
+                            </>
                         }
-                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
                         <SquadTab matchDetailsData={matchDetailsData} squadRatings={squadRatings} bestOfMatch={bestOfMatch}/>
-                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={2}>
+                        <div style={{height: '20px'}}></div>
                         <section className={classes.defaultSection}>
                             <RivalComparison data={sortedAllData} selectedRival={matchDetailsData?.rival.name}/>
                         </section>
-                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={3}>
-                        <HighlightsTab matchDetailsData={matchDetailsData}
-                                       snackbarData={(snackbarData) => handleMessageClick(snackbarData)}/>
-                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
+                        <div style={{height: '20px'}}></div>
+                        <HighlightsTab matchDetailsData={matchDetailsData}/>
 
                     </CustomTabPanel>
                     {
-                        signedIn && fixture === matchType.previous &&
+                    signedIn && fixture === matchType.previous &&
                         <>
                             <CustomTabPanel value={tabValue} index={4}>
                                 {
                                     Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== userName)?.map((x, y) => (
-                                        <section key={y} className={classes.starSection}>
-                                            <span className={classes.starSpan}>{x[0]}</span>
-                                            {
-                                                Object.values(TeamMembers).map(x => x.name).includes(x[0]) ?
-                                                    (ratedPeople?.includes(x[0]) ?
-                                                        <span className={classes.starDetailSpan}>
+                                        <>
+                                            <div style={{height: '20px'}}></div>
+                                            <section key={y} className={classes.starSection}>
+                                                <span className={classes.starSpan}>{x[0]}</span>
+                                                {
+                                                    Object.values(TeamMembers).map(x => x.name).includes(x[0]) ?
+                                                        (ratedPeople?.includes(x[0]) ?
+                                                            <span className={classes.starDetailSpan}>
                                                             {x[0]?.split(' ')[0] + ' added rating to this match.'}
                                                         </span>
-                                                        :
-                                                        <span className={classes.starDetailSpan}>
+                                                            :
+                                                            <span className={classes.starDetailSpan}>
                                                             {x[0]?.split(' ')[0] + ' did not add rating to this match.'}
                                                         </span>)
-                                                    :
-                                                    Object.values(matchDetailsData?.oyesfc?.squad)?.find(x => x?.name === x[0])?.description ?
-                                                        <span className={classes.starDetailSpan}>
+                                                        :
+                                                        Object.values(matchDetailsData?.oyesfc?.squad)?.find(x => x?.name === x[0])?.description ?
+                                                            <span className={classes.starDetailSpan}>
                                                             {Object.entries(matchDetailsData?.oyesfc?.squad)?.find(z => z[0] === x[0])[1]?.description}
                                                         </span>
-                                                        :
-                                                        null
-                                            }
-                                            <div className={classes.starDiv}>
-                                                {[...Array(10)].map((star, index) => {
-                                                    const currentRating = index + 1;
-                                                    return (
+                                                            :
+                                                            null
+                                                }
+                                                <div className={classes.starDiv}>
+                                                    {[...Array(10)].map((star, index) => {
+                                                        const currentRating = index + 1;
+                                                        return (
 
-                                                        <label key={index} className={classes.starLabel}>
-                                                            <input
-                                                                key={star}
-                                                                type="radio"
-                                                                name="rating"
-                                                                value={oYesFCStarFormData[x[0]]}
-                                                                onChange={() =>
-                                                                    handleStarChange(x[0], currentRating)}
-                                                            />
-                                                            <span
-                                                                className={classes.star}
-                                                                style={{
-                                                                    color:
-                                                                        currentRating <= (oYesFCStarFormData[x[0]]) ? "#ffc107" : "#e4e5e9",
-                                                                }}>
+                                                            <label key={index} className={classes.starLabel}>
+                                                                <input
+                                                                    key={star}
+                                                                    type="radio"
+                                                                    name="rating"
+                                                                    value={oYesFCStarFormData[x[0]]}
+                                                                    onChange={() =>
+                                                                        handleStarChange(x[0], currentRating)}
+                                                                />
+                                                                <span
+                                                                    className={classes.star}
+                                                                    style={{
+                                                                        color:
+                                                                            currentRating <= (oYesFCStarFormData[x[0]]) ? "#ffc107" : "#e4e5e9",
+                                                                    }}>
                                                         &#9733;
                                                     </span>
-                                                        </label>
-                                                    );
-                                                })}
-                                            </div>
-                                            <div className={classes.ratingStarDetailsDiv}>
-                                                <ArrowBackIosNewIcon fontSize={isMobile ? 'medium' : 'large'}
-                                                               className={classes.ratingStarIconDiv} onClick={() => handleStarDetailChange(x[0], 'minus')}>
-                                                </ArrowBackIosNewIcon>
-                                                <h1 className={classes.ratingStarSpanDiv}>
-                                                    {oYesFCStarFormData[x[0]] ? oYesFCStarFormData[x[0]]?.toFixed(1) : 'Rate'}
-                                                </h1>
-                                                <ArrowForwardIosIcon fontSize={isMobile ? 'medium' : 'large'}
-                                                                className={classes.ratingStarIconDiv} onClick={() => handleStarDetailChange(x[0], 'plus')}>
-                                                </ArrowForwardIosIcon>
-                                            </div>
-                                        </section>
+                                                            </label>
+                                                        );
+                                                    })}
+                                                </div>
+                                                <div className={classes.ratingStarDetailsDiv}>
+                                                    <ArrowBackIosNewIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                                         className={classes.ratingStarIconDiv}
+                                                                         onClick={() => handleStarDetailChange(x[0], 'minus')}>
+                                                    </ArrowBackIosNewIcon>
+                                                    <h1 className={classes.ratingStarSpanDiv}>
+                                                        {oYesFCStarFormData[x[0]] ? oYesFCStarFormData[x[0]]?.toFixed(1) : 'Rate'}
+                                                    </h1>
+                                                    <ArrowForwardIosIcon fontSize={isMobile ? 'medium' : 'large'}
+                                                                         className={classes.ratingStarIconDiv}
+                                                                         onClick={() => handleStarDetailChange(x[0], 'plus')}>
+                                                    </ArrowForwardIosIcon>
+                                                </div>
+                                            </section>
+                                        </>
+
                                     ))
                                 }
                                 {
@@ -634,66 +602,56 @@ export const MatchDetails = ({onClose, matchDate}) => {
                                     <Alert sx={{borderRadius: '25px', margin: '20px'}}
                                            variant="filled" severity="error">{starsErrorMessage}</Alert>
                                 }
-                                <div className={classes.submitButtonDiv}>
-                                    <button className={classes.mapsButtons}
-                                            disabled={starsSubmitButton === 'Submitted' || starsSubmitButton === 'Not Available'}
-                                            onClick={submitStars}>{starsSubmitButton}</button>
+                                <div style={{height: '20px'}}></div>
+                                <div className={accountClasses.morePageBox} onClick={() => (starsSubmitButton !== 'Submitted' && starsSubmitButton !== 'Not Available') && submitStars()}>
+                                    <span className={navbarClasses.drawerRoutesSpan}>{starsSubmitButton}</span>
                                 </div>
-                                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                             </CustomTabPanel>
                             <CustomTabPanel value={tabValue} index={5}>
                                 {
                                     matchNotes && matchNotes?.map((x, y) => (
-                                        <section key={y} className={classes.notesSection}>
-                                            <span className={classes.noteWriterSpan}>{x[0]}</span>
-                                            <Divider sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
-                                            <span className={classes.starSpan}>{x[1]?.note}</span>
-                                        </section>
+                                        <>
+                                            <div style={{height: '20px'}}></div>
+                                            <section key={y} className={classes.notesSection}>
+                                                <span className={classes.noteWriterSpan}>{x[0]}</span>
+                                                <Divider
+                                                    sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
+                                                <span className={classes.starSpan}>{x[1]?.note}</span>
+                                            </section>
+                                        </>
                                     ))
                                 }
-                                {
+                                <div style={{height: '20px'}}></div>
+                                <section className={classes.notesSection}>
+                                    <span className={classes.noteWriterSpan}>{notesTitle}</span>
+                                    <Divider sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
+                                    <textarea
+                                        className={classes.noteInputDesign}
+                                        required={true}
+                                        name="note"
+                                        value={noteFormData['note']}
+                                        onChange={handleNoteInputChange}
+                                        maxLength={750}
+                                    />
 
-                                    <section className={classes.notesSection}>
-                                        <span className={classes.noteWriterSpan}>{notesTitle}</span>
-                                        <Divider sx={{bgcolor: 'gray', marginTop: '10px', marginBottom: '10px'}}/>
-                                        <textarea
-                                            className={classes.noteInputDesign}
-                                            required={true}
-                                            name="note"
-                                            value={noteFormData['note']}
-                                            onChange={handleNoteInputChange}
-                                            maxLength={750}
-                                        />
-
-                                    </section>
-                                }
+                                </section>
                                 {
                                     notesErrorMessage &&
-                                    <Alert sx={{borderRadius: '25px', margin: '20px'}}
-                                           variant="filled" severity="error">{notesErrorMessage}</Alert>
+                                    <>
+                                        <div style={{height: '20px'}}></div>
+                                        <Alert sx={{borderRadius: '25px', margin: '20px'}}
+                                               variant="filled" severity="error">{notesErrorMessage}</Alert>
+                                    </>
+
                                 }
-                                <div className={classes.submitButtonDiv}>
-                                    <button className={classes.mapsButtons} onClick={submitNote}>
-                                        Submit
-                                    </button>
+                                <div style={{height: '20px'}}></div>
+                                <div className={accountClasses.morePageBox} onClick={submitNote}>
+                                    <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
                                 </div>
-                                <Box sx={{display: {xs: 'block', md: 'none'}, height: '90px'}}></Box>
                             </CustomTabPanel>
                         </>
                     }
                 </div>}
-            {isAddMatchPopupOpen && <AddMatchComponent onClose={() => setAddMatchPopupOpen(false)}
-                                                       snackbarData={(snackbarData) => handleMessageClick(snackbarData)}
-                                                       selectedMatchData={matchDetailsData}/>}
-            <Snackbar open={snackbarData?.open} autoHideDuration={4000}>
-                <Alert
-                    severity={snackbarData?.status}
-                    variant="filled"
-                    sx={{width: '100%'}}
-                >
-                    {snackbarData?.message}
-                </Alert>
-            </Snackbar>
         </div>
     );
 };

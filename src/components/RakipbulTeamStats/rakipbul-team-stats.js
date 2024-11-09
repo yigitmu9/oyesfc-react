@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {ChartTypes, SnackbarTypes} from "../../constants/constants";
-import {Alert, Snackbar} from "@mui/material";
+import React, {useEffect} from 'react';
+import {ChartTypes} from "../../constants/constants";
 import {loadWebsite} from "../../firebase";
 import ChartComponent from "../../shared/ChartComponent/chart-component";
 import CardGrid from "../../shared/CardGrid/card-grid";
@@ -10,7 +9,6 @@ import {calculateRate} from "../../utils/utils";
 const RakipbulTeamStats = () => {
 
     const [rakipbulData, setRakipbulData] = React.useState(null);
-    const [snackbarData, setSnackbarData] = useState(null);
     let goalsScored = 0
     let ourPositions = 0
     let goalsConceded = 0
@@ -25,23 +23,9 @@ const RakipbulTeamStats = () => {
             const response = await loadWebsite(`rakipbul`);
             setRakipbulData(response)
         } catch (error) {
-            const errorResponse = {
-                open: true,
-                status: SnackbarTypes.error,
-                message: error?.message,
-                duration: 18000
-            }
-            setSnackbarData(errorResponse)
-
+            throw new Error(error?.message);
         }
     }
-
-    const closeSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbarData(null);
-    };
 
     if (rakipbulData) {
         Object.values(rakipbulData)?.forEach(item => {
@@ -85,20 +69,14 @@ const RakipbulTeamStats = () => {
 
     return (
         <>
-            <CardGrid title={'Goal Threats in 10 Specific Rakipbul Matches'}
-                      content={cardContent}
-                      firstPart={firstPart}
-                      customStyle={{marginBottom: '0'}}/>
-            <Snackbar open={snackbarData?.open} autoHideDuration={snackbarData?.duration} onClose={closeSnackbar}>
-                <Alert
-                    onClose={closeSnackbar}
-                    severity={snackbarData?.status}
-                    variant="filled"
-                    sx={{width: '100%'}}
-                >
-                    {snackbarData?.message}
-                </Alert>
-            </Snackbar>
+            {
+                rakipbulData ?
+                    <CardGrid title={'Goal Threats in 10 Specific Rakipbul Matches'}
+                              content={cardContent}
+                              firstPart={firstPart}
+                              customStyle={{marginBottom: '0'}}/> :
+                    <h1>ERROR 404</h1>
+            }
         </>
 
     );

@@ -1,22 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import classes from './calendar.module.css'
 import {Calendar, momentLocalizer} from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/en-gb';
-import {matchType, TeamNames} from "../../constants/constants";
-import {MatchDetails} from "../MatchDetails/match-details";
+import {TeamNames} from "../../constants/constants";
 import BackButton from "../../shared/BackButton/back-button";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import Box from "@mui/material/Box";
 
 const CalendarComponent = () => {
 
-    const { allData, filteredData } = useSelector((state) => state.databaseData);
-    const today = new Date();
-    const [isPopupOpen, setPopupOpen] = useState(false);
-    const [matchDetailsData, setMatchDetailsData] = useState(null);
-    const [fixtureType, setFixtureType] = useState(null);
+    const { filteredData } = useSelector((state) => state.databaseData);
     const navigate = useNavigate()
     moment.locale("us-US");
     let calendarEvents = [];
@@ -39,52 +35,8 @@ const CalendarComponent = () => {
 
     const handleSelectEvent = (event) => {
         const selectedMatch = Object.values(filteredData)?.find(x => x?.day === event?.matchId)
-        setMatchDetailsData(selectedMatch)
-        if (today >= event?.end) setFixtureType(matchType.previous)
-        if (today >= event?.start && event?.end > today) setFixtureType(matchType.live)
-        if (event?.start > today) setFixtureType(matchType.upcoming)
-        setPopupOpen(true)
+        navigate('/oyesfc-react/match-details', {state: {day: selectedMatch?.day, cameFrom: 'calendar'}})
     };
-
-    const sortedData = Object.values(filteredData)?.slice()?.sort((a, b) => {
-        if (a?.day && b?.day) {
-            const [dayA, monthA, yearA] = a?.day?.split('-')?.map(Number);
-            const [dayB, monthB, yearB] = b?.day?.split('-')?.map(Number);
-            if (yearA !== yearB) {
-                return yearB - yearA;
-            }
-            if (monthA !== monthB) {
-                return monthB - monthA;
-            }
-            return dayB - dayA;
-        } else {
-            return null
-        }
-    });
-    const sortedAllData = Object.values(allData)?.slice()?.sort((x, y) => {
-        if (x?.day && y?.day) {
-            const [dayA, monthA, yearA] = x?.day?.split('-')?.map(Number);
-            const [dayB, monthB, yearB] = y?.day?.split('-')?.map(Number);
-            if (yearA !== yearB) {
-                return yearB - yearA;
-            }
-            if (monthA !== monthB) {
-                return monthB - monthA;
-            }
-            return dayB - dayA;
-        } else {
-            return null
-        }
-    });
-    const previousMatchesData = sortedData.filter(item => {
-        const [day, month, year] = item?.day?.split('-').map(Number);
-        const endTime = item?.time?.split('-')[1];
-        const [hour, minute] = endTime === '00:00' ? [23, 59] : endTime?.split(':')?.map(Number);
-
-        const eventDateTime = new Date(year, month - 1, day, hour, minute);
-
-        return eventDateTime <= today;
-    });
 
     const handleBack = (data) => {
         if (data) {
@@ -95,7 +47,8 @@ const CalendarComponent = () => {
     return (
         <>
             <BackButton handleBackButton={handleBack} generalTitle={'Calendar'}/>
-            { !isPopupOpen && <div>
+            <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
+            {<div>
                 <div className={classes.grid}>
                     <Calendar
                         localizer={localizer}
@@ -107,12 +60,6 @@ const CalendarComponent = () => {
                     />
                 </div>
             </div>}
-            {isPopupOpen &&
-                <MatchDetails matchDetailsData={matchDetailsData}
-                              onClose={() => setPopupOpen(false)}
-                              fixture={fixtureType}
-                              data={previousMatchesData}
-                              allData={sortedAllData}/>}
         </>
     );
 };

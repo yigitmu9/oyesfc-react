@@ -21,13 +21,19 @@ import {loadWebsite} from "../../firebase";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import JerseyTab from "../JerseyTab/jersey-tab";
 import {returnAverageData} from "../../utils/utils";
+import {useSelector} from "react-redux";
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import matchDetailsClasses from "../MatchDetails/match-details.module.css";
+import playerCardsClasses from '../PlayerCards/player-cards.module.css'
 
 const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirectToTab, weatherData}) => {
 
     const isMobile = window.innerWidth <= 768;
+    const { signedIn } = useSelector((state) => state.credentials);
     const lastFiveGames = Object.values(allData).filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3 || y === matchIndex + 4 || y === matchIndex + 5));
     const matchInformation = createMatchInfos();
     const [facilityRatingData, setFacilityRatingData] = useState(null);
+    const phone = Facilities.find(x => x.name === matchDetailsData?.place)?.phoneNumber?.replace(/[\s()]/g, '');
 
     const redirectToSquadTab = () => {
         redirectToTab(1)
@@ -202,7 +208,7 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                 const response = await loadWebsite(`facilityRatings/${matchDetailsData?.place}`);
                 if (response) calculateFacilityRating(response)
             } catch (error) {
-                console.log(error)
+                throw new Error(error?.message);
             }
         }
 
@@ -224,32 +230,35 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
         if (url) window.open(url, "_blank");
     };
 
-    /*
+
     const redirectToCall = () => {
-        const phone = Facilities.find(x => x.name === matchDetailsData?.place)?.phoneNumber?.replace(/[\s()]/g, '');
         window.location.href = 'tel://' + phone;
     };
-     */
+
 
     return (
         <div className={classes.generalTabDiv}>
             {
                 bestOfMatch &&
-                <section className={classes.momSectionCursor} onClick={redirectToSquadTab}>
-                    <>
-                        <StarIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.starIcon}>
-                        </StarIcon>
-                    </>
-                    <div className={classes.momDetailsDiv}>
+                <>
+                    <div style={{height: '20px'}}></div>
+                    <section className={classes.momSectionCursor} onClick={redirectToSquadTab}>
+                        <>
+                            <StarIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.starIcon}>
+                            </StarIcon>
+                        </>
+                        <div className={classes.momDetailsDiv}>
                                     <span className={classes.momNameSpan}>
                                         {bestOfMatch?.name}
                                     </span>
-                        <span className={classes.momSmallSpan}>
+                            <span className={classes.momSmallSpan}>
                                         Man of the Match
                                     </span>
-                    </div>
-                </section>
+                        </div>
+                    </section>
+                </>
             }
+            <div style={{height: '20px'}}></div>
             <section className={classes.generalTabSection}>
                 <Accordion sx={{
                     bgcolor: '#1C1C1E',
@@ -277,60 +286,41 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                         {
                             facilityRatingData ?
                                 <>
-                                    <div className={classes.facilityRatingStyle}>
-                                        <div className={classes.facilityRatingDiv} style={{
-                                            background: (Object.values(facilityRatingData)
-                                                .map(value => parseFloat(value))
-                                                .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length) >= 7 ? 'darkgreen' :
-                                                (Object.values(facilityRatingData)
+                                    <section className={matchDetailsClasses.generalTabSection} style={{padding: '0'}}>
+                                        <div className={matchDetailsClasses.generalInfoDiv}>
+                                            <span className={playerCardsClasses.ratingSpan} style={{
+                                                background: (Object.values(facilityRatingData)
                                                     .map(value => parseFloat(value))
-                                                    .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length) < 5 ? 'darkred' : 'darkgoldenrod'
-                                        }}>
-                                        <span className={classes.facilityRating}>
-                                            {(Object.values(facilityRatingData)
-                                                .map(value => parseFloat(value))
-                                                .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length)?.toFixed(1)}
-                                                </span>
-                                            <span className={classes.facilityRatingName}>
-                                            Overall
-                                        </span>
+                                                    .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length) >= 7 ? 'darkgreen' :
+                                                    (Object.values(facilityRatingData)
+                                                        .map(value => parseFloat(value))
+                                                        .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length) < 5 ? 'darkred' : 'darkgoldenrod'
+                                            }}>
+                                                {(Object.values(facilityRatingData)
+                                                    .map(value => parseFloat(value))
+                                                    .reduce((acc, value) => acc + value, 0) / Object.values(facilityRatingData).length)?.toFixed(1)}
+                                            </span>
+                                            <span className={matchDetailsClasses.generalInfoSpan}>
+                                                Overall
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div className={classes.facilityRatingStyle}>
+                                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                                         {
-                                            Object.entries(facilityRatingData)?.filter((z, y) => y % 2 === 0)?.map((x, y) => (
-                                                <div key={y} className={classes.facilityRatingDiv} style={{
-                                                    background: x[1] >= 7 ? 'darkgreen' :
-                                                        x[1] < 5 ? 'darkred' : 'darkgoldenrod'
-                                                }}>
-                                                    <span className={classes.facilityRating}>
-                                                        {Number(x[1])?.toFixed(1)}
+                                            Object.entries(facilityRatingData)?.map((a, b) => (
+                                                <div key={b} className={matchDetailsClasses.generalInfoDiv}>
+                                                    <span className={playerCardsClasses.ratingSpan} style={{
+                                                        background: Number(a[1])?.toFixed(0) >= 7 ? 'darkgreen' :
+                                                            Number(a[1])?.toFixed(0) < 5 ? 'darkred' : 'darkgoldenrod'
+                                                    }}>
+                                                        {Number(a[1])?.toFixed(1)}
                                                     </span>
-                                                    <span className={classes.facilityRatingName}>
-                                                        {x[0]}
+                                                    <span className={matchDetailsClasses.generalInfoSpan}>
+                                                        {a[0]}
                                                     </span>
                                                 </div>
                                             ))
                                         }
-                                    </div>
-                                    <div className={classes.facilityRatingStyle}>
-                                        {
-                                            Object.entries(facilityRatingData)?.filter((z, y) => y % 2 !== 0)?.map((x, y) => (
-                                                <div key={y} className={classes.facilityRatingDiv} style={{
-                                                    background: x[1] >= 7 ? 'darkgreen' :
-                                                        x[1] < 5 ? 'darkred' : 'darkgoldenrod'
-                                                }}>
-                                                    <span className={classes.facilityRating}>
-                                                        {Number(x[1])?.toFixed(1)}
-                                                    </span>
-                                                    <span className={classes.facilityRatingName}>
-                                                        {x[0]}
-                                                    </span>
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-
+                                    </section>
                                 </> :
                                 <span className={classes.generalInfoSpan}>
                                 This facility is not rated.
@@ -338,7 +328,6 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                         }
                     </AccordionDetails>
                     <AccordionActions>
-                        {/*<Button onClick={redirectToCall}>Call</Button>*/}
                         <Button onClick={redirectToAppleMaps}>Apple Maps</Button>
                         <Button onClick={redirectToGoogleMaps}>Google Maps</Button>
                     </AccordionActions>
@@ -365,6 +354,11 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                             </span>
                         </div>
                     </AccordionSummary>
+                    <AccordionDetails>
+                        <span className={classes.generalInfoSpan}>
+                                The date of this match is {matchDetailsData.day.replace(/-/g, '/')}.
+                            </span>
+                    </AccordionDetails>
                 </Accordion>
                 <Accordion sx={{
                     bgcolor: '#1C1C1E',
@@ -388,6 +382,11 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                             </span>
                         </div>
                     </AccordionSummary>
+                    <AccordionDetails>
+                        <span className={classes.generalInfoSpan}>
+                                The time of this match is {matchDetailsData.time}.
+                            </span>
+                    </AccordionDetails>
                 </Accordion>
                 <Accordion sx={{
                     bgcolor: '#1C1C1E',
@@ -415,17 +414,53 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                         <JerseyTab matchDetailsData={matchDetailsData}/>
                     </AccordionDetails>
                 </Accordion>
+                {
+                    signedIn &&
+                    <Accordion sx={{
+                        bgcolor: '#1C1C1E',
+                        color: 'lightgray',
+                        width: '100%',
+                        border: 0,
+                        boxShadow: 0
+                    }}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
+                            aria-controls="panel3-content"
+                            id="panel3-header"
+                            sx={{padding: '0 10px'}}
+                        >
+                            <div className={classes.generalInfoDivAccordion}>
+                                <LocalPhoneIcon fontSize={isMobile ? 'medium' : 'large'}
+                                               className={classes.generalInfoIcon}>
+                                </LocalPhoneIcon>
+                                <span className={classes.generalInfoSpanCursor}>
+                                {phone}
+                            </span>
+                            </div>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <span className={classes.generalInfoSpan}>
+                                The telephone number of {matchDetailsData?.place} is {phone}. Click the button to call.
+                            </span>
+                        </AccordionDetails>
+                        <AccordionActions>
+                            <Button onClick={redirectToCall}>Call {matchDetailsData?.place}</Button>
+                        </AccordionActions>
+                    </Accordion>
+                }
             </section>
             {
                 lastFiveGames.length > 0 &&
-                <section className={classes.teamFormSection}>
-                    <div className={classes.formTitleDiv}>
-                        <span className={classes.formTitleSpan}>{TeamNames.oYesFc + ' Form'}</span>
-                    </div>
-                    <div className={classes.formScoresDiv}>
-                        {
-                            lastFiveGames.map((x, y) => (
-                                <div key={y} className={classes.lastGamesDiv}>
+                <>
+                    <div style={{height: '20px'}}></div>
+                    <section className={classes.teamFormSection}>
+                        <div className={classes.formTitleDiv}>
+                            <span className={classes.formTitleSpan}>{TeamNames.oYesFc + ' Form'}</span>
+                        </div>
+                        <div className={classes.formScoresDiv}>
+                            {
+                                lastFiveGames.map((x, y) => (
+                                    <div key={y} className={classes.lastGamesDiv}>
                                                 <span className={
                                                     x.oyesfc.goal > x.rival.goal ?
                                                         classes.formScoresWinSpan
@@ -435,148 +470,158 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                                                 } key={y}>
                                                     {x.oyesfc.goal + ' - ' + x.rival.goal}
                                                 </span>
-                                    {
-                                        y === 0 &&
-                                        <div className={
-                                            x.oyesfc.goal > x.rival.goal ?
-                                                classes.lastWinMatch
-                                                : x.oyesfc.goal === x.rival.goal ?
-                                                    classes.lastDrawMatch
-                                                    : classes.lastLostMatch
-                                        }></div>
-                                    }
-                                </div>
+                                        {
+                                            y === 0 &&
+                                            <div className={
+                                                x.oyesfc.goal > x.rival.goal ?
+                                                    classes.lastWinMatch
+                                                    : x.oyesfc.goal === x.rival.goal ?
+                                                        classes.lastDrawMatch
+                                                        : classes.lastLostMatch
+                                            }></div>
+                                        }
+                                    </div>
 
-                            ))
-                        }
-                    </div>
-                </section>
+                                ))
+                            }
+                        </div>
+                    </section>
+                </>
+
             }
             {
                 matchInformation?.length > 1 &&
-                <section className={classes.generalTabSection}>
-                    <div className={classes.generalInfoDiv}>
-                        <InfoIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
-                        </InfoIcon>
-                        <span className={classes.generalInfoSpan}>
+                <>
+                    <div style={{height: '20px'}}></div>
+                    <section className={classes.generalTabSection}>
+                        <div className={classes.generalInfoDiv}>
+                            <InfoIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
+                            </InfoIcon>
+                            <span className={classes.generalInfoSpan}>
                                     Information
                                 </span>
-                    </div>
-                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
-                    {
-                        matchInformation?.map((x, y) => (
-                            <div key={y} className={classes.generalInfoDiv}>
-                                <LabelIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
-                                </LabelIcon>
-                                <span className={classes.generalInfoSpan}>
+                        </div>
+                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                        {
+                            matchInformation?.map((x, y) => (
+                                <div key={y} className={classes.generalInfoDiv}>
+                                    <LabelIcon fontSize={isMobile ? 'medium' : 'large'}
+                                               className={classes.generalInfoIcon}>
+                                    </LabelIcon>
+                                    <span className={classes.generalInfoSpan}>
                                             {x}
                                         </span>
-                            </div>
-                        ))
-                    }
-                </section>
+                                </div>
+                            ))
+                        }
+                    </section>
+                </>
+
             }
             {((matchDetailsData?.weather?.sky && matchDetailsData?.weather?.sky !== '') || (weatherData?.sky)) &&
-                <section className={classes.generalTabSection}>
-                    <div className={classes.generalInfoDiv}>
-                        <CloudIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
-                        </CloudIcon>
-                        <span className={classes.generalInfoSpan}>
+                <>
+                    <div style={{height: '20px'}}></div>
+                    <section className={classes.generalTabSection}>
+                        <div className={classes.generalInfoDiv}>
+                            <CloudIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
+                            </CloudIcon>
+                            <span className={classes.generalInfoSpan}>
                             Weather
                         </span>
-                    </div>
-                    <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
-                    <div className={classes.generalInfoDiv}>
+                        </div>
+                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                        <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Weather:
                         </span>
-                        <span className={classes.generalInfoSpan}>
+                            <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.weather : (matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '' ? matchDetailsData?.weather?.weather : matchDetailsData?.weather?.sky)}
                         </span>
-                    </div>
-                    {
-                        ((matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '') || (weatherData?.weather)) &&
-                        <>
-                            <div className={classes.generalInfoDiv}>
+                        </div>
+                        {
+                            ((matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '') || (weatherData?.weather)) &&
+                            <>
+                                <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Description:
                         </span>
-                                <span className={classes.generalInfoSpan}>
+                                    <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.description : matchDetailsData?.weather?.description}
                         </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
+                                </div>
+                                <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Part of the Day:
                         </span>
-                                <span className={classes.generalInfoSpan}>
+                                    <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.sky : matchDetailsData?.weather?.sky}
                         </span>
-                            </div>
-                        </>
-                    }
-                    <div className={classes.generalInfoDiv}>
+                                </div>
+                            </>
+                        }
+                        <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Temperature:
                         </span>
-                        <span className={classes.generalInfoSpan}>
+                            <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.temperature : matchDetailsData?.weather?.temperature}&#176;
                         </span>
-                    </div>
-                    {
-                        ((matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '') || (weatherData?.weather)) &&
-                        <>
-                            <div className={classes.generalInfoDiv}>
+                        </div>
+                        {
+                            ((matchDetailsData?.weather?.weather && matchDetailsData?.weather?.weather !== '') || (weatherData?.weather)) &&
+                            <>
+                                <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Feels Like:
                         </span>
-                                <span className={classes.generalInfoSpan}>
+                                    <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.feels_like : matchDetailsData?.weather?.feels_like}&#176;
                         </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
+                                </div>
+                                <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Humidity:
                         </span>
-                                <span className={classes.generalInfoSpan}>
+                                    <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.humidity : matchDetailsData?.weather?.humidity}%
                         </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
+                                </div>
+                                <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Wind Speed:
                         </span>
-                                <span className={classes.generalInfoSpan}>
+                                    <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.windSpeed : matchDetailsData?.weather?.windSpeed} km/h
                         </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
+                                </div>
+                                <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Clouds:
                         </span>
-                                <span className={classes.generalInfoSpan}>
+                                    <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.clouds : matchDetailsData?.weather?.clouds}%
                         </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
+                                </div>
+                                <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Sea Level Pressure:
                         </span>
-                                <span className={classes.generalInfoSpan}>
+                                    <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.sea_level : matchDetailsData?.weather?.sea_level} hPa
                         </span>
-                            </div>
-                            <div className={classes.generalInfoDiv}>
+                                </div>
+                                <div className={classes.generalInfoDiv}>
                         <span className={classes.generalInfoSpan}>
                             Ground Level Pressure:
                         </span>
-                                <span className={classes.generalInfoSpan}>
+                                    <span className={classes.generalInfoSpan}>
                             {weatherData ? weatherData?.grnd_level : matchDetailsData?.weather?.grnd_level} hPa
                         </span>
-                            </div>
-                        </>
-                    }
-                </section>
+                                </div>
+                            </>
+                        }
+                    </section>
+                </>
             }
         </div>
     );

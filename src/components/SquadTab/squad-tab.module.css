@@ -22,17 +22,47 @@
     }
 }
 
+.fieldBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #050505;
+    border-radius: 12px;
+    margin-top: 20px;
+    @media (max-width: 767px) {
+        margin-top: 0;
+        background-color: transparent;
+        border-radius: 0;
+    }
+}
+
+.emptySpace {
+    height: 20px;
+    display: flex;
+    @media (max-width: 767px) {
+        display: none;
+    }
+}
+
 .footballField {
     background-image: url('../../images/field.jpeg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    width: 100%;
+    width: 40%;
     height: auto;
     aspect-ratio: 2 / 3;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-radius: 12px;
+    @media (max-width: 767px) {
+        width: 100%;
+        border-radius: 0;
+    }
+    @media (min-width: 768px) and (max-width: 1100px) {
+        width: 70%;
+    }
 }
 
 .zone {
@@ -78,11 +108,10 @@
 }
 
 .rating {
-    font-size: 16px;
-    padding: 3px;
+    padding: 3px 7px;
     border-radius: 25px;
-    width: 40px;
-    height: 23px;
+    width: auto;
+    height: auto;
     justify-items: center;
     justify-content: center;
     text-align: center;
@@ -91,18 +120,17 @@
     color: lightgray;
     display: flex;
     @media (max-width: 768px) {
-        font-size: 14px;
-        width: 35px;
-        height: 20px;
+        width: auto;
+        height: auto;
     }
 }
 
 .momRating {
     font-size: 16px;
-    padding: 3px;
+    padding: 3px 7px;
     border-radius: 25px;
-    width: 50px;
-    height: 23px;
+    width: auto;
+    height: auto;
     justify-items: center;
     justify-content: center;
     text-align: center;
@@ -111,9 +139,8 @@
     color: lightgray;
     display: flex;
     @media (max-width: 768px) {
-        font-size: 14px;
-        width: 40px;
-        height: 20px;
+        width: auto;
+        height: auto;
     }
 }
 
@@ -129,5 +156,12 @@
     color: lightgrey;
     @media (max-width: 768px) {
         font-size: 16px;
+    }
+}
+
+.spanStyle {
+    font-size: 18px;
+    @media (max-width: 900px) {
+        font-size: 14px;
     }
 }
