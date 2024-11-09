@@ -13,7 +13,6 @@ import {
     WeatherSky
 } from "../../constants/constants";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import matchDetailsClasses from "../MatchDetails/match-details.module.css"
 import {
     Accordion,
     AccordionDetails,
