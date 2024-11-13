@@ -12,6 +12,7 @@
     background-color: #1C1C1E;
     width: 100%;
     border: none;
+    color: lightgray;
     @media (max-width: 768px) {
         padding: 12px 20px;
         font-size: 15px;

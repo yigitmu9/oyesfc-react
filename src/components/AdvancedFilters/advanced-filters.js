@@ -270,7 +270,7 @@ const AdvancedFilters = () => {
                 <BackButton handleBackButton={handleBack} generalTitle={'Filters'}/>
                 <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
                 <div style={{display: "block", height: '100%'}}>
-                    <form className={classes.formStyle} onSubmit={handleSubmit}>
+                    <form className={classes.formStyle}>
                         <div className={classes.formAlign}>
                             <div className={classes.boxStyles}>
                                 <div className={classes.filterPartStyle}>
@@ -563,7 +563,7 @@ const AdvancedFilters = () => {
                                     <span className={navbarClasses.drawerRoutesSpan}>Reset Filters</span>
                                 </div>
                                 <div className={classes.emptySpaceButton}></div>
-                                <div className={accountClasses.morePageBox} onClick={resetFilters}>
+                                <div className={accountClasses.morePageBox} onClick={handleSubmit}>
                                     <span className={navbarClasses.drawerRoutesSpan}>Apply Filters</span>
                                 </div>
                             </div>

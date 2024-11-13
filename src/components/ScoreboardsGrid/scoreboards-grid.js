@@ -23,7 +23,7 @@ const ScoreboardsGrid = ({playerDetails, filteredWithPlayerData}) => {
         <>
             { !playerDetails && <MainTitle title={'Matches'}/>}
             {Object.values(filteredData)?.length > 0 ?
-                <div style={{minHeight: windowHeight}}>
+                <div style={{minHeight: playerDetails ? '' : windowHeight}}>
                     <div className={classes.grid}>
                         {sortedFilteredData?.map((x, y) => (
                             <Scoreboard
