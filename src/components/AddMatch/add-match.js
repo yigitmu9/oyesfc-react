@@ -30,7 +30,7 @@ import {PulseLoader} from "react-spinners";
 import Box from "@mui/material/Box";
 import BackButton from "../../shared/BackButton/back-button";
 import {useDispatch, useSelector} from "react-redux";
-import {getCategoryValues, hasAppliedFilters, returnFilteredData} from "../../utils/utils";
+import {getCategoryValues, getGeoCoordinates, hasAppliedFilters, returnFilteredData} from "../../utils/utils";
 import {updateData} from "../../redux/databaseDataSlice";
 import navbarClasses from "../Navbar/navbar.module.css";
 import accountClasses from '../AccountGrid/account-grid.module.css'
@@ -422,13 +422,6 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
 
     };
 
-    const getGeoCoordinates = (place) => {
-        const xLocation = Facilities.find(x => x.name === place).xAppleLocation
-        const xLocationWithoutSpaces = xLocation.replace(/\s+/g, '');
-        const match = xLocationWithoutSpaces.match(/geo:[\d.,]+/);
-        return match ? match[0]?.split(':')[1] : 'Geo coordinates not found';
-    };
-
     function capitalizeWords(str) {
         return str
             ?.split(' ')
@@ -444,7 +437,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
             const timeDifference = endDate.getTime() - startDate.getTime();
             const dayDifference = timeDifference / (1000 * 3600 * 24);
             if (dayDifference <= 5) {
-                const coordinates = getGeoCoordinates(place);
+                const coordinates = getGeoCoordinates(place)
                 const [latitude, longitude] = coordinates.split(',');
                 const date = new Date(day.split('T')[0])
                 const hour = parseInt(day.split('T')[1].split(':')[0], 10);

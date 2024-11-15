@@ -1,4 +1,4 @@
-import {DirectionList, matchType, TeamMembers, WeatherSky} from "../constants/constants";
+import {DirectionList, Facilities, matchType, TeamMembers, WeatherSky} from "../constants/constants";
 
 export const OYesFCPlayersArray = Object.values(TeamMembers).map(x => x.name)
 
@@ -259,5 +259,11 @@ export const redirect = (direction) => {
     if (direction === DirectionList.reddit) window.open("https://www.reddit.com/r/a:t5_4r4dfa/", "_blank");
     if (direction === DirectionList.youtube) window.open("https://youtube.com/@oyesfc?si=ER9YlrYaittkOeRu", "_blank");
     if (direction === DirectionList.email) window.location.href = "mailto:oyesfc@gmail.com";
-
 }
+
+export const getGeoCoordinates = (place) => {
+    const xLocation = Facilities.find(x => x.name === place).xAppleLocation
+    const xLocationWithoutSpaces = xLocation.replace(/\s+/g, '');
+    const match = xLocationWithoutSpaces.match(/geo:[\d.,]+/);
+    return match ? match[0]?.split(':')[1] : 'Geo coordinates not found';
+};

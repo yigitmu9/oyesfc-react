@@ -9,10 +9,8 @@ import CheckroomIcon from "@mui/icons-material/Checkroom";
 import InfoIcon from "@mui/icons-material/Info";
 import {
     Accordion,
-    AccordionActions,
     AccordionDetails,
     AccordionSummary,
-    Button,
     Divider
 } from "@mui/material";
 import LabelIcon from "@mui/icons-material/Label";
@@ -20,11 +18,25 @@ import CloudIcon from '@mui/icons-material/Cloud';
 import {loadWebsite} from "../../firebase";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import JerseyTab from "../JerseyTab/jersey-tab";
-import {returnAverageData} from "../../utils/utils";
+import {getGeoCoordinates, returnAverageData} from "../../utils/utils";
 import {useSelector} from "react-redux";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import playerCardsClasses from '../PlayerCards/player-cards.module.css'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import accountClasses from "../AccountGrid/account-grid.module.css";
+import navbarClasses from "../Navbar/navbar.module.css";
+
+const DefaultIcon = L.icon({
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+    iconAnchor: [12, 41],
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirectToTab, weatherData}) => {
 
@@ -34,6 +46,9 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
     const matchInformation = createMatchInfos();
     const [facilityRatingData, setFacilityRatingData] = useState(null);
     const phone = Facilities.find(x => x.name === matchDetailsData?.place)?.phoneNumber?.replace(/[\s()]/g, '');
+    const coordinates = getGeoCoordinates(matchDetailsData?.place)
+    const [latitude, longitude] = coordinates.split(',');
+    const facilityCoordinates = [Number(latitude), Number(longitude)]
 
     const redirectToSquadTab = () => {
         redirectToTab(1)
@@ -326,11 +341,29 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                                 This facility is not rated.
                             </span>
                         }
+                        <>
+                            <div style={{height: '20px'}}></div>
+                            <section className={classes.generalTabSection} style={{padding: '0'}}>
+                                <MapContainer center={facilityCoordinates} zoom={13} className={classes.mapClass}>
+                                    <TileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    />
+                                    <Marker position={facilityCoordinates}>
+                                        <Popup>{matchDetailsData?.place}</Popup>
+                                    </Marker>
+                                </MapContainer>
+                            </section>
+                        </>
+                        <div style={{height: '20px'}}></div>
+                        <div className={accountClasses.morePageBox} onClick={redirectToAppleMaps} style={{background: 'black'}}>
+                            <span className={navbarClasses.drawerRoutesSpan} style={{fontSize: isMobile ? '14px' : '18px'}}>View {matchDetailsData?.place} on Apple Maps</span>
+                        </div>
+                        <div style={{height: '20px'}}></div>
+                        <div className={accountClasses.morePageBox} onClick={redirectToGoogleMaps} style={{background: 'black'}}>
+                            <span className={navbarClasses.drawerRoutesSpan} style={{fontSize: isMobile ? '14px' : '18px'}}>View {matchDetailsData?.place} on Google Maps</span>
+                        </div>
                     </AccordionDetails>
-                    <AccordionActions>
-                        <Button onClick={redirectToAppleMaps}>Apple Maps</Button>
-                        <Button onClick={redirectToGoogleMaps}>Google Maps</Button>
-                    </AccordionActions>
                 </Accordion>
                 <Accordion sx={{
                     bgcolor: '#1C1C1E',
@@ -442,17 +475,19 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                             <span className={classes.generalInfoSpan}>
                                 The telephone number of {matchDetailsData?.place} is {phone}. Click the button to call.
                             </span>
+                            <div style={{height: '20px'}}></div>
+                            <div className={accountClasses.morePageBox} onClick={redirectToCall}
+                                 style={{background: 'black'}}>
+                                <span className={navbarClasses.drawerRoutesSpan} style={{fontSize: isMobile ? '14px' : '18px'}}>Call {matchDetailsData?.place}</span>
+                            </div>
                         </AccordionDetails>
-                        <AccordionActions>
-                            <Button onClick={redirectToCall}>Call {matchDetailsData?.place}</Button>
-                        </AccordionActions>
                     </Accordion>
                 }
             </section>
             {
                 lastFiveGames.length > 0 &&
                 <>
-                    <div style={{height: '20px'}}></div>
+                <div style={{height: '20px'}}></div>
                     <section className={classes.teamFormSection}>
                         <div className={classes.formTitleDiv}>
                             <span className={classes.formTitleSpan}>{TeamNames.oYesFc + ' Form'}</span>
