@@ -12,9 +12,9 @@ export const TeamMembers = {
             birthMonth: 12,
             birthDay: 23,
             ratings: [3, 5, 4, 8, 8, 4],
-            bootBrand: 'Nike',
-            bootCollection: 'Mercurial',
-            bootModel: 'Vapor 12',
+            bootBrand: 'Adidas',
+            bootCollection: 'Predator',
+            bootModel: '',
             fifaRole: 'GK',
             position: 1
         },
@@ -104,7 +104,7 @@ export const TeamMembers = {
             ratings: [8.5, 8, 7, 6, 5, 7],
             bootBrand: 'Adidas',
             bootCollection: 'Predator',
-            bootModel: '20.4',
+            bootModel: 'Club Sock',
             fifaRole: 'LW',
             position: 1
         },

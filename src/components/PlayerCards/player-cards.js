@@ -677,7 +677,7 @@ const PlayerCards = ({playerName}) => {
                                           className={matchDetailsClasses.generalInfoIcon}>
                                 </TollIcon>
                                 <span className={matchDetailsClasses.generalInfoSpan}>
-                            Football Boot
+                            Football Boot {playerName === TeamMembers.can.name ? 'and Gloves' : null}
                         </span>
                             </div>
                             <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>

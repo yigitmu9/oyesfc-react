@@ -1,0 +1,26 @@
+.sideBySideInLargeArea {
+    display: flex;
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+}
+
+.emptySpace {
+    width: 50px;
+    @media (max-width: 768px) {
+        width: 0;
+    }
+}
+
+.emptySpaceButton {
+    width: 20px;
+    height: 0;
+    @media (max-width: 768px) {
+        width: 0;
+        height: 20px;
+    }
+}
+
+.emptyHeightSpace {
+    height: 20px;
+}

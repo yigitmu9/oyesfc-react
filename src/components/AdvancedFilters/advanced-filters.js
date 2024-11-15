@@ -6,10 +6,10 @@ import {returnFilteredData} from "../../utils/utils";
 import {loadWebsite} from "../../firebase";
 import {useDispatch, useSelector} from "react-redux";
 import {updateData} from "../../redux/databaseDataSlice";
-import navbarClasses from "../Navbar/navbar.module.css";
-import accountClasses from "../AccountGrid/account-grid.module.css";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
+import sharedClasses from "../../shared/Styles/shared-styles.module.css";
+import ButtonComponent from "../../shared/ButtonComponent/button-component";
 
 const AdvancedFilters = () => {
 
@@ -216,9 +216,7 @@ const AdvancedFilters = () => {
         }
     }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
+    const handleSubmit = async () => {
         if (matchType !== 'all' ||
             filteredPlayers?.length > 0 ||
             filteredFacilities?.length > 0 ||
@@ -558,17 +556,14 @@ const AdvancedFilters = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className={classes.boxStyles}>
-                                <div className={accountClasses.morePageBox} onClick={resetFilters}>
-                                    <span className={navbarClasses.drawerRoutesSpan}>Reset Filters</span>
-                                </div>
-                                <div className={classes.emptySpaceButton}></div>
-                                <div className={accountClasses.morePageBox} onClick={handleSubmit}>
-                                    <span className={navbarClasses.drawerRoutesSpan}>Apply Filters</span>
-                                </div>
-                            </div>
+                            <ButtonComponent
+                                onClick={() => resetFilters()}
+                                name={`Reset Filters`} backgroundColor={'#1C1C1E'} textColor={'#007AFF'}/>
+                            <div className={sharedClasses.emptyHeightSpace}></div>
+                            <ButtonComponent
+                                onClick={() => handleSubmit()}
+                                name={`Apply Filters`}/>
                         </div>
-
                     </form>
                 </div>
             </div>

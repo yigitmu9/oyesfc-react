@@ -30,6 +30,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import {useNavigate} from "react-router-dom";
 import accountClasses from "../AccountGrid/account-grid.module.css";
 import navbarClasses from "../Navbar/navbar.module.css";
+import sharedClasses from "../../shared/Styles/shared-styles.module.css";
+import ButtonComponent from "../../shared/ButtonComponent/button-component";
 
 function CustomTabPanel(props) {
     const {children, value, index, ...other} = props;
@@ -497,17 +499,10 @@ export const MatchDetails = ({matchDate, cameFrom}) => {
                         {
                             isCaptain &&
                             <>
-                                <div style={{height: '20px'}}></div>
-                                <section className={classes.generalTabSection} onClick={editMatch} style={{cursor: 'pointer'}}>
-                                    <div className={classes.urlInfoDiv}>
-                                        <EditIcon fontSize={isMobile ? 'medium' : 'large'}
-                                                  className={classes.generalInfoIcon}>
-                                        </EditIcon>
-                                        <span className={classes.generalInfoSpan}>
-                                            Edit Match
-                                        </span>
-                                    </div>
-                                </section>
+                                <div className={sharedClasses.emptyHeightSpace}></div>
+                                <ButtonComponent
+                                    onClick={() => editMatch()}
+                                    name={`Edit Match`}/>
                             </>
                         }
                     </CustomTabPanel>
@@ -523,7 +518,6 @@ export const MatchDetails = ({matchDate, cameFrom}) => {
                     <CustomTabPanel value={tabValue} index={3}>
                         <div style={{height: '20px'}}></div>
                         <HighlightsTab matchDetailsData={matchDetailsData}/>
-
                     </CustomTabPanel>
                     {
                     signedIn && fixture === matchType.previous &&
@@ -602,10 +596,11 @@ export const MatchDetails = ({matchDate, cameFrom}) => {
                                     <Alert sx={{borderRadius: '25px', margin: '20px'}}
                                            variant="filled" severity="error">{starsErrorMessage}</Alert>
                                 }
-                                <div style={{height: '20px'}}></div>
-                                <div className={accountClasses.morePageBox} onClick={() => (starsSubmitButton !== 'Submitted' && starsSubmitButton !== 'Not Available') && submitStars()}>
-                                    <span className={navbarClasses.drawerRoutesSpan}>{starsSubmitButton}</span>
-                                </div>
+                                <div className={sharedClasses.emptyHeightSpace}></div>
+                                <ButtonComponent
+                                    onClick={() => (starsSubmitButton !== 'Submitted' && starsSubmitButton !== 'Not Available') && submitStars()}
+                                    name={starsSubmitButton}
+                                    backgroundColor={starsSubmitButton === 'Submitted' ? '#1C1C1E' : null}/>
                             </CustomTabPanel>
                             <CustomTabPanel value={tabValue} index={5}>
                                 {
@@ -644,10 +639,10 @@ export const MatchDetails = ({matchDate, cameFrom}) => {
                                     </>
 
                                 }
-                                <div style={{height: '20px'}}></div>
-                                <div className={accountClasses.morePageBox} onClick={submitNote}>
-                                    <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
-                                </div>
+                                <div className={sharedClasses.emptyHeightSpace}></div>
+                                <ButtonComponent
+                                    onClick={() => submitNote()}
+                                    name={'Submit'}/>
                             </CustomTabPanel>
                         </>
                     }

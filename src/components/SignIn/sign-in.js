@@ -87,9 +87,9 @@ const SignIn = () => {
                 <div className={classes.morePageBox} onClick={() => handleSubmit()}>
                     {
                         loading ?
-                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                             :
-                            <span className={classes.drawerRoutesSpan}>Sign In</span>
+                            <span className={classes.drawerRoutesSpan} style={{color: '#007AFF'}}>Sign In</span>
                     }
                 </div>
             </form>

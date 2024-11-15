@@ -13,8 +13,7 @@ import {Alert} from "@mui/material";
 import BackButton from "../../shared/BackButton/back-button";
 import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
-import accountClasses from "../AccountGrid/account-grid.module.css";
-import navbarClasses from "../Navbar/navbar.module.css";
+import ButtonComponent from "../../shared/ButtonComponent/button-component";
 
 const RatingsGrid = () => {
 
@@ -240,9 +239,9 @@ const RatingsGrid = () => {
                 ))
 
             }
-            <div className={accountClasses.morePageBox} onClick={facilityStarsSubmit}>
-                <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
-            </div>
+            <ButtonComponent
+                onClick={() => facilityStarsSubmit()}
+                name={`Submit`}/>
         </>
     )
 
@@ -368,9 +367,9 @@ const RatingsGrid = () => {
                 ))
 
             }
-            <div className={accountClasses.morePageBox} onClick={playerStarsSubmit}>
-                <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
-            </div>
+            <ButtonComponent
+                onClick={() => playerStarsSubmit()}
+                name={`Submit`}/>
         </>
     )
 

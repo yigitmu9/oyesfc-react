@@ -13,9 +13,6 @@
 
 .spanStyle {
     text-align: center;
-    @media (max-width: 900px) {
-        text-align: left;
-    }
 }
 
 .midTitleStyle {

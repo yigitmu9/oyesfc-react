@@ -13,13 +13,12 @@ import {
 import highlightsClasses from './highlights-tab.module.css';
 import addMatchClasses from '../AddMatch/add-match.module.css';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {PulseLoader} from "react-spinners";
 import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import BrowserNotSupportedIcon from '@mui/icons-material/BrowserNotSupported';
 import {useSelector} from "react-redux";
-import accountClasses from "../AccountGrid/account-grid.module.css";
-import navbarClasses from "../Navbar/navbar.module.css";
+import sharedClasses from "../../shared/Styles/shared-styles.module.css";
+import ButtonComponent from "../../shared/ButtonComponent/button-component";
 
 const HighlightsTab = ({matchDetailsData}) => {
 
@@ -79,8 +78,7 @@ const HighlightsTab = ({matchDetailsData}) => {
         }));
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleSubmit = async () => {
         try {
             setLoading(true)
             const videoId = generateRandomString()
@@ -153,7 +151,7 @@ const HighlightsTab = ({matchDetailsData}) => {
                     <section className={classes.generalTabSection}>
                         {isCaptain &&
                             <Accordion
-                                sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%',border: 0, boxShadow: 0}}>
+                                sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%',border: 0, boxShadow: 0, fontSize: {xs: '14px', md: '18px'}}}>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
                                     aria-controls="panel1-content"
@@ -245,15 +243,11 @@ const HighlightsTab = ({matchDetailsData}) => {
                                                                severity={snackbarData?.status}>{snackbarData?.message}</Alert>
                                                     </>
                                                 }
-                                                <div style={{height: '20px'}}></div>
-                                                <div className={accountClasses.morePageBox} onClick={handleSubmit} style={{background: "black"}}>
-                                                    {
-                                                        loading ?
-                                                            <PulseLoader color="red" speedMultiplier={0.7}/>
-                                                            :
-                                                            <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
-                                                    }
-                                                </div>
+                                                <div className={sharedClasses.emptyHeightSpace}></div>
+                                                <ButtonComponent
+                                                    onClick={() => handleSubmit()}
+                                                    name={`Submit`}
+                                                    loading={loading}/>
                                             </div>
                                         </div>
                                     </form>
@@ -262,7 +256,7 @@ const HighlightsTab = ({matchDetailsData}) => {
                         {
                             videoData?.length > 0 ? videoData?.map((x, y) => (
                                     <Accordion key={y}
-                                               sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%',border: 0, boxShadow: 0}}>
+                                               sx={{bgcolor: '#1C1C1E', color: 'lightgray', width: '100%',border: 0, boxShadow: 0, fontSize: {xs: '14px', md: '18px'}}}>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon sx={{color: 'lightgray'}}/>}
                                             aria-controls="panel1-content"

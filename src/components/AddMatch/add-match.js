@@ -12,7 +12,6 @@ import {
     TeamNames, TurkishJerseys,
     WeatherSky
 } from "../../constants/constants";
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import {
     Accordion,
     AccordionDetails,
@@ -35,6 +34,8 @@ import {updateData} from "../../redux/databaseDataSlice";
 import navbarClasses from "../Navbar/navbar.module.css";
 import accountClasses from '../AccountGrid/account-grid.module.css'
 import {useNavigate} from "react-router-dom";
+import sharedClasses from "../../shared/Styles/shared-styles.module.css";
+import ButtonComponent from "../../shared/ButtonComponent/button-component";
 
 const AddMatchComponent = ({selectedMatchData}) => {
 
@@ -206,8 +207,7 @@ const AddMatchComponent = ({selectedMatchData}) => {
         return `${day}%20${monthName}%20${dayName}`;
     }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleSubmit = async () => {
         const unconvertedDay = formData?.day
         finalizeData();
         setDayTime();
@@ -729,59 +729,44 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                         {
                             !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.calendar_create_successful) &&
                             <>
-                                <div style={{height: '20px'}}></div>
-                                <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && createCalendar()}>
-                                    {
-                                        calendarButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
-                                            :
-                                            <span
-                                                className={navbarClasses.drawerRoutesSpan}>Create Calendar Event</span>
-                                    }
-                                </div>
+                                <div className={sharedClasses.emptyHeightSpace}></div>
+                                <ButtonComponent
+                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && createCalendar()}
+                                    name={`Create Calendar Event`}
+                                    loading={calendarButtonLoading}
+                                    textColor={'#007AFF'}
+                                    backgroundColor={'#1C1C1E'}/>
                             </>
                         }
                         {
                             !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.email_sent_successful) &&
                             <>
-                                <div style={{height: '20px'}}></div>
-                                <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && sendEmails()}>
-                                    {
-                                        emailJsButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
-                                            :
-                                            <span className={navbarClasses.drawerRoutesSpan}>Send Emails</span>
-                                    }
-                                </div>
+                                <div className={sharedClasses.emptyHeightSpace}></div>
+                                <ButtonComponent
+                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && sendEmails()}
+                                    name={`Send Emails`}
+                                    loading={emailJsButtonLoading}
+                                    textColor={'#007AFF'}
+                                    backgroundColor={'#1C1C1E'}/>
                             </>
                         }
                         {
                             !selectedMatchData && !finalSuccesses?.includes(AddMatchMessages.siri_shortcut_run_successful) &&
                             <>
-                                <div style={{height: '20px'}}></div>
-                                <div className={accountClasses.morePageBox}
-                                     onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && sendWhatsAppNotificationToSquadMembers()}>
-                                    {
-                                        siriShortcutButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
-                                            :
-                                            <span className={navbarClasses.drawerRoutesSpan}>Run Siri Shortcut</span>
-                                    }
-                                </div>
+                                <div className={sharedClasses.emptyHeightSpace}></div>
+                                <ButtonComponent
+                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && sendWhatsAppNotificationToSquadMembers()}
+                                    name={`Run Siri Shortcut`}
+                                    loading={siriShortcutButtonLoading}
+                                    textColor={'#007AFF'}
+                                    backgroundColor={'#1C1C1E'}/>
                             </>
                         }
-
-                        <div style={{height: '20px'}}></div>
-                        <div className={accountClasses.morePageBox} onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && completeAddMatch()}>
-                            {
-                                loading ?
-                                    <PulseLoader color="red" speedMultiplier={0.7}/>
-                                    :
-                                    <span className={navbarClasses.drawerRoutesSpan}>Submit & Close</span>
-                            }
-                        </div>
-
-                        <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
+                        <div className={sharedClasses.emptyHeightSpace}></div>
+                        <ButtonComponent
+                            onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && completeAddMatch()}
+                            name={`Submit & Close`}
+                            loading={loading}/>
                     </div>
                 </div>
             </div>
@@ -791,14 +776,15 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
     return (
         <div>
             <div>
-                <BackButton handleBackButton={handleBack} generalTitle={selectedMatchData ? 'Edit Match' : 'Add Match'}/>
+                <BackButton handleBackButton={handleBack}
+                            generalTitle={selectedMatchData ? 'Edit Match' : 'Add Match'}/>
                 <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
                 <form className={classes.formStyle}>
                     <div className={classes.formAlign}>
                         <div className={classes.infoAlign}>
 
 
-                            <div className={classes.boxStyle}>
+                        <div className={classes.boxStyle}>
                                 <label className={classes.matchTypeTitle}>
                                     Select Match Type:
                                 </label>
@@ -900,8 +886,10 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 weatherButtonStatus?.warning &&
                                 <>
                                     <div style={{height: '20px'}}></div>
-                                    <Alert sx={{padding: 1, borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
-                                           variant="outlined" severity={weatherButtonStatus?.severity}>{weatherButtonStatus?.warning}</Alert>
+                                    <Alert
+                                        sx={{padding: 1, borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                                        variant="outlined"
+                                        severity={weatherButtonStatus?.severity}>{weatherButtonStatus?.warning}</Alert>
                                 </>
 
                             }
@@ -911,70 +899,70 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                 <>
                                     <label>
                                         <span>Weather: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.weather}
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Temperature: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.temperature}&#176;
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Feels Like: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.feels_like}&#176;
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Ground Level Pressure: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.grnd_level} hPa
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Sea Level Pressure: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.sea_level} hPa
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Humidity: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.humidity} %
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Description: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.description}
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Wind Speed: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.windSpeed} km/h
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Clouds: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.clouds} %
                                         </span>
                                     </label>
                                     <br/>
                                     <label>
                                         <span>Sky: {weatherButtonLoading ?
-                                            <PulseLoader color="red" speedMultiplier={0.7}/>
+                                            <PulseLoader color="#007AFF" speedMultiplier={0.7}/>
                                             : weatherFormData?.sky}
                                         </span>
                                     </label>
@@ -984,7 +972,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
 
                             <div style={{height: '20px'}}></div>
                             <div className={classes.boxStyle}>
-                            <label>
+                                <label>
                                     O Yes FC Jersey:
                                     <select className={classes.select}
                                             onChange={handleOYesFCInputChange}
@@ -1122,12 +1110,12 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                         value={newSquadMember}
                                         onChange={(e) => setNewSquadMember(e.target.value)}
                                     />
-                                    <div style={{height: '10px'}}></div>
-                                    <div className={accountClasses.morePageBox} onClick={handleAddSquadMember} style={{background: 'black', width: '60px'}}>
-                                        <PersonAddAlt1Icon className={classes.iconStyle}></PersonAddAlt1Icon>
-                                    </div>
                                 </label>
                             </div>
+                            <div className={sharedClasses.emptyHeightSpace}></div>
+                            <ButtonComponent
+                                onClick={() => handleAddSquadMember()}
+                                name={`Add Player`} textColor={'#007AFF'} backgroundColor={'#1C1C1E'}/>
                         </div>
                     </div>
                     {
@@ -1143,10 +1131,10 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                         ))
 
                     }
-                    <div style={{height: '20px'}}></div>
-                    <div className={accountClasses.morePageBox} onClick={handleSubmit}>
-                        <span className={navbarClasses.drawerRoutesSpan}>Submit</span>
-                    </div>
+                    <div className={sharedClasses.emptyHeightSpace}></div>
+                    <ButtonComponent
+                        onClick={() => handleSubmit()}
+                        name={`Submit`}/>
                 </form>
             </div>
         </div>

@@ -88,7 +88,7 @@ const AccountGrid = () => {
                             </div>
                             <div style={{height: '20px'}}></div>
                             <div className={classes.morePageBox} onClick={() => startLogOut()}>
-                                <span className={navbarClasses.drawerRoutesSpan}>Sign Out</span>
+                                <span className={navbarClasses.drawerRoutesSpan} style={{color: 'red'}}>Sign Out</span>
                             </div>
                             <div style={{height: '5px'}}></div>
                             <div style={{padding: '0 20px'}}>

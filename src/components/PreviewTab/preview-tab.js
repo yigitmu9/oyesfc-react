@@ -28,8 +28,8 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import accountClasses from "../AccountGrid/account-grid.module.css";
-import navbarClasses from "../Navbar/navbar.module.css";
+import ButtonComponent from "../../shared/ButtonComponent/button-component";
+import sharedClasses from "../../shared/Styles/shared-styles.module.css";
 
 const DefaultIcon = L.icon({
     iconUrl: markerIcon,
@@ -355,14 +355,14 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                                 </MapContainer>
                             </section>
                         </>
-                        <div style={{height: '20px'}}></div>
-                        <div className={accountClasses.morePageBox} onClick={redirectToAppleMaps} style={{background: 'black'}}>
-                            <span className={navbarClasses.drawerRoutesSpan} style={{fontSize: isMobile ? '14px' : '18px'}}>View {matchDetailsData?.place} on Apple Maps</span>
-                        </div>
-                        <div style={{height: '20px'}}></div>
-                        <div className={accountClasses.morePageBox} onClick={redirectToGoogleMaps} style={{background: 'black'}}>
-                            <span className={navbarClasses.drawerRoutesSpan} style={{fontSize: isMobile ? '14px' : '18px'}}>View {matchDetailsData?.place} on Google Maps</span>
-                        </div>
+                        <div className={sharedClasses.emptyHeightSpace}></div>
+                        <ButtonComponent
+                            onClick={() => redirectToAppleMaps()}
+                            name={`View on Apple Maps`}/>
+                        <div className={sharedClasses.emptyHeightSpace}></div>
+                        <ButtonComponent
+                            onClick={() => redirectToGoogleMaps()}
+                            name={`View on Google Maps`}/>
                     </AccordionDetails>
                 </Accordion>
                 <Accordion sx={{
@@ -475,11 +475,10 @@ const PreviewTab = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirec
                             <span className={classes.generalInfoSpan}>
                                 The telephone number of {matchDetailsData?.place} is {phone}. Click the button to call.
                             </span>
-                            <div style={{height: '20px'}}></div>
-                            <div className={accountClasses.morePageBox} onClick={redirectToCall}
-                                 style={{background: 'black'}}>
-                                <span className={navbarClasses.drawerRoutesSpan} style={{fontSize: isMobile ? '14px' : '18px'}}>Call {matchDetailsData?.place}</span>
-                            </div>
+                            <div className={sharedClasses.emptyHeightSpace}></div>
+                            <ButtonComponent
+                                onClick={() => redirectToCall()}
+                                name={`Call ${matchDetailsData?.place}`}/>
                         </AccordionDetails>
                     </Accordion>
                 }

@@ -1,0 +1,36 @@
+.div {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.box {
+    background-color: #1C1C1E;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    width: 300px;
+    padding: 12px 20px;
+    height: auto;
+    cursor: pointer;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+    justify-content: center;
+    @media screen and (max-width: 768px) {
+        width: 100%;
+    }
+}
+
+.spanStyle {
+    color: lightgray;
+    font-size: 18px;
+    text-align: center;
+    @media screen and (max-width: 768px) {
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
