@@ -1,7 +1,7 @@
 {
   "homepage": "https://yigitmu9.github.io/oyesfc-react",
   "name": "oyesfc-react",
-  "version": "1.5.16",
+  "version": "1.6.0",
   "private": true,
   "dependencies": {
     "@emailjs/browser": "^4.3.3",
@@ -14,6 +14,8 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "add-to-calendar-button": "^2.6.10",
     "add-to-calendar-button-react": "^2.6.10",
     "chart.js": "^4.4.0",
@@ -39,6 +41,7 @@
     "react-switch": "^7.0.0",
     "runes": "^0.4.3",
     "styled-components": "^6.0.5",
+    "typescript": "^5.6.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
