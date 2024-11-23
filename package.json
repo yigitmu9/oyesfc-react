@@ -1,7 +1,7 @@
 {
   "homepage": "https://yigitmu9.github.io/oyesfc-react",
   "name": "oyesfc-react",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "private": true,
   "dependencies": {
     "@emailjs/browser": "^4.3.3",
@@ -19,7 +19,7 @@
     "add-to-calendar-button": "^2.6.10",
     "add-to-calendar-button-react": "^2.6.10",
     "chart.js": "^4.4.0",
-    "firebase": "^10.1.0",
+    "firebase": "^10.13.1",
     "ics": "^3.7.2",
     "leaflet": "^1.9.4",
     "mdb-react-ui-kit": "^6.2.0",
