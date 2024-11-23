@@ -278,6 +278,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
                 ]));
                 if (notesTitle === 'Add your note:') setNotesTitle('Edit your note:')
             } catch (error: any) {
+                alert(error?.message)
                 setStarsErrorMessage(error?.message)
             }
         } else {

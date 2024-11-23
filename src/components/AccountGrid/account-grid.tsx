@@ -27,6 +27,7 @@ const AccountGrid = () => {
     const calendarPath = '/oyesfc-react/calendar';
     const addMatchPath = '/oyesfc-react/add-match';
     const ratingsPath = '/oyesfc-react/ratings';
+    const settingsPath = '/oyesfc-react/settings';
     const dispatch = useDispatch();
     const packageJson = require('./../../../package.json');
     const date = new Date();
@@ -46,6 +47,10 @@ const AccountGrid = () => {
 
     const openAddMatchPage = () => {
         navigate(addMatchPath);
+    };
+
+    const openSettingsPage = () => {
+        navigate(settingsPath);
     };
 
     const startLogOut = async () => {
@@ -154,6 +159,15 @@ const AccountGrid = () => {
                     className={navbarClasses.miniTitle}>{'© ' + year + ' ' + TeamNames.oYesFc + '™ | v' + packageJson.version}</span>
                         </div>
                     </Box>
+                    {
+                        signedIn &&
+                        <>
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.morePageBox} onClick={openSettingsPage}>
+                                <span className={navbarClasses.drawerRoutesSpan}>Settings</span>
+                            </div>
+                        </>
+                    }
                 </Box>
             </div>
 

@@ -19,6 +19,7 @@ import BrowserNotSupportedIcon from '@mui/icons-material/BrowserNotSupported';
 import {useSelector} from "react-redux";
 import sharedClasses from "../../shared/Styles/shared-styles.module.css";
 import ButtonComponent from "../../shared/ButtonComponent/button-component";
+import {generateRandomString} from "../../utils/utils";
 
 interface  HighlightsTabProps {
     matchDetailsData?: any;
@@ -63,16 +64,6 @@ const HighlightsTab: React.FC<HighlightsTabProps> = ({matchDetailsData}) => {
             setSnackbarData(errorResponse)
         }
     }
-
-    const generateRandomString = () => {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        const charactersLength = characters.length;
-        for (let i = 0; i < 10; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-    };
 
     const handleInputChange = (event?: any) => {
         const {name, value} = event.target;

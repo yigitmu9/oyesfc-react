@@ -19,6 +19,7 @@ import CalendarPage from "./calendar-page";
 import AddMatchPage from "./add-match-page";
 import PlayerDetailsPage from "./player-details-page";
 import MatchDetailsPage from "./match-details-page";
+import SettingsPage from "./settings-page";
 
 const AppPage = () => {
 
@@ -84,6 +85,7 @@ const AppPage = () => {
                 <Route path='oyesfc-react/add-match' element={<AddMatchPage/>}/>
                 <Route path='oyesfc-react/player-details' element={<PlayerDetailsPage/>}/>
                 <Route path='oyesfc-react/match-details' element={<MatchDetailsPage/>}/>
+                <Route path='oyesfc-react/settings' element={<SettingsPage/>}/>
             </Routes>
         </Router>
     );

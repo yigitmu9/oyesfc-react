@@ -267,3 +267,13 @@ export const getGeoCoordinates = (place: any) => {
     const match = xLocationWithoutSpaces?.match(/geo:[\d.,]+/);
     return match ? match[0]?.split(':')[1] : 'Geo coordinates not found';
 };
+
+export const generateRandomString = () => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 10; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+};
