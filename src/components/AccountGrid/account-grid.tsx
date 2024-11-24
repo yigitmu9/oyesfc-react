@@ -160,7 +160,7 @@ const AccountGrid = () => {
                         </div>
                     </Box>
                     {
-                        signedIn &&
+                        isCaptain &&
                         <>
                             <div style={{height: '20px'}}></div>
                             <div className={classes.morePageBox} onClick={openSettingsPage}>
