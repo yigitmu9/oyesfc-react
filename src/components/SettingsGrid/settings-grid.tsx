@@ -27,17 +27,19 @@ const SettingsGrid = () => {
     }
 
     const checkSubscription = async () => {
+        /*
         try {
             const response: any = await loadWebsite('notifications');
             Notification.requestPermission().then((permission) => {
                 if (permission === 'granted') {
-                    navigator.serviceWorker.register('/oyesfc-react/firebase-messaging-sw.js')
-                        .then(function (registration) {
+                    registration.then((reg: any) => {
+                        if (reg) {
                             getToken(messaging, {
                                 vapidKey: response?.vapidKey,
-                                serviceWorkerRegistration: registration
+                                serviceWorkerRegistration: reg
                             }).then(async (currentToken) => {
                                 if (response?.[userName] && Object.values(response?.[userName])?.includes(currentToken)) {
+                                    console.log(currentToken)
                                     const success = {
                                         message: 'Already subscribed!',
                                         severity: SnackbarTypes.success
@@ -59,14 +61,14 @@ const SettingsGrid = () => {
                                 }
                                 setWarning(err);
                             });
-                        })
-                        .catch(function (error) {
+                        } else {
                             const err = {
-                                message: error?.message,
+                                message: 'Registration failed!',
                                 severity: SnackbarTypes.error
                             }
                             setWarning(err);
-                        });
+                        }
+                    });
                 } else {
                     const err = {
                         message: 'No permission!',
@@ -78,7 +80,7 @@ const SettingsGrid = () => {
         } catch (error: any) {
             alert(error?.message)
         }
-
+         */
     }
 
     return (

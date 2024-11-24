@@ -5,6 +5,19 @@ import App from './App'
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
+import OneSignal from "react-onesignal";
+
+if (typeof window !== 'undefined') {
+    OneSignal.init({
+        appId: 'f90d48fc-0a75-407d-bb20-651d11d349de',
+        // You can add other initialization options here
+        notifyButton: {
+            enable: true,
+        },
+        // Uncomment the below line to run on localhost. See: https://documentation.onesignal.com/docs/local-testing
+        allowLocalhostAsSecureOrigin: true
+    }).then(r => r);
+}
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
