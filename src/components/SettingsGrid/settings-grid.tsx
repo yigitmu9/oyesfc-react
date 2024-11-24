@@ -87,6 +87,7 @@ const SettingsGrid = () => {
         <div style={{minHeight: '70vh'}}>
             <BackButton handleBackButton={handleBack} generalTitle={'Settings'}/>
             <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
+            <div className='onesignal-customlink-container'></div>
             {
                 warning?.severity !== SnackbarTypes.success &&
                 <div className={classes.morePageBox} onClick={checkSubscription}>
