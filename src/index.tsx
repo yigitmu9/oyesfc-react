@@ -10,13 +10,11 @@ import OneSignal from "react-onesignal";
 if (typeof window !== 'undefined') {
     OneSignal.init({
         appId: 'f90d48fc-0a75-407d-bb20-651d11d349de',
-        // You can add other initialization options here
-        notifyButton: {
-            enable: true,
-        },
-        // Uncomment the below line to run on localhost. See: https://documentation.onesignal.com/docs/local-testing
+        autoRegister: false,
         allowLocalhostAsSecureOrigin: true
-    }).then(r => r);
+    }).then(() => {
+        OneSignal.Notifications.setDefaultUrl('https://yigitmu9.github.io/oyesfc-react/').then(r => r);
+    });
 }
 
 const rootElement = document.getElementById('root');
