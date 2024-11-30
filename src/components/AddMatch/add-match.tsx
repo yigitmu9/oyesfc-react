@@ -22,7 +22,7 @@ import {
     RadioGroup,
 } from "@mui/material";
 import {styled} from "@mui/system";
-import {getWeather} from "../../services/service";
+import {getWeather, sendNotifications} from "../../services/service";
 import * as emailjs from "@emailjs/browser";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {PulseLoader} from "react-spinners";
@@ -48,6 +48,7 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({selectedMatchData}
     const [emailJsButtonLoading, setEmailJsButtonLoading] = useState(false);
     const [siriShortcutButtonLoading, setSiriShortcutButtonLoading] = useState(false);
     const [weatherButtonLoading, setWeatherButtonLoading] = useState(false);
+    const [pushNotificationLoading, setPushNotificationLoading] = useState(false);
     const [warnings, setWarnings] = useState<any>(null);
     const [finalErrors, setFinalErrors] = useState<any>([]);
     const [finalSuccesses, setFinalSuccesses] = useState<any>([]);
@@ -203,6 +204,55 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({selectedMatchData}
         }
     }
 
+    const sendPushNotifications = async () => {
+        setPushNotificationLoading(true)
+        if (selectedMatchData) {
+            const title = 'Maç sonucu'
+            const detail = `${TeamNames.oYesFc} ${submittedMatchData?.oyesfc?.goal}-${submittedMatchData?.rival?.goal} ${submittedMatchData?.rival?.name}`
+            await sendNotifications(title, detail)
+                .then(() => {
+                    const message = AddMatchMessages.push_notifications_success
+                    setFinalSuccesses((prevData?: any) => ([
+                        ...prevData,
+                        message
+                    ]));
+                    setPushNotificationLoading(false)
+                }).catch(() => {
+                    const message = AddMatchMessages.push_notifications_fail
+                    setFinalErrors((prevData?: any) => ([
+                        ...prevData,
+                        message
+                    ]));
+                    setPushNotificationLoading(false)
+                })
+        } else {
+            const response: any = await loadWebsite(`notifications`);
+            const title = `Yeni maç ayarlandı`
+            const detail = `${submittedMatchData?.rival?.name} takımına karşı ${submittedMatchData?.day?.replace(/-/g, '/')} tarihinde ` +
+                `${submittedMatchData?.time} saatleri arasında ${submittedMatchData?.place} sahasında oynanacak maçın kadrosundasın.`
+            const playerIds = Object.entries(response).filter((a: any) => Object.keys(submittedMatchData?.oyesfc?.squad)?.includes(a[0]))
+                ?.map(item => (item?.[1] ? Object.values(item?.[1]) : null))
+                ?.flat();
+
+            await sendNotifications(title, detail, playerIds)
+                .then(() => {
+                    const message = AddMatchMessages.push_notifications_success
+                    setFinalSuccesses((prevData?: any) => ([
+                        ...prevData,
+                        message
+                    ]));
+                    setPushNotificationLoading(false)
+                }).catch(() => {
+                    const message = AddMatchMessages.push_notifications_fail
+                    setFinalErrors((prevData?: any) => ([
+                        ...prevData,
+                        message
+                    ]));
+                    setPushNotificationLoading(false)
+                })
+        }
+    }
+
     const convertMatchDayToString = (matchDate?: any) => {
         const [day, month, year] = matchDate.split('-').map(Number);
         const date = new Date(year, month - 1, day);
@@ -271,7 +321,6 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({selectedMatchData}
     };
 
     const finalizeData = () => {
-        console.log(oYesFCSquadFormData)
         for (const key in oYesFCSquadFormData) {
             if (oYesFCSquadFormData.hasOwnProperty(key)) {
                 oYesFCSquadFormData[key] = { ...oYesFCSquadFormData[key] };
@@ -741,7 +790,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                             <>
                                 <div className={sharedClasses.emptyHeightSpace}></div>
                                 <ButtonComponent
-                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && createCalendar()}
+                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading && !pushNotificationLoading) && createCalendar()}
                                     name={`Create Calendar Event`}
                                     loading={calendarButtonLoading}
                                     textColor={'#007AFF'}
@@ -753,7 +802,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                             <>
                                 <div className={sharedClasses.emptyHeightSpace}></div>
                                 <ButtonComponent
-                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && sendEmails()}
+                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading && !pushNotificationLoading) && sendEmails()}
                                     name={`Send Emails`}
                                     loading={emailJsButtonLoading}
                                     textColor={'#007AFF'}
@@ -765,8 +814,20 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                             <>
                                 <div className={sharedClasses.emptyHeightSpace}></div>
                                 <ButtonComponent
-                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && sendWhatsAppNotificationToSquadMembers()}
+                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading && !pushNotificationLoading) && sendWhatsAppNotificationToSquadMembers()}
                                     name={`Run Siri Shortcut`}
+                                    loading={siriShortcutButtonLoading}
+                                    textColor={'#007AFF'}
+                                    backgroundColor={'#1C1C1E'}/>
+                            </>
+                        }
+                        {
+                            !finalSuccesses?.includes(AddMatchMessages.push_notifications_success) &&
+                            <>
+                                <div className={sharedClasses.emptyHeightSpace}></div>
+                                <ButtonComponent
+                                    onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading && !pushNotificationLoading) && sendPushNotifications()}
+                                    name={`Send Push Notification`}
                                     loading={siriShortcutButtonLoading}
                                     textColor={'#007AFF'}
                                     backgroundColor={'#1C1C1E'}/>
@@ -774,7 +835,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                         }
                         <div className={sharedClasses.emptyHeightSpace}></div>
                         <ButtonComponent
-                            onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading) && completeAddMatch()}
+                            onClick={() => (!calendarButtonLoading && !emailJsButtonLoading && !siriShortcutButtonLoading && !pushNotificationLoading) && completeAddMatch()}
                             name={`Submit & Close`}
                             loading={loading}/>
                     </div>

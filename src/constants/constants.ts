@@ -670,6 +670,8 @@ export const AddMatchMessages = {
     email_sent_successful: 'Email was sent successfully to all players!',
     siri_shortcut_run_successful: 'Siri shortcut run successfully!',
     siri_shortcut_run_failed: 'Failed to run siri shortcut!',
+    push_notifications_success: 'Push notifications sent successfully!',
+    push_notifications_fail: 'Failed to send push notifications!',
 }
 
 export const TurkishJerseys = {

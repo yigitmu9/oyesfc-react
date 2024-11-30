@@ -12,14 +12,12 @@ import {generateRandomString} from "../../utils/utils";
 import {AlertInterface} from "../../interfaces/Alert";
 import {SnackbarTypes} from "../../constants/constants";
 import OneSignal from "react-onesignal";
-import {sendNotifications} from "../../services/service";
 
 const SettingsGrid = () => {
 
     const {userName} = useSelector((state: any) => state.credentials);
     const navigate = useNavigate()
     const [warning, setWarning] = useState<AlertInterface>({message: '', severity: undefined});
-    const [notWarning, setNotWarning] = useState<AlertInterface>({message: '', severity: undefined});
 
     const saveSubscriptionIdToDatabase = useCallback(async (pushSubscriptionId: any) => {
         try {
@@ -85,26 +83,6 @@ const SettingsGrid = () => {
         });
     }
 
-    const sendNotification = async (sendToAll: boolean) => {
-        const response: any = sendToAll ?
-            await sendNotifications('Deneme', 'Herkese giden bildirim denemesi.')
-            :
-            await sendNotifications('Deneme', 'Kişiye özel bildirim denemesi.', ['4f9002ac-8185-4d44-85b8-51f172132260'])
-        if (response?.success) {
-            const success = {
-                message: 'Notification send successfully!',
-                severity: SnackbarTypes.success
-            }
-            setNotWarning(success);
-        } else {
-            const fail = {
-                message: response?.error?.message,
-                severity: SnackbarTypes.error
-            }
-            setNotWarning(fail);
-        }
-    }
-
     return (
         <div style={{minHeight: '70vh'}}>
             <BackButton handleBackButton={handleBack} generalTitle={'Settings'}/>
@@ -121,27 +99,6 @@ const SettingsGrid = () => {
                     {warning?.severity !== SnackbarTypes.success && <div style={{height: '20px'}}></div>}
                     <Alert sx={{padding: 1, borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
                            variant="outlined" severity={warning?.severity}>{warning?.message}</Alert>
-                </>
-            }
-            {
-                warning?.severity === SnackbarTypes.success &&
-                <>
-                    <div style={{height: '20px'}}></div>
-                    <div className={classes.morePageBox} onClick={() => sendNotification(true)}>
-                        <span className={navbarClasses.drawerRoutesSpan}>Send to All</span>
-                    </div>
-                    <div style={{height: '20px'}}></div>
-                    <div className={classes.morePageBox} onClick={() => sendNotification(false)}>
-                        <span className={navbarClasses.drawerRoutesSpan}>Send to One</span>
-                    </div>
-                </>
-            }
-            {
-                notWarning?.severity &&
-                <>
-                    {<div style={{height: '20px'}}></div>}
-                    <Alert sx={{padding: 1, borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
-                           variant="outlined" severity={notWarning?.severity}>{notWarning?.message}</Alert>
                 </>
             }
         </div>
