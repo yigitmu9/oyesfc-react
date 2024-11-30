@@ -1,6 +1,7 @@
 import {onAuthStateChanged, signInWithEmailAndPassword, signOut} from "firebase/auth";
 import {auth, loadWebsite} from "../firebase";
 import {SnackbarTypes} from "../constants/constants";
+import axios from "axios";
 
 export async function getWeather(openWeatherType?: any, latitude?: any, longitude?: any) {
     const apiKey = '92168351d1aaa4db88e8f39e9216e249';
@@ -90,3 +91,42 @@ export const signInUser = (email?: any, password?: any) => {
             });
     });
 }
+
+export const sendNotifications = async (title: string, message: string, playerIds?: string[]) => {
+    const REST_API_KEY = await loadWebsite(`notifications/key`);
+    const appId = 'f90d48fc-0a75-407d-bb20-651d11d349de';
+    const payload = playerIds ?
+            {
+                app_id: appId,
+                include_player_ids: playerIds,
+                headings: {en: title},
+                contents: {en: message},
+            }
+            :
+            {
+                app_id: appId,
+                headings: {en: title},
+                contents: {en: message},
+            };
+    return new Promise(async (resolve) => {
+        await axios.post(
+            "https://onesignal.com/api/v1/notifications",
+            payload,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Basic ${REST_API_KEY}`,
+                },
+            }
+        ).then(() => {
+            resolve({
+                success: true
+            });
+        }).catch((error) => {
+            resolve({
+                success: false,
+                error: error
+            });
+        });
+    });
+};
