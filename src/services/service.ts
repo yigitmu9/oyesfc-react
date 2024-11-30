@@ -107,6 +107,7 @@ export const sendNotifications = async (title: string, message: string, playerId
                 app_id: appId,
                 headings: {en: title},
                 contents: {en: message},
+                included_segments: ['Subscribed Users']
             };
     return new Promise(async (resolve) => {
         await axios.post(

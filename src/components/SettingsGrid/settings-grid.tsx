@@ -89,7 +89,7 @@ const SettingsGrid = () => {
         const response: any = sendToAll ?
             await sendNotifications('Deneme', 'Herkese giden bildirim denemesi.')
             :
-            await sendNotifications('Deneme', 'Kişiye özel bildirim denemesi.', ['8a675d3b-b483-48ce-8838-06a30b9a8aaf'])
+            await sendNotifications('Deneme', 'Kişiye özel bildirim denemesi.', ['4f9002ac-8185-4d44-85b8-51f172132260'])
         if (response?.success) {
             const success = {
                 message: 'Notification send successfully!',
