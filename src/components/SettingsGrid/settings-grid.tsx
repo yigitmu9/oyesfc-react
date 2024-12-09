@@ -2,8 +2,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import BackButton from "../../shared/BackButton/back-button";
 import {useNavigate} from "react-router-dom";
-import classes from "../AccountGrid/account-grid.module.css";
-import navbarClasses from "../Navbar/navbar.module.css";
 import {Alert} from "@mui/material";
 import {dataBase, loadWebsite} from "../../firebase";
 import {useSelector} from "react-redux";
@@ -12,12 +10,14 @@ import {generateRandomString} from "../../utils/utils";
 import {AlertInterface} from "../../interfaces/Alert";
 import {SnackbarTypes} from "../../constants/constants";
 import OneSignal from "react-onesignal";
+import ButtonComponent from "../../shared/ButtonComponent/button-component";
 
 const SettingsGrid = () => {
 
     const {userName} = useSelector((state: any) => state.credentials);
     const navigate = useNavigate()
     const [warning, setWarning] = useState<AlertInterface>({message: '', severity: undefined});
+    const [loading, setLoading] = useState<boolean>(true)
 
     const saveSubscriptionIdToDatabase = useCallback(async (pushSubscriptionId: any) => {
         try {
@@ -28,10 +28,12 @@ const SettingsGrid = () => {
                 severity: SnackbarTypes.success
             }
             setWarning(success);
+            if (loading) setLoading(false)
         } catch (error: any) {
             alert(error?.message)
+            if (loading) setLoading(false)
         }
-    }, [userName])
+    }, [loading, userName])
 
     useEffect(() => {
         const checkSubscription = async () => {
@@ -45,6 +47,7 @@ const SettingsGrid = () => {
                             severity: SnackbarTypes.success
                         }
                         setWarning(success);
+                        if (loading) setLoading(false)
                     } else if (pushSubscriptionId) {
                         await saveSubscriptionIdToDatabase(pushSubscriptionId)
                     } else if (!pushSubscriptionId) {
@@ -53,16 +56,18 @@ const SettingsGrid = () => {
                             severity: SnackbarTypes.error
                         }
                         setWarning(success);
+                        if (loading) setLoading(false)
                     }
                 } else if (!OneSignal.Notifications.permission && !warning?.severity) {
-
+                    if (loading) setLoading(false)
                 }
             } catch (error: any) {
                 alert(error?.message)
+                if (loading) setLoading(false)
             }
         }
         checkSubscription().then(r => r)
-    }, [saveSubscriptionIdToDatabase, userName, warning?.severity]);
+    }, [loading, saveSubscriptionIdToDatabase, userName, warning?.severity]);
 
     const handleBack = (data?: any) => {
         if (data) {
@@ -71,15 +76,17 @@ const SettingsGrid = () => {
     }
 
     const checkSubscription = async () => {
+        setLoading(true)
         await OneSignal?.Notifications?.requestPermission()?.then(() => {
             const pushSubscriptionId = OneSignal?.User?.PushSubscription?.id;
             saveSubscriptionIdToDatabase(pushSubscriptionId)
         }).catch((err: any) => {
-            const success = {
-                message: err?.message,
+            const error = {
+                message: err,
                 severity: SnackbarTypes.error
             }
-            setWarning(success);
+            setWarning(error);
+            if (loading) setLoading(false)
         });
     }
 
@@ -89,9 +96,7 @@ const SettingsGrid = () => {
             <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
             {
                 warning?.severity !== SnackbarTypes.success &&
-                <div className={classes.morePageBox} onClick={checkSubscription}>
-                    <span className={navbarClasses.drawerRoutesSpan}>Subscribe</span>
-                </div>
+                <ButtonComponent onClick={checkSubscription} name={'Subscribe'} loading={loading}/>
             }
             {
                 warning?.severity &&

@@ -547,10 +547,12 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
                                                                 {x[0]?.split(' ')[0] + ' did not add rating to this match.'}
                                                             </span>)
                                                         :
-                                                        checkPlayerDescription(x[0])
+                                                        <span className={classes.starDetailSpan}>
+                                                            {checkPlayerDescription(x[0])}
+                                                        </span>
                                                 }
                                                 <div className={classes.starDiv}>
-                                                    {[...Array(10)].map((star, index) => {
+                                                {[...Array(10)].map((star, index) => {
                                                         const currentRating = index + 1;
                                                         return (
 

@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import sharedClasses from "../../shared/Styles/shared-styles.module.css";
 import ButtonComponent from "../../shared/ButtonComponent/button-component";
+import {Alert} from "@mui/material";
 
 const AdvancedFilters = () => {
 
@@ -17,6 +18,9 @@ const AdvancedFilters = () => {
     const {allData} = useSelector((state: any) => state.databaseData);
     const storage: any = localStorage.getItem('filters')
     const filtersInStorage = JSON.parse(storage);
+    const removeFilters = 'Clear selected'
+    const zeroFilters = 'No filter selected'
+    const [filterButton, setFilterButton] = useState(storage ? removeFilters : zeroFilters);
     const [matchType, setMatchType] = useState(!filtersInStorage?.appliedType ? 'all' : filtersInStorage?.appliedType);
     const [filteredPlayers, setFilteredPlayers] = useState(!filtersInStorage?.appliedPlayers ? [] : filtersInStorage?.appliedPlayers)
     const [filteredFacilities, setFilteredFacilities] = useState(!filtersInStorage?.appliedFacilities ? [] : filtersInStorage?.appliedFacilities)
@@ -77,6 +81,7 @@ const AdvancedFilters = () => {
     playerLengthArray = playerLengthArray.sort()
 
     const resetFilters = () => {
+        setFilterButton(zeroFilters)
         setMatchType('all')
         setFilteredPlayers([])
         setFilteredFacilities([])
@@ -93,6 +98,7 @@ const AdvancedFilters = () => {
     }
 
     const handleMatchTypeChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (name !== matchType && checked) {
@@ -102,6 +108,7 @@ const AdvancedFilters = () => {
     };
 
     const handlePlayerChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredPlayers?.includes(name) && !checked) {
@@ -112,6 +119,7 @@ const AdvancedFilters = () => {
     };
 
     const handleFacilityChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredFacilities?.includes(name) && !checked) {
@@ -122,6 +130,7 @@ const AdvancedFilters = () => {
     };
 
     const handleYearChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredYears?.includes(name) && !checked) {
@@ -132,6 +141,7 @@ const AdvancedFilters = () => {
     };
 
     const handleMonthChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredMonths?.includes(name) && !checked) {
@@ -142,6 +152,7 @@ const AdvancedFilters = () => {
     };
 
     const handleRivalChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredRivals?.includes(name) && !checked) {
@@ -152,6 +163,7 @@ const AdvancedFilters = () => {
     };
 
     const handleSquadTypeChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (name !== filteredSquad && checked) {
@@ -160,6 +172,7 @@ const AdvancedFilters = () => {
     };
 
     const handleJerseyChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredJersey?.includes(name) && !checked) {
@@ -170,6 +183,7 @@ const AdvancedFilters = () => {
     };
 
     const handleSkyChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredSky?.includes(name) && !checked) {
@@ -180,6 +194,7 @@ const AdvancedFilters = () => {
     };
 
     const handleTemperatureChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredTemperature?.includes(name) && !checked) {
@@ -190,6 +205,7 @@ const AdvancedFilters = () => {
     };
 
     const handleNumberOfPlayersChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const {name} = event.target;
         const checked = event.target.checked;
         if (filteredNumberOfPlayers?.includes(name) && !checked) {
@@ -200,6 +216,7 @@ const AdvancedFilters = () => {
     };
 
     const handleMatchVideosChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const checked = event.target.checked;
         if (filteredMatchVideos && !checked) {
             setFilteredMatchVideos(false)
@@ -209,6 +226,7 @@ const AdvancedFilters = () => {
     }
 
     const handleRatingMatchesChange = (event?: any) => {
+        if (filterButton === zeroFilters) setFilterButton(removeFilters)
         const checked = event.target.checked;
         if (filteredRatingMatches && !checked) {
             setFilteredRatingMatches(false)
@@ -557,13 +575,21 @@ const AdvancedFilters = () => {
                                     </div>
                                 </div>
                             </div>
+                            {
+                                filterButton === removeFilters &&
+                                <Alert sx={{padding: 1, marginBottom: '20px', borderRadius: '15px', bgcolor: '#1C1C1E', color: 'lightgray'}}
+                                       variant="outlined" severity="info">You can clear all the above selections by clicking
+                                    on the 'Clear selected' button. Then click on the 'Apply' button to apply this change.</Alert>
+                            }
                             <ButtonComponent
-                                onClick={() => resetFilters()}
-                                name={`Reset Filters`} backgroundColor={'#1C1C1E'} textColor={'#007AFF'}/>
+                                onClick={() => filterButton === removeFilters ? resetFilters() : null}
+                                name={filterButton}
+                                backgroundColor={'#1C1C1E'}
+                                textColor={filterButton === removeFilters ? '#007AFF' : 'lightgray'}/>
                             <div className={sharedClasses.emptyHeightSpace}></div>
                             <ButtonComponent
                                 onClick={() => handleSubmit()}
-                                name={`Apply Filters`}/>
+                                name={`Apply`}/>
                         </div>
                     </form>
                 </div>
