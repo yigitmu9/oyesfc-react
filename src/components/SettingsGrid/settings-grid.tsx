@@ -96,7 +96,12 @@ const SettingsGrid = () => {
             <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
             {
                 warning?.severity !== SnackbarTypes.success &&
-                <ButtonComponent onClick={checkSubscription} name={'Subscribe'} loading={loading}/>
+                <ButtonComponent onClick={checkSubscription}
+                                 name={'Subscribe'}
+                                 loading={loading}
+                                 size={'large'}
+                                 textColor={'#007AFF'}
+                                 backgroundColor={'#1C1C1E'}/>
             }
             {
                 warning?.severity &&

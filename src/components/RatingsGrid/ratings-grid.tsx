@@ -11,16 +11,19 @@ import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import {Alert} from "@mui/material";
 import BackButton from "../../shared/BackButton/back-button";
-import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import ButtonComponent from "../../shared/ButtonComponent/button-component";
 
-const RatingsGrid = () => {
+interface  RatingsGridProps {
+    category?: string;
+    handlePreviousPage?: any
+}
+
+const RatingsGrid: React.FC<RatingsGridProps> = ({category, handlePreviousPage}) => {
 
     const { userName, id } = useSelector((state: any) => state.credentials);
     const initialFacilitiesFormData = {};
     const statTypes = useMemo(() => ['Facilities', 'Players'], []);
-    const [statType, setStatType] = useState('');
     const [options, setOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
     const isMobile = window.innerWidth <= 768;
@@ -28,9 +31,8 @@ const RatingsGrid = () => {
     const facilitiesRateCategories = ['Ground', 'Locker Room', 'Location', 'Goal Size', 'Field Size', 'Cafe']
     const [facilityRatingInfoData, setFacilityRatingInfoData] = useState<any>(null);
     const [warnings, setWarnings] = useState<any>(null);
-    const navigate = useNavigate()
 
-    const updateSecondOptions = useCallback((type: any) => {
+    const updateSecondOptions = useCallback((type: string) => {
         let optionsArray: any = [];
         if (type === statTypes[0]) {
             optionsArray = Facilities.map(x => x.name).sort()
@@ -42,26 +44,18 @@ const RatingsGrid = () => {
     }, [statTypes, userName]);
 
     useEffect(() => {
-        if (statType) {
-            updateSecondOptions(statType);
+        if (category) {
+            updateSecondOptions(category);
         }
-    }, [statType, updateSecondOptions]);
+    }, [category, updateSecondOptions]);
 
     const handleDetailChange = (data?: any) => {
         setFacilitiesFormData(initialFacilitiesFormData)
         setSelectedOption(data);
         if (facilityRatingInfoData) setFacilityRatingInfoData(null)
         if (warnings) setWarnings(null)
-        if (statType === statTypes[0]) fetchFacilityRatingData(data).then(r => r)
-        if (statType === statTypes[1]) fetchPlayerRatingData(data).then(r => r)
-    };
-
-    const handleCategoryChange = (data?: any) => {
-        setFacilitiesFormData(initialFacilitiesFormData)
-        setStatType(data);
-        if (facilityRatingInfoData) setFacilityRatingInfoData(null)
-        if (selectedOption) setSelectedOption('')
-        if (warnings) setWarnings(null)
+        if (category === statTypes[0]) fetchFacilityRatingData(data).then(r => r)
+        if (category === statTypes[1]) fetchPlayerRatingData(data).then(r => r)
     };
 
     const handleStarChange = (player?: any, rating?: any) => {
@@ -103,7 +97,7 @@ const RatingsGrid = () => {
     };
 
     const facilityStarsSubmit = async () => {
-        if (statType === statTypes[0] && selectedOption && Object.values(facilitiesFormData)?.length === 6) {
+        if (category === statTypes[0] && selectedOption && Object.values(facilitiesFormData)?.length === 6) {
             try {
                 await set(ref(dataBase, `facilityRatings/${selectedOption}/${userName}`), facilitiesFormData);
                 showWarning('Your ratings have been saved successfully!', 'success')
@@ -116,7 +110,7 @@ const RatingsGrid = () => {
     };
 
     const playerStarsSubmit = async () => {
-        if (statType === statTypes[1] && selectedOption && Object.values(facilitiesFormData)?.length === FifaCalculations.length) {
+        if (category === statTypes[1] && selectedOption && Object.values(facilitiesFormData)?.length === FifaCalculations.length) {
             try {
                 await set(ref(dataBase, `playerRatings/${selectedOption}/${id}`), facilitiesFormData);
                 showWarning('Your ratings have been saved successfully!', 'success')
@@ -164,7 +158,7 @@ const RatingsGrid = () => {
 
     const handleBack = (data?: any) => {
         if (data) {
-            navigate('/oyesfc-react/account')
+            handlePreviousPage(true)
         }
     }
 
@@ -375,16 +369,11 @@ const RatingsGrid = () => {
 
     const firstPart = (
         <>
-            <section className={classes.starSection} style={{marginTop: '0'}}>
-                <span className={classes.starSpan}>Select Category</span>
-                <SelectionComponent options={statTypes} onSelectionChange={handleCategoryChange}
-                                    defaultSelectedValue={false}/>
-            </section>
             {
-                statType &&
+                category &&
                 <section className={classes.starSection}>
                     <span className={classes.starSpan}>
-                        {statType === statTypes[0] ? 'Select Facility' : 'Select Player'}
+                        {category === statTypes[0] ? 'Select Facility' : 'Select Player'}
                     </span>
                     <SelectionComponent options={options} onSelectionChange={handleDetailChange}
                                         defaultSelectedValue={false}/>
@@ -396,10 +385,10 @@ const RatingsGrid = () => {
     const secondPart = (
         <>
             {
-                statType && (
-                    statType === statTypes[0] && selectedOption ?
+                category && (
+                    category === statTypes[0] && selectedOption ?
                         facilityRatingContent :
-                        statType === statTypes[1] && selectedOption ?
+                        category === statTypes[1] && selectedOption ?
                             playerRatingContent :
                             null
                 )
@@ -409,7 +398,7 @@ const RatingsGrid = () => {
 
     return (
         <div style={{minHeight: '70vh'}}>
-            <BackButton handleBackButton={handleBack} generalTitle={'Ratings'}/>
+            <BackButton handleBackButton={handleBack} generalTitle={`Rate ${category}`}/>
             <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
             {firstPart}
             {secondPart}

@@ -2,12 +2,12 @@ import React from 'react';
 import Footer from "../components/Footer/footer";
 import PageGrid from "../shared/PageGrid/page-grid";
 import Box from "@mui/material/Box";
-import RatingsGrid from "../components/RatingsGrid/ratings-grid";
+import RatingCompareGrid from "../components/RatingCompareGrid/rating-compare-grid";
 
 const RatingsPage = () => {
 
     const page = (
-        <RatingsGrid/>
+        <RatingCompareGrid/>
     )
 
     return (

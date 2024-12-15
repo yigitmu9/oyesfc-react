@@ -36,7 +36,7 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import ShieldIcon from '@mui/icons-material/Shield';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
-import {returnAverageData} from "../../utils/utils";
+import {calculateAttributes, calculateOverall, returnAverageData} from "../../utils/utils";
 import {useNavigate} from "react-router-dom";
 
 function CustomTabs(props?: any) {
@@ -478,50 +478,9 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
         setPlayerRatingData(calculatedAverages);
     }
 
-    const calculateAttributes = () => {
-        if (playerRatingData) {
-            const PAC = ((Number(playerRatingData["Acceleration"]) + Number(playerRatingData["Sprint speed"])) / 2).toFixed(2);
-            const SHO = ((Number(playerRatingData["Finishing"]) + Number(playerRatingData["Long Shots"]) + Number(playerRatingData["Penalties"]) + Number(playerRatingData["Shot Power"]) + Number(playerRatingData["Volleys"])) / 5).toFixed(2);
-            const PAS = ((Number(playerRatingData["Crossing"]) + Number(playerRatingData["Curve"]) + Number(playerRatingData["Free Kick Accuracy"]) + Number(playerRatingData["Long Passing"]) + Number(playerRatingData["Short Passing"]) + Number(playerRatingData["Vision"])) / 6).toFixed(2);
-            const DRI = ((Number(playerRatingData["Agility"]) + Number(playerRatingData["Balance"]) + Number(playerRatingData["Ball Control"]) + Number(playerRatingData["Composure"]) + Number(playerRatingData["Dribbling"]) + Number(playerRatingData["Reactions"])) / 6).toFixed(2);
-            const DEF = ((Number(playerRatingData["Defensive Awareness"]) + Number(playerRatingData["Interceptions"]) + Number(playerRatingData["Sliding Tackle"]) + Number(playerRatingData["Standing Tackle"]) + Number(playerRatingData["Heading Accuracy"])) / 5).toFixed(2);
-            const PHY = ((Number(playerRatingData["Aggression"]) + Number(playerRatingData["Jumping"]) + Number(playerRatingData["Stamina"]) + Number(playerRatingData["Strength"])) / 4).toFixed(2);
-
-            const DIV = Number(playerRatingData["GK Diving"]).toFixed(2);
-            const HAN = Number(playerRatingData["GK Handling"]).toFixed(2);
-            const KIC = Number(playerRatingData["GK Kicking"]).toFixed(2);
-            const REF = Number(playerRatingData["GK Reflexes"]).toFixed(2);
-            const POS = Number(playerRatingData["GK Positioning"]).toFixed(2);
-
-
-            if (playerName === TeamMembers.can.name) return [ Number(DIV), Number(HAN), Number(KIC), Number(REF), Number(PAC), Number(POS) ];
-            return [ Number(PAC), Number(SHO), Number(PAS), Number(DRI), Number(DEF), Number(PHY) ];
-        }
-    };
-
-    const attributes = calculateAttributes();
+    const attributes = calculateAttributes(playerRatingData, playerName);
     const attributeNames = playerName === TeamMembers.can.name ? ['Diving', 'Handling', 'Kicking', 'Reflex', 'Speed', 'Positioning'] : ['Pace', 'Shooting', 'Passing', 'Dribbling', 'Defending', 'Physique']
-
-    const calculateOverall = (role?: any) => {
-        if (playerRatingData) {
-            let overallScore = 0;
-            let totalWeight = 0;
-
-            FifaCalculations.forEach(({ name, calculation }: any) => {
-                const weight = calculation[role] || 0;
-
-                if (weight > 0) {
-                    overallScore += playerRatingData[name] * weight;
-                    totalWeight += weight;
-                }
-            });
-
-            return ((overallScore / totalWeight)).toFixed(0);
-        }
-
-    };
-
-    const playerOverall = calculateOverall(Object.values(TeamMembers).find(x => x?.name === playerName)?.fifaRole?.toLowerCase()) || 0;
+    const playerOverall = calculateOverall(Object.values(TeamMembers).find(x => x?.name === playerName)?.fifaRole?.toLowerCase(), playerRatingData) || 0;
 
     return (
         <Card sx={styles.card}>
