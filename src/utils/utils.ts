@@ -233,7 +233,7 @@ export const findMatchType = (match: any) => {
     return null
 }
 
-export const returnAverageData = (data: any) => {
+export const returnAverageData = (data: any, notEnoughData?: boolean) => {
     const calculatedAverages: any = {};
     for (const user in data) {
         for (const key in data[user]) {
@@ -248,7 +248,7 @@ export const returnAverageData = (data: any) => {
     for (const key in calculatedAverages) {
         const values = calculatedAverages[key];
         const avg = values.reduce((a: any, b: any) => a + b, 0) / values.length;
-        averagesResult[key] = avg.toFixed(2);
+        averagesResult[key] = notEnoughData ? '0' : avg.toFixed(2);
     }
     return averagesResult;
 }
@@ -291,7 +291,7 @@ export const calculateOverall = (role: any, playerRatingData: any) => {
         }
     });
 
-    return ((overallScore / totalWeight))?.toFixed(0);
+    return ((overallScore / totalWeight))?.toFixed(2);
 };
 
 export const calculateAttributes = (playerRatingData: any, playerName: string) => {
@@ -314,3 +314,118 @@ export const calculateAttributes = (playerRatingData: any, playerName: string) =
         return [ Number(PAC), Number(SHO), Number(PAS), Number(DRI), Number(DEF), Number(PHY) ];
     }
 };
+
+export const calculatePlayerRatings = (rates: any, allData: any, filteredData: any, playerName: any) => {
+    const superFilteredData: any = Object.entries(rates)?.filter((x: any) => {
+        const oyesfcMemberLengthFirst: any = Object.values(allData)?.find((match: any) => match?.day === x[0])
+        const oyesfcMemberLength: any = Object.entries(oyesfcMemberLengthFirst?.oyesfc?.squad)
+            ?.map((a: any) => a[0])?.filter(b => OYesFCPlayersArray?.includes(b))?.length
+        const showRatingsFirst: any = Object.values(allData)?.find((match: any) => match?.day === x[0])
+        const showRatings: any = showRatingsFirst?.showRatings
+        const differenceInHoursFirst: any = Object.values(allData)?.find((match: any) => match?.day === x[0])
+        const differenceInHoursSecond: any = Object.values(allData)?.find((match: any) => match?.day === x[0])
+        const differenceInHours: any = hourDifference(differenceInHoursFirst?.day, differenceInHoursSecond?.time)
+        return Object.values(filteredData)?.map((x: any) => x?.day)?.includes(x[0]) && (Object.values(x[1]?.rates)?.length >= oyesfcMemberLength || showRatings === 'enable' ||
+            (differenceInHours >= 48 && Object.values(x[1]?.rates)?.length >= 4)) && showRatings !== 'disable'
+    })
+    const matchCount = superFilteredData.filter((superMatch: any) => {
+        const first: any = Object.values(allData)?.find((match: any) => match?.day === superMatch[0])
+        return Object.keys(first?.oyesfc?.squad)?.includes(playerName)
+    })?.length
+    let totalRating: any = 0;
+    let eachMatchRatings: any = [];
+    let eachMatchRatingsTotal: any = 0;
+
+    if (superFilteredData.length > 0) {
+        superFilteredData?.forEach((matchData: any) => {
+            totalRating = 0;
+            const ratings = Object.values(matchData[1]?.rates).filter((y: any) => Object.keys(y).includes(playerName)).map((x: any) => x[playerName]);
+            ratings.forEach(x => {
+                totalRating += x
+            });
+            totalRating = ratings?.length ? (totalRating / ratings?.length) : 0
+            eachMatchRatings.push(totalRating)
+        });
+        eachMatchRatings.forEach((x: any) => {
+            eachMatchRatingsTotal += x
+        });
+        const averageRating = matchCount ? (eachMatchRatingsTotal / matchCount) : 0;
+        if (averageRating !== 0) {
+            const mvpCount = calculateAverageRatings(superFilteredData, playerName);
+            return {
+                rating: averageRating ? Number(averageRating.toFixed(2)) : '-',
+                mvp: mvpCount
+            }
+        }
+    }
+    return {
+        rating: '0',
+        mvp: '0',
+    }
+}
+
+export const calculateAverageRatings = (data: any, playerName: any) => {
+    let averageRatings: any = {};
+    let bestOfMatches: any = [];
+    let count = 0;
+
+    data?.forEach((matchData: any) => {
+        averageRatings = {};
+        if (!matchData || !matchData[1]?.rates) return;
+        const matchRatings = matchData[1]?.rates;
+        Object.keys(matchRatings)?.forEach(key => {
+            const ratings = matchRatings[key];
+            Object.keys(ratings)?.forEach(player => {
+                const rating = ratings[player];
+                averageRatings[player] = (averageRatings[player] || 0) + rating;
+            });
+        });
+        Object.keys(averageRatings)?.forEach(player => {
+            averageRatings[player] /= Object.values(matchRatings)?.filter((x: any) => Object.keys(x)?.includes(player))?.length
+        });
+        const topPlayerOfThisMatch = findTopPlayers(averageRatings);
+        bestOfMatches.push(topPlayerOfThisMatch[0])
+    });
+
+    bestOfMatches?.forEach((name: any) => {
+        if (name === playerName) {
+            count++;
+        }
+    });
+
+    return count;
+};
+
+export const findTopPlayers = (averageRatings?: any) => {
+    const values: any = Object.values(averageRatings)
+    const maxAverage = Math.max(...values);
+    return Object.keys(averageRatings)?.filter(player => averageRatings[player] === maxAverage);
+};
+
+export const hourDifference = (matchDay?: any, time?: any) => {
+    const [day, month, year] = matchDay.split('-');
+    const matchTime = time.split('-');
+    const endTime = matchTime[1] === '00:00' ? '23:59' : matchTime[1]
+    const [hour, minute] = endTime.split(':');
+    const inputDateTime: any = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
+    const now: any = new Date();
+    return (now - inputDateTime) / (1000 * 60 * 60)
+};
+
+export const getPlayerStats = (data: any, playerName: any) => {
+    const playerTotalMatch = Object.values(data).filter((item: any) =>
+        Object.keys(item.oyesfc.squad).includes(playerName)).length;
+    let playerTotalGoal = 0;
+    Object.values(data).forEach((item: any) => {
+        if (item?.oyesfc?.squad[playerName]) {
+            playerTotalGoal += item.oyesfc.squad[playerName].goal;
+        }
+    });
+    const numberOfMatches = Object.values(data).length;
+    return {
+        totalMatch: playerTotalMatch,
+        totalGoal: playerTotalGoal,
+        goalPerGame: (playerTotalGoal / playerTotalMatch).toFixed(2),
+        attendanceRate: ((playerTotalMatch / numberOfMatches) * 100).toFixed(0)
+    }
+}

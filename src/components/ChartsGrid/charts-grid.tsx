@@ -40,12 +40,12 @@ const ChartsGrid = () => {
         <>
             <MainTitle title={'Rate of Attendance'} size={'mid'}/>
             <ChartComponent
-                type={ChartTypes.customLine}
+                type={ChartTypes.bar}
                 color={'rgb(255, 205, 86)'}
                 data={attendanceData}
                 customStyle={{height: '330px'}}
                 graphLabels={OYesFCPlayersArray}
-                title={''}/>
+                title={'Rate of Attendance'}/>
         </>
     )
 
@@ -79,13 +79,12 @@ const ChartsGrid = () => {
             <MainTitle title={'Regular Matches Compared to the Rakipbul Performance Increase Percentage'} size={'mid'}/>
             <div style={{display: 'flex', justifyContent: 'center'}}>
                 <ChartComponent
-                    type={ChartTypes.radar}
+                    type={ChartTypes.bar}
                     color={'rgb(54, 162, 235, 0.5)'}
                     data={performance}
-                    customStyle={{height: isMobile ? '330px' : '450px', justifyContent: 'center', width: isMobile ? '330px' : '450px',
-                        display: 'flex', marginTop: '-50px', marginBottom: '-50px'}}
+                    customStyle={{height: '330px'}}
                     graphLabels={OYesFCPlayersArray}
-                    title={''}/>
+                    title={'Performance Increase'}/>
             </div>
 
         </>

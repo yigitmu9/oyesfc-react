@@ -49,7 +49,7 @@ const AccountGrid = () => {
         navigate(addMatchPath);
     };
 
-    const openSettingsPage = () => {
+    const openNotificationSettingsPage = () => {
         navigate(settingsPath);
     };
 
@@ -163,8 +163,8 @@ const AccountGrid = () => {
                         signedIn &&
                         <>
                             <div style={{height: '20px'}}></div>
-                            <div className={classes.morePageBox} onClick={openSettingsPage}>
-                                <span className={navbarClasses.drawerRoutesSpan}>Settings</span>
+                            <div className={classes.morePageBox} onClick={openNotificationSettingsPage}>
+                                <span className={navbarClasses.drawerRoutesSpan}>Notifications</span>
                             </div>
                         </>
                     }

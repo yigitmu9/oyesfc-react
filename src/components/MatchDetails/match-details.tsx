@@ -5,6 +5,7 @@ import Result from "../Result/result";
 import FootballLogo from '../../images/football.png';
 import GameStatus from "../GameStatus/game-status";
 import {
+    AddMatchMessages,
     Facilities,
     matchType,
     openWeatherType,
@@ -19,7 +20,7 @@ import {ref, set} from "firebase/database";
 import {dataBase, loadWebsite} from "../../firebase";
 import PreviewTab from "../PreviewTab/preview-tab";
 import SquadTab from "../SquadTab/squad-tab";
-import {getWeather} from "../../services/service";
+import {getWeather, sendNotifications} from "../../services/service";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HighlightsTab from "../HighlightsTab/highlights-tab";
@@ -168,6 +169,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
             try {
                 await set(ref(dataBase, `rates/${matchDetailsData?.day}/rates/${id}`), oYesFCStarFormData);
                 setStarsSubmitButton('Submitted')
+                await checkSubmittedRatings()
             } catch (error: any) {
                 setStarsErrorMessage(error?.message)
             }
@@ -175,6 +177,33 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
             setStarsErrorMessage('Rate everyone!')
         }
     };
+
+    const checkSubmittedRatings = async () => {
+        try {
+            const response: any = await loadWebsite(`rates/${matchDetailsData?.day}`);
+            if (response) {
+                const oyesfcMemberLengthOfThisMatch = Object.keys(matchDetailsData?.oyesfc?.squad)?.filter(a => oyesfcMembers?.includes(a))
+                if (Object.entries(response?.rates)?.length >= oyesfcMemberLengthOfThisMatch?.length) {
+                    const calculatedData = calculatePlayerRatings(response?.rates, true);
+                    const notificationsResponse: any = await loadWebsite(`notifications`);
+                    const title = `Ratingler açıklandı`
+                    for (const player of Object.keys(matchDetailsData.oyesfc.squad)) {
+                        if (notificationsResponse?.[player]) {
+                            const rating = calculatedData?.ratings?.find((r: any) => r.name === player)?.rating || 0;
+                            const isBest = calculatedData?.bestPlayer?.name === player
+                            const detail = isBest ?
+                                `Tebrikler! ${Number(rating)?.toFixed(1)} rating ile maçın oyuncu oldun` :
+                                `Maçta aldığın rating ${Number(rating)?.toFixed(1)}`
+                            const idsOfPlayer: any = Object.values(notificationsResponse?.[player])
+                            await sendNotifications(title, detail, idsOfPlayer)
+                        }
+                    }
+                }
+            }
+        } catch (error: any) {
+            alert(error?.message);
+        }
+    }
 
     const fetchRatesData = async () => {
         try {
@@ -236,7 +265,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
         }
     }
 
-    const calculatePlayerRatings = (ratingResponse?: any) => {
+    const calculatePlayerRatings = (ratingResponse?: any, forNotifications?: boolean) => {
         let ratingsArray: any = [];
         let bestPlayer: any;
         Object.entries(matchDetailsData.oyesfc.squad).forEach((playerName: any) => {
@@ -259,6 +288,12 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
             }
             ratingsArray.push(ratingOfPlayer)
         })
+        if (forNotifications) {
+            return {
+                ratings: ratingsArray,
+                bestPlayer: bestPlayer,
+            }
+        }
         setSquadRatings(ratingsArray)
         setBestOfMatch(bestPlayer)
     }

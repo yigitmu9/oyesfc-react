@@ -2,12 +2,12 @@ import React from 'react';
 import Footer from "../components/Footer/footer";
 import PageGrid from "../shared/PageGrid/page-grid";
 import Box from "@mui/material/Box";
-import SettingsGrid from "../components/SettingsGrid/settings-grid";
+import NotificationSettingsGrid from "../components/NotificationSettingsGrid/notification-settings-grid";
 
-const SettingsPage = () => {
+const NotificationSettingsPage = () => {
 
     const page = (
-        <SettingsGrid/>
+        <NotificationSettingsGrid/>
     )
 
     return (
@@ -21,4 +21,4 @@ const SettingsPage = () => {
     );
 };
 
-export default SettingsPage;
+export default NotificationSettingsPage;

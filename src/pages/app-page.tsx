@@ -19,7 +19,7 @@ import CalendarPage from "./calendar-page";
 import AddMatchPage from "./add-match-page";
 import PlayerDetailsPage from "./player-details-page";
 import MatchDetailsPage from "./match-details-page";
-import SettingsPage from "./settings-page";
+import SettingsPage from "./notification-settings-page";
 
 const AppPage = () => {
 

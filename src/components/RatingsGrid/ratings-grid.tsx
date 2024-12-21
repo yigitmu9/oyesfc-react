@@ -170,7 +170,7 @@ const RatingsGrid: React.FC<RatingsGridProps> = ({category, handlePreviousPage})
                     {
                         facilityRatingInfoData?.map((z: any, i: number) => (
                             <span className={matchDetailsClasses.starDetailSpan} key={i}>
-                                {z[0]?.split(' ')[0] + '\'s rating for ' + selectedOption + '\'s ' + x + ': ' + z[1][x]}
+                                {z[0] + ': ' + z[1][x]}
                             </span>
                         ))
                     }

@@ -1,6 +1,12 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import classes from "./comparison-grid.module.css";
-import {calculateOverall, returnAverageData} from "../../utils/utils";
+import {
+    calculateOverall,
+    calculatePlayerRatings,
+    getPlayerStats,
+    OYesFCPlayersArray,
+    returnAverageData
+} from "../../utils/utils";
 import SelectionComponent from "../../shared/SelectionComponent/selection-component";
 import {loadWebsite} from "../../firebase";
 import BackButton from "../../shared/BackButton/back-button";
@@ -9,7 +15,8 @@ import sharedClasses from "../../shared/Styles/shared-styles.module.css";
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
 import playerCardsClasses from "../PlayerCards/player-cards.module.css";
 import {Alert} from "@mui/material";
-import {FifaCalculations, TeamMembers} from "../../constants/constants";
+import {Facilities, FifaCalculations, TeamMembers} from "../../constants/constants";
+import {useSelector} from "react-redux";
 
 interface  ComparisonGridProps {
     category?: string;
@@ -18,29 +25,34 @@ interface  ComparisonGridProps {
 
 const ComparisonGrid: React.FC<ComparisonGridProps> = ({category, handlePreviousPage}) => {
 
+    const {allData, filteredData} = useSelector((state: any) => state.databaseData);
     const statTypes = useMemo(() => ['Facilities', 'Players'], []);
     const [options, setOptions] = useState([]);
-    const [selectedOption, setSelectedOption] = useState('');
-    const facilitiesCategories = useMemo(() => ['Overall', 'Ground', 'Locker Room', 'Location', 'Goal Size', 'Field Size', 'Cafe'], []);
-    const fifaCategories = useMemo(() => FifaCalculations.map(x => x.name).sort(), []);
-    const playerCategories = useMemo(() => ['Overall', ...fifaCategories], [fifaCategories]);
+    const [selectedOptionOne, setSelectedOptionOne] = useState('');
+    const [selectedOptionTwo, setSelectedOptionTwo] = useState('');
     const [warnings, setWarnings] = useState<any>(null);
     const [calculatedFacilityData, setCalculatedFacilityData] = useState<any>(null);
     const [calculatedPlayerData, setCalculatedPlayerData] = useState<any>(null);
+    const facilitiesCategories = useMemo(() => ['Overall', 'Ground', 'Locker Room', 'Location', 'Goal Size', 'Field Size', 'Cafe'], []);
+    const fifaCategories = useMemo(() => FifaCalculations.map(x => x.name).sort(), []);
+    const playerCategories = useMemo(() => ['Matches', 'Goals', 'Goals per Game', 'Attendance Rate', 'MOTM Awards', 'Average Match Rating', 'Overall', ...fifaCategories], [fifaCategories]);
 
     const updateOptions = useCallback((type: string) => {
         let optionsArray: any = [];
         if (type === statTypes[0]) {
-            optionsArray = facilitiesCategories
+            optionsArray = Facilities.map(x => x.name).sort()
         } else if (type === statTypes[1]) {
-            optionsArray = playerCategories
+            optionsArray = OYesFCPlayersArray
         }
         setOptions(optionsArray);
-        setSelectedOption('');
-    }, [facilitiesCategories, playerCategories, statTypes]);
+    }, [statTypes]);
 
-    const handleChange = (data?: any) => {
-        setSelectedOption(data);
+    const handleChangeOne = (data?: any) => {
+        setSelectedOptionOne(data);
+    };
+
+    const handleChangeTwo = (data?: any) => {
+        setSelectedOptionTwo(data);
     };
 
     const fetchFacilityRatingData = useCallback(async () => {
@@ -65,21 +77,26 @@ const ComparisonGrid: React.FC<ComparisonGridProps> = ({category, handlePrevious
     const fetchPlayerRatingData = useCallback(async () => {
         try {
             const response: any = await loadWebsite(`playerRatings`);
-            if (response) {
-                const filteredResponse = Object.entries(response)?.filter((a: any) => Object.values(a[1])?.length > 3);
+            const ratesResponse: any = await loadWebsite(`rates`);
+            if (response && ratesResponse) {
                 let data: any = [];
-                filteredResponse?.forEach((x: any) => {
-                    const points = returnAverageData(x[1])
-                    const playerOverall = calculateOverall(Object.values(TeamMembers).find(z => z?.name === x[0])?.fifaRole?.toLowerCase(), points) || 0;
-                    const overallPoints = {...points, Overall: playerOverall}
-                    data = [...data, {name: x[0], ratings: overallPoints}]
+                OYesFCPlayersArray?.forEach((player: any) => {
+                    const mvpData = calculatePlayerRatings(ratesResponse, allData, filteredData, player)
+                    const notEnoughData = Object.values(response[player])?.length < 4
+                    const points = returnAverageData(response[player], notEnoughData)
+                    const playerStats = getPlayerStats(filteredData, player)
+                    const playerOverall = calculateOverall(Object.values(TeamMembers).find(z => z?.name === player)?.fifaRole?.toLowerCase(), points) || 0;
+                    const overallPoints = {...points, Overall: playerOverall, Matches: playerStats?.totalMatch,
+                        Goals: playerStats?.totalGoal, 'Goals per Game': playerStats?.goalPerGame, 'Attendance Rate': playerStats?.attendanceRate,
+                        'Average Match Rating': (Number(mvpData?.rating)?.toFixed(2)), 'MOTM Awards': mvpData?.mvp?.toString()}
+                    data = [...data, {name: player, ratings: overallPoints}]
                 })
                 setCalculatedPlayerData(data)
             }
         } catch (error: any) {
             showWarning(error?.message, 'error')
         }
-    }, [])
+    }, [allData, filteredData])
 
     useEffect(() => {
         if (category) {
@@ -105,38 +122,73 @@ const ComparisonGrid: React.FC<ComparisonGridProps> = ({category, handlePrevious
         }
     }
 
+    const returnValue = (data: any, categoryName: any, selectedOption: any, isFacility?: boolean) => {
+        const value = data?.find((x: any) => x.name === selectedOption)?.ratings?.[categoryName] || '0'
+        if (categoryName === 'Goals per Game' || categoryName === 'Average Match Rating') {
+            return Number(value)?.toFixed(2)
+        }
+        if (isFacility) {
+            return Number(value)?.toFixed(1)
+        }
+        return Number(value)?.toFixed(0)
+    }
+
+    const getColor = (selected: any, other: any) => {
+        if (Number(selected) < Number(other)) return 'darkred'
+        if (Number(selected) === Number(other)) return 'darkgoldenrod'
+        if (Number(selected) > Number(other)) return 'darkgreen'
+        return 'darkred'
+    }
+
     const facilityRatingContent = (
         <>
             {
-                calculatedFacilityData?.length > 0 && selectedOption &&
+                calculatedFacilityData?.length > 0 && selectedOptionOne && selectedOptionTwo &&
                 (
                     <>
-                    {[...calculatedFacilityData]?.sort(
-                        (a, b) => parseFloat(b?.ratings?.[selectedOption]) - parseFloat(a?.ratings?.[selectedOption])
-                    ).map((item, index) => (
                         <>
-                            <section className={matchDetailsClasses.generalTabSection} style={{padding: '0'}}
-                                     key={index}>
-                                <div className={matchDetailsClasses.generalInfoDiv}>
-                                    <span className={playerCardsClasses.ratingSpan} style={{
-                                        background: 'lightgray', color: 'black', marginRight: '10px',
-                                    }}>
-                                        {index + 1}
+                            <section className={matchDetailsClasses.generalTabSection} style={{padding: '9.5px 0'}}>
+                                <div className={matchDetailsClasses.generalInfoDiv}
+                                     style={{justifyContent: 'space-between'}}>
+                                    <span className={matchDetailsClasses.generalInfoSpan} style={{margin: 0}}>
+                                        {selectedOptionOne}
                                     </span>
-                                    <span className={playerCardsClasses.ratingSpan} style={{
-                                        background: Number(Number(item.ratings[selectedOption])?.toFixed(0)) >= 7 ? 'darkgreen' :
-                                            Number(Number(item.ratings[selectedOption])?.toFixed(0)) < 5 ? 'darkred' : 'darkgoldenrod'
-                                    }}>
-                                        {Number(item.ratings[selectedOption])?.toFixed(1)}
+                                    <span className={matchDetailsClasses.generalInfoSpan} style={{margin: 0}}>
+                                        {' '}
                                     </span>
-                                    <span className={matchDetailsClasses.generalInfoSpan}>
-                                        {item.name}
+                                    <span className={matchDetailsClasses.generalInfoSpan} style={{margin: 0}}>
+                                        {selectedOptionTwo}
                                     </span>
                                 </div>
                             </section>
                             <div className={sharedClasses.emptyHeightSpace}></div>
                         </>
-                    ))}
+                        {facilitiesCategories?.map((categoryName, index) => (
+                            <div key={index}>
+                                <section className={matchDetailsClasses.generalTabSection} style={{padding: '0'}}
+                                         key={index}>
+                                    <div className={matchDetailsClasses.generalInfoDiv}
+                                         style={{justifyContent: 'space-between'}}>
+                                    <span className={playerCardsClasses.ratingSpan} style={{
+                                        background: getColor(returnValue(calculatedFacilityData, categoryName, selectedOptionOne, true),
+                                            returnValue(calculatedFacilityData, categoryName, selectedOptionTwo, true))
+                                    }}>
+                                        {returnValue(calculatedFacilityData, categoryName, selectedOptionOne, true)}
+                                    </span>
+                                        <span className={matchDetailsClasses.generalInfoSpan}>
+                                        {categoryName}
+                                    </span>
+                                        <span className={playerCardsClasses.ratingSpan} style={{
+                                            background: getColor(returnValue(calculatedFacilityData, categoryName, selectedOptionTwo, true),
+                                                returnValue(calculatedFacilityData, categoryName, selectedOptionOne, true))
+                                        }}>
+                                        {returnValue(calculatedFacilityData, categoryName, selectedOptionTwo, true)}
+                                    </span>
+                                    </div>
+                                </section>
+                                <div className={sharedClasses.emptyHeightSpace}></div>
+                            </div>
+                        ))}
                     </>
                 )
             }
@@ -146,34 +198,51 @@ const ComparisonGrid: React.FC<ComparisonGridProps> = ({category, handlePrevious
     const playerRatingContent = (
         <>
             {
-                calculatedPlayerData?.length > 0 && selectedOption &&
+                calculatedPlayerData?.length > 0 && selectedOptionOne && selectedOptionTwo &&
                 (
                     <>
-                        {[...calculatedPlayerData]?.sort(
-                            (a, b) => parseFloat(b?.ratings?.[selectedOption]) - parseFloat(a?.ratings?.[selectedOption])
-                        ).map((item, index) => (
-                            <>
+                        <>
+                            <section className={matchDetailsClasses.generalTabSection} style={{padding: '9.5px 0'}}>
+                                <div className={matchDetailsClasses.generalInfoDiv}
+                                     style={{justifyContent: 'space-between'}}>
+                                    <span className={matchDetailsClasses.generalInfoSpan} style={{margin: 0}}>
+                                        {selectedOptionOne}
+                                    </span>
+                                    <span className={matchDetailsClasses.generalInfoSpan} style={{margin: 0}}>
+                                        {' '}
+                                    </span>
+                                    <span className={matchDetailsClasses.generalInfoSpan} style={{margin: 0}}>
+                                        {selectedOptionTwo}
+                                    </span>
+                                </div>
+                            </section>
+                            <div className={sharedClasses.emptyHeightSpace}></div>
+                        </>
+                        {playerCategories?.map((categoryName, index) => (
+                            <div key={index}>
                                 <section className={matchDetailsClasses.generalTabSection} style={{padding: '0'}}
                                          key={index}>
-                                    <div className={matchDetailsClasses.generalInfoDiv}>
+                                    <div className={matchDetailsClasses.generalInfoDiv}
+                                         style={{justifyContent: 'space-between'}}>
                                     <span className={playerCardsClasses.ratingSpan} style={{
-                                        background: 'lightgray', color: 'black', marginRight: '10px',
+                                        background: getColor(returnValue(calculatedPlayerData, categoryName, selectedOptionOne),
+                                            returnValue(calculatedPlayerData, categoryName, selectedOptionTwo))
                                     }}>
-                                        {index + 1}
-                                    </span>
-                                        <span className={playerCardsClasses.ratingSpan} style={{
-                                            background: Number(Number(item.ratings[selectedOption])?.toFixed(0)) >= 80 ? 'darkgreen' :
-                                                Number(Number(item.ratings[selectedOption])?.toFixed(0)) < 60 ? 'darkred' : 'darkgoldenrod'
-                                        }}>
-                                        {Number(item.ratings[selectedOption])?.toFixed(0)}
+                                        {returnValue(calculatedPlayerData, categoryName, selectedOptionOne)}
                                     </span>
                                         <span className={matchDetailsClasses.generalInfoSpan}>
-                                        {item.name}
+                                        {categoryName}
+                                    </span>
+                                        <span className={playerCardsClasses.ratingSpan} style={{
+                                            background: getColor(returnValue(calculatedPlayerData, categoryName, selectedOptionTwo),
+                                                returnValue(calculatedPlayerData, categoryName, selectedOptionOne))
+                                        }}>
+                                        {returnValue(calculatedPlayerData, categoryName, selectedOptionTwo)}
                                     </span>
                                     </div>
                                 </section>
                                 <div className={sharedClasses.emptyHeightSpace}></div>
-                            </>
+                            </div>
                         ))}
                     </>
                 )
@@ -187,9 +256,19 @@ const ComparisonGrid: React.FC<ComparisonGridProps> = ({category, handlePrevious
                 category &&
                 <section className={classes.starSection}>
                     <span className={classes.starSpan}>
-                        {'Select attribute'}
+                        {'Select first '}
                     </span>
-                    <SelectionComponent options={options} onSelectionChange={handleChange}
+                    <SelectionComponent options={options} onSelectionChange={handleChangeOne}
+                                        defaultSelectedValue={false}/>
+                </section>
+            }
+            {
+                category &&
+                <section className={classes.starSection}>
+                    <span className={classes.starSpan}>
+                        {'Select second '}
+                    </span>
+                    <SelectionComponent options={options} onSelectionChange={handleChangeTwo}
                                         defaultSelectedValue={false}/>
                 </section>
             }
@@ -200,9 +279,9 @@ const ComparisonGrid: React.FC<ComparisonGridProps> = ({category, handlePrevious
         <>
             {
                 category && (
-                    category === statTypes[0] && selectedOption ?
+                    category === statTypes[0] && selectedOptionOne && selectedOptionTwo ?
                         facilityRatingContent :
-                        category === statTypes[1] && selectedOption ?
+                        category === statTypes[1] && selectedOptionOne && selectedOptionTwo ?
                             playerRatingContent :
                             null
                 )
@@ -212,7 +291,7 @@ const ComparisonGrid: React.FC<ComparisonGridProps> = ({category, handlePrevious
 
     return (
         <div style={{minHeight: '70vh'}}>
-            <BackButton handleBackButton={handleBack} generalTitle={`Sort ${category}`}/>
+            <BackButton handleBackButton={handleBack} generalTitle={`Compare ${category}`}/>
             <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
             {firstPart}
             {secondPart}

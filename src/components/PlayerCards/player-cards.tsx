@@ -36,7 +36,13 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import ShieldIcon from '@mui/icons-material/Shield';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
-import {calculateAttributes, calculateOverall, returnAverageData} from "../../utils/utils";
+import {
+    calculateAttributes,
+    calculateOverall,
+    calculatePlayerRatings,
+    getPlayerStats,
+    returnAverageData
+} from "../../utils/utils";
 import {useNavigate} from "react-router-dom";
 
 function CustomTabs(props?: any) {
@@ -82,7 +88,6 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
     const {signedIn} = useSelector((state: any) => state.credentials);
     const isMobile = window.innerWidth <= 768;
     const [tabValue, setTabValue] = React.useState(0);
-    const numberOfMatches = Object.values(filteredData).length;
     const playerNumber = Object.values(TeamMembers).find(x => x.name === playerName)?.number;
     const imageUrl = Object.entries(TeamMembers).find(x => x[1].name === playerName)?.[0];
     const playerFoot = playerName === TeamMembers.atakan.name ? 'Left' :
@@ -92,8 +97,7 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
     })
     const [ratesData, setRatesData] = useState(null);
     const [playerRatingMvp, setPlayerRatingMvp] = useState<any>({rating: '-', mvp: 0});
-    const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
-    let playerTotalGoal = 0;
+    const playerStats = getPlayerStats(filteredData, playerName)
     const playerBootBrand = Object.values(TeamMembers).find(x => x.name === playerName)?.bootBrand;
     const playerBootCollection = Object.values(TeamMembers).find(x => x.name === playerName)?.bootCollection;
     const playerBootModel = Object.values(TeamMembers).find(x => x.name === playerName)?.bootModel;
@@ -154,12 +158,6 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
         return null
     };
 
-    Object.values(filteredData).forEach((item: any) => {
-        if (item?.oyesfc?.squad[playerName]) {
-            playerTotalGoal += item.oyesfc.squad[playerName].goal;
-        }
-    });
-
     const calculateAge = () => {
         const year = Object.values(TeamMembers).find(x => x.name === playerName)?.birthYear || 0
         const month = Object.values(TeamMembers).find(x => x.name === playerName)?.birthMonth || 0
@@ -170,10 +168,6 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
         if (thisYearBirthDate > now) return (now.getFullYear() - inputDateTime.getFullYear()) - 1;
         return now.getFullYear() - inputDateTime.getFullYear();
     };
-
-
-    const playerTotalMatch = Object.values(filteredData).filter((item: any) =>
-        Object.keys(item.oyesfc.squad).includes(playerName)).length;
 
     useEffect(() => {
         if (!ratesData) {
@@ -353,106 +347,14 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
         try {
             const response: any = await loadWebsite(`rates`);
             if (response) {
-                calculatePlayerRatings(response)
+                const data = calculatePlayerRatings(response, allData, filteredData, playerName)
+                if (data) setPlayerRatingMvp(data)
                 setRatesData(response)
             }
         } catch (error: any) {
             alert(error?.message);
         }
     }
-    const hourDifference = (matchDay?: any, time?: any) => {
-        const [day, month, year] = matchDay.split('-');
-        const matchTime = time.split('-');
-        const endTime = matchTime[1] === '00:00' ? '23:59' : matchTime[1]
-        const [hour, minute] = endTime.split(':');
-        const inputDateTime: any = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
-        const now: any = new Date();
-        return (now - inputDateTime) / (1000 * 60 * 60)
-    };
-
-    const calculatePlayerRatings = (response?: any) => {
-        const superFilteredData: any = Object.entries(response)?.filter((x: any) => {
-            const oyesfcMemberLengthFirst: any = Object.values(allData)?.find((match: any) => match?.day === x[0])
-            const oyesfcMemberLength: any = Object.entries(oyesfcMemberLengthFirst?.oyesfc?.squad)
-                ?.map((a: any) => a[0])?.filter(b => oyesfcMembers?.includes(b))?.length
-            const showRatingsFirst: any = Object.values(allData)?.find((match: any) => match?.day === x[0])
-            const showRatings: any = showRatingsFirst?.showRatings
-            const differenceInHoursFirst: any = Object.values(allData)?.find((match: any) => match?.day === x[0])
-            const differenceInHoursSecond: any = Object.values(allData)?.find((match: any) => match?.day === x[0])
-            const differenceInHours: any = hourDifference(differenceInHoursFirst?.day, differenceInHoursSecond?.time)
-            return Object.values(filteredData)?.map((x: any) => x?.day)?.includes(x[0]) && (Object.values(x[1]?.rates)?.length >= oyesfcMemberLength || showRatings === 'enable' ||
-                (differenceInHours >= 48 && Object.values(x[1]?.rates)?.length >= 4)) && showRatings !== 'disable'
-        })
-        const matchCount = superFilteredData.filter((superMatch: any) => {
-            const first: any = Object.values(allData)?.find((match: any) => match?.day === superMatch[0])
-            return Object.keys(first?.oyesfc?.squad)?.includes(playerName)
-        })?.length
-        let totalRating: any = 0;
-        let eachMatchRatings: any = [];
-        let eachMatchRatingsTotal: any = 0;
-
-        if (superFilteredData.length > 0) {
-            superFilteredData?.forEach((matchData: any) => {
-                totalRating = 0;
-                const ratings = Object.values(matchData[1]?.rates).filter((y: any) => Object.keys(y).includes(playerName)).map((x: any) => x[playerName]);
-                ratings.forEach(x => {
-                    totalRating += x
-                });
-                totalRating = ratings?.length ? (totalRating / ratings?.length) : 0
-                eachMatchRatings.push(totalRating)
-            });
-            eachMatchRatings.forEach((x: any) => {
-                eachMatchRatingsTotal += x
-            });
-            const averageRating = matchCount ? (eachMatchRatingsTotal / matchCount) : 0;
-            if (averageRating !== 0) {
-                const mvpCount = calculateAverageRatings(superFilteredData);
-                const ratingMvp = {
-                    rating: averageRating ? Number(averageRating.toFixed(2)) : '-',
-                    mvp: mvpCount
-                }
-                setPlayerRatingMvp(ratingMvp)
-            }
-        }
-    }
-
-    const calculateAverageRatings = (data?: any) => {
-        let averageRatings: any = {};
-        let bestOfMatches: any = [];
-        let count = 0;
-
-        data?.forEach((matchData: any) => {
-            averageRatings = {};
-            if (!matchData || !matchData[1]?.rates) return;
-            const matchRatings = matchData[1]?.rates;
-            Object.keys(matchRatings)?.forEach(key => {
-                const ratings = matchRatings[key];
-                Object.keys(ratings)?.forEach(player => {
-                    const rating = ratings[player];
-                    averageRatings[player] = (averageRatings[player] || 0) + rating;
-                });
-            });
-            Object.keys(averageRatings)?.forEach(player => {
-                averageRatings[player] /= Object.values(matchRatings)?.filter((x: any) => Object.keys(x)?.includes(player))?.length
-            });
-            const topPlayerOfThisMatch = findTopPlayers(averageRatings);
-            bestOfMatches.push(topPlayerOfThisMatch[0])
-        });
-
-        bestOfMatches?.forEach((name: any) => {
-            if (name === playerName) {
-                count++;
-            }
-        });
-
-        return count;
-    };
-
-    const findTopPlayers = (averageRatings?: any) => {
-        const values: any = Object.values(averageRatings)
-        const maxAverage = Math.max(...values);
-        return Object.keys(averageRatings)?.filter(player => averageRatings[player] === maxAverage);
-    };
 
     const handleBack = (data?: any) => {
         if (data) {
@@ -674,7 +576,7 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
                             <SportsSoccerIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.iconStyle}>
                             </SportsSoccerIcon>
                             <span
-                                className={classes.belowIconSpan}>{playerTotalGoal}</span>
+                                className={classes.belowIconSpan}>{playerStats?.totalGoal}</span>
                         </div>
                         <div className={classes.generalInfoInsideDiv}>
                             <MilitaryTechIcon fontSize={isMobile ? 'medium' : 'large'}
@@ -693,7 +595,7 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
                             textAlign: "end"
                         }}>
                             <p className={classes.fontStyle}>Matches</p>
-                            <p className={classes.fontStyle}>{playerTotalMatch}</p>
+                            <p className={classes.fontStyle}>{playerStats?.totalMatch}</p>
                         </ListItem>
                         <Divider sx={{bgcolor: "#646464"}} variant="middle" color="red"/>
                         <ListItem style={{
@@ -702,7 +604,7 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
                             textAlign: "end"
                         }}>
                             <p className={classes.fontStyle}>Goals</p>
-                            <p className={classes.fontStyle}>{playerTotalGoal}</p>
+                            <p className={classes.fontStyle}>{playerStats?.totalGoal}</p>
                         </ListItem>
                         <Divider sx={{bgcolor: "#646464"}} variant="middle" color="red"/>
                         <ListItem style={{
@@ -711,7 +613,7 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
                             textAlign: "end"
                         }}>
                             <p className={classes.fontStyle}>Goal per Game</p>
-                            <p className={classes.fontStyle}>{(playerTotalGoal / playerTotalMatch).toFixed(2)}</p>
+                            <p className={classes.fontStyle}>{playerStats?.goalPerGame}</p>
                         </ListItem>
                         <Divider sx={{bgcolor: "#646464"}} variant="middle"/>
                         <ListItem style={{
@@ -738,7 +640,7 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
                             textAlign: "end"
                         }}>
                             <p className={classes.fontStyle}>Rate of Attendance</p>
-                            <p className={classes.fontStyle}>{((playerTotalMatch / numberOfMatches) * 100).toFixed(0)}%</p>
+                            <p className={classes.fontStyle}>{playerStats?.attendanceRate}%</p>
                         </ListItem>
                     </List>
                 </section>
@@ -762,7 +664,7 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({playerName}) => {
                                 background: Number(playerOverall) >= 80 ? 'darkgreen' :
                                     Number(playerOverall) < 60 ? 'darkred' : 'darkgoldenrod'
                             }}>
-                                {playerOverall}
+                                {Number(playerOverall)?.toFixed(0)}
                             </span>
                                 <span className={matchDetailsClasses.generalInfoSpan}>
                                 Overall
