@@ -1,0 +1,58 @@
+.grid {
+
+}
+
+.starSection {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 20px 0;
+    background: #1C1C1E;
+    border-radius: 16px;
+    @media (max-width: 768px) {
+        padding: 15px;
+    }
+}
+
+.starSpan {
+    color: lightgray;
+    font-size: 25px;
+    @media (max-width: 768px) {
+        font-size: 16px;
+    }
+}
+
+.facilityRating {
+    font-size: 25px;
+    font-weight: bold;
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+}
+
+.facilityRatingName {
+    font-size: 15px;
+    @media (max-width: 768px) {
+        font-size: 10px;
+    }
+}
+
+.facilityRatingDiv {
+    align-items: center;
+    margin: 10px;
+    border-radius: 10px;
+    width: 100px;
+    justify-items: center;
+    justify-content: center;
+    height: 70px;
+    text-align: center;
+    align-content: center;
+    color: lightgray;
+    display: flex;
+    flex-direction: column;
+    @media (max-width: 768px) {
+        margin: 5px;
+        height: 40px;
+        width: 110px;
+    }
+}
