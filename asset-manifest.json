@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/oyesfc-react/static/css/main.284b57c4.css",
-    "main.js": "/oyesfc-react/static/js/main.e5c6580f.js",
+    "main.css": "/oyesfc-react/static/css/main.4ac122df.css",
+    "main.js": "/oyesfc-react/static/js/main.aaf73437.js",
     "static/js/787.6b6304da.chunk.js": "/oyesfc-react/static/js/787.6b6304da.chunk.js",
     "static/media/ghost.png": "/oyesfc-react/static/media/ghost.9c60e90304ba4f31e2bb.png",
     "static/media/blue2.png": "/oyesfc-react/static/media/blue2.7134be12bd5181b5f6e5.png",
@@ -70,12 +70,12 @@
     "static/media/adidas.PNG": "/oyesfc-react/static/media/adidas.c398c59d5b0ad7963a85.PNG",
     "static/media/Football_field.svg": "/oyesfc-react/static/media/Football_field.7a21f9f8341d6ef6e398.svg",
     "index.html": "/oyesfc-react/index.html",
-    "main.284b57c4.css.map": "/oyesfc-react/static/css/main.284b57c4.css.map",
-    "main.e5c6580f.js.map": "/oyesfc-react/static/js/main.e5c6580f.js.map",
+    "main.4ac122df.css.map": "/oyesfc-react/static/css/main.4ac122df.css.map",
+    "main.aaf73437.js.map": "/oyesfc-react/static/js/main.aaf73437.js.map",
     "787.6b6304da.chunk.js.map": "/oyesfc-react/static/js/787.6b6304da.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.284b57c4.css",
-    "static/js/main.e5c6580f.js"
+    "static/css/main.4ac122df.css",
+    "static/js/main.aaf73437.js"
   ]
 }
