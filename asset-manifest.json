@@ -1,14 +1,15 @@
 {
   "files": {
-    "main.css": "/oyesfc-react/static/css/main.4ac122df.css",
-    "main.js": "/oyesfc-react/static/js/main.aaf73437.js",
+    "main.css": "/oyesfc-react/static/css/main.b4c727a9.css",
+    "main.js": "/oyesfc-react/static/js/main.b714bd6a.js",
     "static/js/787.6b6304da.chunk.js": "/oyesfc-react/static/js/787.6b6304da.chunk.js",
+    "static/media/gold2.jpeg": "/oyesfc-react/static/media/gold2.e771b6dd3e8ac34c13a9.jpeg",
     "static/media/ghost.png": "/oyesfc-react/static/media/ghost.9c60e90304ba4f31e2bb.png",
-    "static/media/blue2.png": "/oyesfc-react/static/media/blue2.7134be12bd5181b5f6e5.png",
-    "static/media/gold2.png": "/oyesfc-react/static/media/gold2.dde37d37fc0e94e56294.png",
+    "static/media/blue2.jpeg": "/oyesfc-react/static/media/blue2.7a2e8bb20db1f3987e7c.jpeg",
+    "static/media/red3.jpeg": "/oyesfc-react/static/media/red3.2da08bef64728bbdea4b.jpeg",
+    "static/media/mehmet.jpeg": "/oyesfc-react/static/media/mehmet.1dcc1b39384a8cfeece0.jpeg",
     "static/media/firstLogo.png": "/oyesfc-react/static/media/firstLogo.68460a05741038d94f91.png",
     "static/media/number4.png": "/oyesfc-react/static/media/number4.5f596c7da97e51e9c311.png",
-    "static/media/red3.jpeg": "/oyesfc-react/static/media/red3.40b973e2c705f579272e.jpeg",
     "static/media/number8.png": "/oyesfc-react/static/media/number8.e9d8322616d60dd5ec3d.png",
     "static/media/ghost1.jpeg": "/oyesfc-react/static/media/ghost1.9d214e726404d4e178b5.jpeg",
     "static/media/Toki.png": "/oyesfc-react/static/media/Toki.d882ed483b52f94a63af.png",
@@ -25,7 +26,6 @@
     "static/media/CAN.png": "/oyesfc-react/static/media/CAN.b2a9101755b126a3c66a.png",
     "static/media/oyesfc.PNG": "/oyesfc-react/static/media/oyesfc.bd5cdb588ddfd1427f70.PNG",
     "static/media/fifa.jpeg": "/oyesfc-react/static/media/fifa.0f029e1a26c46c54a6b8.jpeg",
-    "static/media/mehmet.jpeg": "/oyesfc-react/static/media/mehmet.2bd61cfd7aa32696b9ab.jpeg",
     "static/media/gokhan.jpeg": "/oyesfc-react/static/media/gokhan.7adc2cecd137e09b459c.jpeg",
     "static/media/phoenix.png": "/oyesfc-react/static/media/phoenix.6d51bdd6997e56d2e0cc.png",
     "static/media/number3.png": "/oyesfc-react/static/media/number3.6a7be400e1269ae81e2b.png",
@@ -68,14 +68,13 @@
     "static/media/Kurtsan.png": "/oyesfc-react/static/media/Kurtsan.f71506019087388621b5.png",
     "static/media/football.png": "/oyesfc-react/static/media/football.540a79cf671acacf41c7.png",
     "static/media/adidas.PNG": "/oyesfc-react/static/media/adidas.c398c59d5b0ad7963a85.PNG",
-    "static/media/Football_field.svg": "/oyesfc-react/static/media/Football_field.7a21f9f8341d6ef6e398.svg",
     "index.html": "/oyesfc-react/index.html",
-    "main.4ac122df.css.map": "/oyesfc-react/static/css/main.4ac122df.css.map",
-    "main.aaf73437.js.map": "/oyesfc-react/static/js/main.aaf73437.js.map",
+    "main.b4c727a9.css.map": "/oyesfc-react/static/css/main.b4c727a9.css.map",
+    "main.b714bd6a.js.map": "/oyesfc-react/static/js/main.b714bd6a.js.map",
     "787.6b6304da.chunk.js.map": "/oyesfc-react/static/js/787.6b6304da.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4ac122df.css",
-    "static/js/main.aaf73437.js"
+    "static/css/main.b4c727a9.css",
+    "static/js/main.b714bd6a.js"
   ]
 }
