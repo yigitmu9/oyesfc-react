@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import BackButton from "../../shared/BackButton/back-button";
-import {useNavigate} from "react-router-dom";
 import {Alert} from "@mui/material";
 import {dataBase, loadWebsite} from "../../firebase";
 import {useSelector} from "react-redux";
@@ -16,11 +15,13 @@ import classes from "../SignIn/sign-in.module.css";
 import addMatchClasses from "../AddMatch/add-match.module.css";
 import {sendNotifications} from "../../services/service";
 
+interface  NotificationSettingsGridProps {
+    handlePreviousPage?: any
+}
 
-const NotificationSettingsGrid = () => {
+const NotificationSettingsGrid: React.FC<NotificationSettingsGridProps> = ({handlePreviousPage}) => {
 
     const {userName, isCaptain} = useSelector((state: any) => state.credentials);
-    const navigate = useNavigate()
     const [warning, setWarning] = useState<AlertInterface>({message: '', severity: undefined});
     const [errorMessage, setErrorMessage] = useState<AlertInterface>({message: '', severity: undefined});
     const [loading, setLoading] = useState<boolean>(true)
@@ -96,7 +97,7 @@ const NotificationSettingsGrid = () => {
 
     const handleBack = (data?: any) => {
         if (data) {
-            navigate('/oyesfc-react/account')
+            handlePreviousPage(true)
         }
     }
 
@@ -140,7 +141,7 @@ const NotificationSettingsGrid = () => {
 
     return (
         <div style={{minHeight: '70vh'}}>
-            <BackButton handleBackButton={handleBack} generalTitle={'Notification Settings'}/>
+            <BackButton handleBackButton={handleBack} generalTitle={'Notifications'}/>
             <Box sx={{display: {xs: 'flex', md: 'none'}, height: '30px'}}></Box>
             {
                 warning?.severity !== SnackbarTypes.success &&

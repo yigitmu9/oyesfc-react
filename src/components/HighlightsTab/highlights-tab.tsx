@@ -19,7 +19,7 @@ import BrowserNotSupportedIcon from '@mui/icons-material/BrowserNotSupported';
 import {useSelector} from "react-redux";
 import sharedClasses from "../../shared/Styles/shared-styles.module.css";
 import ButtonComponent from "../../shared/ButtonComponent/button-component";
-import {generateRandomString} from "../../utils/utils";
+import {extractGoogleDriveFileId, extractYoutubeVideoId, generateRandomString} from "../../utils/utils";
 
 interface  HighlightsTabProps {
     matchDetailsData?: any;
@@ -111,33 +111,6 @@ const HighlightsTab: React.FC<HighlightsTabProps> = ({matchDetailsData}) => {
             return '';
         }
     }
-
-    const extractYoutubeVideoId = (url?: any) => {
-        const urlObj = new URL(url);
-        const hostname = urlObj.hostname;
-        if (hostname === 'youtu.be') {
-            return urlObj.pathname.slice(1);
-        }
-        if (hostname === 'www.youtube.com' || hostname === 'youtube.com') {
-            if (urlObj.pathname.includes('/shorts/')) {
-                return urlObj.pathname.split('/shorts/')[1];
-            }
-            return urlObj.searchParams.get('v');
-        }
-        return null;
-    };
-
-    const extractGoogleDriveFileId = (url?: any) => {
-        const urlObj = new URL(url);
-        const pathname = urlObj.pathname;
-        if (pathname.includes('/file/d/')) {
-            return pathname.split('/file/d/')[1].split('/')[0];
-        }
-        if (urlObj.searchParams.get('id')) {
-            return urlObj.searchParams.get('id');
-        }
-        return null;
-    };
 
     return (
         <>

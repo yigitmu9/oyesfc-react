@@ -49,7 +49,7 @@ const AccountGrid = () => {
         navigate(addMatchPath);
     };
 
-    const openNotificationSettingsPage = () => {
+    const openSettingsPage = () => {
         navigate(settingsPath);
     };
 
@@ -136,6 +136,15 @@ const AccountGrid = () => {
                             </div>
                         </>
                     }
+                    {
+                        signedIn &&
+                        <>
+                            <div style={{height: '20px'}}></div>
+                            <div className={classes.morePageBox} onClick={openSettingsPage}>
+                                <span className={navbarClasses.drawerRoutesSpan}>Settings</span>
+                            </div>
+                        </>
+                    }
                     <Box sx={{display: {xs: 'flex', md: 'none'}, flexDirection: 'column'}}>
                         <div style={{height: '20px'}}></div>
                         <div className={classes.morePageBoxLinks}>
@@ -159,15 +168,6 @@ const AccountGrid = () => {
                     className={navbarClasses.miniTitle}>{'© ' + year + ' ' + TeamNames.oYesFc + '™ | v' + packageJson.version}</span>
                         </div>
                     </Box>
-                    {
-                        signedIn &&
-                        <>
-                            <div style={{height: '20px'}}></div>
-                            <div className={classes.morePageBox} onClick={openNotificationSettingsPage}>
-                                <span className={navbarClasses.drawerRoutesSpan}>Notifications</span>
-                            </div>
-                        </>
-                    }
                 </Box>
             </div>
 

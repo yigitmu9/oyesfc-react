@@ -2,12 +2,12 @@ import React from 'react';
 import Footer from "../components/Footer/footer";
 import PageGrid from "../shared/PageGrid/page-grid";
 import Box from "@mui/material/Box";
-import NotificationSettingsGrid from "../components/NotificationSettingsGrid/notification-settings-grid";
+import SettingsGrid from "../components/SettingsGrid/settings-grid";
 
 const NotificationSettingsPage = () => {
 
     const page = (
-        <NotificationSettingsGrid/>
+        <SettingsGrid/>
     )
 
     return (

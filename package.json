@@ -1,14 +1,15 @@
 {
   "homepage": "https://yigitmu9.github.io/oyesfc-react",
   "name": "oyesfc-react",
-  "version": "1.6.12",
+  "version": "1.6.13",
   "private": true,
   "type": "module",
   "dependencies": {
     "@emailjs/browser": "^4.3.3",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^5.15.12",
+    "@mui/joy": "^5.0.0-beta.51",
     "@mui/material": "^5.14.4",
     "@mui/system": "^5.14.18",
     "@reduxjs/toolkit": "^2.2.7",
