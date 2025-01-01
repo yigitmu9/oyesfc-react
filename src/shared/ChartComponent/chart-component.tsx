@@ -74,11 +74,15 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
         },
         scales: {
             x: {
+                beginAtZero: true,
+                suggestedMax: layout === 'y' ? maxValueBarGraph : null,
                 ticks: {
                     color: 'lightgray',
                 },
             },
             y: {
+                beginAtZero: true,
+                suggestedMax: layout === 'x' ? maxValueBarGraph : null,
                 ticks: {
                     color: 'lightgray',
                 },

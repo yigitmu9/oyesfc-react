@@ -5,7 +5,6 @@ import Result from "../Result/result";
 import FootballLogo from '../../images/football.png';
 import GameStatus from "../GameStatus/game-status";
 import {
-    AddMatchMessages,
     Facilities,
     matchType,
     openWeatherType,
@@ -30,6 +29,7 @@ import {findMatchType, sortData} from "../../utils/utils";
 import {useNavigate} from "react-router-dom";
 import sharedClasses from "../../shared/Styles/shared-styles.module.css";
 import ButtonComponent from "../../shared/ButtonComponent/button-component";
+import FormTab from "../FormTab/form-tab";
 
 function CustomTabPanel(props?: any) {
     const {children, value, index, ...other} = props;
@@ -71,10 +71,10 @@ interface  MatchDetailsProps {
 
 export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom}) => {
 
-    const { allData } = useSelector((state: any) => state.databaseData);
+    const { allData, filteredData } = useSelector((state: any) => state.databaseData);
     const { userName, id, signedIn, isCaptain } = useSelector((state: any) => state.credentials);
     const matchDetailsData: any = Object.values(allData).find((x: any) => x.day === matchDate)
-    const sortedAllData = sortData(allData);
+    const sortedFilteredData = sortData(filteredData);
     const fixture = findMatchType(matchDetailsData)
     const hourDifference = () => {
         const [day, month, year] = matchDetailsData.day.split('-');
@@ -101,7 +101,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
     const oyesfcMembers = Object.values(TeamMembers).map(x => x.name)
     const matchDetails = Object.entries(matchDetailsData?.oyesfc?.squad)?.filter((x: any) => x[1].goal > 0)
     const [tabValue, setTabValue] = React.useState(0);
-    const matchIndex = Object.values(sortedAllData).findIndex(x => x === matchDetailsData)
+    const matchIndex = Object.values(sortedFilteredData).findIndex(x => x === matchDetailsData)
     const [oYesFCStarFormData, setOYesFCStarFormData] = useState<any>(initialOYesFCStarFormData);
     const [starsErrorMessage, setStarsErrorMessage] = useState<any>(null);
     const [notesErrorMessage, setNotesErrorMessage] = useState<any>(null);
@@ -514,14 +514,14 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
                                 }
                             }} label="highlights" {...a11yProps(3)} />
                             {
-                                signedIn && fixture === matchType.previous &&
+                                signedIn &&
                                 <Tab sx={{
                                     '&.MuiTab-root': {
                                         color: 'gray'
                                     }, '&.Mui-selected': {
                                         color: 'lightgray'
                                     }
-                                }} label="rating" {...a11yProps(4)} />
+                                }} label="form" {...a11yProps(4)} />
                             }
                             {
                                 signedIn && fixture === matchType.previous &&
@@ -531,12 +531,22 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
                                     }, '&.Mui-selected': {
                                         color: 'lightgray'
                                     }
-                                }} label="notes" {...a11yProps(5)} />
+                                }} label="rating" {...a11yProps(5)} />
+                            }
+                            {
+                                signedIn && fixture === matchType.previous &&
+                                <Tab sx={{
+                                    '&.MuiTab-root': {
+                                        color: 'gray'
+                                    }, '&.Mui-selected': {
+                                        color: 'lightgray'
+                                    }
+                                }} label="notes" {...a11yProps(6)} />
                             }
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={tabValue} index={0}>
-                        <PreviewTab matchDetailsData={matchDetailsData} allData={sortedAllData} matchIndex={matchIndex}
+                        <PreviewTab matchDetailsData={matchDetailsData} filteredData={sortedFilteredData} matchIndex={matchIndex}
                                     bestOfMatch={bestOfMatch} redirectToTab={redirectToTab} weatherData={weatherData}/>
                         {
                             isCaptain &&
@@ -554,7 +564,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
                     <CustomTabPanel value={tabValue} index={2}>
                         <div style={{height: '20px'}}></div>
                         <section className={classes.defaultSection}>
-                            <RivalComparison data={sortedAllData} selectedRival={matchDetailsData?.rival.name}/>
+                            <RivalComparison data={sortedFilteredData} selectedRival={matchDetailsData?.rival.name}/>
                         </section>
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={3}>
@@ -562,9 +572,16 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
                         <HighlightsTab matchDetailsData={matchDetailsData}/>
                     </CustomTabPanel>
                     {
+                        signedIn &&
+                        <CustomTabPanel value={tabValue} index={4}>
+                            <FormTab matchDetailsData={matchDetailsData} matchIndex={matchIndex}
+                                     squadRatings={squadRatings}/>
+                        </CustomTabPanel>
+                    }
+                    {
                     signedIn && fixture === matchType.previous &&
                         <>
-                            <CustomTabPanel value={tabValue} index={4}>
+                            <CustomTabPanel value={tabValue} index={5}>
                                 {
                                     Object.entries(matchDetailsData.oyesfc.squad).filter(a => a[0] !== userName)?.map((x, y) => (
                                         <>
@@ -641,7 +658,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({matchDate, cameFrom})
                                     name={starsSubmitButton}
                                     backgroundColor={starsSubmitButton === 'Submitted' ? '#1C1C1E' : null}/>
                             </CustomTabPanel>
-                            <CustomTabPanel value={tabValue} index={5}>
+                            <CustomTabPanel value={tabValue} index={6}>
                                 {
                                     matchNotes && matchNotes?.map((x: any, y: any) => (
                                         <>

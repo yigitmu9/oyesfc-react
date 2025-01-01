@@ -18,7 +18,7 @@ import CloudIcon from '@mui/icons-material/Cloud';
 import {loadWebsite} from "../../firebase";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import JerseyTab from "../JerseyTab/jersey-tab";
-import {getGeoCoordinates, returnAverageData} from "../../utils/utils";
+import {getGeoCoordinates, returnAverageData, sortData} from "../../utils/utils";
 import {useSelector} from "react-redux";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
@@ -47,18 +47,18 @@ const SetViewComponent = ({ center, zoom }: { center: any; zoom: number }) => {
 
 interface  PreviewTabProps {
     matchDetailsData?: any;
-    allData?: any;
+    filteredData?: any;
     matchIndex?: any;
     bestOfMatch?: any;
     redirectToTab?: any;
     weatherData?: any;
 }
 
-const PreviewTab: React.FC<PreviewTabProps> = ({matchDetailsData, allData, matchIndex, bestOfMatch, redirectToTab, weatherData}) => {
+const PreviewTab: React.FC<PreviewTabProps> = ({matchDetailsData, filteredData, matchIndex, bestOfMatch, redirectToTab, weatherData}) => {
 
     const isMobile = window.innerWidth <= 768;
     const { signedIn } = useSelector((state: any) => state.credentials);
-    const lastFiveGames = Object.values(allData).filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3 || y === matchIndex + 4 || y === matchIndex + 5));
+    const lastFiveGames = Object.values(filteredData).filter((x, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3 || y === matchIndex + 4 || y === matchIndex + 5));
     const matchInformation = createMatchInfos();
     const [facilityRatingData, setFacilityRatingData] = useState(null);
     const phone = Facilities.find(x => x.name === matchDetailsData?.place)?.phoneNumber?.replace(/[\s()]/g, '');
@@ -72,13 +72,13 @@ const PreviewTab: React.FC<PreviewTabProps> = ({matchDetailsData, allData, match
 
     function createMatchInfos() {
         let infosForMatch = [];
-        const lastThreeGames = Object.values(allData)?.filter((x: any, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3));
-        const lastTwoGamesInFacility = Object.values(allData)?.filter((x: any, y) => x?.place === matchDetailsData?.place && y > matchIndex)?.filter((a, b) => a && b < 2);
-        const lastThreeGamesWithRival = Object.values(allData)?.filter((x: any, y) => x?.rival?.name === matchDetailsData?.rival?.name && y > matchIndex)?.filter((a, b) => a && b < 3);
+        const lastThreeGames = Object.values(filteredData)?.filter((x: any, y) => x && (y === matchIndex + 1 || y === matchIndex + 2 || y === matchIndex + 3));
+        const lastTwoGamesInFacility = Object.values(filteredData)?.filter((x: any, y) => x?.place === matchDetailsData?.place && y > matchIndex)?.filter((a, b) => a && b < 2);
+        const lastThreeGamesWithRival = Object.values(filteredData)?.filter((x: any, y) => x?.rival?.name === matchDetailsData?.rival?.name && y > matchIndex)?.filter((a, b) => a && b < 3);
         if (lastThreeGames?.length > 2 && lastThreeGames?.every((x: any) => x?.oyesfc?.goal > x?.rival?.goal)) {
             let consecutiveHigherGoals = 0;
-            for (let i = matchIndex + 1; i < Object.values(allData)?.length; i++) {
-                const match: any = Object.values(allData)[i];
+            for (let i = matchIndex + 1; i < Object.values(filteredData)?.length; i++) {
+                const match: any = Object.values(filteredData)[i];
                 const oyesfcGoals = match?.oyesfc?.goal;
                 const rivalGoals = match?.rival?.goal;
 
@@ -93,8 +93,8 @@ const PreviewTab: React.FC<PreviewTabProps> = ({matchDetailsData, allData, match
         }
         if (lastThreeGames?.length > 2 && lastThreeGames?.every((x: any) => x?.oyesfc?.goal <= x?.rival?.goal)) {
             let consecutiveLessGoals = 0;
-            for (let i = matchIndex + 1; i < Object.values(allData)?.length; i++) {
-                const match: any = Object.values(allData)[i];
+            for (let i = matchIndex + 1; i < Object.values(filteredData)?.length; i++) {
+                const match: any = Object.values(filteredData)[i];
                 const oyesfcGoals = match?.oyesfc?.goal;
                 const rivalGoals = match?.rival?.goal;
 
@@ -157,7 +157,7 @@ const PreviewTab: React.FC<PreviewTabProps> = ({matchDetailsData, allData, match
         });
 
         let allTimePlayerGoals: any = {};
-        Object.values(allData).filter((x, y) => x && y > matchIndex).forEach((match: any) => {
+        Object.values(filteredData).filter((x, y) => x && y > matchIndex).forEach((match: any) => {
             const squad = match.oyesfc.squad;
             Object.keys(squad).forEach(player => {
                 if (Object.keys(matchDetailsData.oyesfc.squad).includes(player) && Object.values(TeamMembers).map(x => x.name).includes(player)) {
@@ -180,7 +180,7 @@ const PreviewTab: React.FC<PreviewTabProps> = ({matchDetailsData, allData, match
         }
 
         let allTimeMatchesCount: any = {};
-        Object.values(allData).filter((x, y) => x && y >= matchIndex).forEach((match: any) => {
+        Object.values(filteredData).filter((x, y) => x && y >= matchIndex).forEach((match: any) => {
             const squad = match.oyesfc.squad;
             Object.keys(squad).forEach(player => {
                 if (Object.keys(matchDetailsData.oyesfc.squad).includes(player) && Object.values(TeamMembers).map(x => x.name).includes(player)) {
@@ -201,14 +201,14 @@ const PreviewTab: React.FC<PreviewTabProps> = ({matchDetailsData, allData, match
             })
         }
 
-        if (Object.values(allData).filter((x, y) => x && y >= matchIndex)?.length % 25 === 0) {
-            const no5 = `O Yes FC is playing their ${Object.values(allData).filter((x, y) => x && y >= matchIndex)?.length}th match.`
+        if (Object.values(filteredData).filter((x, y) => x && y >= matchIndex)?.length % 25 === 0) {
+            const no5 = `O Yes FC is playing their ${Object.values(filteredData).filter((x, y) => x && y >= matchIndex)?.length}th match.`
             infosForMatch.push(no5)
         }
 
         if (infosForMatch?.length > 0) {
             let playerGoals: any = {};
-            Object.values(allData).filter((x: any, y: number) => x && y > matchIndex).filter((x: any) => x?.rival?.name === matchDetailsData?.rival?.name).forEach((match: any) => {
+            Object.values(filteredData).filter((x: any, y: number) => x && y > matchIndex).filter((x: any) => x?.rival?.name === matchDetailsData?.rival?.name).forEach((match: any) => {
                 const squad = match.oyesfc.squad;
                 Object.keys(squad).forEach(player => {
                     const goals = squad[player].goal;
