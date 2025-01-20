@@ -10,7 +10,6 @@ import {useSelector} from "react-redux";
 const ChartsGrid = () => {
 
     const { filteredData } = useSelector((state: any) => state.databaseData);
-    const isMobile = window.innerWidth <= 768;
     const calculatedData = calculateIndividualStats(filteredData)
     const goalPerGameData = calculatedData?.map(x => x[4])
     const attendanceData = calculatedData?.map(x => x[3])

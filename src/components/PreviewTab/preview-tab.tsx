@@ -18,7 +18,7 @@ import CloudIcon from '@mui/icons-material/Cloud';
 import {loadWebsite} from "../../firebase";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import JerseyTab from "../JerseyTab/jersey-tab";
-import {getGeoCoordinates, returnAverageData, sortData} from "../../utils/utils";
+import {getGeoCoordinates, returnAverageData} from "../../utils/utils";
 import {useSelector} from "react-redux";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import matchDetailsClasses from "../MatchDetails/match-details.module.css";
