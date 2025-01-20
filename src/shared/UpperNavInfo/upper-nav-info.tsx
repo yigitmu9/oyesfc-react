@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import classes from './upper-nav-info.module.css'
+import React, { useEffect, useState } from 'react';
+import classes from './upper-nav-info.module.css';
 
 interface UpperNavInfoProps {
     title?: string;
 }
 
 const UpperNavInfo: React.FC<UpperNavInfoProps> = ({ title }) => {
-
     const [showNavbar, setShowNavbar] = useState(false);
 
     useEffect(() => {
@@ -25,7 +24,12 @@ const UpperNavInfo: React.FC<UpperNavInfoProps> = ({ title }) => {
 
     return (
         <div>
-            <nav className={classes.nav} style={{transform: showNavbar ? 'translateY(0)' : 'translateY(-100%)'}}>
+            <nav
+                className={classes.nav}
+                style={{
+                    transform: showNavbar ? 'translateY(0)' : 'translateY(-100%)',
+                }}
+            >
                 {title}
             </nav>
         </div>

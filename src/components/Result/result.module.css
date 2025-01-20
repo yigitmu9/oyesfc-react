@@ -1,17 +1,17 @@
 .result {
-  color: lightgray;
-  font-size: 30px;
-  background-color: transparent;
-  @media (max-width: 768px) {
-    font-size: 22px;
-  }
+    color: lightgray;
+    font-size: 30px;
+    background-color: transparent;
+    @media (max-width: 768px) {
+        font-size: 22px;
+    }
 }
 
 .resultDetails {
-  color: lightgray;
-  font-size: 60px;
-  background-color: transparent;
-  @media (max-width: 768px) {
-    font-size: 34px;
-  }
+    color: lightgray;
+    font-size: 60px;
+    background-color: transparent;
+    @media (max-width: 768px) {
+        font-size: 34px;
+    }
 }

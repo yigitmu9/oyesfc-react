@@ -1,11 +1,11 @@
 import React from 'react';
-import {BarLoader} from "react-spinners";
-import OYesFCLogo from '../images/oyesfc.PNG'
-import {OYesFcEras} from "../constants/constants";
-import PhoenixLogo from "../images/phoenix.png";
-import FirstLogo from "../images/firstLogo.png";
-import GhostLogo from "../images/ghost.png";
-import {useSelector} from "react-redux";
+import { BarLoader } from 'react-spinners';
+import OYesFCLogo from '../images/oyesfc.PNG';
+import { OYesFcEras } from '../constants/constants';
+import PhoenixLogo from '../images/phoenix.png';
+import FirstLogo from '../images/firstLogo.png';
+import GhostLogo from '../images/ghost.png';
+import { useSelector } from 'react-redux';
 
 const LoadingPage = () => {
     const { selectedEra } = useSelector((state: any) => state.era);
@@ -17,7 +17,7 @@ const LoadingPage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '90vh',
-                color: 'lightgray'
+                color: 'lightgray',
             }}
         >
             {Loading(selectedEra)}
@@ -28,22 +28,21 @@ const LoadingPage = () => {
 export default LoadingPage;
 
 export function Loading(selectedEra?: any, heightSize?: any) {
-
     const getTeamLogo = () => {
-        if (selectedEra === OYesFcEras.goldenAge) return PhoenixLogo
-        if (selectedEra === OYesFcEras.redAndBlack) return OYesFCLogo
-        if (selectedEra === OYesFcEras.rising) return FirstLogo
-        if (selectedEra === OYesFcEras.origins) return GhostLogo
-        return PhoenixLogo
-    }
+        if (selectedEra === OYesFcEras.goldenAge) return PhoenixLogo;
+        if (selectedEra === OYesFcEras.redAndBlack) return OYesFCLogo;
+        if (selectedEra === OYesFcEras.rising) return FirstLogo;
+        if (selectedEra === OYesFcEras.origins) return GhostLogo;
+        return PhoenixLogo;
+    };
 
     const getColor = () => {
-        if (selectedEra === OYesFcEras.goldenAge) return 'goldenrod'
-        if (selectedEra === OYesFcEras.redAndBlack) return 'firebrick'
-        if (selectedEra === OYesFcEras.rising) return 'dodgerblue'
-        if (selectedEra === OYesFcEras.origins) return 'gray'
-        return 'goldenrod'
-    }
+        if (selectedEra === OYesFcEras.goldenAge) return 'goldenrod';
+        if (selectedEra === OYesFcEras.redAndBlack) return 'firebrick';
+        if (selectedEra === OYesFcEras.rising) return 'dodgerblue';
+        if (selectedEra === OYesFcEras.origins) return 'gray';
+        return 'goldenrod';
+    };
 
     return (
         <div
@@ -53,12 +52,20 @@ export function Loading(selectedEra?: any, heightSize?: any) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: heightSize ? heightSize : '90vh',
-                color: 'lightgray'
+                color: 'lightgray',
             }}
         >
-            <img style={{width: "200px", height: "200px", background: "transparent", marginBottom: "20px"}}
-                 src={getTeamLogo()} alt={'1'}/>
-            <BarLoader color={getColor()} speedMultiplier={0.7}/>
+            <img
+                style={{
+                    width: '200px',
+                    height: '200px',
+                    background: 'transparent',
+                    marginBottom: '20px',
+                }}
+                src={getTeamLogo()}
+                alt={'1'}
+            />
+            <BarLoader color={getColor()} speedMultiplier={0.7} />
         </div>
-    )
+    );
 }

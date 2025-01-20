@@ -5,7 +5,7 @@ const initialState = {
     isCaptain: null,
     email: null,
     id: null,
-    signedIn: false
+    signedIn: false,
 };
 
 const credentialsSlice = createSlice({

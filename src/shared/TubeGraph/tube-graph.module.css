@@ -89,7 +89,6 @@
 .line1 {
     height: 100%;
     float: left;
-
 }
 
 .line2 {
@@ -101,7 +100,6 @@
     align-items: center;
     display: flex;
     background-color: transparent;
-
 }
 
 .colorTitleDiv {
@@ -109,7 +107,6 @@
     width: 5px;
     height: 20px;
     border-radius: 25px;
-
 }
 
 .colorTitle {
@@ -117,7 +114,6 @@
     width: 100%;
     float: left;
     border-radius: 25px;
-
 }
 
 .colorTitle2 {

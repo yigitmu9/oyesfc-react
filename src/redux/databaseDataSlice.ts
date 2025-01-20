@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     allData: null,
-    filteredData: null
+    filteredData: null,
 };
 
 const databaseDataSlice = createSlice({

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    selectedEra: null
+    selectedEra: null,
 };
 
 const eraSlice = createSlice({

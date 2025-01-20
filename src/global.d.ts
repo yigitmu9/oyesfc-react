@@ -1,13 +1,13 @@
-declare module '*.module.css'
+declare module '*.module.css';
 
-declare module '*.png'
+declare module '*.png';
 
-declare module '*.PNG'
+declare module '*.PNG';
 
-declare module '*.jpeg'
+declare module '*.jpeg';
 
-declare module '*.svg'
+declare module '*.svg';
 
-declare module 'leaflet'
+declare module 'leaflet';
 
-declare module 'react-big-calendar'
+declare module 'react-big-calendar';

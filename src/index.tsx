@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App'
+import App from './App';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
-import OneSignal from "react-onesignal";
+import OneSignal from 'react-onesignal';
 
 if (typeof window !== 'undefined') {
     OneSignal.init({
         appId: 'f90d48fc-0a75-407d-bb20-651d11d349de',
         autoRegister: false,
-        allowLocalhostAsSecureOrigin: true
+        allowLocalhostAsSecureOrigin: true,
     }).then(() => {
-        OneSignal.Notifications.setDefaultUrl('https://yigitmu9.github.io/oyesfc-react/').then(r => r);
+        OneSignal.Notifications.setDefaultUrl('https://yigitmu9.github.io/oyesfc-react/').then((r) => r);
     });
 }
 

@@ -1,227 +1,219 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora&display=swap');
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 .pitch .teams {
-
 }
 
 .team {
-
 }
 
 .goalkeeper {
-
 }
 
 .lines {
-
-
 }
 
 .line {
-
 }
 
 .player-view {
-
 }
 
 .player {
-
 }
 
 .number {
-  font-weight: bolder;
-  @media (max-width: 767px) {
-    font-size: 12px;
-  }
+    font-weight: bolder;
+    @media (max-width: 767px) {
+        font-size: 12px;
+    }
 }
 
 .name {
-  margin: -15px;
-  font-size: 18px;
-  font-weight: bolder;
-  @media (max-width: 767px) {
-    font-size: 16px;
-    margin: -12px;
-  }
+    margin: -15px;
+    font-size: 18px;
+    font-weight: bolder;
+    @media (max-width: 767px) {
+        font-size: 16px;
+        margin: -12px;
+    }
 }
 
 .rbc-calendar {
-  background-color: #1C1C1E !important;
-  color: lightgray !important;
-  border: none !important;
-  box-shadow: none !important;
+    background-color: #1c1c1e !important;
+    color: lightgray !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .rbc-toolbar {
-  background-color: #1C1C1E !important;
-  font-size: 18px !important;
-  margin-bottom: 0 !important;
-  padding-bottom: 10px !important;
-  border: none !important;
-  box-shadow: none !important;
-  @media (max-width: 767px) {
-    font-size: 14px !important;
-  }
+    background-color: #1c1c1e !important;
+    font-size: 18px !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 10px !important;
+    border: none !important;
+    box-shadow: none !important;
+    @media (max-width: 767px) {
+        font-size: 14px !important;
+    }
 }
 
 .rbc-toolbar-label {
-  font-size: 18px !important;
-  @media (max-width: 767px) {
-    font-size: 14px !important;
-    margin: 10px !important;
-  }
+    font-size: 18px !important;
+    @media (max-width: 767px) {
+        font-size: 14px !important;
+        margin: 10px !important;
+    }
 }
 
 .rbc-toolbar button {
-  color: lightgray !important;
-  background-color: #444 !important;
-  border: 1px solid #555 !important;
+    color: lightgray !important;
+    background-color: #444 !important;
+    border: 1px solid #555 !important;
 }
 
 .rbc-toolbar button:hover {
-  background-color: #555 !important;
+    background-color: #555 !important;
 }
 
 .rbc-month-view,
 .rbc-time-view,
 .rbc-agenda-view {
-  background-color: #1C1C1E !important;
+    background-color: #1c1c1e !important;
 }
 
 .rbc-header {
-  background-color: #1c1c1c !important;
-  color: lightgray !important;
+    background-color: #1c1c1c !important;
+    color: lightgray !important;
 }
 
 .rbc-date-cell {
-  color: lightgray !important;
+    color: lightgray !important;
 }
 
 .rbc-date-cell.rbc-now {
-  background-color: #3e3e3e !important;
+    background-color: #3e3e3e !important;
 }
 
 .rbc-date-cell.rbc-off-range {
-  color: #777 !important;
+    color: #777 !important;
 }
 
 .rbc-event {
-  background-color: darkred !important;
-  color: lightgray !important;
-  border: 1px solid darkred !important;;
+    background-color: darkred !important;
+    color: lightgray !important;
+    border: 1px solid darkred !important;
 }
 
 .rbc-event-content {
-  background-color: darkred !important;
-  color: lightgray !important;
-  font-size: 14px !important;
-  @media (max-width: 767px) {
-    font-size: 12px !important;
-  }
+    background-color: darkred !important;
+    color: lightgray !important;
+    font-size: 14px !important;
+    @media (max-width: 767px) {
+        font-size: 12px !important;
+    }
 }
 
 .rbc-selected {
-  background-color: darkred !important;
+    background-color: darkred !important;
 }
 
 .rbc-today {
-  background-color: #1C1C1E !important;;
+    background-color: #1c1c1e !important;
 }
 
 .rbc-show-more {
-  background-color: #444 !important;
-  color: lightgray !important;
+    background-color: #444 !important;
+    color: lightgray !important;
 }
 
 .rbc-agenda-table {
-  background-color: #1C1C1E !important;
-  color: lightgray !important;
-  border: 1px solid lightgray !important;
+    background-color: #1c1c1e !important;
+    color: lightgray !important;
+    border: 1px solid lightgray !important;
 }
 
 .rbc-agenda-table th,
 .rbc-agenda-table td {
-  border: 1px solid lightgray !important;
+    border: 1px solid lightgray !important;
 }
 
 .rbc-agenda-content {
-  background-color: #1C1C1E !important;
-  color: lightgray !important;
+    background-color: #1c1c1e !important;
+    color: lightgray !important;
 }
 
 .rbc-time-column {
-  background-color: #1C1C1E !important;
+    background-color: #1c1c1e !important;
 }
 
 .rbc-time-header {
-  background-color: #1c1c1c !important;
-  color: lightgray !important;
+    background-color: #1c1c1c !important;
+    color: lightgray !important;
 }
 
 .rbc-time-header-cell {
-  border: 1px solid #444 !important;
+    border: 1px solid #444 !important;
 }
 
 .rbc-time-slot {
-  border-top: 1px solid #444 !important;
-  font-size: 18px !important;
-  @media (max-width: 767px) {
-    font-size: 14px !important;
-  }
+    border-top: 1px solid #444 !important;
+    font-size: 18px !important;
+    @media (max-width: 767px) {
+        font-size: 14px !important;
+    }
 }
 
 .rbc-time-content {
-  border-top: 1px solid #444 !important;
+    border-top: 1px solid #444 !important;
 }
 
 .rbc-off-range-bg {
-  background-color: #121212 !important;
+    background-color: #121212 !important;
 }
 
 .rbc-btn-group {
-  color: lightgray !important;
+    color: lightgray !important;
 }
 
 .rbc-current-time-indicator {
-  background-color: darkred !important;
+    background-color: darkred !important;
 }
 
 .rbc-date-cell.rbc-now {
-  background-color: gray !important;
+    background-color: gray !important;
 }
 
 .rbc-agenda-event-cell {
-  font-size: 18px !important;
-  @media (max-width: 767px) {
-    font-size: 14px !important;
-  }
+    font-size: 18px !important;
+    @media (max-width: 767px) {
+        font-size: 14px !important;
+    }
 }
 
 .rbc-agenda-time-cell {
-  font-size: 18px !important;
-  @media (max-width: 767px) {
-    font-size: 14px !important;
-  }
+    font-size: 18px !important;
+    @media (max-width: 767px) {
+        font-size: 14px !important;
+    }
 }
 
 .rbc-agenda-date-cell {
-  font-size: 18px !important;
-  @media (max-width: 767px) {
-    font-size: 14px !important;
-  }
+    font-size: 18px !important;
+    @media (max-width: 767px) {
+        font-size: 14px !important;
+    }
 }
 
 .rbc-agenda-empty {
-  font-size: 18px !important;
-  text-align: center !important;
-  @media (max-width: 767px) {
-    font-size: 14px !important;
-  }
+    font-size: 18px !important;
+    text-align: center !important;
+    @media (max-width: 767px) {
+        font-size: 14px !important;
+    }
 }

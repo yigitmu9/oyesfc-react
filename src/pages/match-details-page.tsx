@@ -1,24 +1,26 @@
 import React from 'react';
-import PageGrid from "../shared/PageGrid/page-grid";
-import Box from "@mui/material/Box";
-import Footer from "../components/Footer/footer";
-import {useLocation} from "react-router-dom";
-import {MatchDetails} from "../components/MatchDetails/match-details";
+import PageGrid from '../shared/PageGrid/page-grid';
+import Box from '@mui/material/Box';
+import Footer from '../components/Footer/footer';
+import { useLocation } from 'react-router-dom';
+import { MatchDetails } from '../components/MatchDetails/match-details';
 
 const MatchDetailsPage = () => {
-
     const { state } = useLocation();
 
-    const page = (
-        <MatchDetails matchDate={state?.day} cameFrom={state?.cameFrom}/>
-    )
+    const page = <MatchDetails matchDate={state?.day} cameFrom={state?.cameFrom} />;
 
     return (
         <div>
-            <PageGrid page={page}/>
-            <Box sx={{display: {xs: 'block', md: 'none'}, height: '100px'}}></Box>
-            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                <Footer/>
+            <PageGrid page={page} />
+            <Box
+                sx={{
+                    display: { xs: 'block', md: 'none' },
+                    height: '100px',
+                }}
+            ></Box>
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <Footer />
             </Box>
         </div>
     );

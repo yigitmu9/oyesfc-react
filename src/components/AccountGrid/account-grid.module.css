@@ -1,5 +1,5 @@
 .morePageBox {
-    background-color: #1C1C1E;
+    background-color: #1c1c1e;
     display: flex;
     flex-direction: column;
     border-radius: 12px;
@@ -10,7 +10,7 @@
 }
 
 .morePageBoxLinks {
-    background-color: #1C1C1E;
+    background-color: #1c1c1e;
     display: flex;
     flex-direction: column;
     border-radius: 12px;

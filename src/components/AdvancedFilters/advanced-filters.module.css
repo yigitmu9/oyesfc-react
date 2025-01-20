@@ -67,7 +67,7 @@
 }
 
 .checkmark:after {
-    content: "";
+    content: '';
     position: absolute;
     display: none;
 }
@@ -100,7 +100,7 @@
 .filterPartStyle {
     display: block;
     margin-bottom: 20px;
-    background-color: #1C1C1E;
+    background-color: #1c1c1e;
     border-radius: 12px;
     padding: 20px;
     color: lightgray;

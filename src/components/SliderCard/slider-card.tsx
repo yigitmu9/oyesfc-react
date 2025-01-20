@@ -1,12 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
-import classes from "./slider-card.module.css";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import MainTitle from "../../shared/MainTitle/main-title";
-import Box from "@mui/material/Box";
-import {loadWebsite} from "../../firebase";
-import {extractGoogleDriveFileId} from "../../utils/utils";
+import React, { useEffect, useRef, useState } from 'react';
+import classes from './slider-card.module.css';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import MainTitle from '../../shared/MainTitle/main-title';
+import Box from '@mui/material/Box';
+import { loadWebsite } from '../../firebase';
+import { extractGoogleDriveFileId } from '../../utils/utils';
 
 const SliderCard = () => {
     const [news, setNews] = useState<any>(null);
@@ -18,7 +18,7 @@ const SliderCard = () => {
             position: 'relative',
             backgroundColor: 'rgb(28, 28, 30)',
             borderRadius: '16px',
-            height: 'auto'
+            height: 'auto',
         },
         media: {
             height: 0,
@@ -64,7 +64,10 @@ const SliderCard = () => {
         if (!container) return;
 
         const cardWidth = container.offsetWidth;
-        container.scrollTo({ left: ((itemIndex + 1) === length) ? (length * cardWidth) : (itemIndex * cardWidth), behavior: "smooth" });
+        container.scrollTo({
+            left: itemIndex + 1 === length ? length * cardWidth : itemIndex * cardWidth,
+            behavior: 'smooth',
+        });
 
         setCurrentIndexes((prev: any) => ({
             ...prev,
@@ -75,57 +78,59 @@ const SliderCard = () => {
     const fetchNews = async () => {
         const response: any = await loadWebsite(`news`);
         if (response) {
-            const arrayObject: any = Object.values(response)
+            const arrayObject: any = Object.values(response);
             arrayObject?.forEach((_: any, i: number) => {
                 setCurrentIndexes((prev: any) => ({
                     ...prev,
                     [i]: 0,
                 }));
-            })
+            });
             setNews(arrayObject);
         }
-    }
+    };
 
     useEffect(() => {
         if (!news) {
-            fetchNews().then(r => r);
+            fetchNews().then((r) => r);
         }
     }, [news]);
 
     const getUrl = (driveUrl?: any) => {
         const fileId = extractGoogleDriveFileId(driveUrl);
         return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-    }
+    };
 
     return (
         <>
             <div className={classes.grid}>
-                <MainTitle title={'Discover'} size={'large'}/>
+                <MainTitle title={'Discover'} size={'large'} />
                 {news &&
                     news?.map((items: any, categoryIndex: number) => (
                         <Box
                             key={categoryIndex}
                             sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                width: "100%",
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                width: '100%',
                             }}
                         >
                             <Box
                                 ref={(el: any) => (containerRefs.current[categoryIndex] = el)}
                                 onScroll={() => handleScroll(categoryIndex)}
                                 sx={{
-                                    display: "flex",
+                                    display: 'flex',
                                     gap: 10,
                                     py: 1,
-                                    overflowX: "auto",
-                                    width: "100%",
-                                    scrollSnapType: "x mandatory",
-                                    "& > *": {
-                                        scrollSnapAlign: "center",
+                                    overflowX: 'auto',
+                                    width: '100%',
+                                    scrollSnapType: 'x mandatory',
+                                    '& > *': {
+                                        scrollSnapAlign: 'center',
                                     },
-                                    "::-webkit-scrollbar": { display: "none" },
+                                    '::-webkit-scrollbar': {
+                                        display: 'none',
+                                    },
                                 }}
                             >
                                 {Object.values(items)?.map((x: any, i: number) => (
@@ -134,7 +139,10 @@ const SliderCard = () => {
                                             {x?.logo && (
                                                 <CardMedia
                                                     component="img"
-                                                    sx={{height: "auto", width: "100%"}}
+                                                    sx={{
+                                                        height: 'auto',
+                                                        width: '100%',
+                                                    }}
                                                     image={getUrl(x?.logo)}
                                                 />
                                             )}
@@ -144,21 +152,34 @@ const SliderCard = () => {
                                             </CardContent>
                                             <CardContent sx={styles.content2}>
                                                 {/* Pagination */}
-                                                <Box sx={{display: "flex", gap: 1}}>
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        gap: 1,
+                                                    }}
+                                                >
                                                     {Object.values(items)?.map((_, dotIndex: any) => (
                                                         <span
                                                             key={dotIndex}
-                                                            onClick={() => scrollToIndex(dotIndex, categoryIndex, Object.values(items)?.length)}
+                                                            onClick={() =>
+                                                                scrollToIndex(
+                                                                    dotIndex,
+                                                                    categoryIndex,
+                                                                    Object.values(items)?.length
+                                                                )
+                                                            }
                                                             style={{
-                                                                width: "10px",
-                                                                height: "10px",
-                                                                borderRadius: "50%",
+                                                                width: '10px',
+                                                                height: '10px',
+                                                                borderRadius: '50%',
                                                                 backgroundColor:
-                                                                    (dotIndex === currentIndexes[categoryIndex] || (dotIndex === 3 && currentIndexes[categoryIndex] > dotIndex))
-                                                                        ? "#007AFF"
-                                                                        : "lightgray",
-                                                                cursor: "pointer",
-                                                                transition: "background-color 0.3s",
+                                                                    dotIndex === currentIndexes[categoryIndex] ||
+                                                                    (dotIndex === 3 &&
+                                                                        currentIndexes[categoryIndex] > dotIndex)
+                                                                        ? '#007AFF'
+                                                                        : 'lightgray',
+                                                                cursor: 'pointer',
+                                                                transition: 'background-color 0.3s',
                                                             }}
                                                         ></span>
                                                     ))}
@@ -169,8 +190,7 @@ const SliderCard = () => {
                                 ))}
                             </Box>
                         </Box>
-                    ))
-                }
+                    ))}
             </div>
         </>
     );

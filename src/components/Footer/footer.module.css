@@ -22,7 +22,7 @@
     align-items: center;
     width: 100%;
     height: auto;
-    background-color: #1C1C1E;
+    background-color: #1c1c1e;
     @media screen and (max-width: 768px) {
         padding: 30px 3% 30px;
         justify-content: center;
