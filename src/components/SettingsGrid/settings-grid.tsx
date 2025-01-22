@@ -13,6 +13,7 @@ import addMatchClasses from '../AddMatch/add-match.module.css';
 import signInClasses from '../SignIn/sign-in.module.css';
 import { changeEra } from '../../redux/eraSlice';
 import AddNews from '../AddNews/add-news';
+import AddReleaseNote from '../AddReleaseNote/add-release-note';
 
 const SettingsGrid = () => {
     const dispatch = useDispatch();
@@ -105,6 +106,10 @@ const SettingsGrid = () => {
         return <AddNews handlePreviousPage={handlePrevious} />;
     }
 
+    if (page === 4) {
+        return <AddReleaseNote handlePreviousPage={handlePrevious} />;
+    }
+
     return (
         <div style={{ minHeight: '70vh' }}>
             <BackButton handleBackButton={handleBack} generalTitle={'Settings'} />
@@ -121,6 +126,14 @@ const SettingsGrid = () => {
                     <div style={{ height: '20px' }}></div>
                     <div className={classes.morePageBox} onClick={() => setPage(3)}>
                         <span className={navbarClasses.drawerRoutesSpan}>Add News</span>
+                    </div>
+                </>
+            )}
+            {isCaptain && (
+                <>
+                    <div style={{ height: '20px' }}></div>
+                    <div className={classes.morePageBox} onClick={() => setPage(4)}>
+                        <span className={navbarClasses.drawerRoutesSpan}>Add Release Note</span>
                     </div>
                 </>
             )}

@@ -295,7 +295,7 @@ const FormTab: React.FC<FormTabProps> = ({ matchDetailsData, matchIndex, squadRa
                                         }}
                                     />
                                 )}
-                                {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataAfter && (
+                                {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataAfter?.length > 0 && (
                                     <div className={matchDetailsClasses.generalInfoDiv}>
                                         <ArrowCircleRightIcon
                                             fontSize={isMobile ? 'medium' : 'large'}

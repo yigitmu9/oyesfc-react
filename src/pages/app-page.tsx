@@ -20,6 +20,7 @@ import AddMatchPage from './add-match-page';
 import PlayerDetailsPage from './player-details-page';
 import MatchDetailsPage from './match-details-page';
 import SettingsPage from './notification-settings-page';
+import ReleaseNotesPage from './release-notes-page';
 
 const AppPage = () => {
     const dispatch = useDispatch();
@@ -95,6 +96,7 @@ const AppPage = () => {
                 <Route path="oyesfc-react/player-details" element={<PlayerDetailsPage />} />
                 <Route path="oyesfc-react/match-details" element={<MatchDetailsPage />} />
                 <Route path="oyesfc-react/settings" element={<SettingsPage />} />
+                <Route path="oyesfc-react/release-notes" element={<ReleaseNotesPage />} />
             </Routes>
         </Router>
     );

@@ -27,6 +27,7 @@ const AccountGrid = () => {
     const addMatchPath = '/oyesfc-react/add-match';
     const ratingsPath = '/oyesfc-react/ratings';
     const settingsPath = '/oyesfc-react/settings';
+    const releaseNotesPath = '/oyesfc-react/release-notes';
     const dispatch = useDispatch();
     const packageJson = require('./../../../package.json');
     const date = new Date();
@@ -50,6 +51,10 @@ const AccountGrid = () => {
 
     const openSettingsPage = () => {
         navigate(settingsPath);
+    };
+
+    const openReleaseNotesPage = () => {
+        navigate(releaseNotesPath);
     };
 
     const startLogOut = async () => {
@@ -183,6 +188,14 @@ const AccountGrid = () => {
                             <div style={{ height: '20px' }}></div>
                             <div className={classes.morePageBox} onClick={openAddMatchPage}>
                                 <span className={navbarClasses.drawerRoutesSpan}>Add Match</span>
+                            </div>
+                        </>
+                    )}
+                    {signedIn && (
+                        <>
+                            <div style={{ height: '20px' }}></div>
+                            <div className={classes.morePageBox} onClick={openReleaseNotesPage}>
+                                <span className={navbarClasses.drawerRoutesSpan}>Release Notes</span>
                             </div>
                         </>
                     )}
