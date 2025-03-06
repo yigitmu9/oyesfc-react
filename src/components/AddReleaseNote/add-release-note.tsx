@@ -10,7 +10,6 @@ import { dataBase, loadWebsite } from '../../firebase';
 import { ref, set } from 'firebase/database';
 import { AddMatchMessages, SnackbarTypes } from '../../constants/constants';
 import { sendNotifications } from '../../services/service';
-import { useSelector } from 'react-redux';
 
 interface AddReleaseNoteProps {
     handlePreviousPage?: any;
