@@ -1,25 +1,20 @@
-.nikeImageStyle {
-    width: 270px;
-    height: 100px;
+.imageStyle {
+    width: auto;
+    max-height: 125px;
     background: transparent;
     margin-bottom: 20px;
-    @media screen and (max-width: 900px) {
-        width: 175px;
-        height: 65px;
-    }
-}
 
-.adidasImageStyle {
-    width: 170px;
-    height: 100px;
-    background: transparent;
-    margin-bottom: 20px;
     @media screen and (max-width: 900px) {
-        width: 119px;
-        height: 70px;
+        width: auto;
+        max-height: 75px;
     }
 }
 
 .collectionSplitter {
-    margin-top: 20px;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
 }

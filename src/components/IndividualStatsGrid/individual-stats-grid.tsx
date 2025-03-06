@@ -4,7 +4,6 @@ import WeatherIndividualStats from '../WeatherIndividualStats/weather-individual
 import RakipbulPlayerStats from '../RakipbulPlayerStats/rakipbul-player-stats';
 import classes from './individual-stats-grid.module.css';
 import UltimateTeam from '../UltimateTeam/ultimate-team';
-import BootBrands from '../BootBrands/boot-brands';
 import MixedStats from '../MixedStats/mixed-stats';
 import MainTitle from '../../shared/MainTitle/main-title';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +21,6 @@ const IndividualStatsGrid = () => {
             <UltimateTeam onClickCard={openPlayerDetails} />
             <ChartsGrid />
             <MixedStats />
-            <BootBrands />
             <WeatherIndividualStats />
             <RakipbulPlayerStats />
         </div>

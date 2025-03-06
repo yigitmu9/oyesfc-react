@@ -4,9 +4,15 @@ import Footer from '../components/Footer/footer';
 import PageGrid from '../shared/PageGrid/page-grid';
 import Box from '@mui/material/Box';
 import UpperNavInfo from '../shared/UpperNavInfo/upper-nav-info';
+import FilterAlertComponent from '../shared/FilterAlert/filter-alert';
 
 const IndividualStatsPage = () => {
-    const page = <IndividualStatsGrid />;
+    const page = (
+        <>
+            <IndividualStatsGrid />
+            <FilterAlertComponent/>
+        </>
+    )
 
     return (
         <div>

@@ -78,7 +78,15 @@ const SliderCard = () => {
     const fetchNews = async () => {
         const response: any = await loadWebsite(`news`);
         if (response) {
-            const arrayObject: any = Object.values(response);
+            const sortedKeys = Object.keys(response)?.sort((a, b) => {
+                const dateA = Date.parse(a);
+                const dateB = Date.parse(b);
+                if (!isNaN(dateA) && !isNaN(dateB)) return dateB - dateA;
+                if (!isNaN(dateA)) return -1;
+                if (!isNaN(dateB)) return 1;
+                return 0;
+            });
+            const arrayObject: any = sortedKeys.map(key => response[key]);
             arrayObject?.forEach((_: any, i: number) => {
                 setCurrentIndexes((prev: any) => ({
                     ...prev,

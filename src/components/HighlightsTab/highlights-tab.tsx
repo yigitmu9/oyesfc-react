@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import classes from '../MatchDetails/match-details.module.css';
 import { Accordion, AccordionDetails, AccordionSummary, Alert } from '@mui/material';
-import { HighlightConstants, SnackbarMessages, SnackbarTypes, TeamNames } from '../../constants/constants';
+import {
+    AddMatchMessages,
+    HighlightConstants,
+    SnackbarMessages,
+    SnackbarTypes,
+    TeamNames,
+} from '../../constants/constants';
 import highlightsClasses from './highlights-tab.module.css';
 import addMatchClasses from '../AddMatch/add-match.module.css';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -12,6 +18,7 @@ import { useSelector } from 'react-redux';
 import sharedClasses from '../../shared/Styles/shared-styles.module.css';
 import ButtonComponent from '../../shared/ButtonComponent/button-component';
 import { extractGoogleDriveFileId, extractYoutubeVideoId, generateRandomString } from '../../utils/utils';
+import { sendNotifications } from '../../services/service';
 
 interface HighlightsTabProps {
     matchDetailsData?: any;
@@ -43,7 +50,17 @@ const HighlightsTab: React.FC<HighlightsTabProps> = ({ matchDetailsData }) => {
             const response = await loadWebsite(`videos/${matchDetailsData?.day}`);
             if (response) {
                 const videosArray: any = Object.values(response);
-                setVideoData(videosArray);
+                const sortedData = videosArray?.sort((a: any, b: any) => {
+                    if (a?.type === 'Highlights') return -1;
+                    if (b?.type === 'Highlights') return 1;
+                    if (a?.type === 'Goal' && b?.type === 'Goal') {
+                        const minA = isNaN(a?.minute) ? Infinity : parseInt(a?.minute, 10);
+                        const minB = isNaN(b?.minute) ? Infinity : parseInt(b?.minute, 10);
+                        return minA - minB;
+                    }
+                    return 0;
+                });
+                setVideoData(sortedData);
             }
         } catch (error: any) {
             const errorResponse = {
@@ -69,6 +86,7 @@ const HighlightsTab: React.FC<HighlightsTabProps> = ({ matchDetailsData }) => {
             setLoading(true);
             const videoId = generateRandomString();
             await set(ref(dataBase, `videos/${matchDetailsData.day}/${videoId}`), formData);
+            await sendPushNotifications()
             setFormData(initialFormData);
             setLoading(false);
             const messageResponse = {
@@ -101,6 +119,24 @@ const HighlightsTab: React.FC<HighlightsTabProps> = ({ matchDetailsData }) => {
         } else {
             return '';
         }
+    };
+
+    const sendPushNotifications = async () => {
+        const response: any = await loadWebsite(`notifications`);
+        const permission: any = await loadWebsite(`releaseNotes/permissions`);
+        const title = `Maç özeti eklendi`;
+        const detail = `Maç özetine maç detayları içerisindeki highlights sekmesinden erişebilirsiniz.`;
+        const playerIds = Object.entries(response)
+            ?.filter((a: any) => permission?.[a[0]]?.['Match Videos'])
+            ?.map((item) => (item?.[1] ? Object.values(item?.[1]) : null))
+            ?.flat();
+
+        await sendNotifications(title, detail, playerIds)
+            .then(r => r)
+            .catch(() => {
+                const message = AddMatchMessages.push_notifications_fail;
+                alert(message)
+            });
     };
 
     return (

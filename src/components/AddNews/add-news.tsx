@@ -53,8 +53,8 @@ const AddNews: React.FC<AddNewsProps> = ({ handlePreviousPage }) => {
     const handleSubmit = async () => {
         try {
             setLoading(true);
-            const id = generateRandomString();
-            await set(ref(dataBase, `news/${id}`), formData);
+            const date = new Date().toString();
+            await set(ref(dataBase, `news/${date}`), formData);
             setFormData(
                 Array.from({ length: selection.length }, () => ({
                     title: '',

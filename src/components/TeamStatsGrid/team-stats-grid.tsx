@@ -7,6 +7,7 @@ import MainSquadStats from '../MainSquadStats/main-squad-stats';
 import MainTitle from '../../shared/MainTitle/main-title';
 import MixedTeamStats from '../MixedTeamStats/mixed-team-stats';
 import { useSelector } from 'react-redux';
+import BootBrands from '../BootBrands/boot-brands';
 
 const TeamStatsGrid = () => {
     const { signedIn } = useSelector((state: any) => state.credentials);
@@ -17,6 +18,7 @@ const TeamStatsGrid = () => {
             <GeneralResults />
             <MixedTeamStats />
             {signedIn && <MainSquadStats />}
+            <BootBrands />
             <WeatherTeamStats />
             <RakipbulTeamStats />
         </div>

@@ -11,11 +11,22 @@ export const TeamMembers = {
         birthMonth: 12,
         birthDay: 23,
         ratings: [3, 5, 4, 8, 8, 4],
-        bootBrand: 'Adidas',
-        bootCollection: 'Predator',
-        bootModel: '',
+        bootBrand: 'Nike',
+        bootCollection: 'Mercurial',
+        bootModel: 'Vapor 12',
         fifaRole: 'GK',
         position: 1,
+        /*
+        bootBrand: 'Adidas',
+        bootCollection: 'Predator',
+        bootModel: 'Club',
+        oldBootData: [{
+            changeDate: '',
+            bootBrand: 'Nike',
+            bootCollection: 'Mercurial',
+            bootModel: 'Vapor 12',
+        }]
+         */
     },
     atakan: {
         name: 'Atakan Rakipsiz',
@@ -25,11 +36,19 @@ export const TeamMembers = {
         birthMonth: 10,
         birthDay: 11,
         ratings: [5, 5, 8.5, 7, 6, 6],
-        bootBrand: 'Nike',
-        bootCollection: 'Tiempo',
-        bootModel: 'Legend 8',
+        bootBrand: 'Puma',
+        bootCollection: 'Future',
+        bootModel: '7',
         fifaRole: 'CB',
         position: 2,
+        oldBootData: [
+            {
+                changeDate: '28-02-2025',
+                bootBrand: 'Nike',
+                bootCollection: 'Tiempo',
+                bootModel: 'Legend 8',
+            }
+        ]
     },
     berk: {
         name: 'Berk Doğan',
@@ -100,6 +119,14 @@ export const TeamMembers = {
         bootModel: 'Club Sock',
         fifaRole: 'LW',
         position: 1,
+        oldBootData: [
+            {
+                changeDate: '02-08-2024',
+                bootBrand: 'Adidas',
+                bootCollection: 'Predator',
+                bootModel: '20.4',
+            }
+        ]
     },
     oguzhan: {
         name: 'Oğuzhan Cesur',
@@ -152,10 +179,18 @@ export const TeamMembers = {
         birthDay: 16,
         ratings: [8, 8.5, 6.5, 5.5, 6, 6.5],
         bootBrand: 'Nike',
-        bootCollection: 'Phantom',
-        bootModel: 'Vision',
+        bootCollection: 'Mercurial',
+        bootModel: 'Air Zoom Superfly 9',
         fifaRole: 'CF',
         position: 2,
+        oldBootData: [
+            {
+                changeDate: '25-02-2025',
+                bootBrand: 'Nike',
+                bootCollection: 'Phantom',
+                bootModel: 'Vision',
+            }
+        ]
     },
 };
 
@@ -679,10 +714,9 @@ export const TurkishJerseys = {
 };
 
 export const BootBrandsList = {
-    nike: 'Nike',
     adidas: 'Adidas',
+    nike: 'Nike',
     puma: 'Puma',
-    lotto: 'Lotto',
 };
 
 export const HighlightConstants = {

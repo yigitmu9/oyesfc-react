@@ -25,7 +25,8 @@ import CakeIcon from '@mui/icons-material/Cake';
 import PlayerRadarChart from '../PlayerRadarChart/player-radar-chart';
 import bootBrandsClasses from '../BootBrands/boot-brands.module.css';
 import NikeLogo from '../../images/nike.png';
-import AdidasLogo from '../../images/adidas.PNG';
+import AdidasLogo from '../../images/adidas.png';
+import PumaLogo from '../../images/puma.png';
 import TollIcon from '@mui/icons-material/Toll';
 import BackButton from '../../shared/BackButton/back-button';
 import { useSelector } from 'react-redux';
@@ -44,6 +45,7 @@ import {
     returnAverageData,
 } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
+import ListComponent from '../../shared/ListComponent/list-component';
 
 function CustomTabs(props?: any) {
     const { children, value, index, ...other } = props;
@@ -592,18 +594,14 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({ playerName }) => {
                                     className={matchDetailsClasses.generalInfoIcon}
                                 ></TollIcon>
                                 <span className={matchDetailsClasses.generalInfoSpan}>
-                                    Football Boot {playerName === TeamMembers.can.name ? 'and Gloves' : null}
+                                    Football Boot
                                 </span>
                             </div>
                             <Divider sx={{ bgcolor: 'gray', margin: '10px' }} />
                             <div className={classes.bootStyle}>
                                 <img
-                                    className={
-                                        playerBootBrand === BootBrandsList.nike
-                                            ? bootBrandsClasses.nikeImageStyle
-                                            : bootBrandsClasses.adidasImageStyle
-                                    }
-                                    src={playerBootBrand === BootBrandsList.nike ? NikeLogo : AdidasLogo}
+                                    className={bootBrandsClasses.imageStyle}
+                                    src={playerBootBrand === BootBrandsList.nike ? NikeLogo : playerBootBrand === BootBrandsList.adidas ? AdidasLogo : PumaLogo}
                                     alt={'1'}
                                 />
                                 <h1 className={classes.collectionNameStyle}>
@@ -711,6 +709,15 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({ playerName }) => {
                         </ListItem>
                     </List>
                 </section>
+                {
+                    playerBootBrand &&
+                    <>
+                        <div style={{ height: '20px' }}></div>
+                        <section className={matchDetailsClasses.squadSection}>
+                            <ListComponent data={playerStats?.bootGoalsData} />
+                        </section>
+                    </>
+                }
             </CustomTabs>
             <CustomTabs value={tabValue} index={2}>
                 <div style={{ height: '20px' }}></div>

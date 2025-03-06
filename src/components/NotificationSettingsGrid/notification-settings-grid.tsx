@@ -36,6 +36,9 @@ const NotificationSettingsGrid: React.FC<NotificationSettingsGridProps> = ({ han
         title: '',
         detail: '',
     };
+    const subscriptions = ['Release Notes', 'Match Videos']
+    const permissionButtons = ['Subscribe to ', 'Unsubscribe from ']
+    const [permissions, setPermissions] = useState<any>(null);
 
     const [formData, setFormData] = useState(initialFormData);
 
@@ -48,6 +51,17 @@ const NotificationSettingsGrid: React.FC<NotificationSettingsGridProps> = ({ han
         }));
     };
 
+    const checkReleaseNoteSubscription= useCallback(
+        async () => {
+            try {
+                const permission: any = await loadWebsite(`releaseNotes/permissions/${userName}`);
+                setPermissions(permission)
+            } catch (error: any) {
+                alert(error?.message);
+            }
+        }, [userName]
+    );
+
     const saveSubscriptionIdToDatabase = useCallback(
         async (pushSubscriptionId: any) => {
             try {
@@ -58,13 +72,14 @@ const NotificationSettingsGrid: React.FC<NotificationSettingsGridProps> = ({ han
                     severity: SnackbarTypes.success,
                 };
                 setWarning(success);
+                checkReleaseNoteSubscription().then(r => r)
                 if (loading) setLoading(false);
             } catch (error: any) {
                 alert(error?.message);
                 if (loading) setLoading(false);
             }
         },
-        [loading, userName]
+        [checkReleaseNoteSubscription, loading, userName]
     );
 
     useEffect(() => {
@@ -83,6 +98,7 @@ const NotificationSettingsGrid: React.FC<NotificationSettingsGridProps> = ({ han
                             severity: SnackbarTypes.success,
                         };
                         setWarning(success);
+                        checkReleaseNoteSubscription().then(r => r)
                         if (loading) setLoading(false);
                     } else if (pushSubscriptionId) {
                         await saveSubscriptionIdToDatabase(pushSubscriptionId);
@@ -103,7 +119,7 @@ const NotificationSettingsGrid: React.FC<NotificationSettingsGridProps> = ({ han
             }
         };
         checkSubscription().then((r) => r);
-    }, [isCaptain, loading, saveSubscriptionIdToDatabase, userName, warning?.severity]);
+    }, [checkReleaseNoteSubscription, isCaptain, loading, saveSubscriptionIdToDatabase, userName, warning?.severity]);
 
     const handleBack = (data?: any) => {
         if (data) {
@@ -153,6 +169,21 @@ const NotificationSettingsGrid: React.FC<NotificationSettingsGridProps> = ({ han
             });
     };
 
+    const handleChangePermission = async (title: any) => {
+        try {
+            setLoading(true);
+            await set(ref(dataBase, `releaseNotes/permissions/${userName}/${title}`), !permissions?.[title]);
+            setPermissions((prevData: any) => ({
+                ...prevData,
+                [title]: !permissions?.[title],
+            }));
+            setLoading(false);
+        } catch (error: any) {
+            alert(error?.message);
+            setLoading(false);
+        }
+    }
+
     return (
         <div style={{ minHeight: '70vh' }}>
             <BackButton handleBackButton={handleBack} generalTitle={'Notifications'} />
@@ -186,6 +217,21 @@ const NotificationSettingsGrid: React.FC<NotificationSettingsGridProps> = ({ han
                     </Alert>
                 </>
             )}
+            {
+                warning?.severity === SnackbarTypes.success && subscriptions?.map((x: any, y: any) => (
+                    <div key={y}>
+                        <div className={sharedClasses.emptyHeightSpace}></div>
+                        <ButtonComponent
+                            onClick={() => handleChangePermission(x)}
+                            name={permissions?.[x] ? (permissionButtons[1] + x) : (permissionButtons[0] + x)}
+                            loading={formLoading}
+                            size={'large'}
+                            textColor={permissions?.[x] ? 'red' : '#007AFF'}
+                            backgroundColor={'#1C1C1E'}
+                        />
+                    </div>
+                ))
+            }
             {isCaptain && (
                 <>
                     <div className={sharedClasses.emptyHeightSpace}></div>

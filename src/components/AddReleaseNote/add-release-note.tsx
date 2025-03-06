@@ -6,9 +6,11 @@ import { AlertInterface } from '../../interfaces/Alert';
 import ButtonComponent from '../../shared/ButtonComponent/button-component';
 import sharedClasses from '../../shared/Styles/shared-styles.module.css';
 import classes from '../SignIn/sign-in.module.css';
-import { dataBase } from '../../firebase';
+import { dataBase, loadWebsite } from '../../firebase';
 import { ref, set } from 'firebase/database';
-import { SnackbarTypes } from '../../constants/constants';
+import { AddMatchMessages, SnackbarTypes, TeamNames } from '../../constants/constants';
+import { sendNotifications } from '../../services/service';
+import { useSelector } from 'react-redux';
 
 interface AddReleaseNoteProps {
     handlePreviousPage?: any;
@@ -16,6 +18,7 @@ interface AddReleaseNoteProps {
 
 const AddReleaseNote: React.FC<AddReleaseNoteProps> = ({ handlePreviousPage }) => {
     const packageJson = require('./../../../package.json');
+    const { userName } = useSelector((state: any) => state.credentials);
     const [errorMessage, setErrorMessage] = useState<AlertInterface>({
         message: '',
         severity: undefined,
@@ -42,12 +45,13 @@ const AddReleaseNote: React.FC<AddReleaseNoteProps> = ({ handlePreviousPage }) =
             handlePreviousPage(true);
         }
     };
-    console.log( new Date().toString());
+
     const handleSubmit = async () => {
         try {
             setLoading(true);
             const date = new Date().toString();
             await set(ref(dataBase, `releaseNotes/notes/${date}`), formData);
+            await sendPushNotifications()
             setFormData(
                 {
                     version: '',
@@ -68,6 +72,24 @@ const AddReleaseNote: React.FC<AddReleaseNoteProps> = ({ handlePreviousPage }) =
             };
             setErrorMessage(messageResponse);
         }
+    };
+
+    const sendPushNotifications = async () => {
+        const response: any = await loadWebsite(`notifications`);
+        const permission: any = await loadWebsite(`releaseNotes/permissions`);
+        const title = `Yeni release notu eklendi`;
+        const detail = `Not detaylarına ayarlar relase notes kısmından erişebilirsiniz.`;
+        const playerIds = Object.entries(response)
+            ?.filter((a: any) => permission?.[a[0]]?.['Release Notes'])
+            ?.map((item) => (item?.[1] ? Object.values(item?.[1]) : null))
+            ?.flat();
+
+        await sendNotifications(title, detail, playerIds)
+            .then(r => r)
+            .catch(() => {
+                const message = AddMatchMessages.push_notifications_fail;
+                alert(message)
+            });
     };
 
     return (

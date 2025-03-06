@@ -485,17 +485,51 @@ export const getPlayerStats = (data: any, playerName: any) => {
         Object.keys(item.oyesfc.squad).includes(playerName)
     ).length;
     let playerTotalGoal = 0;
+    let oldBootGoals = 0;
+    let newBootGoals = 0;
+    let bootGoalsData: any;
+    const player: any = Object.values(TeamMembers).find(x => x.name === playerName)
     Object.values(data).forEach((item: any) => {
         if (item?.oyesfc?.squad[playerName]) {
             playerTotalGoal += item.oyesfc.squad[playerName].goal;
+            const goals = item.oyesfc.squad[playerName].goal;
+            const matchDate = item.day.split("-").reverse().join("-");
+
+            if (player.oldBootData?.length) {
+                let currentBoot = player.oldBootData[0];
+
+                for (const boot of player.oldBootData) {
+                    if (matchDate < boot.changeDate.split("-").reverse().join("-")) break;
+                    currentBoot = boot;
+                }
+
+                if (matchDate < currentBoot.changeDate.split("-").reverse().join("-")) {
+                    oldBootGoals += goals;
+                } else {
+                    newBootGoals += goals;
+                }
+            } else {
+                newBootGoals += goals;
+            }
         }
     });
     const numberOfMatches = Object.values(data).length;
+    if (player?.oldBootData) {
+        bootGoalsData = [
+            [`${player?.oldBootData?.[0]?.bootBrand} ${player?.oldBootData?.[0]?.bootCollection} ${player?.oldBootData?.[0]?.bootModel} Goals`, oldBootGoals],
+            [`${player?.bootBrand} ${player?.bootCollection} ${player?.bootModel} Goals`, newBootGoals],
+        ];
+    } else {
+        bootGoalsData = [
+            [`${player?.bootBrand} ${player?.bootCollection} ${player?.bootModel} Goals`, newBootGoals],
+        ];
+    }
     return {
         totalMatch: playerTotalMatch,
         totalGoal: playerTotalGoal,
         goalPerGame: (playerTotalGoal / playerTotalMatch).toFixed(2),
         attendanceRate: ((playerTotalMatch / numberOfMatches) * 100).toFixed(0),
+        bootGoalsData: bootGoalsData
     };
 };
 

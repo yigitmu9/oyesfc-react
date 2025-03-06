@@ -24,7 +24,7 @@ const ListComponent: React.FC<ListComponentProps> = ({ data, customStyle }) => {
                             <p className={classes.listItemSpanStyle}>{x[0]}</p>
                             <p className={classes.listItemSpanStyle}>{x[1]}</p>
                         </ListItem>
-                        <Divider sx={{ bgcolor: '#646464' }} variant="middle" color="red" />
+                        {data?.length !== y + 1 && <Divider sx={{ bgcolor: '#646464' }} variant="middle" color="red" />}
                     </div>
                 ))}
             </List>

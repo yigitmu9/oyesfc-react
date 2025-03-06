@@ -1,108 +1,97 @@
-import React from 'react';
-import NikeLogo from '../../images/nike.png';
-import AdidasLogo from '../../images/adidas.PNG';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TeamMembers } from '../../constants/constants';
 import { BootBrandsList } from '../../constants/constants';
 import classes from './boot-brands.module.css';
-import MainTitle from '../../shared/MainTitle/main-title';
 import CardGrid from '../../shared/CardGrid/card-grid';
 import ListComponent from '../../shared/ListComponent/list-component';
 import { useSelector } from 'react-redux';
+import SelectionComponent from '../../shared/SelectionComponent/selection-component';
 
 const BootBrands = () => {
     const { filteredData } = useSelector((state: any) => state.databaseData);
-    let adidasPlayer: any = 0;
-    let nikePlayer: any = 0;
-    let adidasGoal: any = 0;
-    let nikeGoal: any = 0;
-    let adidasCollections: any = [];
-    let nikeCollections: any = [];
-    let playerTotalGoalFacilities = 0;
+    const defaultBrand = BootBrandsList.adidas
+    const [selectedBrandData, setSelectedBrandData] = useState<any>({data: null, brand: defaultBrand});
 
-    Object.values(TeamMembers).forEach((x) => {
-        playerTotalGoalFacilities = 0;
-        Object.values(filteredData).forEach((item: any) => {
-            if (item?.oyesfc?.squad[x.name] && x.name !== TeamMembers.can.name) {
-                playerTotalGoalFacilities += item.oyesfc.squad[x.name].goal;
+    const handleChange = useCallback((brand: string) => {
+
+        const brandPlayers = Object.values(TeamMembers).filter(x => x.bootBrand === brand)
+        const brandPlayerLength = brandPlayers.length
+        const bootStats: any = {};
+
+        Object.values(TeamMembers).forEach((player: any) => {
+            if (player.bootBrand === brand || player?.oldBootData?.[0]?.bootBrand === brand) {
+                const { name, bootBrand, bootCollection, bootModel } = player;
+                const oldBootData = player?.oldBootData ? player?.oldBootData : [];
+                const bootHistory = [{ changeDate: '9999-99-99', bootBrand, bootCollection, bootModel }, ...oldBootData];
+
+                Object.values(filteredData).forEach((match: any) => {
+                    const matchDate = match.day.split('-').reverse().join('-');
+                    if (!match.oyesfc || !match.oyesfc.squad[name]) return;
+                    const goals = match.oyesfc.squad[name].goal;
+
+                    let currentBoot = bootHistory[0];
+                    if (bootHistory.length > 1 && matchDate < bootHistory[1].changeDate.split('-').reverse().join('-')) currentBoot = bootHistory[1];
+
+                    const { bootBrand, bootCollection, bootModel } = currentBoot;
+                    if (!bootStats[bootBrand]) bootStats[bootBrand] = { totalGoals: 0, collections: {} };
+                    if (!bootStats[bootBrand].collections[bootCollection]) {
+                        bootStats[bootBrand].collections[bootCollection] = { totalGoals: 0, models: {} };
+                    }
+                    if (!bootStats[bootBrand].collections[bootCollection].models[bootModel]) {
+                        bootStats[bootBrand].collections[bootCollection].models[bootModel] = 0;
+                    }
+
+                    bootStats[bootBrand].totalGoals += goals;
+                    bootStats[bootBrand].collections[bootCollection].totalGoals += goals;
+                    bootStats[bootBrand].collections[bootCollection].models[bootModel] += goals;
+                });
             }
         });
-        if (x.bootBrand === BootBrandsList.nike) {
-            nikePlayer += 1;
-            nikeGoal += playerTotalGoalFacilities;
-            const bootItem = nikeCollections?.find((item: any) => item.hasOwnProperty(x.bootCollection));
-            if (bootItem) {
-                bootItem[x.bootCollection] += playerTotalGoalFacilities;
-            } else {
-                nikeCollections.push({
-                    [x.bootCollection]: playerTotalGoalFacilities,
-                });
-            }
+
+        const collectionGoals = Object.entries(bootStats?.[brand]?.collections)?.map((x: any) => {
+            return [`${x[0]} Goals`, x[1].totalGoals]
+        })
+
+        const brandData = [
+            [`${brand} Players`, brandPlayerLength],
+            [`Total ${brand} Goals`, bootStats?.[brand]?.totalGoals || 0],
+            ...collectionGoals
+        ];
+
+        const finalData = {
+            data: brandData,
+            brand: brand
         }
-        if (x.bootBrand === BootBrandsList.adidas) {
-            adidasPlayer += 1;
-            adidasGoal += playerTotalGoalFacilities;
-            const bootItem = adidasCollections?.find((item: any) => item?.hasOwnProperty(x.bootCollection));
-            if (bootItem) {
-                bootItem[x.bootCollection] += playerTotalGoalFacilities;
-            } else {
-                adidasCollections.push({
-                    [x.bootCollection]: playerTotalGoalFacilities,
-                });
-            }
+
+        setSelectedBrandData(finalData)
+    }, [filteredData]);
+
+    useEffect(() => {
+        if (!selectedBrandData?.data) {
+            handleChange(defaultBrand)
         }
-    });
+    }, [defaultBrand, handleChange, selectedBrandData]);
 
-    const dataForNike = [
-        ['Nike Players', nikePlayer],
-        ['Total Nike Goals', nikeGoal],
-        [Object.entries(nikeCollections[0])[0][0] + ' Goals', Object.entries(nikeCollections[0])[0][1]],
-        [Object.entries(nikeCollections[1])[0][0] + ' Goals', Object.entries(nikeCollections[1])[0][1]],
-        [Object.entries(nikeCollections[2])[0][0] + ' Goals', Object.entries(nikeCollections[2])[0][1]],
-    ];
-
-    const dataForAdidas = [
-        ['Adidas Players', adidasPlayer],
-        ['Total Adidas Goals', adidasGoal],
-        [Object.entries(adidasCollections[0])[0][0] + ' Goals', Object.entries(adidasCollections[0])[0][1]],
-        [Object.entries(adidasCollections[1])[0][0] + ' Goals', Object.entries(adidasCollections[1])[0][1]],
-        [Object.entries(adidasCollections[2])[0][0] + ' Goals', Object.entries(adidasCollections[2])[0][1]],
-    ];
-
-    const nikeCard = (
+    const cardContent = (
         <>
-            <MainTitle title={'Nike'} size={'mid'} />
             <div className={classes.collectionSplitter}>
-                <img className={classes.nikeImageStyle} src={NikeLogo} alt={'1'} />
-                <ListComponent data={dataForNike} />
+                <img className={classes.imageStyle} src={require(`../../images/${selectedBrandData?.brand?.toLowerCase()}.png`)} alt={'1'} />
+                <ListComponent data={selectedBrandData?.data} />
             </div>
         </>
     );
 
-    const adidasCard = (
+    const firstPart = (
         <>
-            <MainTitle title={'Adidas'} size={'mid'} />
-            <div className={classes.collectionSplitter}>
-                <img className={classes.adidasImageStyle} src={AdidasLogo} alt={'1'} />
-                <ListComponent data={dataForAdidas} />
-            </div>
-        </>
-    );
-
-    return (
-        <>
-            <CardGrid
-                smallCards={true}
-                firstPart={nikeCard}
-                content={adidasCard}
-                customStyle={{
-                    justifyContent: 'center',
-                    display: 'block',
-                    textAlign: 'center',
-                    height: 'auto',
-                }}
+            <SelectionComponent
+                options={Object.values(BootBrandsList)}
+                onSelectionChange={handleChange}
+                defaultSelectedValue={true}
             />
         </>
     );
+
+    return <CardGrid title={'Boot Brand Statistics'} content={cardContent} firstPart={firstPart} />;
 };
 
 export default BootBrands;
