@@ -8,7 +8,7 @@ import sharedClasses from '../../shared/Styles/shared-styles.module.css';
 import classes from '../SignIn/sign-in.module.css';
 import { dataBase, loadWebsite } from '../../firebase';
 import { ref, set } from 'firebase/database';
-import { AddMatchMessages, SnackbarTypes, TeamNames } from '../../constants/constants';
+import { AddMatchMessages, SnackbarTypes } from '../../constants/constants';
 import { sendNotifications } from '../../services/service';
 import { useSelector } from 'react-redux';
 
@@ -18,7 +18,6 @@ interface AddReleaseNoteProps {
 
 const AddReleaseNote: React.FC<AddReleaseNoteProps> = ({ handlePreviousPage }) => {
     const packageJson = require('./../../../package.json');
-    const { userName } = useSelector((state: any) => state.credentials);
     const [errorMessage, setErrorMessage] = useState<AlertInterface>({
         message: '',
         severity: undefined,

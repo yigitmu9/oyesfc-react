@@ -8,7 +8,6 @@ import sharedClasses from '../../shared/Styles/shared-styles.module.css';
 import classes from '../SignIn/sign-in.module.css';
 import SelectionComponent from '../../shared/SelectionComponent/selection-component';
 import ratingsClasses from '../RatingsGrid/ratings-grid.module.css';
-import { generateRandomString } from '../../utils/utils';
 import { dataBase } from '../../firebase';
 import { ref, set } from 'firebase/database';
 import { SnackbarTypes } from '../../constants/constants';
