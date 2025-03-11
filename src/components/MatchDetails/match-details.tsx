@@ -81,7 +81,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({ matchDate, cameFrom 
 
     const checkButton = () => {
         const differenceInHours = hourDifference();
-        if (differenceInHours >= 48 || !Object.keys(matchDetailsData?.oyesfc?.squad)?.includes(userName)) {
+        if (differenceInHours >= 48 || !Object.keys(matchDetailsData?.oyesfc?.squad)?.includes(userName) || fixture === matchType.previous) {
             return 'Not Available';
         }
         return 'Submit';
@@ -574,7 +574,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({ matchDate, cameFrom 
                                     {...a11yProps(4)}
                                 />
                             )}
-                            {signedIn && fixture === matchType.previous && (
+                            {signedIn && (
                                 <Tab
                                     sx={{
                                         '&.MuiTab-root': {
@@ -588,7 +588,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({ matchDate, cameFrom 
                                     {...a11yProps(5)}
                                 />
                             )}
-                            {signedIn && fixture === matchType.previous && (
+                            {signedIn && (
                                 <Tab
                                     sx={{
                                         '&.MuiTab-root': {

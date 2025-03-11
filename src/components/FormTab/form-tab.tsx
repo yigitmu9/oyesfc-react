@@ -12,12 +12,14 @@ import {
 import { ChartTypes, TeamMembers } from '../../constants/constants';
 import { useSelector } from 'react-redux';
 import PersonIcon from '@mui/icons-material/Person';
-import { Alert, Divider } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Divider } from '@mui/material';
 import playerCardsClasses from '../PlayerCards/player-cards.module.css';
 import ChartComponent from '../../shared/ChartComponent/chart-component';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import TimelineIcon from '@mui/icons-material/Timeline';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import classes from '../MatchDetails/match-details.module.css';
 
 interface FormTabProps {
     matchDetailsData?: any;
@@ -280,69 +282,52 @@ const FormTab: React.FC<FormTabProps> = ({ matchDetailsData, matchIndex, squadRa
                         <div key={index}>
                             <div style={{ height: '20px' }}></div>
                             <section className={matchDetailsClasses.generalTabSection}>
-                                <div className={matchDetailsClasses.generalInfoDiv}>
-                                    <PersonIcon
-                                        fontSize={isMobile ? 'medium' : 'large'}
-                                        className={matchDetailsClasses.generalInfoIcon}
-                                    ></PersonIcon>
-                                    <span className={matchDetailsClasses.generalInfoSpan}>{player}</span>
-                                </div>
-                                {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataAfter?.length > 0 && (
-                                    <Divider
-                                        sx={{
-                                            bgcolor: 'gray',
-                                            margin: '10px',
-                                        }}
-                                    />
-                                )}
-                                {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataAfter?.length > 0 && (
-                                    <div className={matchDetailsClasses.generalInfoDiv}>
-                                        <ArrowCircleRightIcon
-                                            fontSize={isMobile ? 'medium' : 'large'}
-                                            className={matchDetailsClasses.generalInfoIcon}
-                                        ></ArrowCircleRightIcon>
-                                        <span className={matchDetailsClasses.generalInfoSpan}>Post Match</span>
-                                    </div>
-                                )}
-                                {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataAfter?.length > 0 &&
-                                    calculatedPlayerData
-                                        ?.find((x: any) => x?.name === player)
-                                        ?.dataAfter?.map((a: any, i: any) => (
-                                            <div className={matchDetailsClasses.generalInfoDiv} key={i}>
-                                                <span
-                                                    className={playerCardsClasses.ratingSpan}
-                                                    style={{
-                                                        background: a?.color,
-                                                        color: a?.color === 'lightgray' ? 'black' : 'lightgray',
-                                                        marginRight: '10px',
-                                                        minWidth: '60px',
-                                                    }}
-                                                >
-                                                    {a?.value}
-                                                </span>
-                                                <span className={matchDetailsClasses.generalInfoSpan}>{a?.label}</span>
-                                            </div>
-                                        ))}
-                                <Divider
+                                <Accordion
                                     sx={{
-                                        bgcolor: 'gray',
-                                        margin: '10px',
+                                        bgcolor: '#1C1C1E',
+                                        color: 'lightgray',
+                                        width: '100%',
+                                        border: 0,
+                                        boxShadow: 0,
                                     }}
-                                />
-                                {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataBefore && (
-                                    <div className={matchDetailsClasses.generalInfoDiv}>
-                                        <ArrowCircleLeftIcon
-                                            fontSize={isMobile ? 'medium' : 'large'}
-                                            className={matchDetailsClasses.generalInfoIcon}
-                                        ></ArrowCircleLeftIcon>
-                                        <span className={matchDetailsClasses.generalInfoSpan}>Pre Match</span>
-                                    </div>
-                                )}
-                                {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataBefore &&
-                                    calculatedPlayerData
-                                        ?.find((x: any) => x?.name === player)
-                                        ?.dataBefore?.map((a: any, i: any) => (
-                                            <div className={matchDetailsClasses.generalInfoDiv} key={i}>
+                                >
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon sx={{ color: 'lightgray' }} />}
+                                        aria-controls="panel3-content"
+                                        id="panel3-header"
+                                        sx={{ padding: '0 10px' }}
+                                    >
+                                        <div className={classes.generalInfoDivAccordion}>
+                                            <PersonIcon
+                                                fontSize={isMobile ? 'medium' : 'large'}
+                                                className={matchDetailsClasses.generalInfoIcon}
+                                            ></PersonIcon>
+                                            <span className={matchDetailsClasses.generalInfoSpan}>{player}</span>
+                                        </div>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataAfter?.length > 0 && (
+                                            <Divider
+                                                sx={{
+                                                    bgcolor: 'gray',
+                                                    margin: '10px',
+                                                }}
+                                            />
+                                        )}
+                                        {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataAfter?.length > 0 && (
+                                            <div className={matchDetailsClasses.generalInfoDiv}>
+                                                <ArrowCircleRightIcon
+                                                    fontSize={isMobile ? 'medium' : 'large'}
+                                                    className={matchDetailsClasses.generalInfoIcon}
+                                                ></ArrowCircleRightIcon>
+                                                <span className={matchDetailsClasses.generalInfoSpan}>Post Match</span>
+                                            </div>
+                                        )}
+                                        {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataAfter?.length > 0 &&
+                                            calculatedPlayerData
+                                                ?.find((x: any) => x?.name === player)
+                                                ?.dataAfter?.map((a: any, i: any) => (
+                                                <div className={matchDetailsClasses.generalInfoDiv} key={i}>
                                                 <span
                                                     className={playerCardsClasses.ratingSpan}
                                                     style={{
@@ -354,47 +339,83 @@ const FormTab: React.FC<FormTabProps> = ({ matchDetailsData, matchIndex, squadRa
                                                 >
                                                     {a?.value}
                                                 </span>
-                                                <span className={matchDetailsClasses.generalInfoSpan}>{a?.label}</span>
-                                            </div>
-                                        ))}
-                                {calculatedPlayerDataForGraph && (
-                                    <>
+                                                    <span className={matchDetailsClasses.generalInfoSpan}>{a?.label}</span>
+                                                </div>
+                                            ))}
                                         <Divider
                                             sx={{
                                                 bgcolor: 'gray',
                                                 margin: '10px',
                                             }}
                                         />
-                                        <div className={matchDetailsClasses.generalInfoDiv}>
-                                            <TimelineIcon
-                                                fontSize={isMobile ? 'medium' : 'large'}
-                                                className={matchDetailsClasses.generalInfoIcon}
-                                            ></TimelineIcon>
-                                            <span className={matchDetailsClasses.generalInfoSpan}>
+                                        {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataBefore && (
+                                            <div className={matchDetailsClasses.generalInfoDiv}>
+                                                <ArrowCircleLeftIcon
+                                                    fontSize={isMobile ? 'medium' : 'large'}
+                                                    className={matchDetailsClasses.generalInfoIcon}
+                                                ></ArrowCircleLeftIcon>
+                                                <span className={matchDetailsClasses.generalInfoSpan}>Pre Match</span>
+                                            </div>
+                                        )}
+                                        {calculatedPlayerData?.find((x: any) => x?.name === player)?.dataBefore &&
+                                            calculatedPlayerData
+                                                ?.find((x: any) => x?.name === player)
+                                                ?.dataBefore?.map((a: any, i: any) => (
+                                                <div className={matchDetailsClasses.generalInfoDiv} key={i}>
+                                                <span
+                                                    className={playerCardsClasses.ratingSpan}
+                                                    style={{
+                                                        background: a?.color,
+                                                        color: a?.color === 'lightgray' ? 'black' : 'lightgray',
+                                                        marginRight: '10px',
+                                                        minWidth: '60px',
+                                                    }}
+                                                >
+                                                    {a?.value}
+                                                </span>
+                                                    <span className={matchDetailsClasses.generalInfoSpan}>{a?.label}</span>
+                                                </div>
+                                            ))}
+                                        {calculatedPlayerDataForGraph && (
+                                            <>
+                                                <Divider
+                                                    sx={{
+                                                        bgcolor: 'gray',
+                                                        margin: '10px',
+                                                    }}
+                                                />
+                                                <div className={matchDetailsClasses.generalInfoDiv}>
+                                                    <TimelineIcon
+                                                        fontSize={isMobile ? 'medium' : 'large'}
+                                                        className={matchDetailsClasses.generalInfoIcon}
+                                                    ></TimelineIcon>
+                                                    <span className={matchDetailsClasses.generalInfoSpan}>
                                                 Ratings in Last 5 Matches
                                             </span>
-                                        </div>
-                                        <div
-                                            style={{
-                                                height: '20px',
-                                            }}
-                                        ></div>
-                                        <ChartComponent
-                                            type={ChartTypes.customLine}
-                                            color={'rgb(153, 102, 255)'}
-                                            data={getDataForGraph(player)}
-                                            customStyle={{
-                                                width: '100%',
-                                                height: '330px',
-                                                padding: '10px',
-                                            }}
-                                            graphLabels={['1', '2', '3', '4', 'Last']}
-                                            layout={'x'}
-                                            title={'Ratings in Last 5 Matches'}
-                                            maxValueBarGraph={10}
-                                        />
-                                    </>
-                                )}
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        height: '20px',
+                                                    }}
+                                                ></div>
+                                                <ChartComponent
+                                                    type={ChartTypes.customLine}
+                                                    color={'rgb(153, 102, 255)'}
+                                                    data={getDataForGraph(player)}
+                                                    customStyle={{
+                                                        width: '100%',
+                                                        height: '330px',
+                                                        padding: '10px',
+                                                    }}
+                                                    graphLabels={['1', '2', '3', '4', 'Last']}
+                                                    layout={'x'}
+                                                    title={'Ratings in Last 5 Matches'}
+                                                    maxValueBarGraph={10}
+                                                />
+                                            </>
+                                        )}
+                                    </AccordionDetails>
+                                </Accordion>
                             </section>
                         </div>
                     ))

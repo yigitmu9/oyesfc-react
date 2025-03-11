@@ -682,6 +682,39 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({ playerName }) => {
                                 textAlign: 'end',
                             }}
                         >
+                            <p className={classes.fontStyle}>Hattricks</p>
+                            <p className={classes.fontStyle}>{playerStats?.hattrickCount}</p>
+                        </ListItem>
+                        <Divider sx={{ bgcolor: '#646464' }} variant="middle" />
+                        <ListItem
+                            style={{
+                                justifyContent: 'space-between',
+                                display: 'flex',
+                                textAlign: 'end',
+                            }}
+                        >
+                            <p className={classes.fontStyle}>Longest Goal Streak</p>
+                            <p className={classes.fontStyle}>{playerStats?.longestGoalStreak}</p>
+                        </ListItem>
+                        <Divider sx={{ bgcolor: '#646464' }} variant="middle" />
+                        <ListItem
+                            style={{
+                                justifyContent: 'space-between',
+                                display: 'flex',
+                                textAlign: 'end',
+                            }}
+                        >
+                            <p className={classes.fontStyle}>Max Goals in One Match</p>
+                            <p className={classes.fontStyle}>{playerStats?.maxGoalsInOneMatch}</p>
+                        </ListItem>
+                        <Divider sx={{ bgcolor: '#646464' }} variant="middle" />
+                        <ListItem
+                            style={{
+                                justifyContent: 'space-between',
+                                display: 'flex',
+                                textAlign: 'end',
+                            }}
+                        >
                             <p className={classes.fontStyle}>Rating</p>
                             <p className={classes.fontStyle}>{playerRatingMvp?.rating}</p>
                         </ListItem>

@@ -488,12 +488,32 @@ export const getPlayerStats = (data: any, playerName: any) => {
     let oldBootGoals = 0;
     let newBootGoals = 0;
     let bootGoalsData: any;
+    let hattrickCount = 0;
+    let longestGoalStreak = 0;
+    let currentStreak = 0;
+    let maxGoalsInOneMatch = 0;
     const player: any = Object.values(TeamMembers).find(x => x.name === playerName)
-    Object.values(data).forEach((item: any) => {
+    const sortedMatches: any = Object.values(data).sort((a: any, b: any) => {
+        return new Date(a.day.split("-").reverse().join("-")).getTime() -
+            new Date(b.day.split("-").reverse().join("-")).getTime();
+    });
+    sortedMatches.forEach((item: any) => {
         if (item?.oyesfc?.squad[playerName]) {
             playerTotalGoal += item.oyesfc.squad[playerName].goal;
+            hattrickCount += item.oyesfc.squad[playerName].goal > 2 ? 1 : 0
             const goals = item.oyesfc.squad[playerName].goal;
             const matchDate = item.day.split("-").reverse().join("-");
+
+            if (goals > 0) {
+                currentStreak++;
+                longestGoalStreak = Math.max(longestGoalStreak, currentStreak);
+            } else {
+                currentStreak = 0;
+            }
+
+            if (goals > 0 && goals > maxGoalsInOneMatch) {
+                maxGoalsInOneMatch = goals;
+            }
 
             if (player.oldBootData?.length) {
                 let currentBoot = player.oldBootData[0];
@@ -529,7 +549,10 @@ export const getPlayerStats = (data: any, playerName: any) => {
         totalGoal: playerTotalGoal,
         goalPerGame: (playerTotalGoal / playerTotalMatch).toFixed(2),
         attendanceRate: ((playerTotalMatch / numberOfMatches) * 100).toFixed(0),
-        bootGoalsData: bootGoalsData
+        bootGoalsData: bootGoalsData,
+        hattrickCount: hattrickCount,
+        longestGoalStreak: longestGoalStreak,
+        maxGoalsInOneMatch: maxGoalsInOneMatch
     };
 };
 
