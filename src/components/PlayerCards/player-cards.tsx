@@ -45,7 +45,6 @@ import {
     returnAverageData,
 } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
-import ListComponent from '../../shared/ListComponent/list-component';
 
 function CustomTabs(props?: any) {
     const { children, value, index, ...other } = props;

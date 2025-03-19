@@ -3,7 +3,6 @@ import classes from './table-component.module.css';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useSelector } from 'react-redux';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import scoreboardClasses from '../../components/Scoreboard/scoreboard.module.css';
 
 interface TableComponentProps {
     columns?: any;

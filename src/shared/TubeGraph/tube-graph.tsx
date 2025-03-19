@@ -1,9 +1,8 @@
 import React from 'react';
 import classes from './tube-graph.module.css';
-import { FormControl, List, ListItem } from '@mui/material';
+import { List, ListItem } from '@mui/material';
 import { useSelector } from 'react-redux';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import Box from '@mui/material/Box';
 
 interface MainSquadStatsProps {
     data?: any;
