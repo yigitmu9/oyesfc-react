@@ -4,6 +4,8 @@ import { Bar, Doughnut, Line, Pie, PolarArea, Radar } from 'react-chartjs-2';
 import { ChartTypes } from '../../constants/constants';
 import { CategoryScale, Chart as linear, Chart } from 'chart.js/auto';
 import PropTypes, { any } from 'prop-types';
+import { useSelector } from 'react-redux';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 interface ChartComponentProps {
     type?: any;
@@ -26,6 +28,7 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
     graphLabels,
     maxValueBarGraph,
 }) => {
+    const { loadingData } = useSelector((state: any) => state.databaseData);
     const datasets: any = {
         labels: graphLabels,
         datasets: [
@@ -213,9 +216,17 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
         ) : null;
 
     return (
-        <div className={classes.chartStyle} style={customStyle}>
-            {chart}
-        </div>
+        <>
+            {loadingData ?
+                <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                    <Skeleton className={classes.chartStyle} style={customStyle}/>
+                </SkeletonTheme>
+                :
+                <div className={classes.chartStyle} style={customStyle}>
+                    {chart}
+                </div>
+            }
+        </>
     );
 };
 

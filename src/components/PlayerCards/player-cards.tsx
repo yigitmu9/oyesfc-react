@@ -747,7 +747,26 @@ const PlayerCards: React.FC<PlayerCardsProps> = ({ playerName }) => {
                     <>
                         <div style={{ height: '20px' }}></div>
                         <section className={matchDetailsClasses.squadSection}>
-                            <ListComponent data={playerStats?.bootGoalsData} />
+                            <List component="nav" aria-label="mailbox folders">
+                                {
+                                    playerStats?.bootGoalsData?.map((x: any, y: number) => (
+                                        <div key={y}>
+                                            <ListItem
+                                                style={{
+                                                    justifyContent: 'space-between',
+                                                    display: 'flex',
+                                                    textAlign: 'end',
+                                                }}
+                                            >
+                                                <p className={classes.fontStyle}>{x?.[0]}</p>
+                                                <p className={classes.fontStyle}>{x?.[1]}</p>
+                                            </ListItem>
+                                            {playerStats?.bootGoalsData?.length !== (y + 1) &&
+                                                <Divider sx={{ bgcolor: '#646464' }} variant="middle" color="red" />}
+                                        </div>
+                                    ))
+                                }
+                            </List>
                         </section>
                     </>
                 }

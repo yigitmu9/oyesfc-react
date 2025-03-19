@@ -123,14 +123,13 @@ const AddReleaseNote: React.FC<AddReleaseNoteProps> = ({ handlePreviousPage }) =
                             />
                             <br />
                             <div className={sharedClasses.emptyHeightSpace}></div>
-                            <input
+                            <textarea
                                 className={classes.inputDesign}
                                 required={true}
-                                type="text"
                                 name="note"
                                 placeholder={'Note'}
                                 value={formData?.note}
-                                onChange={(event) => handleInputChange(event)}
+                                onChange={(event: any) => handleInputChange(event)}
                             />
                         </div>
                         {errorMessage?.severity && (

@@ -17,9 +17,11 @@ import SignIn from '../SignIn/sign-in';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Alert } from '@mui/material';
 import { redirect } from '../../utils/utils';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const AccountGrid = () => {
-    const { userName, isCaptain, email, signedIn } = useSelector((state: any) => state.credentials);
+    const { userName, isCaptain, email, signedIn, credentialsLoading } = useSelector((state: any) => state.credentials);
+    const { loadingData } = useSelector((state: any) => state.databaseData);
     const [errorData, setErrorData] = useState(null);
     const navigate = useNavigate();
     const filtersPath = '/oyesfc-react/filters';
@@ -71,6 +73,12 @@ const AccountGrid = () => {
             });
     };
 
+    const loadingSkeleton = (
+        <SkeletonTheme baseColor="#202020" highlightColor="#444">
+            <Skeleton/>
+        </SkeletonTheme>
+    )
+
     return (
         <div style={{ minHeight: '70vh' }}>
             <MainTitle title={'Account'} />
@@ -98,15 +106,25 @@ const AccountGrid = () => {
                             }}
                         />
                     ) : (
-                        <AccountBoxIcon
-                            sx={{
-                                display: 'flex',
-                                width: 'auto',
-                                height: '110%',
-                                color: 'lightgrey',
-                                marginTop: '-60px',
-                            }}
-                        ></AccountBoxIcon>
+                        credentialsLoading ?
+                            <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                                <Skeleton style={{
+                                    display: 'flex',
+                                    width: '600px',
+                                    height: '400px',
+                                    borderRadius: '15px',
+                                }}/>
+                            </SkeletonTheme>
+                            :
+                            <AccountBoxIcon
+                                sx={{
+                                    display: 'flex',
+                                    width: 'auto',
+                                    height: '110%',
+                                    color: 'lightgrey',
+                                    marginTop: '-60px',
+                                }}
+                            ></AccountBoxIcon>
                     )}
                 </Box>
                 <Box
@@ -162,7 +180,11 @@ const AccountGrid = () => {
                     )}
                     {!signedIn && <SignIn />}
                     <div className={classes.morePageBox} onClick={openFiltersPage}>
-                        <span className={navbarClasses.drawerRoutesSpan}>Filters</span>
+                        {(!credentialsLoading && !loadingData) ?
+                            <span className={navbarClasses.drawerRoutesSpan}>Filters</span>
+                            :
+                            loadingSkeleton
+                        }
                     </div>
                     <div style={{ height: '5px' }}></div>
                     <div style={{ padding: '0 20px' }}>
@@ -173,13 +195,19 @@ const AccountGrid = () => {
                     </div>
                     <div style={{ height: '30px' }}></div>
                     <div className={classes.morePageBox} onClick={openCalendarPage}>
-                        <span className={navbarClasses.drawerRoutesSpan}>Calendar</span>
+                        {(!credentialsLoading && !loadingData) ?
+                            <span className={navbarClasses.drawerRoutesSpan}>Calendar</span>
+                            : loadingSkeleton
+                        }
                     </div>
                     {signedIn && (
                         <>
                             <div style={{ height: '20px' }}></div>
                             <div className={classes.morePageBox} onClick={openRatingsPage}>
-                                <span className={navbarClasses.drawerRoutesSpan}>Ratings</span>
+                                {(!credentialsLoading && !loadingData) ?
+                                    <span className={navbarClasses.drawerRoutesSpan}>Ratings</span>
+                                    : loadingSkeleton
+                        }
                             </div>
                         </>
                     )}
@@ -187,7 +215,10 @@ const AccountGrid = () => {
                         <>
                             <div style={{ height: '20px' }}></div>
                             <div className={classes.morePageBox} onClick={openAddMatchPage}>
-                                <span className={navbarClasses.drawerRoutesSpan}>Add Match</span>
+                                {(!credentialsLoading && !loadingData) ?
+                                    <span className={navbarClasses.drawerRoutesSpan}>Add Match</span>
+                                    : loadingSkeleton
+                        }
                             </div>
                         </>
                     )}
@@ -195,7 +226,11 @@ const AccountGrid = () => {
                         <>
                             <div style={{ height: '20px' }}></div>
                             <div className={classes.morePageBox} onClick={openReleaseNotesPage}>
-                                <span className={navbarClasses.drawerRoutesSpan}>Release Notes</span>
+
+                                {(!credentialsLoading && !loadingData) ?
+                                    <span className={navbarClasses.drawerRoutesSpan}>Release Notes</span>
+                                    : loadingSkeleton
+                        }
                             </div>
                         </>
                     )}
@@ -203,7 +238,11 @@ const AccountGrid = () => {
                         <>
                             <div style={{ height: '20px' }}></div>
                             <div className={classes.morePageBox} onClick={openSettingsPage}>
-                                <span className={navbarClasses.drawerRoutesSpan}>Settings</span>
+
+                                {(!credentialsLoading && !loadingData) ?
+                                    <span className={navbarClasses.drawerRoutesSpan}>Settings</span>
+                                    : loadingSkeleton
+                        }
                             </div>
                         </>
                     )}

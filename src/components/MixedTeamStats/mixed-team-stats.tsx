@@ -18,7 +18,7 @@ const MixedTeamStats = () => {
     const [winRateState, setWinRateState] = useState<any>([]);
     const [labels, setLabels] = useState<any>([]);
     const [fullDataState, setFullDataState] = useState<any>(null);
-    const categoryValues = useMemo(() => getCategoryValues(filteredData), [filteredData]);
+    const categoryValues = useMemo(() => getCategoryValues(filteredData || []), [filteredData]);
 
     const fetchData = useCallback(
         (option: any) => {

@@ -6,6 +6,7 @@ const initialState = {
     email: null,
     id: null,
     signedIn: false,
+    credentialsLoading: true
 };
 
 const credentialsSlice = createSlice({
@@ -18,6 +19,7 @@ const credentialsSlice = createSlice({
             state.email = action.payload.email;
             state.id = action.payload.id;
             state.signedIn = true;
+            state.credentialsLoading = false;
         },
         logout: (state) => {
             state.userName = null;
@@ -25,6 +27,7 @@ const credentialsSlice = createSlice({
             state.email = null;
             state.id = null;
             state.signedIn = false;
+            state.credentialsLoading = false;
         },
     },
 });

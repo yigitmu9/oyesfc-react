@@ -21,10 +21,11 @@ import GroupIcon from '@mui/icons-material/Group';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../../redux/credentialsSlice';
 import { checkAuthState } from '../../services/service';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 function Navbar() {
     const { selectedEra } = useSelector((state: any) => state.era);
-    const { userName, signedIn } = useSelector((state: any) => state.credentials);
+    const { userName, signedIn, credentialsLoading } = useSelector((state: any) => state.credentials);
     const navigate = useNavigate();
     const location = useLocation();
     const matchesPath = '/oyesfc-react/matches';
@@ -203,17 +204,27 @@ function Navbar() {
                                     )}
                                 />
                             ) : (
-                                <AccountCircleIcon
-                                    sx={{
-                                        width: 59,
-                                        height: 59,
-                                        background: '0, 0, 0, 0',
-                                        color: 'black',
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={navigateAccountPage}
-                                    className={classes.userButtonLinkStyle}
-                                ></AccountCircleIcon>
+                                credentialsLoading ?
+                                    <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                                        <Skeleton style={{
+                                            width: 59,
+                                            height: 59,
+                                            background: '0, 0, 0, 0',
+                                            borderRadius: '50%'
+                                        }}/>
+                                    </SkeletonTheme>
+                                    :
+                                    <AccountCircleIcon
+                                        sx={{
+                                            width: 59,
+                                            height: 59,
+                                            background: '0, 0, 0, 0',
+                                            color: 'black',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={navigateAccountPage}
+                                        className={classes.userButtonLinkStyle}
+                                    ></AccountCircleIcon>
                             )}
                         </Box>
                     </Toolbar>

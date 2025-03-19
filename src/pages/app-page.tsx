@@ -5,7 +5,7 @@ import MatchesPage from '../pages/matches-page';
 import IndividualStatsPage from '../pages/individual-stats-page';
 import TeamStatsPage from '../pages/team-stats-page';
 import { loadWebsite } from '../firebase';
-import LoadingPage from '../pages/loading-page';
+// import LoadingPage from '../pages/loading-page';
 import ErrorPage from '../pages/error-page';
 import Navbar from '../components/Navbar/navbar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +26,7 @@ const AppPage = () => {
     const dispatch = useDispatch();
     const { selectedEra } = useSelector((state: any) => state.era);
     const { allData } = useSelector((state: any) => state.databaseData);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -49,6 +49,7 @@ const AppPage = () => {
                     updateData({
                         allData: response,
                         filteredData: filterData,
+                        loadingData: false
                     })
                 );
             } else {
@@ -56,13 +57,14 @@ const AppPage = () => {
                     updateData({
                         allData: response,
                         filteredData: response,
+                        loadingData: false
                     })
                 );
             }
-            setLoading(false);
+            // setLoading(false);
         } catch (error: any) {
             setError(error);
-            setLoading(false);
+            // setLoading(false);
         }
     }, [dispatch]);
 
@@ -72,9 +74,11 @@ const AppPage = () => {
         }
     }, [allData, fetchData]);
 
+    /*
     if (loading) {
         return <LoadingPage />;
     }
+     */
 
     if (error) {
         return <ErrorPage />;

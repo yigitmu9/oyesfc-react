@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import classes from './sign-in.module.css';
 import { SnackbarMessages } from '../../constants/constants';
 import { Alert } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkAuthState, signInUser } from '../../services/service';
 import { login, logout } from '../../redux/credentialsSlice';
 import { PulseLoader } from 'react-spinners';
 import navbarClasses from '../Navbar/navbar.module.css';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const SignIn = () => {
+    const { credentialsLoading } = useSelector((state: any) => state.credentials);
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -56,11 +58,20 @@ const SignIn = () => {
         setLoading(false);
     };
 
+    const loadingSkeleton = (
+        <SkeletonTheme baseColor="#202020" highlightColor="#444">
+            <Skeleton className={classes.inputDesign}/>
+        </SkeletonTheme>
+    )
+
     return (
         <>
             <form className={classes.formStyle}>
                 <div>
-                    <input
+                    {credentialsLoading ?
+                        loadingSkeleton
+                        :
+                        <input
                         className={classes.inputDesign}
                         required={true}
                         type="email"
@@ -68,10 +79,13 @@ const SignIn = () => {
                         placeholder="Email"
                         value={formData.email}
                         onChange={handleInputChange}
-                    />
+                    />}
                     <br />
                     <div style={{ height: '20px' }}></div>
-                    <input
+                    {credentialsLoading ?
+                        loadingSkeleton
+                        :
+                        <input
                         className={classes.inputDesign}
                         required={true}
                         type="password"
@@ -79,7 +93,7 @@ const SignIn = () => {
                         placeholder="Password"
                         value={formData.password}
                         onChange={handleInputChange}
-                    />
+                    />}
                     {errorMessage && (
                         <Alert
                             sx={{
@@ -97,7 +111,10 @@ const SignIn = () => {
                     )}
                 </div>
                 <div style={{ height: '20px' }}></div>
-                <div className={classes.morePageBox} onClick={() => handleSubmit()}>
+                {credentialsLoading ?
+                    loadingSkeleton
+                    :
+                    <div className={classes.morePageBox} onClick={() => handleSubmit()}>
                     {loading ? (
                         <PulseLoader color="#007AFF" speedMultiplier={0.7} />
                     ) : (
@@ -105,14 +122,14 @@ const SignIn = () => {
                             Sign In
                         </span>
                     )}
-                </div>
+                </div>}
             </form>
             <div style={{ height: '5px' }}></div>
-            <div style={{ padding: '0 20px' }}>
+            {!credentialsLoading && <div style={{ padding: '0 20px' }}>
                 <span className={navbarClasses.miniTitle}>
-                    {"To access your account; after entering your email and password, click the 'Sign In' button."}
+                    {'To access your account; after entering your email and password, click the \'Sign In\' button.'}
                 </span>
-            </div>
+            </div>}
             <div style={{ height: '30px' }}></div>
         </>
     );

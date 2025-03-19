@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChartTypes } from '../../constants/constants';
 import MainTitle from '../../shared/MainTitle/main-title';
 import ChartComponent from '../../shared/ChartComponent/chart-component';
@@ -8,18 +8,32 @@ import { useSelector } from 'react-redux';
 
 const ChartsGrid = () => {
     const { filteredData } = useSelector((state: any) => state.databaseData);
-    const calculatedData = calculateIndividualStats(filteredData);
-    const goalPerGameData = calculatedData?.map((x) => x[4]);
-    const attendanceData = calculatedData?.map((x) => x[3]);
-    const totalTeamGoal = calculateTeamStats(filteredData)?.scoredGoal;
-    const goalPercent = calculatedData?.map((x) => ((x[2] / totalTeamGoal) * 100)?.toFixed(0));
-    const rakipbulGames = filteredData ? Object.values(filteredData)?.filter((x: any) => x.rakipbul === true) : [];
-    const normalGames = filteredData ? Object.values(filteredData)?.filter((x: any) => x.rakipbul === false) : [];
-    const calculatedRakipbulData = calculateIndividualStats(rakipbulGames);
-    const calculatedNormalData = calculateIndividualStats(normalGames);
-    const performance = calculatedRakipbulData?.map((x, y) =>
-        (((calculatedNormalData[y][4] - x[4]) / x[4]) * 100)?.toFixed(0)
-    );
+    const [chartData, setChartData] = useState<any>(null);
+
+
+    useEffect(() => {
+        if (filteredData) {
+            const calculatedData = calculateIndividualStats(filteredData);
+            const goalPerGameData = calculatedData?.map((x) => x[4]);
+            const attendanceData = calculatedData?.map((x) => x[3]);
+            const totalTeamGoal = calculateTeamStats(filteredData)?.scoredGoal;
+            const goalPercent = calculatedData?.map((x) => ((x[2] / totalTeamGoal) * 100)?.toFixed(0));
+            const rakipbulGames = filteredData ? Object.values(filteredData)?.filter((x: any) => x.rakipbul === true) : [];
+            const normalGames = filteredData ? Object.values(filteredData)?.filter((x: any) => x.rakipbul === false) : [];
+            const calculatedRakipbulData = calculateIndividualStats(rakipbulGames);
+            const calculatedNormalData = calculateIndividualStats(normalGames);
+            const performance = calculatedRakipbulData?.map((x, y) =>
+                (((calculatedNormalData[y][4] - x[4]) / x[4]) * 100)?.toFixed(0)
+            );
+            const finalData = {
+                goalPerGameData: goalPerGameData,
+                attendanceData: attendanceData,
+                goalPercent: goalPercent,
+                performance: performance
+            }
+            setChartData(finalData)
+        }
+    }, [filteredData]);
 
     const firstCard = (
         <>
@@ -27,7 +41,7 @@ const ChartsGrid = () => {
             <ChartComponent
                 type={ChartTypes.bar}
                 color={'rgb(153, 102, 255)'}
-                data={goalPerGameData}
+                data={chartData?.goalPerGameData}
                 customStyle={{ height: '330px' }}
                 graphLabels={OYesFCPlayersArray}
                 layout={'x'}
@@ -42,7 +56,7 @@ const ChartsGrid = () => {
             <ChartComponent
                 type={ChartTypes.bar}
                 color={'rgb(255, 205, 86)'}
-                data={attendanceData}
+                data={chartData?.attendanceData}
                 customStyle={{ height: '330px' }}
                 graphLabels={OYesFCPlayersArray}
                 title={'Rate of Attendance'}
@@ -55,7 +69,7 @@ const ChartsGrid = () => {
             <MainTitle title={'Goal Percentage Compared to Total O Yes FC Goal'} size={'mid'} />
             <ChartComponent
                 type={ChartTypes.pie}
-                data={goalPercent}
+                data={chartData?.goalPercent}
                 color={[
                     'rgb(255, 99, 132)',
                     'rgb(255, 159, 64)',
@@ -86,7 +100,7 @@ const ChartsGrid = () => {
                 <ChartComponent
                     type={ChartTypes.bar}
                     color={'rgb(54, 162, 235, 0.5)'}
-                    data={performance}
+                    data={chartData?.performance}
                     customStyle={{ height: '330px' }}
                     graphLabels={OYesFCPlayersArray}
                     title={'Performance Increase'}

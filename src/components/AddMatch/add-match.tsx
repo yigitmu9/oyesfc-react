@@ -290,6 +290,7 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData
                     updateData({
                         allData: response,
                         filteredData: filterData,
+                        loadingData: false
                     })
                 );
             } else {
@@ -297,6 +298,7 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData
                     updateData({
                         allData: response,
                         filteredData: response,
+                        loadingData: false
                     })
                 );
             }

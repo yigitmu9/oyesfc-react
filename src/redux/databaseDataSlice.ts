@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     allData: null,
     filteredData: null,
+    loadingData: true
 };
 
 const databaseDataSlice = createSlice({
@@ -12,6 +13,7 @@ const databaseDataSlice = createSlice({
         updateData: (state, action) => {
             state.allData = action.payload.allData;
             state.filteredData = action.payload.filteredData;
+            state.loadingData = action.payload.loadingData;
         },
     },
 });

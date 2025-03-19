@@ -1,3 +1,4 @@
+/*
 import React, { useRef, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 import OYesFCLogo from '../images/oyesfc.PNG';
@@ -15,7 +16,7 @@ import loadingAnimation5 from "../assets/animation5.json";
 import loadingAnimation6 from "../assets/animation6.json";
 
 const LoadingPage = () => {
-    /*
+
     const { selectedEra } = useSelector((state: any) => state.era);
     return (
         <div
@@ -32,8 +33,8 @@ const LoadingPage = () => {
         </div>
     );
 
-     */
-    // const randomNumber = Math.floor(Math.random() * 50);
+
+    const randomNumber = Math.floor(Math.random() * 50);
     const [randomNumber, setRandomNumber] = useState( Math.floor(Math.random() * 49));
     const [randomNumberForAnimation, setRandomNumberForAnimation] = useState( Math.floor(Math.random() * 5));
     const animations: any = [loadingAnimation1, loadingAnimation2, loadingAnimation3, loadingAnimation4, loadingAnimation5, loadingAnimation6]
@@ -130,3 +131,4 @@ export function Loading(selectedEra?: any, heightSize?: any) {
         </div>
     );
 }
+ */

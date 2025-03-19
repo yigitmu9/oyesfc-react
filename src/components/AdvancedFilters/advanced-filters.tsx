@@ -304,7 +304,7 @@ const AdvancedFilters = () => {
         const videosResponse = await loadWebsite(`videos`);
         const ratingsResponse = await loadWebsite(`rates`);
         const finalData = returnFilteredData(allData, appliedFilters, videosResponse, ratingsResponse);
-        dispatch(updateData({ allData: allData, filteredData: finalData }));
+        dispatch(updateData({ allData: allData, filteredData: finalData, loadingData: false }));
         handleBack(true);
     };
 

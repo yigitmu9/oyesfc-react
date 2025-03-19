@@ -67,10 +67,10 @@ const BootBrands = () => {
     }, [filteredData]);
 
     useEffect(() => {
-        if (!selectedBrandData?.data) {
+        if (!selectedBrandData?.data && filteredData) {
             handleChange(defaultBrand)
         }
-    }, [defaultBrand, handleChange, selectedBrandData]);
+    }, [defaultBrand, filteredData, handleChange, selectedBrandData]);
 
     const cardContent = (
         <>

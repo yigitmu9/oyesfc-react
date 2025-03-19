@@ -7,8 +7,6 @@ import { useSelector } from 'react-redux';
 
 const WeatherIndividualStats = () => {
     const { filteredData } = useSelector((state: any) => state.databaseData);
-    const hotWeather = Object.values(filteredData).filter((item: any) => item?.weather?.temperature > 15);
-    const coldWeather = Object.values(filteredData).filter((item: any) => item?.weather?.temperature < 16);
 
     const emptyData = [
         [0, 'Matches', 0, 0, 100],
@@ -17,10 +15,12 @@ const WeatherIndividualStats = () => {
         [0, 'Goals per Game', 0, 0, 100],
     ];
     const [value, setValue] = useState(emptyData);
-    const calculatedColdWeatherData = calculateIndividualStats(coldWeather);
-    const calculatedHotWeatherData = calculateIndividualStats(hotWeather);
 
     const readyData = (player?: any) => {
+        const hotWeather = Object.values(filteredData).filter((item: any) => item?.weather?.temperature > 15);
+        const coldWeather = Object.values(filteredData).filter((item: any) => item?.weather?.temperature < 16);
+        const calculatedColdWeatherData = calculateIndividualStats(coldWeather);
+        const calculatedHotWeatherData = calculateIndividualStats(hotWeather);
         const playerColdData = calculatedColdWeatherData?.find((x) => x?.includes(player));
         const playerHotData = calculatedHotWeatherData?.find((x) => x?.includes(player));
 

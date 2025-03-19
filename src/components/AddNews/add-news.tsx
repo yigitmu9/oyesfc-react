@@ -123,14 +123,13 @@ const AddNews: React.FC<AddNewsProps> = ({ handlePreviousPage }) => {
                                 />
                                 <br />
                                 <div className={sharedClasses.emptyHeightSpace}></div>
-                                <input
+                                <textarea
                                     className={classes.inputDesign}
                                     required={true}
-                                    type="text"
                                     name="content"
                                     placeholder={'Content ' + (index + 1)}
                                     value={formData?.[index]?.content}
-                                    onChange={(event) => handleInputChange(event, index)}
+                                    onChange={(event: any) => handleInputChange(event, index)}
                                 />
                                 <div className={sharedClasses.emptyHeightSpace}></div>
                                 <input
