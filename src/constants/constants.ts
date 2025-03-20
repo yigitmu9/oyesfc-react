@@ -1313,3 +1313,30 @@ export const FamousQuotes: any = [
     { 'quote': 'Some people think football is a matter of life and death. I assure you, it\'s much more serious than that.', 'author': 'Bill Shankly' }
 ]
 
+export const constantNews = [[
+    {
+        "content": "A special logo for the 10th anniversary of the establishment of O Yes FC. It took its color from gold, which symbolizes special, and its symbol from the phoenix, the official animal of the team. The gold color and logo were used on the jersey produced in July 14, 2023.",
+        "logo": "gold2",
+        "driveLogo": "https://drive.google.com/file/d/1Y3yvrhihf13VPOyNu1ltrVR_S5ovuc0G/view?usp=sharing",
+        "title": "Golden Age"
+    },
+    {
+        "content": "The colors of O Yes FC are red and black. The red represents enthusiasm and fieriness, and the black represents the fear of opponents to face O Yes FC. The logo and colors took their final form in April 29, 2019 and were used on the jersey produced in the same year. Red jersey, designed on May 13.",
+        "logo": "red3",
+        "driveLogo": "https://drive.google.com/file/d/1kXbJs6iYxlP8a6dJWQvAtsLC76j72oXd/view?usp=sharing",
+        "title": "Red & Black"
+    },
+    {
+        "content": "The first O Yes FC logo appeared on May 13, 2014, as a result of gradual growth and branding. As in the first 2 jerseys, a blue tone is used in this logo and represents self-confidence. It was used in the Chelsea jersey released on August 28, 2014 and the Wavy jersey released on August 22, 2015.",
+        "logo": "blue2",
+        "driveLogo": "https://drive.google.com/file/d/1DIXilsiuxEQdz-iLNC6aMARk3mT1b8Zw/view?usp=sharing",
+        "title": "Rising"
+    },
+    {
+        "content": "O Yes FC was founded on November 17, 2013 and its first jersey was introduced 5 days later, on November 22. The ghost logo used on the first jersey is symbol of  opponents fear, the harbinger of victory. The white next to blue on the jersey represents stability, while the orange used on the collar represents enthusiasm and energy.",
+        "logo": "ghost1",
+        "driveLogo": "https://drive.google.com/file/d/1zCMEKfpGtIFqkHNL-VrbogHmYU1MVx7S/view?usp=sharing",
+        "title": "Origins"
+    }
+]]
+

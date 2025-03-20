@@ -7,6 +7,7 @@ import MainTitle from '../../shared/MainTitle/main-title';
 import Box from '@mui/material/Box';
 import { loadWebsite } from '../../firebase';
 import { extractGoogleDriveFileId } from '../../utils/utils';
+import { constantNews, TeamMembers } from '../../constants/constants';
 
 const SliderCard = () => {
     const [news, setNews] = useState<any>(null);
@@ -108,97 +109,108 @@ const SliderCard = () => {
         return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
     };
 
+    const system = (data: any, driveImage: boolean) => {
+        return (
+            data?.map((items: any, categoryIndex: number) => (
+                <Box
+                    key={categoryIndex}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        width: '100%',
+                    }}
+                >
+                    <Box
+                        ref={(el: any) => (containerRefs.current[categoryIndex] = el)}
+                        onScroll={() => handleScroll(categoryIndex)}
+                        sx={{
+                            display: 'flex',
+                            gap: 10,
+                            py: 1,
+                            overflowX: 'auto',
+                            width: '100%',
+                            scrollSnapType: 'x mandatory',
+                            '& > *': {
+                                scrollSnapAlign: 'center',
+                            },
+                            '::-webkit-scrollbar': {
+                                display: 'none',
+                            },
+                        }}
+                    >
+                        {Object.values(items)?.map((x: any, i: number) => (
+                            <div className={classes.insideGrid} key={i}>
+                                <Card sx={styles.card} className={classes.cardStyle}>
+                                    {x?.logo && (
+                                        <CardMedia
+                                            component="img"
+                                            sx={{
+                                                height: 'auto',
+                                                width: '100%',
+                                            }}
+                                            image={driveImage ?
+                                                getUrl(x?.logo)
+                                                :
+                                                require(
+                                                `../../images/${x?.logo}.jpeg`
+                                                )
+                                            }
+                                        />
+                                    )}
+                                    <CardContent sx={styles.content}>
+                                        <h1 className={classes.title}>{x?.title}</h1>
+                                        <span className={classes.content}>{x?.content}</span>
+                                    </CardContent>
+                                    <CardContent sx={styles.content2}>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                gap: 1,
+                                            }}
+                                        >
+                                            {Object.values(items)?.map((_, dotIndex: any) => (
+                                                <span
+                                                    key={dotIndex}
+                                                    onClick={() =>
+                                                        scrollToIndex(
+                                                            dotIndex,
+                                                            categoryIndex,
+                                                            Object.values(items)?.length
+                                                        )
+                                                    }
+                                                    style={{
+                                                        width: '10px',
+                                                        height: '10px',
+                                                        borderRadius: '50%',
+                                                        backgroundColor:
+                                                            dotIndex === currentIndexes[categoryIndex] ||
+                                                            (dotIndex === 3 &&
+                                                                currentIndexes[categoryIndex] > dotIndex)
+                                                                ? '#007AFF'
+                                                                : 'lightgray',
+                                                        cursor: 'pointer',
+                                                        transition: 'background-color 0.3s',
+                                                    }}
+                                                ></span>
+                                            ))}
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        ))}
+                    </Box>
+                </Box>
+            ))
+        )
+    }
+
     return (
         <>
             <div className={classes.grid}>
                 <MainTitle title={'Discover'} size={'large'} />
-                {news &&
-                    news?.map((items: any, categoryIndex: number) => (
-                        <Box
-                            key={categoryIndex}
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                width: '100%',
-                            }}
-                        >
-                            <Box
-                                ref={(el: any) => (containerRefs.current[categoryIndex] = el)}
-                                onScroll={() => handleScroll(categoryIndex)}
-                                sx={{
-                                    display: 'flex',
-                                    gap: 10,
-                                    py: 1,
-                                    overflowX: 'auto',
-                                    width: '100%',
-                                    scrollSnapType: 'x mandatory',
-                                    '& > *': {
-                                        scrollSnapAlign: 'center',
-                                    },
-                                    '::-webkit-scrollbar': {
-                                        display: 'none',
-                                    },
-                                }}
-                            >
-                                {Object.values(items)?.map((x: any, i: number) => (
-                                    <div className={classes.insideGrid} key={i}>
-                                        <Card sx={styles.card} className={classes.cardStyle}>
-                                            {x?.logo && (
-                                                <CardMedia
-                                                    component="img"
-                                                    sx={{
-                                                        height: 'auto',
-                                                        width: '100%',
-                                                    }}
-                                                    image={getUrl(x?.logo)}
-                                                />
-                                            )}
-                                            <CardContent sx={styles.content}>
-                                                <h1 className={classes.title}>{x?.title}</h1>
-                                                <span className={classes.content}>{x?.content}</span>
-                                            </CardContent>
-                                            <CardContent sx={styles.content2}>
-                                                {/* Pagination */}
-                                                <Box
-                                                    sx={{
-                                                        display: 'flex',
-                                                        gap: 1,
-                                                    }}
-                                                >
-                                                    {Object.values(items)?.map((_, dotIndex: any) => (
-                                                        <span
-                                                            key={dotIndex}
-                                                            onClick={() =>
-                                                                scrollToIndex(
-                                                                    dotIndex,
-                                                                    categoryIndex,
-                                                                    Object.values(items)?.length
-                                                                )
-                                                            }
-                                                            style={{
-                                                                width: '10px',
-                                                                height: '10px',
-                                                                borderRadius: '50%',
-                                                                backgroundColor:
-                                                                    dotIndex === currentIndexes[categoryIndex] ||
-                                                                    (dotIndex === 3 &&
-                                                                        currentIndexes[categoryIndex] > dotIndex)
-                                                                        ? '#007AFF'
-                                                                        : 'lightgray',
-                                                                cursor: 'pointer',
-                                                                transition: 'background-color 0.3s',
-                                                            }}
-                                                        ></span>
-                                                    ))}
-                                                </Box>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                ))}
-                            </Box>
-                        </Box>
-                    ))}
+                {news && system(news, true)}
+                {constantNews && system(constantNews, false)}
             </div>
         </>
     );
