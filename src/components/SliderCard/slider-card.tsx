@@ -7,7 +7,7 @@ import MainTitle from '../../shared/MainTitle/main-title';
 import Box from '@mui/material/Box';
 import { loadWebsite } from '../../firebase';
 import { extractGoogleDriveFileId } from '../../utils/utils';
-import { constantNews, TeamMembers } from '../../constants/constants';
+import { constantNews } from '../../constants/constants';
 
 const SliderCard = () => {
     const [news, setNews] = useState<any>(null);
