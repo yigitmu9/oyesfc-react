@@ -24,7 +24,7 @@ const AddReleaseNote: React.FC<AddReleaseNoteProps> = ({ handlePreviousPage }) =
     const [loading, setLoading] = useState<boolean>(false);
     const [formData, setFormData] = useState(
         {
-            version: '',
+            version: packageJson.version || '',
             note: '',
         }
     );
