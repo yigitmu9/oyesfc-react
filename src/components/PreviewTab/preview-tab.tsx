@@ -624,9 +624,9 @@ const PreviewTab: React.FC<PreviewTabProps> = ({
                         <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
                         <span className={classes.generalInfoSpan}>
                             {matchDetailsData?.aiNote
-                                ?.split(/([.:])/g)
+                                ?.split(/__NEWLINE__/g)
                                 .reduce((acc: any, curr: any): any => {
-                                    if (curr === '.' || curr === ':') {
+                                    if (curr === '__NEWLINE__') {
                                         const sentence = (acc.pop() || '') + curr;
                                         acc.push(sentence);
                                     } else if (curr.trim()) {

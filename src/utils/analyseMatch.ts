@@ -62,5 +62,5 @@ ${selectedMatchData ? 'Which key points can you bring out for team and individua
     });
 
     const data = await response.json();
-    return data.choices?.[0]?.message?.content || 'No response.';
+    return data.choices?.[0]?.message?.content?.replace(/\n/g, '__NEWLINE__') || 'No response.';
 }
