@@ -30,17 +30,20 @@ import { PulseLoader } from 'react-spinners';
 import Box from '@mui/material/Box';
 import BackButton from '../../shared/BackButton/back-button';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryValues, getGeoCoordinates, hasAppliedFilters, returnFilteredData } from '../../utils/utils';
+import { getCategoryValues, getGeoCoordinates, hasAppliedFilters, returnFilteredData , sortData} from '../../utils/utils';
 import { updateData } from '../../redux/databaseDataSlice';
 import { useNavigate } from 'react-router-dom';
 import sharedClasses from '../../shared/Styles/shared-styles.module.css';
 import ButtonComponent from '../../shared/ButtonComponent/button-component';
+import {analyzeMatchesWithOpenRouter} from "../../utils/analyseMatch";
 
 interface AddMatchComponentProps {
     selectedMatchData?: any;
+    squadRatings?: any;
+    matchIndex?: any;
 }
 
-const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData }) => {
+const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData , squadRatings, matchIndex}) => {
     const dispatch = useDispatch();
     const { allData } = useSelector((state: any) => state.databaseData);
     const [loading, setLoading] = useState<any>(selectedMatchData ? null : '');
@@ -101,6 +104,7 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData
         rival: initialRivalFormData,
         time: selectedMatchData ? selectedMatchData?.time : '',
         weather: initialWeatherFormData,
+        aiNote: selectedMatchData ? selectedMatchData?.aiNote : '',
     };
 
     const [formData, setFormData] = useState(initialFormData);
@@ -262,7 +266,7 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData
 
     const handleSubmit = async () => {
         const unconvertedDay = formData?.day;
-        finalizeData();
+        await finalizeData();
         setDayTime();
         const continueAddMatch = checkPayload(formData, unconvertedDay);
         if (continueAddMatch) {
@@ -332,10 +336,10 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData
         formData.time = `${timeFormat}-${nextTimeFormat}`;
     };
 
-    const finalizeData = () => {
+    const finalizeData = async () => {
         for (const key in oYesFCSquadFormData) {
             if (oYesFCSquadFormData.hasOwnProperty(key)) {
-                oYesFCSquadFormData[key] = { ...oYesFCSquadFormData[key] };
+                oYesFCSquadFormData[key] = {...oYesFCSquadFormData[key]};
                 if (
                     !oYesFCSquadFormData[key].hasOwnProperty('description') ||
                     !oYesFCSquadFormData[key]['description']
@@ -349,12 +353,17 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData
                     oYesFCSquadFormData[key]['position'] =
                         Object.values(TeamMembers).find((x) => x?.name === key)?.position || 0;
                 }
+                if (selectedMatchData && squadRatings && !oYesFCSquadFormData[key]['rating']) {
+                    oYesFCSquadFormData[key]['rating'] = squadRatings?.find((x: any) => x?.name === key)?.rating || 0;
+                }
             }
         }
         oYesFCFormData.squad = oYesFCSquadFormData;
         formData.oyesfc = oYesFCFormData;
         formData.rival = rivalFormData;
         formData.weather = weatherFormData;
+        const sortedData: any = sortData(allData);
+        formData.aiNote = await analyzeMatchesWithOpenRouter(Object.values(sortedData)?.filter((x: any, y: any) => x && y > matchIndex), formData, selectedMatchData);
     };
 
     function formatDateTime(day?: any, time?: any) {

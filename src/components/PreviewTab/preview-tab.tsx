@@ -24,7 +24,7 @@ import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import ButtonComponent from '../../shared/ButtonComponent/button-component';
-import sharedClasses from '../../shared/Styles/shared-styles.module.css';
+import sharedClasses from '../../shared/Styles/shared-styles.module.css';import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const DefaultIcon = L.icon({
     iconUrl: markerIcon,
@@ -609,6 +609,42 @@ const PreviewTab: React.FC<PreviewTabProps> = ({
                     </section>
                 </>
             )}
+            {
+                matchDetailsData?.aiNote &&
+                <>
+                    <div style={{height: '20px'}}></div>
+                    <section className={classes.generalTabSection}>
+                        <div className={classes.generalInfoDiv}>
+                            <AutoAwesomeIcon fontSize={isMobile ? 'medium' : 'large'} className={classes.generalInfoIcon}>
+                            </AutoAwesomeIcon>
+                            <span className={classes.generalInfoSpan}>
+                                    AI Notes
+                                </span>
+                        </div>
+                        <Divider sx={{bgcolor: 'gray', margin: '10px'}}/>
+                        <span className={classes.generalInfoSpan}>
+                            {matchDetailsData?.aiNote
+                                ?.split(/([.:])/g)
+                                .reduce((acc: any, curr: any): any => {
+                                    if (curr === '.' || curr === ':') {
+                                        const sentence = (acc.pop() || '') + curr;
+                                        acc.push(sentence);
+                                    } else if (curr.trim()) {
+                                        acc.push(curr.trim());
+                                    }
+                                    return acc;
+                                }, [])
+                                .map((sentence: any, index: any): any => (
+                                    <React.Fragment key={index}>
+                                        {sentence}
+                                        <br />
+                                    </React.Fragment>
+                                ))}
+                        </span>
+                    </section>
+                </>
+
+            }
             {matchInformation?.length > 1 && (
                 <>
                     <div style={{ height: '20px' }}></div>

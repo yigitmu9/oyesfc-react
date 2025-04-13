@@ -156,7 +156,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({ matchDate, cameFrom 
     };
 
     const editMatch = () => {
-        navigate('/oyesfc-react/add-match', { state: matchDetailsData });
+        navigate('/oyesfc-react/add-match', { state: {matchDetailsData : matchDetailsData, ratings: squadRatings, matchIndex: matchIndex}});
     };
 
     const submitStars = async () => {

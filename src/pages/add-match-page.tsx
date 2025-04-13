@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 const AddMatchPage = () => {
     const { state } = useLocation();
 
-    const page = <AddMatch selectedMatchData={state} />;
+    const page = <AddMatch selectedMatchData={state?.matchDetailsData} squadRatings={state?.ratings} matchIndex={state?.matchIndex} />;
 
     return (
         <div>
