@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/oyesfc-react/static/css/main.54b9ebcb.css",
-    "main.js": "/oyesfc-react/static/js/main.777cc527.js",
+    "main.js": "/oyesfc-react/static/js/main.394b7614.js",
     "static/js/787.6b6304da.chunk.js": "/oyesfc-react/static/js/787.6b6304da.chunk.js",
     "static/media/video.mov": "/oyesfc-react/static/media/video.5f6f17f24f3fd71665d5.mov",
     "static/media/gold2.jpeg": "/oyesfc-react/static/media/gold2.e771b6dd3e8ac34c13a9.jpeg",
@@ -71,11 +71,11 @@
     "static/media/football.png": "/oyesfc-react/static/media/football.540a79cf671acacf41c7.png",
     "index.html": "/oyesfc-react/index.html",
     "main.54b9ebcb.css.map": "/oyesfc-react/static/css/main.54b9ebcb.css.map",
-    "main.777cc527.js.map": "/oyesfc-react/static/js/main.777cc527.js.map",
+    "main.394b7614.js.map": "/oyesfc-react/static/js/main.394b7614.js.map",
     "787.6b6304da.chunk.js.map": "/oyesfc-react/static/js/787.6b6304da.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.54b9ebcb.css",
-    "static/js/main.777cc527.js"
+    "static/js/main.394b7614.js"
   ]
 }
