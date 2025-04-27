@@ -8,11 +8,12 @@ interface ResultProps {
     isDetails?: any;
     fixture?: any;
     time?: any;
+    abandonment?: boolean;
 }
 
-const Result: React.FC<ResultProps> = ({ homeTeamScore, awayTeamScore, isDetails, fixture, time }) => {
+const Result: React.FC<ResultProps> = ({ homeTeamScore, awayTeamScore, isDetails, fixture, time, abandonment }) => {
     const result = fixture !== matchType.upcoming ? homeTeamScore + ' - ' + awayTeamScore : time?.split('-')[0];
-    return <span className={isDetails ? classes.resultDetails : classes.result}>{result}</span>;
+    return <span className={isDetails ? classes.resultDetails : classes.result}>{abandonment ? 'ABN' : result}</span>;
 };
 
 export default Result;

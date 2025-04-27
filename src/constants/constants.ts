@@ -11,22 +11,18 @@ export const TeamMembers = {
         birthMonth: 12,
         birthDay: 23,
         ratings: [3, 5, 4, 8, 8, 4],
-        bootBrand: 'Nike',
-        bootCollection: 'Mercurial',
-        bootModel: 'Vapor 12',
         fifaRole: 'GK',
         position: 1,
-        /*
         bootBrand: 'Adidas',
         bootCollection: 'Predator',
         bootModel: 'Club',
         oldBootData: [{
-            changeDate: '',
+            changeDate: '25-04-2025',
             bootBrand: 'Nike',
             bootCollection: 'Mercurial',
             bootModel: 'Vapor 12',
         }]
-         */
+
     },
     atakan: {
         name: 'Atakan Rakipsiz',
@@ -40,7 +36,7 @@ export const TeamMembers = {
         bootCollection: 'Future',
         bootModel: '7',
         fifaRole: 'CB',
-        position: 2,
+        position: 3,
         oldBootData: [
             {
                 changeDate: '28-02-2025',
@@ -76,7 +72,7 @@ export const TeamMembers = {
         bootCollection: 'Deportivo',
         bootModel: '1',
         fifaRole: 'RW',
-        position: 4,
+        position: 5,
     },
     gokhan: {
         name: 'Gökhan Cömert',
@@ -90,7 +86,7 @@ export const TeamMembers = {
         bootCollection: '',
         bootModel: '',
         fifaRole: 'CM',
-        position: 2,
+        position: 3,
     },
     mehmet: {
         name: 'Mehmet Çelik',
@@ -104,7 +100,7 @@ export const TeamMembers = {
         bootCollection: '',
         bootModel: '',
         fifaRole: 'CB',
-        position: 2,
+        position: 3,
     },
     mert: {
         name: 'Mert Mutlu',
@@ -140,7 +136,7 @@ export const TeamMembers = {
         bootCollection: '',
         bootModel: '',
         fifaRole: 'CB',
-        position: 2,
+        position: 3,
     },
     ogulcan: {
         name: 'Oğulcan Sakallıoğlu',
@@ -154,7 +150,7 @@ export const TeamMembers = {
         bootCollection: 'Phantom',
         bootModel: 'Gx',
         fifaRole: 'CM',
-        position: 3,
+        position: 5,
     },
     utku: {
         name: 'Utku Öztürk',
@@ -168,7 +164,7 @@ export const TeamMembers = {
         bootCollection: 'Copa',
         bootModel: '20.3',
         fifaRole: 'RWB',
-        position: 4,
+        position: 5,
     },
     yigit: {
         name: 'Yiğit Mutlu',
@@ -182,7 +178,7 @@ export const TeamMembers = {
         bootCollection: 'Mercurial',
         bootModel: 'Air Zoom Superfly 9',
         fifaRole: 'CF',
-        position: 2,
+        position: 3,
         oldBootData: [
             {
                 changeDate: '25-02-2025',

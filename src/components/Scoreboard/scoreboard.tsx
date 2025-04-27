@@ -42,6 +42,7 @@ const Scoreboard: React.FC<ScoreboardsGridProps> = ({ value, openPopup, playerDe
                     awayTeamScore={value?.rival?.goal}
                     fixture={fixture}
                     time={value?.time}
+                    abandonment={value?.abandoned}
                 />
                 <GameStatus status={value?.day?.replace(/-/g, '/')} bgColor={buttonBgColor} fixture={fixture} />
             </main>

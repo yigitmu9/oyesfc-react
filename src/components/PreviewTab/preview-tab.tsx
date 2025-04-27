@@ -7,7 +7,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Facilities, TeamMembers, TeamNames } from '../../constants/constants';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
 import InfoIcon from '@mui/icons-material/Info';
-import { Accordion, AccordionDetails, AccordionSummary, Divider } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Divider } from '@mui/material';
 import LabelIcon from '@mui/icons-material/Label';
 import CloudIcon from '@mui/icons-material/Cloud';
 import { loadWebsite } from '../../firebase';
@@ -327,6 +327,21 @@ const PreviewTab: React.FC<PreviewTabProps> = ({
 
     return (
         <div className={classes.generalTabDiv}>
+            {matchDetailsData?.abandoned && (
+                <Alert
+                    sx={{
+                        padding: '0.5 1',
+                        marginTop: '20px',
+                        borderRadius: '15px',
+                        bgcolor: '#1C1C1E',
+                        color: 'lightgray',
+                    }}
+                    variant="outlined"
+                    severity="error"
+                >
+                    {'The match was abandoned due to incidents on the pitch.'}
+                </Alert>
+            )}
             {bestOfMatch && (
                 <>
                     <div style={{ height: '20px' }}></div>

@@ -59,6 +59,7 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData
     const [submittedMatchData, setSubmittedMatchData] = useState<any>(null);
     const allFacilities = Facilities.map((x) => x.name);
     const [isRakipbul, setIsRakipbul] = useState(false);
+    const [submitMatchLoading, setSubmitMatchLoading] = useState(false);
     const rivalNames = getCategoryValues(allData).rivals;
     const navigate = useNavigate();
 
@@ -265,12 +266,14 @@ const AddMatchComponent: React.FC<AddMatchComponentProps> = ({ selectedMatchData
     };
 
     const handleSubmit = async () => {
+        setSubmitMatchLoading(true)
         const unconvertedDay = formData?.day;
         await finalizeData();
         setDayTime();
         const continueAddMatch = checkPayload(formData, unconvertedDay);
         if (continueAddMatch) {
             setSubmittedMatchData(formData);
+            setSubmitMatchLoading(false)
             if (warnings) setWarnings(null);
         }
     };
@@ -676,6 +679,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
         if (errorMessages?.length > 0) {
             formData.day = unconvertedDay;
             setWarnings(errorMessages);
+            setSubmitMatchLoading(false)
             return false;
         }
         return true;
@@ -740,6 +744,32 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                 navigate('/oyesfc-react/account');
             }
         }
+    };
+
+    const setPositionLabel = (positionNumber: number, role: string): string => {
+        if (role === 'gk') return 'GK'
+        if (role === 'df') {
+            if (positionNumber === 1) return 'LB'
+            if (positionNumber === 2) return 'LCB'
+            if (positionNumber === 3) return 'CB'
+            if (positionNumber === 4) return 'RCB'
+            if (positionNumber === 5) return 'RB'
+        }
+        if (role === 'cm') {
+            if (positionNumber === 1) return 'LM'
+            if (positionNumber === 2) return 'LCM'
+            if (positionNumber === 3) return 'CM'
+            if (positionNumber === 4) return 'RCM'
+            if (positionNumber === 5) return 'RM'
+        }
+        if (role === 'fw') {
+            if (positionNumber === 1) return 'LW'
+            if (positionNumber === 2) return 'LST'
+            if (positionNumber === 3) return 'ST'
+            if (positionNumber === 4) return 'RST'
+            if (positionNumber === 5) return 'RW'
+        }
+        return positionNumber?.toString()
     };
 
     function BpRadio(props?: any) {
@@ -899,7 +929,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                         sendPushNotifications()
                                     }
                                     name={`Send Push Notification`}
-                                    loading={siriShortcutButtonLoading}
+                                    loading={pushNotificationLoading}
                                     textColor={'#007AFF'}
                                     backgroundColor={'#1C1C1E'}
                                 />
@@ -1284,63 +1314,71 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                                                 />
                                             </label>
                                             <br />
-                                            <label>
-                                                {member} Role:
-                                                <select
-                                                    className={classes.select}
-                                                    onChange={(e) =>
-                                                        handleSquadInputChange(
-                                                            member,
-                                                            e,
-                                                            oYesFCSquadFormData[member]?.goal,
-                                                            oYesFCSquadFormData[member]?.role,
-                                                            oYesFCSquadFormData[member]?.position,
-                                                            oYesFCSquadFormData[member]?.description
-                                                        )
-                                                    }
-                                                    required={true}
+                                            <label className={classes.matchTypeTitle}>{member} Role:
+                                                <RadioGroup
+                                                    row
+                                                    aria-labelledby="demo-row-radio-buttons-group-label"
                                                     name={`oyesfc.squad.${member}.role`}
                                                     value={
                                                         oYesFCSquadFormData[member].role
                                                             ? oYesFCSquadFormData[member].role
                                                             : Object.values(TeamMembers).find((x) => x?.name === member)
-                                                                  ?.role || oYesFCSquadFormData[member].role
+                                                            ?.role || oYesFCSquadFormData[member].role
                                                     }
                                                 >
-                                                    <option>Select Role</option>
                                                     {FootballRoles.map((x, y) => (
-                                                        <option key={y} value={x}>
-                                                            {x}
-                                                        </option>
+                                                        <FormControlLabel
+                                                            key={y}
+                                                            value={x}
+                                                            control={<BpRadio />}
+                                                            label={x?.toUpperCase()}
+                                                            onChange={(e) =>
+                                                                handleSquadInputChange(
+                                                                    member,
+                                                                    e,
+                                                                    oYesFCSquadFormData[member]?.goal,
+                                                                    oYesFCSquadFormData[member]?.role,
+                                                                    oYesFCSquadFormData[member]?.position,
+                                                                    oYesFCSquadFormData[member]?.description
+                                                                )
+                                                            }
+                                                        />
                                                     ))}
-                                                </select>
+                                                </RadioGroup>
                                             </label>
                                             <br />
-                                            <label>
-                                                {member} Position (Start from Left Wing):
-                                                <input
-                                                    className={classes.inputDesign}
-                                                    type="number"
-                                                    onChange={(e) =>
-                                                        handleSquadInputChange(
-                                                            member,
-                                                            e,
-                                                            oYesFCSquadFormData[member]?.goal,
-                                                            oYesFCSquadFormData[member]?.role,
-                                                            oYesFCSquadFormData[member]?.position,
-                                                            oYesFCSquadFormData[member]?.description
-                                                        )
-                                                    }
+                                            <label className={classes.matchTypeTitle}>{member} Position:
+                                                <RadioGroup
+                                                    row
+                                                    aria-labelledby="demo-row-radio-buttons-group-label"
                                                     name={`oyesfc.squad.${member}.position`}
                                                     value={
                                                         oYesFCSquadFormData[member].position
                                                             ? oYesFCSquadFormData[member].position
                                                             : Object.values(TeamMembers).find((x) => x?.name === member)
-                                                                  ?.position || oYesFCSquadFormData[member].position
+                                                            ?.position || oYesFCSquadFormData[member].position
                                                     }
-                                                />
+                                                >
+                                                    {[1, 2, 3, 4, 5].map((x, y) => (
+                                                        <FormControlLabel
+                                                            key={y}
+                                                            value={x}
+                                                            control={<BpRadio />}
+                                                            label={setPositionLabel(x, oYesFCSquadFormData[member]?.role)}
+                                                            onChange={(e) =>
+                                                                handleSquadInputChange(
+                                                                    member,
+                                                                    e,
+                                                                    oYesFCSquadFormData[member]?.goal,
+                                                                    oYesFCSquadFormData[member]?.role,
+                                                                    oYesFCSquadFormData[member]?.position,
+                                                                    oYesFCSquadFormData[member]?.description
+                                                                )
+                                                            }
+                                                        />
+                                                    ))}
+                                                </RadioGroup>
                                             </label>
-
                                             <br />
                                             {!Object.values(TeamMembers).some((x) => x?.name === member) && (
                                                 <>
@@ -1429,7 +1467,7 @@ Detaylar web sitemizde: https://yigitmu9.github.io/oyesfc-react/`;
                         backgroundColor={'#1C1C1E'}
                     />
                     <div className={sharedClasses.emptyHeightSpace}></div>
-                    <ButtonComponent onClick={() => handleSubmit()} name={`Submit`} />
+                    <ButtonComponent onClick={() => handleSubmit()} name={`Submit`} loading={submitMatchLoading}/>
                 </form>
             </div>
         </div>

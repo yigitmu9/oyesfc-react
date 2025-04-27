@@ -445,6 +445,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({ matchDate, cameFrom 
                                     isDetails={true}
                                     fixture={fixture}
                                     time={matchDetailsData?.time}
+                                    abandonment={matchDetailsData?.abandoned}
                                 />
                                 {fixture === matchType.live ? (
                                     <GameStatus

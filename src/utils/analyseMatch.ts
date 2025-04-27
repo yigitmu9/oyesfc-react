@@ -44,7 +44,7 @@ ${selectedMatchData ? 'Score: our team  ' + selectedMatchData?.oyesfc?.goal + ' 
         .map(([name, p]: any) => `    - ${name} (${p.role}) ${selectedMatchData ? (p.goal + 'scored goals') : ''} ${(selectedMatchData && p?.rating) ? (', Match Rating ' + p?.rating?.toFixed(1)) : '' }`)
         .join('\n')}
 
-${selectedMatchData ? 'Which key points can you bring out for team and individuals for our last match comparing with previous matches?' : 'What do you suggest or which key points can you bring out for team and individuals?'}
+${selectedMatchData ? 'Which key points can you bring out for team and individuals for our last match comparing with previous matches? And the last match was abandoned due to incidents on the pitch.' : 'What do you suggest or which key points can you bring out for team and individuals?'}
   `.trim();
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
