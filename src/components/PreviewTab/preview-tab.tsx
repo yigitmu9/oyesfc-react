@@ -656,6 +656,7 @@ const PreviewTab: React.FC<PreviewTabProps> = ({
                                     </React.Fragment>
                                 ))}
                         </span>
+                        <span style={{marginTop: '32px', textAlign: 'right', color: '#494949'}} className={classes.generalInfoSpan}>Google: Gemini 2.0 Flash Experimental</span>
                     </section>
                 </>
 

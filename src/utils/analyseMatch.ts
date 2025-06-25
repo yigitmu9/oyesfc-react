@@ -9,7 +9,10 @@ export async function analyzeMatchesWithOpenRouter(allMatches: any, nextMatch: a
         return score;
     };
 
+    const isPastMatch = selectedMatchData && isPast(nextMatch?.day, nextMatch?.time?.split('-')?.[1])
+
     const relevantMatches = allMatches
+        ?.filter((f: any) => !f?.abandoned)
         .map((m: any) => ({ match: m, score: scoreMatch(m) }))
         .sort((a: any, b: any) => b.score - a.score)
         .slice(0, 10)
@@ -30,21 +33,21 @@ ${squad}
     }).join('\n\n');
 
     const prompt = `
-${selectedMatchData ? 'You can see similar matches data to our last match below.' : 'You can see similar matches data to our next match below.'}
+${isPastMatch ? 'You can see similar matches data to our last match below.' : 'You can see similar matches data to our next match below.'}
 
 ${formatMatches}
 
-${selectedMatchData ? 'Last match info:' : 'Next match info:'}
+${isPastMatch ? 'Last match info:' : 'Next match info:'}
 - Place: ${nextMatch?.place}
 - Rival: ${nextMatch?.rival?.name}
-${selectedMatchData ? 'Score: our team  ' + selectedMatchData?.oyesfc?.goal + ' ,rival ' + selectedMatchData?.rival?.goal : ''}
+${isPastMatch ? 'Score: our team  ' + selectedMatchData?.oyesfc?.goal + ' ,rival ' + selectedMatchData?.rival?.goal : ''}
 - Weather: ${nextMatch?.weather?.temperature}°C, ${nextMatch?.weather?.description}
 - Date: ${nextMatch?.day}
 - Squad: ${Object.entries(nextMatch?.oyesfc?.squad || {})
-        .map(([name, p]: any) => `    - ${name} (${p.role}) ${selectedMatchData ? (p.goal + 'scored goals') : ''} ${(selectedMatchData && p?.rating) ? (', Match Rating ' + p?.rating?.toFixed(1)) : '' }`)
+        .map(([name, p]: any) => `    - ${name} (${p.role}) ${isPastMatch ? (p.goal + 'scored goals') : ''} ${(selectedMatchData && p?.rating) ? (', Match Rating ' + p?.rating?.toFixed(1)) : '' }`)
         .join('\n')}
 
-${selectedMatchData ? 'Which key points can you bring out for team and individuals for our last match comparing with previous matches?' : 'What do you suggest or which key points can you bring out for team and individuals?'}
+${isPastMatch ? 'Which key points can you bring out for team and individuals for our last match comparing with previous matches?' : 'What do you suggest or which key points can you bring out for team and individuals?'}
   `.trim();
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -54,9 +57,17 @@ ${selectedMatchData ? 'Which key points can you bring out for team and individua
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            model: 'openchat/openchat-3.5-0106',
-            messages: [
-                { role: 'user', content: prompt }
+            "model": "google/gemini-2.0-flash-exp:free",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": prompt
+                        }
+                    ]
+                }
             ]
         })
     });
@@ -64,3 +75,12 @@ ${selectedMatchData ? 'Which key points can you bring out for team and individua
     const data = await response.json();
     return data.choices?.[0]?.message?.content?.replace(/\n/g, '__NEWLINE__') || 'No response.';
 }
+
+function isPast(date: string, time: string): boolean {
+    const [day, month, year] = date.split("-");
+    const dateString = `${year}-${month}-${day}T${time}:00`;
+    const inputDate = new Date(dateString);
+    const now = new Date();
+    return inputDate >= now;
+}
+
